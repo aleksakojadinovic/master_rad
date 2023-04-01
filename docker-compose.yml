@@ -1,4 +1,21 @@
 services:
+  proxy:
+    container_name: proxy-local
+    build:
+      context: ./services/proxy
+      dockerfile: ./docker/Dockerfile.development
+
+  maindb:
+    container_name: main-db-local
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - 27017:27017
+    volumes:
+      - main-db-data:/data/db
+
   ticketing:
     container_name: ticketing-local
     build:
@@ -11,3 +28,6 @@ services:
       NODE_ENV: "development"
     volumes:
       - "./services/ticketing:/app/"
+
+volumes:
+  main-db-data:
