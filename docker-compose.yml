@@ -40,5 +40,19 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  ssr:
+    container_name: ssr-local
+    build:
+      context: ./services/ssr
+      dockerfile: ./docker/Dockerfile.development
+    ports:
+      - "3002:3000"
+    environment:
+      NODE_ENV: "development"
+    volumes:
+      - "./services/ssr:/app/"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
 volumes:
   main-db-data:
