@@ -33,6 +33,7 @@ services:
     environment:
       MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
       MAIN_DB_PWD: ${MAIN_DB_PWD}
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "3001:3000"
     volumes:
