@@ -16,5 +16,3 @@ COPY . .
 
 # Start the development server
 CMD ["npm", "run", "start:dev"]
-
-

@@ -1,0 +1,7 @@
+{
+  "eslint.workingDirectories": [
+    "services/ticketing",
+    "services/ssr",
+    "services/auth"
+  ]
+}
