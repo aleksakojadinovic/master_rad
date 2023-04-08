@@ -25,15 +25,15 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  # auth:
-  #   container_name: auth-local
-  #   build:
-  #     context: ./services/auth
-  #     dockerfile: ./docker/Dockerfile.development
-  #   ports:
-  #     - "3001:3000"
-  #   extra_hosts:
-  #     - "host.docker.internal:host-gateway"
+  auth:
+    container_name: auth-local
+    build:
+      context: ./services/auth
+      dockerfile: ./docker/Dockerfile.development
+    ports:
+      - "3001:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   ticketing:
     container_name: ticketing-local
