@@ -10,7 +10,8 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
 @Module({
   imports: [
     MongooseModule.forRoot(
-      `mongodb://${MAIN_DB_USERNAME}:${MAIN_DB_PWD}@maindb:27017`,
+      `mongodb://${MAIN_DB_USERNAME}:${MAIN_DB_PWD}@maindb:27017/sts_db`,
+      { authSource: 'admin', user: MAIN_DB_USERNAME, pass: MAIN_DB_PWD },
     ),
     UsersModule,
   ],
