@@ -32,6 +32,8 @@ services:
       dockerfile: ./docker/Dockerfile.development
     ports:
       - "3001:3000"
+    volumes:
+      - "./services/auth:/app"
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
