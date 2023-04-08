@@ -30,6 +30,9 @@ services:
     build:
       context: ./services/auth
       dockerfile: ./docker/Dockerfile.development
+    environment:
+      MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
+      MAIN_DB_PWD: ${MAIN_DB_PWD}
     ports:
       - "3001:3000"
     volumes:
