@@ -1,6 +1,6 @@
 {
   "eslint.workingDirectories": [
     "services/ssr",
-    "services/auth"
+    "services/api-main"
   ]
 }
