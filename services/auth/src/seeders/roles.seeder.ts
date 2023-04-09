@@ -1,11 +1,9 @@
-import mongoose from 'mongoose';
-import { Role } from 'src/schemas/role.schema';
-
-const predefinedRoles = [
-  new Role('admin'),
-  new Role('superadmin'),
-  new Role('agent'),
-];
+// const predefinedRoles = [
+//   new Role('admin'),
+//   new Role('superadmin'),
+//   new Role('agent'),
+// ];
 
 // TODO
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function seedRoles() {}

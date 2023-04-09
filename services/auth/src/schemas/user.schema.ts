@@ -1,6 +1,4 @@
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import * as bcrypt from 'bcrypt';
 import { Role } from './role.schema';
 import mongoose from 'mongoose';
 @Schema()

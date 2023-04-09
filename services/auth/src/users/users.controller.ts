@@ -7,7 +7,6 @@ import {
   Patch,
   Param,
   Delete,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -27,7 +26,7 @@ export class UsersController {
   @HasRoles('agent')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile() {
     return 'Hello!';
   }
 
