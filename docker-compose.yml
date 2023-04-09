@@ -25,10 +25,10 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  auth:
-    container_name: auth-local
+  api_main:
+    container_name: api-main-local
     build:
-      context: ./services/auth
+      context: ./services/api-main
       dockerfile: ./docker/Dockerfile.development
     environment:
       MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
@@ -37,22 +37,7 @@ services:
     ports:
       - "3001:3000"
     volumes:
-      - "./services/auth:/app"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-  ticketing:
-    container_name: ticketing-local
-    build:
-      context: ./services/ticketing
-      dockerfile: ./docker/Dockerfile.development
-    ports:
-      - "3002:3000"
-    # restart: unless-stopped
-    environment:
-      NODE_ENV: "development"
-    volumes:
-      - "./services/ticketing:/app/"
+      - "./services/api-main:/app"
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
