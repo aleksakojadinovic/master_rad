@@ -1,9 +1,15 @@
-import { CreateUserDto } from './../dto/create-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 @Schema()
 export class User {
-  constructor(firstName = '', lastName = '', passwordHash = '') {
+  constructor(
+    username: string,
+    firstName: string,
+    lastName: string,
+    passwordHash: string,
+  ) {
+    this.username = username;
     this.firstName = firstName;
     this.lastName = lastName;
     this.passwordHash = passwordHash;
@@ -12,8 +18,11 @@ export class User {
   static async createFromDTO(dto: CreateUserDto) {
     // TODO: Validation all around
     const passwordHash = await bcrypt.hash(dto.password, 10);
-    return new User(dto.firstName, dto.lastName, passwordHash);
+    return new User(dto.username, dto.firstName, dto.lastName, passwordHash);
   }
+
+  @Prop()
+  username: string;
 
   @Prop()
   firstName: string;
