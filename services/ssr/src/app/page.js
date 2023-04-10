@@ -1,7 +1,7 @@
 export default async function Home() {
   return (
     <main>
-      <div>asdasd</div>
+      <div>STS home page</div>
     </main>
   );
 }
