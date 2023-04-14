@@ -1,10 +1,11 @@
-import { useServerSideStore } from "@/redux/store";
+import useServerSideStore from "@/app/useServerSideStore";
 import { cookies } from "next/headers";
 import React from "react";
 
 async function ContactId({ params: { id } }) {
-  const cookieList = cookies();
-  const store = await useServerSideStore(cookieList);
+  const store = await useServerSideStore();
+
+  // store.dispatch('......');
 
   const user = store.getState().api.queries["getMe(undefined)"].data;
 

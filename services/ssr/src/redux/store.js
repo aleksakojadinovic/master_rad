@@ -4,7 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { cache } from "react";
 
 export const makeClientSideStore = (preload) => {
-  console.log("[makeCLientSideStore] accepting preload:", preload);
+  // console.log("[makeCLientSideStore] accepting preload:", preload);
   const store = configureStore({
     reducer: {
       global: globalReducer,
@@ -14,10 +14,10 @@ export const makeClientSideStore = (preload) => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(api.middleware),
   });
-  console.log(
-    "[makeCLientSideStore] created store with state:",
-    store.getState()
-  );
+  // console.log(
+  //   "[makeCLientSideStore] created store with state:",
+  //   store.getState()
+  // );
   return store;
 };
 
@@ -46,8 +46,3 @@ export const obtainStore = cache(async (cookies) => {
   const store = await makeStore(cookies);
   return store;
 });
-
-export const useServerSideStore = async (cookies) => {
-  const store = await obtainStore(cookies);
-  return store;
-};

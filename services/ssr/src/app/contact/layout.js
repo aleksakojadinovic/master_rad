@@ -1,10 +1,9 @@
-import { useServerSideStore } from "@/redux/store";
 import { cookies } from "next/headers";
 import React from "react";
+import useServerSideStore from "../useServerSideStore";
 
 async function SubrouteLayout({ children }) {
-  const cookiesList = cookies();
-  const store = await useServerSideStore(cookiesList);
+  const store = await useServerSideStore();
 
   return <div>{children}</div>;
 }

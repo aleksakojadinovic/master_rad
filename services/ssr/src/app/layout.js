@@ -1,8 +1,9 @@
 import Provider from "@/components/Provider";
-import { makeStore, obtainStore, useServerSideStore } from "@/redux/store";
+import { makeStore, obtainStore } from "@/redux/store";
 import { setUser } from "@/slices/global";
 import { cookies } from "next/headers";
 import React from "react";
+import useServerSideStore from "./useServerSideStore";
 
 export const metadata = {
   title: "STS",
@@ -10,8 +11,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const cookieList = cookies();
-  const store = await useServerSideStore(cookieList);
+  const store = await useServerSideStore();
 
   return (
     <html lang="en">
