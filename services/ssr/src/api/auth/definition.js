@@ -1,5 +1,3 @@
-import { createSelector } from "@reduxjs/toolkit";
-
 export const authSliceDefinition = {
   endpoints: (builder) => ({
     getMe: builder.query({
