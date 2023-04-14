@@ -21,7 +21,7 @@ export const makeClientSideStore = (preload) => {
   return store;
 };
 
-export const makeStore = async (cookies) => {
+const makeServerSideStore = async (cookies) => {
   const store = configureStore({
     reducer: {
       global: globalReducer,
@@ -43,6 +43,6 @@ export const makeStore = async (cookies) => {
 };
 
 export const obtainStore = cache(async (cookies) => {
-  const store = await makeStore(cookies);
+  const store = await makeServerSideStore(cookies);
   return store;
 });

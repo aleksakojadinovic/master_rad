@@ -1,7 +1,4 @@
 import Provider from "@/components/Provider";
-import { makeStore, obtainStore } from "@/redux/store";
-import { setUser } from "@/slices/global";
-import { cookies } from "next/headers";
 import React from "react";
 import useServerSideStore from "./useServerSideStore";
 
