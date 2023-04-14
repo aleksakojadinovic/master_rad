@@ -11,6 +11,7 @@ const AuthenticationModal = dynamic(() =>
 
 function NavigationBar() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
   const handleClose = () => setIsAuthModalOpen(false);
 
   return (
