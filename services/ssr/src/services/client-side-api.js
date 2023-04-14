@@ -3,7 +3,7 @@ import camelize from 'camelize';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: '/api',
-  prepareHeaders: (headers, api) => {
+  prepareHeaders: (headers) => {
     headers.set('X-Requested-With', 'XMLHttpRequest');
     headers.set('Access-Control-Allow-Origin', '*');
   },

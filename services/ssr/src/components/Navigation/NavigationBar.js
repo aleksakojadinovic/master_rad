@@ -4,7 +4,6 @@ import { useGetMeQuery } from '@/api/auth/client';
 import { Box, Button } from '@mui/material';
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 const AuthenticationModal = dynamic(() =>
   import('../AuthenticationModal/AuthenticationModal'),
