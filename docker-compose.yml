@@ -51,6 +51,7 @@ services:
       - "3003:3000"
     environment:
       NODE_ENV: "development"
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
     volumes:
       - "./services/ssr:/app/"
     extra_hosts:

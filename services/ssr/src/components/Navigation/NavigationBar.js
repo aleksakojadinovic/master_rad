@@ -3,11 +3,11 @@
 import { authSliceSelectors, useGetMeQuery } from '@/api/auth/client';
 import { Box, Button } from '@mui/material';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import LogoImage from '../../images/logo-no-background.png';
+import urlJoin from 'url-join';
+import { getExternalBaseUrl } from '@/utils';
 
 const AuthenticationModal = dynamic(() =>
   import('../AuthenticationModal/AuthenticationModal'),
@@ -21,6 +21,11 @@ function NavigationBar() {
 
   const { isLoggedIn, firstName, lastName } = useSelector(
     authSliceSelectors.selectUser,
+  );
+
+  const imageUrl = urlJoin(
+    getExternalBaseUrl(),
+    '/images/logo-no-background.png',
   );
 
   const renderRightSideContent = () => {
@@ -55,7 +60,13 @@ function NavigationBar() {
       }}
     >
       <div>
-        <Image src={LogoImage} alt="Logo" height="40" width="111" />
+        {/* <Image src={imageUrl} alt="Logo" height="40" width="111" /> */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://dev.sts.com/images/logo-no-background.png"
+          alt="Logo"
+          style={{ width: '111px', height: '40px' }}
+        />
       </div>
       <div>{renderRightSideContent()}</div>
     </Box>
