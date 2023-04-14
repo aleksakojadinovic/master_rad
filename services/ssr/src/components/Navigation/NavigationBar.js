@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetMeQuery } from "@/api/auth/client";
 import { Box, Button } from "@mui/material";
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
@@ -10,6 +11,7 @@ const AuthenticationModal = dynamic(() =>
 );
 
 function NavigationBar() {
+  useGetMeQuery();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const handleClose = () => setIsAuthModalOpen(false);
