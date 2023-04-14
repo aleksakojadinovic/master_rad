@@ -19,32 +19,31 @@ const modalContentStyles = {
   width: "300px",
 };
 
-function AuthenticationModal() {
+function AuthenticationModal({ onClose }) {
   return (
-    <Modal
-      sx={modalStyles}
-      open
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+    <Modal sx={modalStyles} open keepMounted onClose={onClose}>
       <Box sx={modalContentStyles}>
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             marginBottom: "20px",
+            position: "relative",
           }}
         >
           <Typography variant="h6" component="h2">
             Login
           </Typography>
+          <Box sx={{ position: "absolute", top: "0", right: "5px" }}>
+            <Button onClick={onClose}>X</Button>
+          </Box>
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <form>
             <TextField label="Username" variant="outlined" />
             <Box sx={{ marginTop: "12px" }}>
-              <TextField label="Password" variant="outlined" />
+              <TextField label="Password" variant="outlined" type="password" />
             </Box>
             <Box sx={{ marginTop: "12px", marginBottom: "20px" }}>
               <Button fullWidth variant="contained">

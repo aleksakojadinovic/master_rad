@@ -11,12 +11,20 @@ const AuthenticationModal = dynamic(() =>
 function NavigationBar() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
 
+  const handleClose = () => setIsAuthModalOpen(false);
+
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <div>Logo</div>
       <div>
-        {isAuthModalOpen && <AuthenticationModal />}
-        <Button onClick={() => setIsAuthModalOpen(true)}>Login</Button>
+        {isAuthModalOpen && <AuthenticationModal onClose={handleClose} />}
+        <Button
+          onClick={() => setIsAuthModalOpen(true)}
+          onClose={handleClose}
+          disabled={isAuthModalOpen}
+        >
+          Login
+        </Button>
       </div>
     </Box>
   );
