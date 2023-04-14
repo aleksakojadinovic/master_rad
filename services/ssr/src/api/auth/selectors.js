@@ -6,5 +6,14 @@ export const defineSelectors = (slice) => {
     [selectGetMeQueryResult],
     ({ data }) => data,
   );
-  return { selectGetMeQueryResult, selectGetMeData };
+  const selectUser = createSelector([selectGetMeData], (userObject) => {
+    const isLoggedIn = !!userObject;
+    const username = userObject?.username ?? null;
+    const firstName = userObject?.firstName ?? null;
+    const lastName = userObject?.lastName ?? null;
+    const roles = userObject?.roles ?? [];
+
+    return { isLoggedIn, username, firstName, lastName, roles };
+  });
+  return { selectGetMeQueryResult, selectGetMeData, selectUser };
 };

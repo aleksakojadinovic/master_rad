@@ -24,7 +24,6 @@ const makeServerSideStore = async (cookies) => {
 };
 
 export const obtainStore = cache(async (cookies) => {
-  console.log('Calling obtainStore:', Math.floor(Math.random() * 100));
   const store = await makeServerSideStore(cookies);
   return store;
 });

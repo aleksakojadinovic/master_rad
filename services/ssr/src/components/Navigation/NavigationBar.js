@@ -3,8 +3,11 @@
 import { authSliceSelectors, useGetMeQuery } from '@/api/auth/client';
 import { Box, Button } from '@mui/material';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+
+import LogoImage from '../../images/logo-no-background.png';
 
 const AuthenticationModal = dynamic(() =>
   import('../AuthenticationModal/AuthenticationModal'),
@@ -16,22 +19,45 @@ function NavigationBar() {
 
   const handleClose = () => setIsAuthModalOpen(false);
 
-  const user = useSelector(authSliceSelectors.selectGetMeData);
+  const { isLoggedIn, firstName, lastName } = useSelector(
+    authSliceSelectors.selectUser,
+  );
+
+  const renderRightSideContent = () => {
+    if (isLoggedIn) {
+      return (
+        <Button>
+          {firstName} {lastName}
+        </Button>
+      );
+    }
+    if (isAuthModalOpen) {
+      return <AuthenticationModal onClose={handleClose} />;
+    }
+    return (
+      <Button
+        onClick={() => setIsAuthModalOpen(true)}
+        onClose={handleClose}
+        disabled={isAuthModalOpen}
+      >
+        Login
+      </Button>
+    );
+  };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      <div>Logo</div>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: '40px',
+      }}
+    >
       <div>
-        {isAuthModalOpen && <AuthenticationModal onClose={handleClose} />}
-        <Button
-          onClick={() => setIsAuthModalOpen(true)}
-          onClose={handleClose}
-          disabled={isAuthModalOpen}
-        >
-          Login
-        </Button>
-        <pre>{JSON.stringify(user, null, 4)}</pre>
+        <Image src={LogoImage} alt="Logo" height="40" width="111" />
       </div>
+      <div>{renderRightSideContent()}</div>
     </Box>
   );
 }
