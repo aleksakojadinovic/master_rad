@@ -15,7 +15,7 @@ const modalStyles = {
 const modalContentStyles = {
   backgroundColor: "white",
   border: "1px solid #ccc",
-  borderRadius: "3px",
+  borderRadius: "5px",
   width: "300px",
 };
 
