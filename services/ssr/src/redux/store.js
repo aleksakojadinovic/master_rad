@@ -1,10 +1,9 @@
 import { api, authSlice } from "@/slices/api";
-import { globalReducer, setUser } from "@/slices/global";
+import { globalReducer } from "@/slices/global";
 import { configureStore } from "@reduxjs/toolkit";
 import { cache } from "react";
 
 export const makeClientSideStore = (preload) => {
-  // console.log("[makeCLientSideStore] accepting preload:", preload);
   const store = configureStore({
     reducer: {
       global: globalReducer,
@@ -14,10 +13,7 @@ export const makeClientSideStore = (preload) => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(api.middleware),
   });
-  // console.log(
-  //   "[makeCLientSideStore] created store with state:",
-  //   store.getState()
-  // );
+
   return store;
 };
 

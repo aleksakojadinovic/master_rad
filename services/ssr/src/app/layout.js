@@ -1,6 +1,8 @@
 import Provider from "@/components/Provider";
 import React from "react";
 import useServerSideStore from "./useServerSideStore";
+import dynamic from "next/dynamic";
+import NavigationBar from "@/components/Navigation/NavigationBar";
 
 export const metadata = {
   title: "STS",
@@ -13,7 +15,10 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <Provider storeState={store.getState()}>
-        <body>{children}</body>
+        <body>
+          <NavigationBar />
+          {children}
+        </body>
       </Provider>
     </html>
   );
