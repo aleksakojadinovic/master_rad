@@ -63,7 +63,7 @@ function NavigationBar() {
         {/* <Image src={imageUrl} alt="Logo" height="40" width="111" /> */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://dev.sts.com/images/logo-no-background.png"
+          src="https://dev.sts.com/images/logo-no-background.svg"
           alt="Logo"
           style={{ width: '111px', height: '40px' }}
         />
