@@ -1,6 +1,5 @@
-import camelize from "camelize";
-
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
+import camelize from "camelize";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://host.docker.internal/api",
@@ -15,7 +14,7 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-export const api = createApi({
+export const serverSideApi = createApi({
   reducerPath: "api",
   baseQuery: async (args, api, extraOptions) => {
     const result = await baseQuery(args, api, extraOptions);
@@ -24,19 +23,6 @@ export const api = createApi({
     }
     return result;
   },
-  keepUnusedFor: 1000,
+  keepUnusedFor: 86400,
   endpoints: () => ({}),
-});
-
-export const authSlice = api.injectEndpoints({
-  endpoints: (builder) => ({
-    getMe: builder.query({
-      query: () => ({
-        url: "/auth/me",
-      }),
-      transformResponse: (res) => {
-        return res;
-      },
-    }),
-  }),
 });

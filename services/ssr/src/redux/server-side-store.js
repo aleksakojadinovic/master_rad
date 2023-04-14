@@ -1,34 +1,19 @@
-import { api, authSlice } from "@/slices/api";
-import { globalReducer } from "@/slices/global";
+import { authSlice } from "@/api/auth/server";
+import { serverSideApi } from "@/services/server-side-api";
 import { configureStore } from "@reduxjs/toolkit";
 import { cache } from "react";
-
-export const makeClientSideStore = (preload) => {
-  const store = configureStore({
-    reducer: {
-      global: globalReducer,
-      [api.reducerPath]: api.reducer,
-    },
-    preloadedState: preload,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
-  });
-
-  return store;
-};
 
 const makeServerSideStore = async (cookies) => {
   const store = configureStore({
     reducer: {
-      global: globalReducer,
-      [api.reducerPath]: api.reducer,
+      [serverSideApi.reducerPath]: serverSideApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         thunk: {
           extraArgument: cookies,
         },
-      }).concat(api.middleware),
+      }).concat(serverSideApi.middleware),
   });
 
   store.dispatch(authSlice.endpoints.getMe.initiate());

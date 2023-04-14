@@ -1,6 +1,6 @@
 "use client";
 
-import { makeClientSideStore } from "@/redux/store";
+import { makeClientSideStore } from "@/redux/client-side-store";
 import { useRef } from "react";
 import { Provider as ReactReduxProvider } from "react-redux";
 
