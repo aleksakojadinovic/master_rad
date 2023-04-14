@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useGetMeQuery } from "@/api/auth/client";
-import { Box, Button } from "@mui/material";
-import dynamic from "next/dynamic";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useGetMeQuery } from '@/api/auth/client';
+import { Box, Button } from '@mui/material';
+import dynamic from 'next/dynamic';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const AuthenticationModal = dynamic(() =>
-  import("../AuthenticationModal/AuthenticationModal")
+  import('../AuthenticationModal/AuthenticationModal'),
 );
 
 function NavigationBar() {
@@ -17,7 +17,7 @@ function NavigationBar() {
   const handleClose = () => setIsAuthModalOpen(false);
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
       <div>Logo</div>
       <div>
         {isAuthModalOpen && <AuthenticationModal onClose={handleClose} />}

@@ -1,16 +1,16 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import camelize from "camelize";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import camelize from 'camelize';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "/api",
+  baseUrl: '/api',
   prepareHeaders: (headers, api) => {
-    headers.set("X-Requested-With", "XMLHttpRequest");
-    headers.set("Access-Control-Allow-Origin", "*");
+    headers.set('X-Requested-With', 'XMLHttpRequest');
+    headers.set('Access-Control-Allow-Origin', '*');
   },
 });
 
 export const clientSideApi = createApi({
-  reducerPath: "api",
+  reducerPath: 'api',
   baseQuery: async (args, api, extraOptions) => {
     const result = await baseQuery(args, api, extraOptions);
     if (result.data) {

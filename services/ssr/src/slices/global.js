@@ -1,11 +1,11 @@
-const { createSlice } = require("@reduxjs/toolkit");
+const { createSlice } = require('@reduxjs/toolkit');
 
 const initialState = {
   user: null,
 };
 
 const globalSlice = createSlice({
-  name: "globalSlice",
+  name: 'globalSlice',
   initialState,
   reducers: {
     setUser(state, action) {

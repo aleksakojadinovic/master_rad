@@ -1,5 +1,5 @@
-import { clientSideApi } from "@/services/client-side-api";
-import { configureStore } from "@reduxjs/toolkit";
+import { clientSideApi } from '@/services/client-side-api';
+import { configureStore } from '@reduxjs/toolkit';
 
 export const makeClientSideStore = (preload) => {
   const store = configureStore({

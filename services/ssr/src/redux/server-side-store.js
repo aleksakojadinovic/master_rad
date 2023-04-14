@@ -1,7 +1,7 @@
-import { authSlice } from "@/api/auth/server";
-import { serverSideApi } from "@/services/server-side-api";
-import { configureStore } from "@reduxjs/toolkit";
-import { cache } from "react";
+import { authSlice } from '@/api/auth/server';
+import { serverSideApi } from '@/services/server-side-api';
+import { configureStore } from '@reduxjs/toolkit';
+import { cache } from 'react';
 
 const makeServerSideStore = async (cookies) => {
   const store = configureStore({
