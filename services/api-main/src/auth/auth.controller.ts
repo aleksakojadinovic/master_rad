@@ -20,9 +20,9 @@ export class AuthController {
 
   @Get('me')
   @Header('content-type', 'application/json')
+  @UseGuards(AuthGuard('jwt'))
   async me(@Request() req) {
-    const FakeCookie = req.cookies.FakeCookie;
-    const [username, userId] = FakeCookie.split('@');
-    return { id: userId, username };
+    // const accessToken = req.hea
+    return req.user;
   }
 }

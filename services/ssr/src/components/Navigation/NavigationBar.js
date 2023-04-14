@@ -1,9 +1,10 @@
 'use client';
 
-import { useGetMeQuery } from '@/api/auth/client';
+import { authSliceSelectors, useGetMeQuery } from '@/api/auth/client';
 import { Box, Button } from '@mui/material';
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const AuthenticationModal = dynamic(() =>
   import('../AuthenticationModal/AuthenticationModal'),
@@ -14,6 +15,8 @@ function NavigationBar() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const handleClose = () => setIsAuthModalOpen(false);
+
+  const user = useSelector(authSliceSelectors.selectGetMeData);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -27,6 +30,7 @@ function NavigationBar() {
         >
           Login
         </Button>
+        <pre>{JSON.stringify(user, null, 4)}</pre>
       </div>
     </Box>
   );

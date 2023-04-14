@@ -8,8 +8,11 @@ const baseQuery = fetchBaseQuery({
     headers.set('Access-Control-Allow-Origin', '*');
     const cookies = api.extra;
     if (cookies) {
-      const FakeCookie = cookies.get('FakeCookie').value;
-      headers.set('Cookie', `FakeCookie=${FakeCookie}`);
+      const accessToken = cookies.get('accessToken')?.value;
+
+      if (accessToken) {
+        headers.set('Authorization', `Bearer ${accessToken}`);
+      }
     }
   },
 });
