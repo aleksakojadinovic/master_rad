@@ -2,6 +2,7 @@
 
 import { useLoginMutation } from '@/api/auth/client';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 
 const modalStyles = {
@@ -21,8 +22,7 @@ const modalContentStyles = {
 };
 
 function AuthenticationModal({ onClose }) {
-  const [triggerLogin, { isLoading, isSuccess, isError, data }] =
-    useLoginMutation();
+  const [triggerLogin, { isLoading, isSuccess, data }] = useLoginMutation();
   const [username, setUsername] = useState('aleksa');
   const [password, setPassowrd] = useState('aleksa123');
 
@@ -31,8 +31,12 @@ function AuthenticationModal({ onClose }) {
   };
 
   useEffect(() => {
-    console.log(data);
-  }, [isSuccess]);
+    if (!isSuccess) {
+      return;
+    }
+    const { accessToken } = data;
+    Cookies.set('accessToken', accessToken);
+  }, [isSuccess, data]);
 
   return (
     <Modal sx={modalStyles} open keepMounted onClose={onClose}>
