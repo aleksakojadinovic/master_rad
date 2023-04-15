@@ -7,7 +7,6 @@ import { CreateUserResponseDto } from './dto/create-user-response.dto';
 import { getPasswordHash } from 'src/utils';
 import { RolesService } from './roles.service';
 import { Role } from 'src/schemas/role.schema';
-import { UserDTO } from './dto/user-dto';
 
 @Injectable()
 export class UsersService {

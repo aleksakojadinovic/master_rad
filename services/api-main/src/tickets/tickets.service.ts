@@ -45,6 +45,7 @@ export class TicketsService {
     return `This action returns a #${id} ticket`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateTicketDto: UpdateTicketDto) {
     return `This action updates a #${id} ticket`;
   }
