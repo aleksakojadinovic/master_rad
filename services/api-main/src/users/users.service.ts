@@ -7,6 +7,7 @@ import { CreateUserResponseDto } from './dto/create-user-response.dto';
 import { getPasswordHash } from 'src/utils';
 import { RolesService } from './roles.service';
 import { Role } from 'src/schemas/role.schema';
+import { UserDTO } from './dto/user-dto';
 
 @Injectable()
 export class UsersService {
@@ -47,8 +48,9 @@ export class UsersService {
   }
 
   // TODO: maybe add repository layer to handle these populate calls
-  async findByUsername(username: string): Promise<User | null> {
-    return await this.userModel.findOne({ username }).populate('roles');
+  async findByUsername(username: string) {
+    const user = await this.userModel.findOne({ username }).populate('roles');
+    return user;
   }
 
   findOne(id: number) {

@@ -1,11 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Ticket, TicketHistoryEntryType } from 'src/schemas/ticket.schema';
+import { Model } from 'mongoose';
+import { TicketHistoryEntry } from 'src/schemas/ticket.schema';
+import { TicketHistoryEntryCreated } from 'src/schemas/ticket.schema';
 
 @Injectable()
 export class TicketsService {
-  create(createTicketDto: CreateTicketDto) {
-    return 'This action adds a new ticket';
+  constructor(@InjectModel(Ticket.name) private ticketModel: Model<Ticket>) {}
+
+  async create(createTicketDto: CreateTicketDto) {
+    const ticketObject = new Ticket();
+    console.log(createTicketDto);
+    // TODO: Remove hardcoding
+    ticketObject.history = [
+      new TicketHistoryEntry(
+        new Date(),
+        createTicketDto.userId,
+        'New ticket',
+        TicketHistoryEntryType.CREATED,
+        new TicketHistoryEntryCreated(
+          createTicketDto.title,
+          createTicketDto.body,
+        ),
+      ),
+    ];
+
+    const ticketModel = new this.ticketModel(ticketObject);
+
+    console.log({ ticketModel });
+
+    await ticketModel.save();
+
+    return 'Ticket successfully created';
   }
 
   findAll() {

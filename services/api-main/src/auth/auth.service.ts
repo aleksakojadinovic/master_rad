@@ -20,13 +20,15 @@ export class AuthService {
       return null;
     }
 
-    const userPayload = new User(
-      user.username,
-      user.firstName,
-      user.lastName,
-      '',
-      user.roles,
-    );
+    const userPayload = {
+      id: user._id.toString(),
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      passwordHash: '',
+      roles: user.roles,
+    };
+
     return userPayload;
   }
 
