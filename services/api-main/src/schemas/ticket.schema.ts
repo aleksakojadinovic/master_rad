@@ -58,7 +58,7 @@ export class TicketHistoryEntry {
 
 export const TicketHistoryEntrySchemaType = {
   timestamp: Date,
-  initiator: mongoose.Schema.Types.ObjectId,
+  initiator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   note: String,
   entryType: { type: String, enum: TicketHistoryEntryType },
   entry: { type: Object },

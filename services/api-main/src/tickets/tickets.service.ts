@@ -39,7 +39,11 @@ export class TicketsService {
   }
 
   async findOne(id: string) {
-    const ticket: Ticket = await this.ticketModel.findOne({ _id: id });
+    const ticket: Ticket = await this.ticketModel
+      .findOne({ _id: id })
+      .populate('history.initiator')
+      .populate('history.initiator.roles');
+    console.log(ticket.history[0].initiator);
     return ticket;
   }
 

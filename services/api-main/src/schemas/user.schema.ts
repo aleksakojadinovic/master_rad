@@ -26,7 +26,7 @@ export class User {
   @Prop()
   lastName: string;
 
-  @Prop()
+  @Prop({ type: String, select: false })
   passwordHash: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
