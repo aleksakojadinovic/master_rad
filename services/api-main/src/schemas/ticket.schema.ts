@@ -1,5 +1,4 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
 
 enum TicketStatus {
   NEW,
@@ -7,20 +6,30 @@ enum TicketStatus {
   CLOSED,
 }
 
-class TicketHistoryEntryCreated {}
+export class TicketHistoryEntryCreated {}
 
-class TicketHistoryEntryStatusChange {
+export class TicketHistoryEntryStatusChange {
   constructor(public statusFrom: TicketStatus, public statusTo: TicketStatus) {}
 }
 
-class TicketHistoryEntryDeleted {}
+// The initiator field can be used for the user who commented
+export class TicketHistoryEntryCommentAdded {
+  constructor(public body: string) {}
+}
 
-class TicketHistoryEntry {
+export class TicketHistoryEntryDeleted {}
+
+export class TicketHistoryEntry {
   constructor(
     public timestamp: Date,
+    // I'm not sure whether this can be automatically connected to the mongoose Object id
     public initiator: string,
     public note: string,
-    public entry: TicketHistoryEntryStatusChange | TicketHistoryEntryDeleted,
+    public entry:
+      | TicketHistoryEntryCreated
+      | TicketHistoryEntryDeleted
+      | TicketHistoryEntryStatusChange
+      | TicketHistoryEntryCommentAdded,
   ) {}
 }
 
@@ -52,7 +61,7 @@ export class Ticket {
   status: TicketStatus;
 
   @Prop({ type: [{ type: TicketHistoryEntry }] })
-  history: TicketHistoryEntryStatusChange[];
+  history: TicketHistoryEntry[];
 
   //   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
   //   roles: Role[];
