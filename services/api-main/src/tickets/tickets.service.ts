@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -8,7 +8,6 @@ import { TicketHistoryEntry } from 'src/schemas/ticket.schema';
 import { TicketHistoryEntryCreated } from 'src/schemas/ticket.schema';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/schemas/user.schema';
-import { Role } from 'src/schemas/role.schema';
 
 @Injectable()
 export class TicketsService {
