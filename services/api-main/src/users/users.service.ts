@@ -55,8 +55,8 @@ export class UsersService {
     return user;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    return this.userModel.findById(id).populate('roles');
   }
 
   update(id: number) {

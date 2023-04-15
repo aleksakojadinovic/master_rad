@@ -1,5 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
+import { User } from './user.schema';
 
 export enum TicketStatus {
   NEW,
@@ -43,7 +44,7 @@ export class TicketHistoryEntry {
   constructor(
     public timestamp: Date,
     // I'm not sure whether this can be automatically connected to the mongoose Object id
-    public initiator: string,
+    public initiator: User,
     public note: string,
     public entryType: TicketHistoryEntryType,
     public entry:
