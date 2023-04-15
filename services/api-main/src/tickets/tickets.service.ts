@@ -13,8 +13,7 @@ export class TicketsService {
 
   async create(createTicketDto: CreateTicketDto) {
     const ticketObject = new Ticket();
-    console.log(createTicketDto);
-    // TODO: Remove hardcoding
+
     ticketObject.history = [
       new TicketHistoryEntry(
         new Date(),
@@ -29,8 +28,6 @@ export class TicketsService {
     ];
 
     const ticketModel = new this.ticketModel(ticketObject);
-
-    console.log({ ticketModel });
 
     await ticketModel.save();
 

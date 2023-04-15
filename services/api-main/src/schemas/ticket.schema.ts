@@ -70,20 +70,8 @@ export class Ticket {
     this.history = [];
   }
 
-  @Prop({ type: String, enum: TicketStatus })
-  title: string;
-
-  @Prop()
-  body: string;
-
-  @Prop()
-  status: TicketStatus;
-
   @Prop({ type: [{ type: TicketHistoryEntrySchemaType }] })
   history: TicketHistoryEntry[];
-
-  //   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
-  //   roles: Role[];
 }
 
 export const TicketSchema = SchemaFactory.createForClass(Ticket);
