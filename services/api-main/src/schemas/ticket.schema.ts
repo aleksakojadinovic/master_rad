@@ -70,6 +70,8 @@ export class Ticket {
     this.history = [];
   }
 
+  _id: string;
+
   @Prop({ type: [{ type: TicketHistoryEntrySchemaType }] })
   history: TicketHistoryEntry[];
 }

@@ -38,8 +38,9 @@ export class TicketsService {
     return `This action returns all tickets`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ticket`;
+  async findOne(id: string) {
+    const ticket: Ticket = await this.ticketModel.findOne({ _id: id });
+    return ticket;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

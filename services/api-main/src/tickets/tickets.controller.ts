@@ -13,6 +13,8 @@ import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { Ticket } from 'src/schemas/ticket.schema';
+import { TicketDTO } from './dto/ticket.dto';
 
 @Controller('tickets')
 export class TicketsController {
@@ -32,8 +34,10 @@ export class TicketsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const ticket: Ticket = await this.ticketsService.findOne(id);
+    const ticketDto = TicketDTO.mapFromModel(ticket);
+    return ticketDto;
   }
 
   @Patch(':id')
