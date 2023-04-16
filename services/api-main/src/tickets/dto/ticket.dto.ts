@@ -2,8 +2,10 @@ import {
   Ticket,
   TicketHistoryEntryBodyChanged,
   TicketHistoryEntryCreated,
+  TicketHistoryEntryStatusChange,
   TicketHistoryEntryTitleChanged,
   TicketHistoryEntryType,
+  TicketStatus,
 } from 'src/schemas/ticket.schema';
 export class TicketDTO {
   constructor(
@@ -15,11 +17,26 @@ export class TicketDTO {
   ) {}
 
   static mapFromModel(ticket: Ticket): TicketDTO {
-    const initialTitle = (ticket.history[0].entry as TicketHistoryEntryCreated)
-      .title;
+    if (ticket.history.length === 0) {
+      throw new Error(
+        `Found a ticket with no history entries, id: ${ticket._id}`,
+      );
+    }
+    const initialEntry = ticket.history[0].entry as TicketHistoryEntryCreated;
 
-    const initialBody = (ticket.history[0].entry as TicketHistoryEntryCreated)
-      .body;
+    const initialTitle = initialEntry.title;
+    const initialBody = initialEntry.body;
+    const dateCreated = ticket.history[0].timestamp;
+
+    const statuses = ticket.history
+      .filter(
+        (historyEntry) =>
+          historyEntry.entryType === TicketHistoryEntryType.STATUS_CHANGED,
+      )
+      .map(
+        (historyEntry) =>
+          (historyEntry.entry as TicketHistoryEntryStatusChange).statusTo,
+      );
 
     const titles = [initialTitle].concat(
       ticket.history
@@ -47,6 +64,15 @@ export class TicketDTO {
 
     const title = titles[titles.length - 1];
     const body = bodies[bodies.length - 1];
-    return new TicketDTO(ticket._id, title, body, new Date(), '');
+    const status =
+      statuses.length > 0 ? statuses[statuses.length - 1] : TicketStatus.NEW;
+
+    return new TicketDTO(
+      ticket._id,
+      title,
+      body,
+      dateCreated,
+      status.toString(),
+    );
   }
 }

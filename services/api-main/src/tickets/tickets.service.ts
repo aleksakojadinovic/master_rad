@@ -3,12 +3,13 @@ import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket, TicketHistoryEntryType } from 'src/schemas/ticket.schema';
-import { Model } from 'mongoose';
+import { Model, isValidObjectId } from 'mongoose';
 import { TicketHistoryEntry } from 'src/schemas/ticket.schema';
 import { TicketHistoryEntryCreated } from 'src/schemas/ticket.schema';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/schemas/user.schema';
-
+import { ServiceErrors } from 'src/errors';
+import { ok, err } from 'neverthrow';
 @Injectable()
 export class TicketsService {
   constructor(
@@ -59,8 +60,25 @@ export class TicketsService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: number, updateTicketDto: UpdateTicketDto) {
-    return `This action updates a #${id} ticket`;
+  async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
+    if (!isValidObjectId(id)) {
+      return err({
+        error: ServiceErrors.VALIDATION_FAILED,
+        message: 'Invalid ticket id.',
+      });
+    }
+    // console.log({ updateTicketDto });
+
+    const ticket = await this.findOne(id);
+
+    if (!ticket) {
+      return err({
+        error: ServiceErrors.ENTITY_NOT_FOUND,
+        message: 'Ticket not found',
+      });
+    }
+
+    return ok(ticket);
   }
 
   remove(id: number) {

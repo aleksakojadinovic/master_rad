@@ -8,6 +8,7 @@ import {
   Delete,
   Request,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -15,7 +16,9 @@ import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Ticket } from 'src/schemas/ticket.schema';
 import { TicketDTO } from './dto/ticket.dto';
+import { ServiceErrorInterceptor } from 'src/interceptors';
 
+@UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
@@ -41,8 +44,23 @@ export class TicketsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
-    return this.ticketsService.update(+id, updateTicketDto);
+  @UseGuards(AuthGuard('jwt'))
+  async update(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() updateTicketDto: UpdateTicketDto,
+  ) {
+    const result = await this.ticketsService.update(
+      id,
+      req.user.id,
+      updateTicketDto,
+    );
+    if (result.isOk()) {
+      const ticket = TicketDTO.mapFromModel(result.value as Ticket);
+      return ticket;
+    }
+
+    return result.error;
   }
 
   @Delete(':id')
