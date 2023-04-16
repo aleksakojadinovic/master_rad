@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Ticket, TicketHistoryEntryType } from 'src/schemas/ticket.schema';
+import {
+  Ticket,
+  TicketHistoryEntryStatusChange,
+  TicketHistoryEntryType,
+} from 'src/schemas/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
 import { TicketHistoryEntry } from 'src/schemas/ticket.schema';
 import { TicketHistoryEntryCreated } from 'src/schemas/ticket.schema';
@@ -56,27 +60,61 @@ export class TicketsService {
       },
     });
 
-    return ticket;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
-    if (!isValidObjectId(id)) {
-      return err({
-        error: ServiceErrors.VALIDATION_FAILED,
-        message: 'Invalid ticket id.',
-      });
-    }
-    // console.log({ updateTicketDto });
-
-    const ticket = await this.findOne(id);
-
     if (!ticket) {
       return err({
         error: ServiceErrors.ENTITY_NOT_FOUND,
         message: 'Ticket not found',
       });
     }
+
+    return ok(ticket);
+  }
+
+  async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
+    // We assume that userId is validated on the controller I guess? Actually it's guaranteed to be correct
+    // since it is extracted from jwt
+
+    if (!isValidObjectId(id)) {
+      return err({
+        error: ServiceErrors.VALIDATION_FAILED,
+        message: 'Invalid ticket id.',
+      });
+    }
+
+    const ticketObject = await this.findOne(id);
+
+    if (ticketObject.isErr()) {
+      return ticketObject;
+    }
+
+    const ticket = ticketObject.value;
+
+    const user: User = await this.usersService.findOne(userId);
+
+    if (!user) {
+      return err({
+        error: ServiceErrors.ENTITY_NOT_FOUND,
+        message: 'User not found',
+      });
+    }
+
+    if (updateTicketDto.status != null) {
+      // Add status change entry
+      const newEntry = new TicketHistoryEntryStatusChange(
+        updateTicketDto.status,
+      );
+      ticket.history.push(
+        new TicketHistoryEntry(
+          new Date(),
+          user,
+          '',
+          TicketHistoryEntryType.STATUS_CHANGED,
+          newEntry,
+        ),
+      );
+    }
+
+    await ticket.save();
 
     return ok(ticket);
   }

@@ -35,9 +35,8 @@ export class TicketDTO {
       )
       .map(
         (historyEntry) =>
-          (historyEntry.entry as TicketHistoryEntryStatusChange).statusTo,
+          (historyEntry.entry as TicketHistoryEntryStatusChange).status,
       );
-
     const titles = [initialTitle].concat(
       ticket.history
         .filter(

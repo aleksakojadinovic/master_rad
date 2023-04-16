@@ -22,7 +22,7 @@ export class TicketHistoryEntryCreated {
 }
 
 export class TicketHistoryEntryStatusChange {
-  constructor(public statusFrom: TicketStatus, public statusTo: TicketStatus) {}
+  constructor(public status: TicketStatus) {}
 }
 
 // The initiator field can be used for the user who commented
@@ -61,7 +61,7 @@ export const TicketHistoryEntrySchemaType = {
   timestamp: Date,
   initiator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   note: String,
-  entryType: { type: String, enum: TicketHistoryEntryType },
+  entryType: { type: Number, enum: TicketHistoryEntryType },
   entry: { type: Object },
 };
 

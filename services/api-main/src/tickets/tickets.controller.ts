@@ -38,9 +38,11 @@ export class TicketsController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const ticket: Ticket = await this.ticketsService.findOne(id);
-    const ticketDto = TicketDTO.mapFromModel(ticket);
-    return ticketDto;
+    const result = await this.ticketsService.findOne(id);
+    if (result.isOk()) {
+      return TicketDTO.mapFromModel(result.value as Ticket);
+    }
+    return result.error;
   }
 
   @Patch(':id')
