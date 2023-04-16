@@ -1,22 +1,12 @@
 'use client';
 
-import React, { Fragment } from 'react';
+import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Box, Divider, Grid, Typography } from '@mui/material';
-import { format } from 'date-fns';
 import TicketStatusBadge from './TicketStatusBadge';
-import UserCard from '../User/UserCard';
-import UserChip from '../User/UserChip';
-
-// TODO move to utils
-const formatDate = (date) => {
-  const d = new Date(date);
-  return format(
-    new Date(d.toISOString().slice(0, -1)),
-    "dd/MM/yyyy 'at' hh:mm a",
-  );
-};
+import Comment from '../Comment/Comment';
+import { formatDate } from '@/utils';
 
 export default function Ticket({ ticket }) {
   return (
@@ -53,14 +43,7 @@ export default function Ticket({ ticket }) {
       <Divider />
       <CardContent>
         {ticket.comments.map((comment, index) => (
-          <Card key={index} sx={{ marginTop: '12px' }}>
-            <CardContent>
-              <UserChip user={comment.user} />
-              <Box marginTop="12px">
-                <Typography variant="body2">{comment.body}</Typography>
-              </Box>
-            </CardContent>
-          </Card>
+          <Comment key={index} comment={comment} />
         ))}
       </CardContent>
     </Card>
