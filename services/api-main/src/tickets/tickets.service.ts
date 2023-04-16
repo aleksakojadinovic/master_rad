@@ -4,16 +4,21 @@ import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   Ticket,
+  TicketHistoryEntryBodyChanged,
   TicketHistoryEntryStatusChange,
   TicketHistoryEntryType,
 } from 'src/schemas/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
-import { TicketHistoryEntry } from 'src/schemas/ticket.schema';
-import { TicketHistoryEntryCreated } from 'src/schemas/ticket.schema';
+import {
+  TicketHistoryEntry,
+  TicketHistoryEntryCreated,
+} from 'src/schemas/ticket.schema';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/schemas/user.schema';
 import { ServiceErrors } from 'src/errors';
 import { ok, err } from 'neverthrow';
+import { uuid } from 'uuidv4';
+import { TicketDTO } from './dto/ticket.dto';
 @Injectable()
 export class TicketsService {
   constructor(
@@ -26,24 +31,21 @@ export class TicketsService {
 
     const ticketObject = new Ticket();
 
-    ticketObject.history = [
-      new TicketHistoryEntry(
-        new Date(),
-        user,
-        'New ticket',
-        TicketHistoryEntryType.CREATED,
-        new TicketHistoryEntryCreated(
-          createTicketDto.title,
-          createTicketDto.body,
-        ),
+    const initialEntry = TicketHistoryEntry.create({
+      initiator: user,
+      entry: new TicketHistoryEntryCreated(
+        createTicketDto.title,
+        createTicketDto.body,
       ),
-    ];
+    });
+
+    ticketObject.history = [initialEntry];
 
     const ticketModel = new this.ticketModel(ticketObject);
 
     await ticketModel.save();
 
-    return 'Ticket successfully created';
+    return TicketDTO.mapFromModel(ticketModel as Ticket);
   }
 
   findAll() {
@@ -71,9 +73,6 @@ export class TicketsService {
   }
 
   async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
-    // We assume that userId is validated on the controller I guess? Actually it's guaranteed to be correct
-    // since it is extracted from jwt
-
     if (!isValidObjectId(id)) {
       return err({
         error: ServiceErrors.VALIDATION_FAILED,
@@ -98,19 +97,32 @@ export class TicketsService {
       });
     }
 
+    const groupId = uuid();
+    const timestamp = new Date();
+
     if (updateTicketDto.status != null) {
       // Add status change entry
-      const newEntry = new TicketHistoryEntryStatusChange(
-        updateTicketDto.status,
-      );
+      const entry = new TicketHistoryEntryStatusChange(updateTicketDto.status);
+
       ticket.history.push(
-        new TicketHistoryEntry(
-          new Date(),
-          user,
-          '',
-          TicketHistoryEntryType.STATUS_CHANGED,
-          newEntry,
-        ),
+        TicketHistoryEntry.create({
+          groupId,
+          timestamp,
+          initiator: user,
+          entry,
+        }),
+      );
+    }
+
+    if (updateTicketDto.body != null) {
+      const entry = new TicketHistoryEntryBodyChanged(updateTicketDto.body);
+      ticket.history.push(
+        TicketHistoryEntry.create({
+          groupId,
+          timestamp,
+          initiator: user,
+          entry,
+        }),
       );
     }
 
