@@ -18,6 +18,19 @@ class CommentDTO {
   ) {}
 }
 
+class StatusChangeDTO {
+  constructor(
+    public statusFrom: TicketStatus,
+    public statusTo: TicketStatus,
+    public timestamp: Date,
+    public user: UserDTO,
+  ) {}
+}
+
+class HistoryDTO {
+  constructor(public changes: (CommentDTO | StatusChangeDTO)[]) {}
+}
+
 export class TicketDTO {
   constructor(
     public id: string,
@@ -27,6 +40,7 @@ export class TicketDTO {
     public createdAt: Date,
     public status: string,
     public comments: CommentDTO[],
+    public statusChanges: StatusChangeDTO[],
   ) {}
 
   static mapFromModel(ticket: Ticket): TicketDTO {
@@ -43,11 +57,24 @@ export class TicketDTO {
     const initialBody = initialEntry.body;
     const dateCreated = ticket.history[0].timestamp;
 
-    const statuses = ticket.history
-      .filter(
-        (item) => item.entryType === TicketHistoryEntryType.STATUS_CHANGED,
-      )
-      .map((item) => (item.entry as TicketHistoryEntryStatusChange).status);
+    const statuses = ticket.history.filter(
+      (item) => item.entryType === TicketHistoryEntryType.STATUS_CHANGED,
+    );
+
+    const statusChanges = statuses.map((item, index) => {
+      const entry = item.entry as TicketHistoryEntryStatusChange;
+      const previous =
+        index > 0
+          ? (statuses[index - 1].entry as TicketHistoryEntryStatusChange).status
+          : TicketStatus.NEW;
+
+      return new StatusChangeDTO(
+        previous,
+        entry.status,
+        item.timestamp,
+        UserDTO.mapFromModel(item.initiator),
+      );
+    });
 
     const titles = [initialTitle].concat(
       ticket.history
@@ -80,7 +107,12 @@ export class TicketDTO {
     const title = titles[titles.length - 1];
     const body = bodies[bodies.length - 1];
     const status =
-      statuses.length > 0 ? statuses[statuses.length - 1] : TicketStatus.NEW;
+      statuses.length > 0
+        ? (
+            statuses[statuses.length - 1]
+              .entry as TicketHistoryEntryStatusChange
+          ).status
+        : TicketStatus.NEW;
 
     return new TicketDTO(
       ticket._id,
@@ -90,6 +122,7 @@ export class TicketDTO {
       dateCreated,
       status.toString(),
       comments,
+      statusChanges,
     );
   }
 }

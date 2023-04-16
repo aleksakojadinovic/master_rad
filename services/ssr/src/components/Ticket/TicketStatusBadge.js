@@ -8,7 +8,7 @@ export default function TicketStatusBadge({ status }) {
   const displayText = TicketStatusText[status];
 
   const resolveChip = () => {
-    switch (status) {
+    switch (status.toString()) {
       case TicketStatus.NEW:
         return (
           <Chip
@@ -37,9 +37,10 @@ export default function TicketStatusBadge({ status }) {
           />
         );
       default:
+        console.log('idk about', status, 'in', TicketStatus);
         return displayText;
     }
   };
 
-  return <Box sx={{ width: '70px' }}>{resolveChip()}</Box>;
+  return <Box>{resolveChip()}</Box>;
 }

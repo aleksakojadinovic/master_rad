@@ -1,14 +1,13 @@
 import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import UserChip from '../User/UserChip';
 import { formatDate } from '@/utils';
-import styled from '@emotion/styled';
 
 export default function Comment({ comment }) {
   return (
-    <Card sx={{ marginTop: '12px' }}>
+    <Card>
       <CardContent>
         <Box
           display="flex"
@@ -31,11 +30,6 @@ export default function Comment({ comment }) {
           <Typography variant="body2">{comment.body}</Typography>
         </Box>
       </CardContent>
-      <CommentHeaderContainer />
     </Card>
   );
 }
-
-const CommentHeaderContainer = styled(Box)`
-  ${({ theme }) => console.log({ theme })}
-`;

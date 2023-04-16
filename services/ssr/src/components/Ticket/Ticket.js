@@ -7,8 +7,59 @@ import { Box, Divider, Grid, Typography } from '@mui/material';
 import TicketStatusBadge from './TicketStatusBadge';
 import Comment from '../Comment/Comment';
 import { formatDate } from '@/utils';
+import { useMemo } from 'react';
+import StatusChange from '../StatusChange/StatusChange';
 
 export default function Ticket({ ticket }) {
+  const changes = useMemo(
+    () =>
+      [
+        ...ticket.comments.map((comment) => ({
+          comment,
+          type: 'comment',
+          date: new Date(comment.timestamp),
+        })),
+        ...ticket.statusChanges.map((statusChange) => ({
+          statusChange,
+          type: 'statusChange',
+          date: new Date(statusChange.timestamp),
+        })),
+      ].sort(({ date: date1 }, { date: date2 }) => {
+        return date1 - date2;
+      }),
+    [ticket.comments, ticket.statusChanges],
+  );
+
+  const renderChanges = () => {
+    const wrap = (content, index) => (
+      <Box key={index} sx={{ marginTop: '12px' }}>
+        {content}
+      </Box>
+    );
+
+    return changes.map(({ type, comment, statusChange }, index) => {
+      console.log({ index });
+      if (type === 'statusChange') {
+        return wrap(
+          <Box
+            display="flex"
+            justifyContent="center"
+            marginTop="20px"
+            marginBottom="20px"
+          >
+            <Card>
+              <CardContent>
+                <StatusChange statusChange={statusChange} />
+              </CardContent>
+            </Card>
+          </Box>,
+          index,
+        );
+      }
+      return wrap(<Comment comment={comment} />, index);
+    });
+  };
+
   return (
     <Card variant="outlined">
       <CardContent>
@@ -41,11 +92,7 @@ export default function Ticket({ ticket }) {
         <Typography variant="body1">{ticket.body}</Typography>
       </CardContent>
       <Divider />
-      <CardContent>
-        {ticket.comments.map((comment, index) => (
-          <Comment key={index} comment={comment} />
-        ))}
-      </CardContent>
+      <CardContent>{renderChanges()}</CardContent>
     </Card>
   );
 }
