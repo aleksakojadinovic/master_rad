@@ -4,7 +4,6 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { User } from './user.schema';
 import { uuid } from 'uuidv4';
-import { time, timeStamp } from 'console';
 
 export enum TicketStatus {
   NEW,

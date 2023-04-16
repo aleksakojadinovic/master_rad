@@ -6,7 +6,6 @@ import {
   Ticket,
   TicketHistoryEntryBodyChanged,
   TicketHistoryEntryStatusChange,
-  TicketHistoryEntryType,
 } from 'src/schemas/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
 import {
