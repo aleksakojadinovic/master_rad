@@ -52,7 +52,7 @@ type EntryType =
   | TicketHistoryEntryTitleChanged
   | TicketHistoryEntryBodyChanged;
 
-export class TicketHistoryEntry {
+export class TicketHistoryItem {
   constructor(
     public groupId: string,
     public timestamp: Date,
@@ -75,7 +75,7 @@ export class TicketHistoryEntry {
     initiator: User;
     note?: string;
     entry: EntryType;
-  }): TicketHistoryEntry {
+  }): TicketHistoryItem {
     const resolvedGroupId = groupId ?? uuid();
     const resolvedTimestamp = timestamp ?? new Date();
     const resolvedNote = note ?? '';
@@ -106,7 +106,7 @@ export class TicketHistoryEntry {
       type = TicketHistoryEntryType.BODY_CHANGED;
     }
 
-    return new TicketHistoryEntry(
+    return new TicketHistoryItem(
       resolvedGroupId,
       resolvedTimestamp,
       initiator,
@@ -117,7 +117,7 @@ export class TicketHistoryEntry {
   }
 }
 
-export const TicketHistoryEntrySchemaType = {
+export const TicketHistoryItemSchemaType = {
   timestamp: Date,
   initiator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   note: String,
@@ -133,8 +133,8 @@ export class Ticket {
 
   _id: string;
 
-  @Prop({ type: [{ type: TicketHistoryEntrySchemaType }] })
-  history: TicketHistoryEntry[];
+  @Prop({ type: [{ type: TicketHistoryItemSchemaType }] })
+  history: TicketHistoryItem[];
 }
 
 export const TicketSchema = SchemaFactory.createForClass(Ticket);

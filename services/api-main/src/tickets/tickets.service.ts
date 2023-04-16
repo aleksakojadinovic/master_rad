@@ -10,7 +10,7 @@ import {
 } from 'src/schemas/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
 import {
-  TicketHistoryEntry,
+  TicketHistoryItem,
   TicketHistoryEntryCreated,
 } from 'src/schemas/ticket.schema';
 import { UsersService } from 'src/users/users.service';
@@ -31,7 +31,7 @@ export class TicketsService {
 
     const ticketObject = new Ticket();
 
-    const initialEntry = TicketHistoryEntry.create({
+    const initialEntry = TicketHistoryItem.create({
       initiator: user,
       entry: new TicketHistoryEntryCreated(
         createTicketDto.title,
@@ -105,7 +105,7 @@ export class TicketsService {
       const entry = new TicketHistoryEntryStatusChange(updateTicketDto.status);
 
       ticket.history.push(
-        TicketHistoryEntry.create({
+        TicketHistoryItem.create({
           groupId,
           timestamp,
           initiator: user,
@@ -117,7 +117,7 @@ export class TicketsService {
     if (updateTicketDto.body != null) {
       const entry = new TicketHistoryEntryBodyChanged(updateTicketDto.body);
       ticket.history.push(
-        TicketHistoryEntry.create({
+        TicketHistoryItem.create({
           groupId,
           timestamp,
           initiator: user,
