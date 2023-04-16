@@ -37,7 +37,6 @@ export default function TicketStatusBadge({ status }) {
           />
         );
       default:
-        console.log('idk about', status, 'in', TicketStatus);
         return displayText;
     }
   };
