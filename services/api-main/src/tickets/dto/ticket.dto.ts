@@ -26,7 +26,6 @@ export class TicketDTO {
     }
 
     const initialItem = ticket.history[0];
-    console.log(initialItem.initiator);
     const initialEntry = ticket.history[0].entry as TicketHistoryEntryCreated;
 
     const initialTitle = initialEntry.title;

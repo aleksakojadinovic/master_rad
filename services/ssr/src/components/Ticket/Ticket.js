@@ -3,8 +3,9 @@
 import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Divider, Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid, Typography } from '@mui/material';
 import { format } from 'date-fns';
+import TicketStatusBadge from './TicketStatusBadge';
 
 export default function Ticket({ ticket }) {
   const date = new Date(ticket.createdAt);
@@ -16,20 +17,31 @@ export default function Ticket({ ticket }) {
   );
   return (
     <Card variant="outlined">
-      <Grid>
-        <Grid item xs={12}>
-          <CardContent>
-            <Typography variant="h4">{ticket.title}</Typography>
-          </CardContent>
+      <CardContent>
+        <Grid container>
+          <Grid item xs={12} md={9}>
+            <Box display="flex" alignItems="center" height="100%">
+              <Typography variant="h4">{ticket.title}</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              height="100%"
+            >
+              <Typography component="div" sx={{ color: 'text.disabled' }}>
+                {createdAtDisplay}
+              </Typography>
+              <Typography component="div" sx={{ color: 'secondary.main' }}>
+                by {ticket.createdUser.firstName} {ticket.createdUser.lastName}
+              </Typography>
+              <TicketStatusBadge status={ticket.status} />
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <CardContent>
-            <Typography variant="h6" component="div">
-              {createdAtDisplay}
-            </Typography>
-          </CardContent>
-        </Grid>
-      </Grid>
+      </CardContent>
 
       <Divider />
       <CardContent>
