@@ -1,6 +1,7 @@
 import {
   Ticket,
   TicketHistoryEntryBodyChanged,
+  TicketHistoryEntryCommentAdded,
   TicketHistoryEntryCreated,
   TicketHistoryEntryStatusChange,
   TicketHistoryEntryTitleChanged,
@@ -8,6 +9,15 @@ import {
   TicketStatus,
 } from 'src/schemas/ticket.schema';
 import { UserDTO } from 'src/users/dto/user-dto';
+
+class CommentDTO {
+  constructor(
+    public user: UserDTO,
+    public timestamp: Date,
+    public body: string,
+  ) {}
+}
+
 export class TicketDTO {
   constructor(
     public id: string,
@@ -16,6 +26,7 @@ export class TicketDTO {
     public body: string,
     public createdAt: Date,
     public status: string,
+    public comments: CommentDTO[],
   ) {}
 
   static mapFromModel(ticket: Ticket): TicketDTO {
@@ -34,36 +45,37 @@ export class TicketDTO {
 
     const statuses = ticket.history
       .filter(
-        (historyEntry) =>
-          historyEntry.entryType === TicketHistoryEntryType.STATUS_CHANGED,
+        (item) => item.entryType === TicketHistoryEntryType.STATUS_CHANGED,
       )
-      .map(
-        (historyEntry) =>
-          (historyEntry.entry as TicketHistoryEntryStatusChange).status,
-      );
+      .map((item) => (item.entry as TicketHistoryEntryStatusChange).status);
+
     const titles = [initialTitle].concat(
       ticket.history
         .filter(
-          (historyEntry) =>
-            historyEntry.entryType === TicketHistoryEntryType.TITLE_CHANGED,
+          (item) => item.entryType === TicketHistoryEntryType.TITLE_CHANGED,
         )
-        .map(
-          (historyEntry) =>
-            (historyEntry.entry as TicketHistoryEntryTitleChanged).title,
-        ),
+        .map((item) => (item.entry as TicketHistoryEntryTitleChanged).title),
     );
 
     const bodies = [initialBody].concat(
       ticket.history
         .filter(
-          (historyEntry) =>
-            historyEntry.entryType === TicketHistoryEntryType.BODY_CHANGED,
+          (item) => item.entryType === TicketHistoryEntryType.BODY_CHANGED,
         )
-        .map(
-          (historyEntry) =>
-            (historyEntry.entry as TicketHistoryEntryBodyChanged).body,
-        ),
+        .map((item) => (item.entry as TicketHistoryEntryBodyChanged).body),
     );
+
+    const comments = ticket.history
+      .filter((item) => item.entryType === TicketHistoryEntryType.COMMEND_ADDED)
+      .map((item) => ({
+        entry: item.entry as TicketHistoryEntryCommentAdded,
+        user: item.initiator,
+        timestamp: item.timestamp,
+      }))
+      .map(
+        ({ user, entry, timestamp }) =>
+          new CommentDTO(UserDTO.mapFromModel(user), timestamp, entry.body),
+      );
 
     const title = titles[titles.length - 1];
     const body = bodies[bodies.length - 1];
@@ -73,16 +85,11 @@ export class TicketDTO {
     return new TicketDTO(
       ticket._id,
       title,
-      new UserDTO(
-        initialItem.initiator._id,
-        initialItem.initiator.username,
-        initialItem.initiator.firstName,
-        initialItem.initiator.lastName,
-        initialItem.initiator.roles.map(({ name }) => name),
-      ),
+      UserDTO.mapFromModel(initialItem.initiator),
       body,
       dateCreated,
       status.toString(),
+      comments,
     );
   }
 }

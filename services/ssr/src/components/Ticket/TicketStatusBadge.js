@@ -1,6 +1,6 @@
 'use client';
 
-import { TicketStatus, TicketStatusText } from '@/enums/TicketStatus';
+import { TicketStatus, TicketStatusText } from '@/enums/tickets';
 import { Box, Chip } from '@mui/material';
 import React from 'react';
 

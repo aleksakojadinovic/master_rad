@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import {
   Ticket,
   TicketHistoryEntryBodyChanged,
+  TicketHistoryEntryCommentAdded,
   TicketHistoryEntryStatusChange,
 } from 'src/schemas/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
@@ -115,6 +116,19 @@ export class TicketsService {
 
     if (updateTicketDto.body != null) {
       const entry = new TicketHistoryEntryBodyChanged(updateTicketDto.body);
+      ticket.history.push(
+        TicketHistoryItem.create({
+          groupId,
+          timestamp,
+          initiator: user,
+          entry,
+        }),
+      );
+    }
+
+    if (updateTicketDto.comment != null && updateTicketDto.comment.length > 0) {
+      // TODO: Some extra validation? idk
+      const entry = new TicketHistoryEntryCommentAdded(updateTicketDto.comment);
       ticket.history.push(
         TicketHistoryItem.create({
           groupId,

@@ -1,20 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Box, Divider, Grid, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import TicketStatusBadge from './TicketStatusBadge';
+import UserCard from '../User/UserCard';
+import UserChip from '../User/UserChip';
 
-export default function Ticket({ ticket }) {
-  const date = new Date(ticket.createdAt);
-
-  console.log({ ticket });
-  const createdAtDisplay = format(
-    new Date(date.toISOString().slice(0, -1)),
+// TODO move to utils
+const formatDate = (date) => {
+  const d = new Date(date);
+  return format(
+    new Date(d.toISOString().slice(0, -1)),
     "dd/MM/yyyy 'at' hh:mm a",
   );
+};
+
+export default function Ticket({ ticket }) {
   return (
     <Card variant="outlined">
       <CardContent>
@@ -32,7 +36,7 @@ export default function Ticket({ ticket }) {
               height="100%"
             >
               <Typography component="div" sx={{ color: 'text.disabled' }}>
-                {createdAtDisplay}
+                {formatDate(ticket.createdAt)}
               </Typography>
               <Typography component="div" sx={{ color: 'secondary.main' }}>
                 by {ticket.createdUser.firstName} {ticket.createdUser.lastName}
@@ -42,10 +46,22 @@ export default function Ticket({ ticket }) {
           </Grid>
         </Grid>
       </CardContent>
-
       <Divider />
       <CardContent>
-        <Typography variant="p">{ticket.body}</Typography>
+        <Typography variant="body1">{ticket.body}</Typography>
+      </CardContent>
+      <Divider />
+      <CardContent>
+        {ticket.comments.map((comment, index) => (
+          <Card key={index} sx={{ marginTop: '12px' }}>
+            <CardContent>
+              <UserChip user={comment.user} />
+              <Box marginTop="12px">
+                <Typography variant="body2">{comment.body}</Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        ))}
       </CardContent>
     </Card>
   );
