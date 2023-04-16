@@ -17,6 +17,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { Ticket } from 'src/schemas/ticket.schema';
 import { TicketDTO } from './dto/ticket.dto';
 import { ServiceErrorInterceptor } from 'src/interceptors';
+import { isValidObjectId } from 'mongoose';
+import { err } from 'neverthrow';
+import { ServiceErrors } from 'src/errors';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')
@@ -38,6 +41,12 @@ export class TicketsController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
+    if (!isValidObjectId(id)) {
+      return err({
+        type: ServiceErrors.VALIDATION_FAILED,
+        message: 'Invalid ticket id',
+      });
+    }
     const result = await this.ticketsService.findOne(id);
     if (result.isOk()) {
       return TicketDTO.mapFromModel(result.value as Ticket);

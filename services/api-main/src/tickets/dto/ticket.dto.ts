@@ -7,10 +7,12 @@ import {
   TicketHistoryEntryType,
   TicketStatus,
 } from 'src/schemas/ticket.schema';
+import { UserDTO } from 'src/users/dto/user-dto';
 export class TicketDTO {
   constructor(
     public id: string,
     public title: string,
+    public createdUser: UserDTO,
     public body: string,
     public createdAt: Date,
     public status: string,
@@ -22,6 +24,9 @@ export class TicketDTO {
         `Found a ticket with no history entries, id: ${ticket._id}`,
       );
     }
+
+    const initialItem = ticket.history[0];
+    console.log(initialItem.initiator);
     const initialEntry = ticket.history[0].entry as TicketHistoryEntryCreated;
 
     const initialTitle = initialEntry.title;
@@ -69,6 +74,13 @@ export class TicketDTO {
     return new TicketDTO(
       ticket._id,
       title,
+      new UserDTO(
+        initialItem.initiator._id,
+        initialItem.initiator.username,
+        initialItem.initiator.firstName,
+        initialItem.initiator.lastName,
+        initialItem.initiator.roles.map(({ name }) => name),
+      ),
       body,
       dateCreated,
       status.toString(),

@@ -17,6 +17,8 @@ export class User {
     this.roles = roles;
   }
 
+  _id: string;
+
   @Prop()
   username: string;
 
