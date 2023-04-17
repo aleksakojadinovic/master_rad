@@ -1,0 +1,7 @@
+import { TicketStatus } from 'src/schemas/ticket.schema';
+
+export class UpdateTicketDto {
+  status?: TicketStatus;
+  body?: string;
+  comment?: string;
+}

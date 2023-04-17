@@ -3,6 +3,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { TicketsModule } from './tickets/tickets.module';
 
 const MAIN_DB_USERNAME = process.env.MAIN_DB_USERNAME;
 const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
@@ -15,6 +16,7 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
     ),
     UsersModule,
     AuthModule,
+    TicketsModule,
   ],
   providers: [AppService],
 })

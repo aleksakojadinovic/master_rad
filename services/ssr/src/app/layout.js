@@ -2,6 +2,7 @@ import Provider from '@/components/Provider';
 import React from 'react';
 import useServerSideStore from './useServerSideStore';
 import NavigationBar from '@/components/Navigation/NavigationBar';
+import RootStyleRegistry from '@/components/RootStyleRegistry';
 
 export const metadata = {
   title: 'STS',
@@ -14,10 +15,12 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <Provider storeState={store.getState()}>
-        <body>
-          <NavigationBar />
-          {children}
-        </body>
+        <RootStyleRegistry>
+          <body>
+            <NavigationBar />
+            {children}
+          </body>
+        </RootStyleRegistry>
       </Provider>
     </html>
   );

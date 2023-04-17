@@ -6,9 +6,6 @@ import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import urlJoin from 'url-join';
-import { getExternalBaseUrl } from '@/utils';
-
 const AuthenticationModal = dynamic(() =>
   import('../AuthenticationModal/AuthenticationModal'),
 );
@@ -21,11 +18,6 @@ function NavigationBar() {
 
   const { isLoggedIn, firstName, lastName } = useSelector(
     authSliceSelectors.selectUser,
-  );
-
-  const imageUrl = urlJoin(
-    getExternalBaseUrl(),
-    '/images/logo-no-background.png',
   );
 
   const renderRightSideContent = () => {

@@ -1,7 +1,6 @@
 import { validatePasswordHash } from 'src/utils';
 import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-import { User } from 'src/schemas/user.schema';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -20,23 +19,25 @@ export class AuthService {
       return null;
     }
 
-    const userPayload = new User(
-      user.username,
-      user.firstName,
-      user.lastName,
-      '',
-      user.roles,
-    );
+    const userPayload = {
+      id: user._id.toString(),
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      passwordHash: '',
+      roles: user.roles,
+    };
+
     return userPayload;
   }
 
   async login(user: any) {
     const payload = {
-      id: user.id,
+      _id: user.id,
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
-      roles: user.roles.map(({ name }) => name),
+      roles: user.roles,
     };
     const token = this.jwtService.sign(payload);
     // TODO: Add token to database

@@ -47,12 +47,16 @@ export class UsersService {
   }
 
   // TODO: maybe add repository layer to handle these populate calls
-  async findByUsername(username: string): Promise<User | null> {
-    return await this.userModel.findOne({ username }).populate('roles');
+  async findByUsername(username: string) {
+    const user = await this.userModel
+      .findOne({ username })
+      .select('+passwordHash')
+      .populate('roles');
+    return user;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    return this.userModel.findById(id).populate('roles');
   }
 
   update(id: number) {
