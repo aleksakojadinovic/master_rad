@@ -37,7 +37,7 @@ export class AuthService {
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
-      roles: user.roles.map(({ name }) => name),
+      roles: user.roles,
     };
     const token = this.jwtService.sign(payload);
     // TODO: Add token to database

@@ -9,6 +9,7 @@ import {
   Request,
   UseGuards,
   UseInterceptors,
+  Req,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -20,6 +21,7 @@ import { ServiceErrorInterceptor } from 'src/interceptors';
 import { isValidObjectId } from 'mongoose';
 import { err } from 'neverthrow';
 import { ServiceErrors } from 'src/errors';
+import { User } from 'src/schemas/user.schema';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')
@@ -40,7 +42,7 @@ export class TicketsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Req() req, @Param('id') id: string) {
     if (!isValidObjectId(id)) {
       return err({
         type: ServiceErrors.VALIDATION_FAILED,
@@ -61,6 +63,8 @@ export class TicketsController {
     @Param('id') id: string,
     @Body() updateTicketDto: UpdateTicketDto,
   ) {
+    const user = req.user as User;
+    console.log({ roles: user.roles });
     const result = await this.ticketsService.update(
       id,
       req.user.id,
