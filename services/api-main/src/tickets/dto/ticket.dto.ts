@@ -15,6 +15,7 @@ class CommentDTO {
     public user: UserDTO,
     public timestamp: Date,
     public body: string,
+    public index: number,
   ) {}
 }
 
@@ -24,11 +25,8 @@ class StatusChangeDTO {
     public statusTo: TicketStatus,
     public timestamp: Date,
     public user: UserDTO,
+    public index: number,
   ) {}
-}
-
-class HistoryDTO {
-  constructor(public changes: (CommentDTO | StatusChangeDTO)[]) {}
 }
 
 export class TicketDTO {
@@ -57,24 +55,34 @@ export class TicketDTO {
     const initialBody = initialEntry.body;
     const dateCreated = ticket.history[0].timestamp;
 
-    const statuses = ticket.history.filter(
-      (item) => item.entryType === TicketHistoryEntryType.STATUS_CHANGED,
-    );
-
-    const statusChanges = statuses.map((item, index) => {
-      const entry = item.entry as TicketHistoryEntryStatusChange;
-      const previous =
-        index > 0
-          ? (statuses[index - 1].entry as TicketHistoryEntryStatusChange).status
-          : TicketStatus.NEW;
-
-      return new StatusChangeDTO(
-        previous,
-        entry.status,
-        item.timestamp,
-        UserDTO.mapFromModel(item.initiator),
+    const statusItemsAndIndices = ticket.history
+      .map((item, index) => ({ item, index }))
+      .filter(
+        ({ item }) => item.entryType === TicketHistoryEntryType.STATUS_CHANGED,
       );
-    });
+
+    console.log({ statusItems: statusItemsAndIndices });
+
+    const statusChanges = statusItemsAndIndices.map(
+      ({ item, index }, arrayIndex) => {
+        const entry = item.entry as TicketHistoryEntryStatusChange;
+        const previous =
+          arrayIndex > 0
+            ? (
+                statusItemsAndIndices[arrayIndex - 1].item
+                  .entry as TicketHistoryEntryStatusChange
+              ).status
+            : TicketStatus.NEW;
+
+        return new StatusChangeDTO(
+          previous,
+          entry.status,
+          item.timestamp,
+          UserDTO.mapFromModel(item.initiator),
+          index,
+        );
+      },
+    );
 
     const titles = [initialTitle].concat(
       ticket.history
@@ -92,24 +100,33 @@ export class TicketDTO {
         .map((item) => (item.entry as TicketHistoryEntryBodyChanged).body),
     );
 
-    const comments = ticket.history
-      .filter((item) => item.entryType === TicketHistoryEntryType.COMMEND_ADDED)
-      .map((item) => ({
+    const commentItems = ticket.history
+      .map((item, index) => ({ item, index }))
+      .filter(
+        ({ item }) => item.entryType === TicketHistoryEntryType.COMMEND_ADDED,
+      )
+      .map(({ item, index }) => ({
         entry: item.entry as TicketHistoryEntryCommentAdded,
         user: item.initiator,
         timestamp: item.timestamp,
+        index,
       }))
       .map(
-        ({ user, entry, timestamp }) =>
-          new CommentDTO(UserDTO.mapFromModel(user), timestamp, entry.body),
+        ({ user, entry, timestamp, index }) =>
+          new CommentDTO(
+            UserDTO.mapFromModel(user),
+            timestamp,
+            entry.body,
+            index,
+          ),
       );
 
     const title = titles[titles.length - 1];
     const body = bodies[bodies.length - 1];
     const status =
-      statuses.length > 0
+      statusItemsAndIndices.length > 0
         ? (
-            statuses[statuses.length - 1]
+            statusItemsAndIndices[statusItemsAndIndices.length - 1].item
               .entry as TicketHistoryEntryStatusChange
           ).status
         : TicketStatus.NEW;
@@ -121,7 +138,7 @@ export class TicketDTO {
       body,
       dateCreated,
       status.toString(),
-      comments,
+      commentItems,
       statusChanges,
     );
   }

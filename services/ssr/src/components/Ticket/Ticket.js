@@ -16,16 +16,16 @@ export default function Ticket({ ticket }) {
       [
         ...ticket.comments.map((comment) => ({
           comment,
+          index: comment.index,
           type: 'comment',
-          date: new Date(comment.timestamp),
         })),
         ...ticket.statusChanges.map((statusChange) => ({
           statusChange,
+          index: statusChange.index,
           type: 'statusChange',
-          date: new Date(statusChange.timestamp),
         })),
-      ].sort(({ date: date1 }, { date: date2 }) => {
-        return date1 - date2;
+      ].sort(({ index: index1 }, { index: index2 }) => {
+        return index1 - index2;
       }),
     [ticket.comments, ticket.statusChanges],
   );
@@ -38,7 +38,6 @@ export default function Ticket({ ticket }) {
     );
 
     return changes.map(({ type, comment, statusChange }, index) => {
-      console.log({ index });
       if (type === 'statusChange') {
         return wrap(
           <Box
