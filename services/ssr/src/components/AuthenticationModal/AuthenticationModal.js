@@ -27,8 +27,6 @@ function AuthenticationModal({ onClose }) {
   const [username, setUsername] = useState('aleksa');
   const [password, setPassowrd] = useState('aleksa123');
 
-  const router = useRouter();
-
   const handleLogin = () => {
     triggerLogin({ username, password });
   };
@@ -39,8 +37,9 @@ function AuthenticationModal({ onClose }) {
     }
     const { accessToken } = data;
     Cookies.set('accessToken', accessToken);
-    router.refresh();
-  }, [isSuccess, data, router]);
+
+    location.reload();
+  }, [isSuccess, data]);
 
   return (
     <Modal sx={modalStyles} open keepMounted onClose={onClose}>
