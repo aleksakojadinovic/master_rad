@@ -72,11 +72,7 @@ export class TicketsController {
       .map(({ name }) => name)
       .some((role) => ['agent', 'admin'].includes(role));
 
-    console.log({ user });
-
     const isTicketOwner = await this.ticketsService.isTicketOwner(user._id, id);
-
-    console.log({ hasRequiredRole, isTicketOwner });
 
     if (!hasRequiredRole && !isTicketOwner) {
       throw new NotFoundException();

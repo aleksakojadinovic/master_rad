@@ -37,7 +37,7 @@ function AuthenticationModal({ onClose }) {
     const { accessToken } = data;
     Cookies.set('accessToken', accessToken);
 
-    location.reload();
+    window.location.reload();
   }, [isSuccess, data]);
 
   return (

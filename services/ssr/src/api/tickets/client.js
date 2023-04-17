@@ -6,6 +6,6 @@ export const ticketsSlice = clientSideApi.injectEndpoints(
   ticketsSliceDefinition,
 );
 
-export const { useGetMeQuery, useLoginMutation } = ticketsSlice;
+export const { useGetTicketQuery } = ticketsSlice;
 
 export const ticketsSliceSelectors = defineSelectors(ticketsSlice);

@@ -61,8 +61,6 @@ export class TicketDTO {
         ({ item }) => item.entryType === TicketHistoryEntryType.STATUS_CHANGED,
       );
 
-    console.log({ statusItems: statusItemsAndIndices });
-
     const statusChanges = statusItemsAndIndices.map(
       ({ item, index }, arrayIndex) => {
         const entry = item.entry as TicketHistoryEntryStatusChange;

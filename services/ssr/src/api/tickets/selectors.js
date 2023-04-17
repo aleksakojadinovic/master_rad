@@ -5,6 +5,17 @@ export const defineSelectors = (slice) => {
     [(state) => state, (_, id) => id],
     (state, id) => slice.endpoints.getTicket.select({ id })(state),
   );
+
+  const selectGetTicketIndicators = createSelector(
+    [selectGetTicketQueryResult],
+    ({ isSuccess, isError, isLoading, isFetching }) => ({
+      isSuccess,
+      isError,
+      isLoading,
+      isFetching,
+    }),
+  );
+
   const selectGetTicketData = createSelector(
     [selectGetTicketQueryResult],
     ({ data }) => data,
@@ -12,5 +23,6 @@ export const defineSelectors = (slice) => {
 
   return {
     selectGetTicketData,
+    selectGetTicketIndicators,
   };
 };
