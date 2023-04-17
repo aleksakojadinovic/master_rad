@@ -3,7 +3,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { User } from './user.schema';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 
 export enum TicketStatus {
   NEW,

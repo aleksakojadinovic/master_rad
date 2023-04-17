@@ -17,7 +17,7 @@ import { UsersService } from 'src/users/users.service';
 import { User } from 'src/schemas/user.schema';
 import { ServiceErrors } from 'src/errors';
 import { ok, err } from 'neverthrow';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 import { TicketDTO } from './dto/ticket.dto';
 @Injectable()
 export class TicketsService {
@@ -70,6 +70,20 @@ export class TicketsService {
     }
 
     return ok(ticket);
+  }
+
+  async isTicketOwner(userId: string, ticketId: string) {
+    const result = await this.findOne(ticketId);
+
+    if (result.isErr()) {
+      return result;
+    }
+
+    const ticket = result.value as Ticket;
+
+    const creatorId = ticket.history[0].initiator._id.toString();
+
+    return userId === creatorId;
   }
 
   async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
