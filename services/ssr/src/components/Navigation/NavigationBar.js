@@ -1,46 +1,43 @@
 'use client';
 
-import { authSliceSelectors, useGetMeQuery } from '@/api/auth/client';
-import { Box, Button } from '@mui/material';
-import dynamic from 'next/dynamic';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Box } from '@mui/material';
+import React from 'react';
 
-const AuthenticationModal = dynamic(() =>
-  import('../AuthenticationModal/AuthenticationModal'),
-);
+// const AuthenticationModal = dynamic(() =>
+//   import('../AuthenticationModal/AuthenticationModal'),
+// );
 
 function NavigationBar() {
-  useGetMeQuery();
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  // useGetMeQuery();
+  // const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  const handleClose = () => setIsAuthModalOpen(false);
+  // const handleClose = () => setIsAuthModalOpen(false);
 
-  const { isLoggedIn, firstName, lastName } = useSelector(
-    authSliceSelectors.selectUser,
-  );
+  // const { isLoggedIn, firstName, lastName } = useSelector(
+  //   authSliceSelectors.selectUser,
+  // );
 
-  const renderRightSideContent = () => {
-    if (isLoggedIn) {
-      return (
-        <Button>
-          {firstName} {lastName}
-        </Button>
-      );
-    }
-    if (isAuthModalOpen) {
-      return <AuthenticationModal onClose={handleClose} />;
-    }
-    return (
-      <Button
-        onClick={() => setIsAuthModalOpen(true)}
-        onClose={handleClose}
-        disabled={isAuthModalOpen}
-      >
-        Login
-      </Button>
-    );
-  };
+  // const renderRightSideContent = () => {
+  //   if (isLoggedIn) {
+  //     return (
+  //       <Button>
+  //         {firstName} {lastName}
+  //       </Button>
+  //     );
+  //   }
+  //   if (isAuthModalOpen) {
+  //     return <AuthenticationModal onClose={handleClose} />;
+  //   }
+  //   return (
+  //     <Button
+  //       onClick={() => setIsAuthModalOpen(true)}
+  //       onClose={handleClose}
+  //       disabled={isAuthModalOpen}
+  //     >
+  //       Login
+  //     </Button>
+  //   );
+  // };
 
   return (
     <Box
@@ -60,7 +57,7 @@ function NavigationBar() {
           style={{ width: '111px', height: '40px' }}
         />
       </div>
-      <div>{renderRightSideContent()}</div>
+      {/* <div>{renderRightSideContent()}</div> */}
     </Box>
   );
 }
