@@ -1,6 +1,9 @@
 import React from 'react';
-import TicketViewPage from './TicketViewPage';
+import Ticket from '@/components/Ticket/Ticket';
+import { useServerSideFetch } from '@/app/serverSideFetch';
 
 export default async function TicketView({ params: { id } }) {
-  return <TicketViewPage id={id} />;
+  const ticket = await useServerSideFetch(`/api/tickets/${id}`);
+
+  return <Ticket ticket={ticket} />;
 }
