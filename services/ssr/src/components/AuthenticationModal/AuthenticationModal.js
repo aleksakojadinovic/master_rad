@@ -1,5 +1,3 @@
-'use client';
-
 import { useLoginMutation } from '@/api/auth/client';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import Cookies from 'js-cookie';

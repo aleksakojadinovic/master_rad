@@ -1,5 +1,3 @@
-'use client';
-
 import { authSliceSelectors, useGetMeQuery } from '@/api/auth/client';
 import { Box, Button } from '@mui/material';
 import dynamic from 'next/dynamic';

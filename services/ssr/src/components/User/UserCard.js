@@ -1,5 +1,3 @@
-'use client';
-
 import { Avatar, Box, Chip, Typography } from '@mui/material';
 import React from 'react';
 

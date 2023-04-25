@@ -26,6 +26,6 @@ export default createApi({
     }
     return result;
   },
-  keepUnusedFor: 10,
+  keepUnusedFor: 1000,
   endpoints: () => ({}),
 });
