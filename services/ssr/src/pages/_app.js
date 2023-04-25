@@ -1,4 +1,6 @@
+import { authSlice } from '@/api/auth';
 import AppWrapper from '@/components/AppWrapper';
+import NavigationBar from '@/components/Navigation/NavigationBar';
 import PageContainer from '@/components/PageContainer/PageContainer';
 import { wrapper } from '@/redux/store';
 import App from 'next/app';
@@ -10,6 +12,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <Provider store={store}>
+      <NavigationBar />
       <PageContainer>
         <AppWrapper Component={Component} pageProps={pageProps} />
       </PageContainer>
@@ -17,9 +20,15 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-MyApp.getInitialProps = wrapper.getInitialAppProps(() => async (context) => {
-  const appProps = await App.getInitialProps(context);
-  return { ...appProps };
-});
+MyApp.getInitialProps = wrapper.getInitialAppProps(
+  (store) => async (context) => {
+    store.dispatch(authSlice.endpoints.getMe.initiate());
+
+    await Promise.all(store.dispatch(authSlice.util.getRunningQueriesThunk()));
+
+    const appProps = await App.getInitialProps(context);
+    return { ...appProps };
+  },
+);
 
 export default MyApp;

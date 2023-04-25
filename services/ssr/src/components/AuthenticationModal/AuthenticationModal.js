@@ -1,4 +1,4 @@
-import { useLoginMutation } from '@/api/auth/client';
+import { useLoginMutation } from '@/api/auth';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
@@ -20,9 +20,10 @@ const modalContentStyles = {
 };
 
 function AuthenticationModal({ onClose }) {
-  const [triggerLogin, { isLoading, isSuccess, data }] = useLoginMutation();
   const [username, setUsername] = useState('aleksa');
   const [password, setPassowrd] = useState('aleksa123');
+
+  const [triggerLogin, { data, isSuccess, isLoading }] = useLoginMutation();
 
   const handleLogin = () => {
     triggerLogin({ username, password });

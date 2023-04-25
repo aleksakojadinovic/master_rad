@@ -1,4 +1,4 @@
-import { authSliceSelectors, useGetMeQuery } from '@/api/auth/client';
+import { selectGetMeQueryResponse, useGetMeQuery } from '@/api/auth';
 import { Box, Button } from '@mui/material';
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
@@ -14,15 +14,13 @@ function NavigationBar() {
 
   const handleClose = () => setIsAuthModalOpen(false);
 
-  const { isLoggedIn, firstName, lastName } = useSelector(
-    authSliceSelectors.selectUser,
-  );
+  const user = useSelector(selectGetMeQueryResponse);
 
   const renderRightSideContent = () => {
-    if (isLoggedIn) {
+    if (user != null) {
       return (
         <Button>
-          {firstName} {lastName}
+          {user.firstName} {user.lastName}
         </Button>
       );
     }
@@ -50,7 +48,6 @@ function NavigationBar() {
       }}
     >
       <div>
-        {/* <Image src={imageUrl} alt="Logo" height="40" width="111" /> */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://dev.sts.com/images/logo-no-background.svg"
