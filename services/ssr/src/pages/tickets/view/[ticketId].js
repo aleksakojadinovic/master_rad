@@ -6,8 +6,9 @@ import {
 } from '@/api/tickets';
 import Ticket from '@/components/Ticket/Ticket';
 import { wrapper } from '@/redux/store';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
 function TicketViewPage() {
@@ -19,7 +20,17 @@ function TicketViewPage() {
   const ticket = useSelector((state) =>
     selectGetTicketQueryResponse(state, id),
   );
-  return <Ticket ticket={ticket} />;
+
+  const title = `${ticket.title} | STS`;
+
+  return (
+    <Fragment>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <Ticket ticket={ticket} />
+    </Fragment>
+  );
 }
 
 export default TicketViewPage;
