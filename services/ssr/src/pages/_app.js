@@ -1,6 +1,5 @@
 import { authSlice } from '@/api/auth';
 import AppWrapper from '@/components/AppWrapper';
-import NavigationBar from '@/components/Navigation/NavigationBar';
 import PageContainer from '@/components/PageContainer/PageContainer';
 import { wrapper } from '@/redux/store';
 import App from 'next/app';
@@ -12,7 +11,6 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <Provider store={store}>
-      <NavigationBar />
       <PageContainer>
         <AppWrapper Component={Component} pageProps={pageProps} />
       </PageContainer>

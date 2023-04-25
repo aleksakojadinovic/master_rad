@@ -1,10 +1,16 @@
 import { wrapper } from '@/redux/store';
-import React from 'react';
+import React, { Fragment } from 'react';
+import NavigationBar from './Navigation/NavigationBar';
 
 function AppWrapper({ Component, pageProps }) {
   wrapper.useHydration(pageProps);
 
-  return <Component {...pageProps} />;
+  return (
+    <Fragment>
+      <NavigationBar />
+      <Component {...pageProps} />
+    </Fragment>
+  );
 }
 
 export default AppWrapper;

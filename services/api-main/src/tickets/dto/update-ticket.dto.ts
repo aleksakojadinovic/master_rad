@@ -1,4 +1,4 @@
-import { TicketStatus } from 'src/schemas/ticket.schema';
+import { TicketStatus } from '../types';
 
 export class UpdateTicketDto {
   status?: TicketStatus;

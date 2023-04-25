@@ -11,7 +11,8 @@ import { useRouter } from 'next/router';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
-function TicketViewPage() {
+function TicketViewPage(props) {
+  wrapper.useHydration(props);
   const router = useRouter();
   const id = router.query.ticketId;
 

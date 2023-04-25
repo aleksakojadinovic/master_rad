@@ -2,54 +2,18 @@
 
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { User } from './user.schema';
+import { User } from '../schemas/user.schema';
 import { v4 as uuid } from 'uuid';
-
-export enum TicketStatus {
-  NEW,
-  OPEN,
-  CLOSED,
-}
-
-export enum TicketHistoryEntryType {
-  CREATED,
-  TITLE_CHANGED,
-  BODY_CHANGED,
-  STATUS_CHANGED,
-  COMMEND_ADDED,
-  DELETED,
-}
-
-export class TicketHistoryEntryCreated {
-  constructor(public title: string, public body: string) {}
-}
-
-export class TicketHistoryEntryStatusChange {
-  constructor(public status: TicketStatus) {}
-}
-
-// The initiator field can be used for the user who commented
-export class TicketHistoryEntryCommentAdded {
-  constructor(public body: string) {}
-}
-
-export class TicketHistoryEntryDeleted {}
-
-export class TicketHistoryEntryTitleChanged {
-  constructor(public title: string) {}
-}
-
-export class TicketHistoryEntryBodyChanged {
-  constructor(public body: string) {}
-}
-
-type EntryType =
-  | TicketHistoryEntryCreated
-  | TicketHistoryEntryDeleted
-  | TicketHistoryEntryStatusChange
-  | TicketHistoryEntryCommentAdded
-  | TicketHistoryEntryTitleChanged
-  | TicketHistoryEntryBodyChanged;
+import {
+  TicketHistoryEntryBodyChanged,
+  TicketHistoryEntryCommentAdded,
+  TicketHistoryEntryCreated,
+  TicketHistoryEntryDeleted,
+  TicketHistoryEntryStatusChange,
+  TicketHistoryEntryTitleChanged,
+  TicketHistoryEntryType,
+  TicketHistoryEntryTypeUnion,
+} from './ticket-history.schema';
 
 export class TicketHistoryItem {
   constructor(
@@ -59,7 +23,7 @@ export class TicketHistoryItem {
     public initiator: User,
     public note: string,
     public entryType: TicketHistoryEntryType,
-    public entry: EntryType,
+    public entry: TicketHistoryEntryTypeUnion,
   ) {}
 
   static create({
@@ -73,7 +37,7 @@ export class TicketHistoryItem {
     timestamp?: Date;
     initiator: User;
     note?: string;
-    entry: EntryType;
+    entry: TicketHistoryEntryTypeUnion;
   }): TicketHistoryItem {
     const resolvedGroupId = groupId ?? uuid();
     const resolvedTimestamp = timestamp ?? new Date();
