@@ -1,4 +1,5 @@
 import AppWrapper from '@/components/AppWrapper';
+import PageContainer from '@/components/PageContainer/PageContainer';
 import { wrapper } from '@/redux/store';
 import App from 'next/app';
 import React from 'react';
@@ -9,7 +10,9 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <Provider store={store}>
-      <AppWrapper Component={Component} pageProps={pageProps} />
+      <PageContainer>
+        <AppWrapper Component={Component} pageProps={pageProps} />
+      </PageContainer>
     </Provider>
   );
 }

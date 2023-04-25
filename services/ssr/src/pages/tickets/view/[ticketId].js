@@ -2,6 +2,7 @@ import {
   selectGetTicketQueryIndicators,
   selectGetTicketQueryResponse,
   ticketsSlice,
+  useGetTicketQuery,
 } from '@/api/tickets';
 import Ticket from '@/components/Ticket/Ticket';
 import { wrapper } from '@/redux/store';
@@ -13,11 +14,11 @@ function TicketViewPage() {
   const router = useRouter();
   const id = router.query.ticketId;
 
+  useGetTicketQuery({ id });
+
   const ticket = useSelector((state) =>
     selectGetTicketQueryResponse(state, id),
   );
-  console.log({ ticket });
-  return null;
   return <Ticket ticket={ticket} />;
 }
 
