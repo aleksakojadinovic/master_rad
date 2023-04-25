@@ -7,8 +7,11 @@ import Comment from '../Comment/Comment';
 import { formatDate } from '@/utils';
 import { useMemo } from 'react';
 import StatusChange from '../StatusChange/StatusChange';
+import CommentEditor from './CommentEditor';
 
 export default function Ticket({ ticket }) {
+  const canAddComment = true;
+
   const changes = useMemo(
     () =>
       [
@@ -57,6 +60,19 @@ export default function Ticket({ ticket }) {
     });
   };
 
+  const renderAddComment = () => {
+    if (!canAddComment) {
+      return null;
+    }
+    return (
+      <Card>
+        <CardContent>
+          <CommentEditor />
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <Card variant="outlined">
       <CardContent>
@@ -88,8 +104,11 @@ export default function Ticket({ ticket }) {
       <CardContent>
         <Typography variant="body1">{ticket.body}</Typography>
       </CardContent>
-      <Divider />
       <CardContent>{renderChanges()}</CardContent>
+      <Box sx={{ marginTop: '12px' }}>
+        <Divider />
+        {renderAddComment()}
+      </Box>
     </Card>
   );
 }

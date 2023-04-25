@@ -8,6 +8,7 @@ export default function PageContainer({ children }) {
         paddingTop: '24px',
         paddingLeft: '24px',
         paddingRight: '24px',
+        paddingBottom: '120px',
         maxWidth: '1000px',
         margin: '0 auto',
       }}

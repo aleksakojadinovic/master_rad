@@ -139,7 +139,6 @@ export class TicketsService {
     }
 
     if (updateTicketDto.comment != null && updateTicketDto.comment.length > 0) {
-      // TODO: Some extra validation? idk
       const entry = new TicketHistoryEntryCommentAdded(updateTicketDto.comment);
       ticket.history.push(
         TicketHistoryItem.create({

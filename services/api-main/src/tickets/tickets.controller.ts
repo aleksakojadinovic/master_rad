@@ -74,7 +74,7 @@ export class TicketsController {
 
     const isTicketOwner = await this.ticketsService.isTicketOwner(user._id, id);
 
-    if (!hasRequiredRole && !isTicketOwner) {
+    if (!hasRequiredRole || !isTicketOwner) {
       throw new NotFoundException();
     }
 
