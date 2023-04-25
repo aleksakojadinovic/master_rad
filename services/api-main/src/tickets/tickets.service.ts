@@ -10,7 +10,6 @@ import { User } from 'src/users/schema/user.schema';
 import { ServiceErrors } from 'src/errors';
 import { ok, err } from 'neverthrow';
 import { v4 as uuid } from 'uuid';
-import { TicketDTO } from './dto/ticket.dto';
 import {
   TicketHistoryEntryBodyChanged,
   TicketHistoryEntryCommentAdded,

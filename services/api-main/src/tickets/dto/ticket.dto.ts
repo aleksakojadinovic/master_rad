@@ -1,15 +1,5 @@
-import { Ticket } from 'src/tickets/schema/ticket.schema';
 import { UserDTO } from 'src/users/dto/user-dto';
-import {
-  TicketHistoryEntryBodyChanged,
-  TicketHistoryEntryCommentAdded,
-  TicketHistoryEntryCreated,
-  TicketHistoryEntryStatusChange,
-  TicketHistoryEntryTitleChanged,
-  TicketHistoryEntryType,
-} from '../schema/ticket-history.schema';
 import { TicketStatus } from '../types';
-import { getUserDTO } from 'src/users/mappers/users-mapper';
 
 class CommentDTO {
   constructor(
