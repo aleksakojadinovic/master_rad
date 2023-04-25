@@ -9,6 +9,7 @@ import {
   TicketHistoryEntryType,
 } from '../schema/ticket-history.schema';
 import { TicketStatus } from '../types';
+import { getUserDTO } from 'src/users/mappers/users-mapper';
 
 class CommentDTO {
   constructor(
@@ -76,7 +77,7 @@ export class TicketDTO {
           previous,
           entry.status,
           item.timestamp,
-          UserDTO.mapFromModel(item.initiator),
+          getUserDTO(item.initiator),
           index,
         );
       },
@@ -111,12 +112,7 @@ export class TicketDTO {
       }))
       .map(
         ({ user, entry, timestamp, index }) =>
-          new CommentDTO(
-            UserDTO.mapFromModel(user),
-            timestamp,
-            entry.body,
-            index,
-          ),
+          new CommentDTO(getUserDTO(user), timestamp, entry.body, index),
       );
 
     const title = titles[titles.length - 1];
@@ -132,7 +128,7 @@ export class TicketDTO {
     return new TicketDTO(
       ticket._id,
       title,
-      UserDTO.mapFromModel(initialItem.initiator),
+      getUserDTO(initialItem.initiator),
       body,
       dateCreated,
       status.toString(),
