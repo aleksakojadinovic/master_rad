@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from '../schemas/user.schema';
+import { User } from './schema/user.schema';
 import { Model } from 'mongoose';
 import { CreateUserResponseDto } from './dto/create-user-response.dto';
 import { getPasswordHash } from 'src/utils';
 import { RolesService } from './roles.service';
-import { Role } from 'src/schemas/role.schema';
+import { Role } from 'src/users/schema/role.schema';
 
 @Injectable()
 export class UsersService {

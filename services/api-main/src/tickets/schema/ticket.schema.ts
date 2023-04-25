@@ -2,7 +2,7 @@
 
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { User } from '../schemas/user.schema';
+import { User } from '../../users/schema/user.schema';
 import { v4 as uuid } from 'uuid';
 import {
   TicketHistoryEntryBodyChanged,

@@ -1,4 +1,4 @@
-import { TicketStatus } from './types';
+import { TicketStatus } from '../types';
 
 export enum TicketHistoryEntryType {
   CREATED,

@@ -16,13 +16,13 @@ import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { Ticket } from 'src/tickets/ticket.schema';
+import { Ticket } from 'src/tickets/schema/ticket.schema';
 import { TicketDTO } from './dto/ticket.dto';
 import { ServiceErrorInterceptor } from 'src/interceptors';
 import { isValidObjectId } from 'mongoose';
 import { err } from 'neverthrow';
 import { ServiceErrors } from 'src/errors';
-import { User } from 'src/schemas/user.schema';
+import { User } from 'src/users/schema/user.schema';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')

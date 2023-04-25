@@ -1,4 +1,4 @@
-import { User } from 'src/schemas/user.schema';
+import { User } from 'src/users/schema/user.schema';
 
 export class UserDTO {
   constructor(
