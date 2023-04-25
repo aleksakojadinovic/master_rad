@@ -17,7 +17,7 @@ function DashboardPage() {
 export default DashboardPage;
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (context) => {
+  (store) => async () => {
     const user = selectGetMeQueryResponse(store.getState());
     if (user == null) {
       return {
