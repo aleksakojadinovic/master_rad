@@ -6,10 +6,9 @@ import {
   TicketHistoryEntryCreated,
   TicketHistoryEntryStatusChange,
   TicketHistoryEntryTitleChanged,
-  TicketHistoryEntryType,
 } from '../schema/ticket-history.schema';
 import { Ticket } from '../schema/ticket.schema';
-import { TicketStatus } from '../types';
+import { TicketHistoryEntryType, TicketStatus } from '../types';
 import { TicketDTO } from '../dto/ticket.dto';
 
 export function getTicketDTO(ticket: Ticket) {

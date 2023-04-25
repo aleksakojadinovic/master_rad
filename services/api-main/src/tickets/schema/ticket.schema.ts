@@ -11,9 +11,9 @@ import {
   TicketHistoryEntryDeleted,
   TicketHistoryEntryStatusChange,
   TicketHistoryEntryTitleChanged,
-  TicketHistoryEntryType,
   TicketHistoryEntryTypeUnion,
 } from './ticket-history.schema';
+import { TicketHistoryEntryType } from '../types';
 
 export class TicketHistoryItem {
   constructor(

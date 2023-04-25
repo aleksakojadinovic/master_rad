@@ -1,14 +1,5 @@
 import { TicketStatus } from '../types';
 
-export enum TicketHistoryEntryType {
-  CREATED,
-  TITLE_CHANGED,
-  BODY_CHANGED,
-  STATUS_CHANGED,
-  COMMEND_ADDED,
-  DELETED,
-}
-
 export class TicketHistoryEntryCreated {
   constructor(public title: string, public body: string) {}
 }
