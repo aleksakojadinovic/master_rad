@@ -108,4 +108,4 @@ dist
 *.crt
 *.key
 
-.vscode
+.vscode/
