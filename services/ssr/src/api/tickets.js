@@ -7,11 +7,22 @@ export const ticketsSlice = api.injectEndpoints({
       query: ({ id }) => ({
         url: `/tickets/${id}`,
       }),
+      providesTags: ({ id }) => {
+        return [{ type: 'getTicket', id }];
+      },
+    }),
+    updateTicket: builder.mutation({
+      query: ({ id, ...update }) => ({
+        url: `/tickets/${id}`,
+        method: 'PATCH',
+        body: update,
+      }),
+      invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
     }),
   }),
 });
 
-export const { useGetTicketQuery } = ticketsSlice;
+export const { useGetTicketQuery, useUpdateTicketMutation } = ticketsSlice;
 
 const selectGetTicketQueryResult = createSelector(
   [(state) => state, (_, id) => id],

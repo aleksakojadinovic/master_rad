@@ -1,10 +1,18 @@
 import { Box, Button, TextareaAutosize } from '@mui/material';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
-function CommentEditor() {
+function CommentEditor({ onSubmit, isSubmitDisabled, isSuccess }) {
   const [comment, setComment] = useState('');
 
   const handleChange = (e) => setComment(e.target.value);
+
+  const handleSubmit = () => onSubmit(comment);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setComment('');
+    }
+  }, [isSuccess]);
 
   return (
     <Fragment>
@@ -16,7 +24,11 @@ function CommentEditor() {
         onChange={handleChange}
       />
       <Box display="flex" flexDirection="row-reverse">
-        <Button variant="contained" disabled={comment.length === 0}>
+        <Button
+          variant="contained"
+          disabled={comment.length === 0 || isSubmitDisabled}
+          onClick={handleSubmit}
+        >
           Post
         </Button>
       </Box>

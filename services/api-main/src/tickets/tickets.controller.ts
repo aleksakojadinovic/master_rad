@@ -70,7 +70,7 @@ export class TicketsController {
 
     const hasRequiredRole = user.roles
       .map(({ name }) => name)
-      .some((role) => ['agent', 'admin'].includes(role));
+      .some((role) => ['agent', 'admin', 'customer'].includes(role));
 
     const isTicketOwner = await this.ticketsService.isTicketOwner(user._id, id);
 
@@ -80,7 +80,7 @@ export class TicketsController {
 
     const result = await this.ticketsService.update(
       id,
-      req.user.id,
+      req.user._id,
       updateTicketDto,
     );
     if (result.isOk()) {

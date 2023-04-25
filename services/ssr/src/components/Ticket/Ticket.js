@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Box, Divider, Grid, Typography } from '@mui/material';
@@ -8,9 +8,18 @@ import { formatDate } from '@/utils';
 import { useMemo } from 'react';
 import StatusChange from '../StatusChange/StatusChange';
 import CommentEditor from './CommentEditor';
+import { useUpdateTicketMutation } from '@/api/tickets';
 
 export default function Ticket({ ticket }) {
+  const [updateTicket, { isLoading, isSuccess }] = useUpdateTicketMutation();
+
   const canAddComment = true;
+
+  const handleSubmitComment = (comment) => {
+    updateTicket({ id: ticket.id, comment });
+  };
+
+  useEffect(() => {}, [isSuccess]);
 
   const changes = useMemo(
     () =>
@@ -67,7 +76,11 @@ export default function Ticket({ ticket }) {
     return (
       <Card>
         <CardContent>
-          <CommentEditor />
+          <CommentEditor
+            onSubmit={handleSubmitComment}
+            isSubmitDisabled={isLoading}
+            isSuccess={isSuccess}
+          />
         </CardContent>
       </Card>
     );
