@@ -10,7 +10,6 @@ import {
   UseGuards,
   UseInterceptors,
   Req,
-  NotFoundException,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -68,14 +67,20 @@ export class TicketsController {
 
     // This is allowed either for agents or for authors of the ticket
 
-    const hasRequiredRole = user.roles
-      .map(({ name }) => name)
-      .some((role) => ['agent', 'admin', 'customer'].includes(role));
+    // const hasRequiredRole = user.roles
+    //   .map(({ name }) => name)
+    //   .some((role) => ['agent', 'admin', 'customer'].includes(role));
 
+    // const isAdmin = user.roles.map(({ name }) => name).includes('admin');
+    // const isAgent = user.roles.map(({ name }) => name).includes('agent');
+    const isCustomer = user.roles.map(({ name }) => name).includes('customer');
     const isTicketOwner = await this.ticketsService.isTicketOwner(user._id, id);
 
-    if (!hasRequiredRole || !isTicketOwner) {
-      throw new NotFoundException();
+    if (isCustomer && !isTicketOwner) {
+      return err({
+        type: ServiceErrors.ENTITY_NOT_FOUND,
+        message: 'Ticket not found.',
+      });
     }
 
     const result = await this.ticketsService.update(
