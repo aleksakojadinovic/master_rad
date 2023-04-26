@@ -30,10 +30,16 @@ export class TicketsController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  create(@Request() req, @Body() createTicketDto: CreateTicketDto) {
+  async create(@Request() req, @Body() createTicketDto: CreateTicketDto) {
     // TODO: Antipattern?
-    createTicketDto.userId = req.user.id;
-    return this.ticketsService.create(createTicketDto);
+    const result = await this.ticketsService.create(
+      req.user.id,
+      createTicketDto,
+    );
+    if (result.isErr) {
+      return result;
+    }
+    return result.value;
   }
 
   @Get()

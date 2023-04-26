@@ -17,6 +17,7 @@ import {
   TicketHistoryEntryStatusChange,
 } from './schema/ticket-history.schema';
 import { getTicketDTO } from './mappers/tickets-mapper';
+
 @Injectable()
 export class TicketsService {
   constructor(
@@ -24,8 +25,8 @@ export class TicketsService {
     private usersService: UsersService,
   ) {}
 
-  async create(createTicketDto: CreateTicketDto) {
-    const user: User = await this.usersService.findOne(createTicketDto.userId);
+  async create(userId: string, createTicketDto: CreateTicketDto) {
+    const user: User = await this.usersService.findOne(userId);
 
     const ticketObject = new Ticket();
 
@@ -43,7 +44,7 @@ export class TicketsService {
 
     await ticketModel.save();
 
-    return getTicketDTO(ticketModel as Ticket);
+    return ok(getTicketDTO(ticketModel as Ticket));
   }
 
   findAll() {
