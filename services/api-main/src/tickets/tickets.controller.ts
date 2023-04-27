@@ -21,7 +21,6 @@ import { isValidObjectId } from 'mongoose';
 import { err } from 'neverthrow';
 import { ServiceErrors } from 'src/errors';
 import { User } from 'src/users/schema/user.schema';
-import { plainToClass, plainToInstance } from 'class-transformer';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')

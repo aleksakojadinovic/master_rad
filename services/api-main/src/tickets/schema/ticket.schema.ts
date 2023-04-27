@@ -13,7 +13,6 @@ import {
 import { TicketDTO } from '../dto/ticket.dto';
 import { TicketHistoryEntryType, TicketStatus } from '../types';
 import { User } from 'src/users/schema/user.schema';
-import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 
 @Schema()
 export class Ticket {
