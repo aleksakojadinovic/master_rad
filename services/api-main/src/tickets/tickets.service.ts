@@ -4,7 +4,6 @@ import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket } from 'src/tickets/schema/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
-import { TicketHistoryItem } from 'src/tickets/schema/ticket.schema';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/schema/user.schema';
 import { ServiceErrors } from 'src/errors';
@@ -15,6 +14,7 @@ import {
   TicketHistoryEntryCommentAdded,
   TicketHistoryEntryCreated,
   TicketHistoryEntryStatusChange,
+  TicketHistoryItem,
 } from './schema/ticket-history.schema';
 import { getTicketDTO } from './mappers/tickets-mapper';
 

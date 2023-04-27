@@ -12,3 +12,8 @@ export enum TicketHistoryEntryType {
   COMMEND_ADDED,
   DELETED,
 }
+
+export enum TicketCategoryType {
+  GENERAL_SUPPORT,
+  TECH_SUPPORT,
+}
