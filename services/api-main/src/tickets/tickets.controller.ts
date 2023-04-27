@@ -21,7 +21,7 @@ import { isValidObjectId } from 'mongoose';
 import { err } from 'neverthrow';
 import { ServiceErrors } from 'src/errors';
 import { User } from 'src/users/schema/user.schema';
-import { getTicketDTO } from './mappers/tickets-mapper';
+import { plainToClass, plainToInstance } from 'class-transformer';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')
@@ -57,7 +57,8 @@ export class TicketsController {
     }
     const result = await this.ticketsService.findOne(id);
     if (result.isOk()) {
-      return getTicketDTO(result.value as Ticket);
+      // TODO
+      return null;
     }
     return result.error;
   }
@@ -95,7 +96,7 @@ export class TicketsController {
       updateTicketDto,
     );
     if (result.isOk()) {
-      const ticket = getTicketDTO(result.value as Ticket);
+      const ticket = (result.value as Ticket).getDTO();
       return ticket;
     }
 

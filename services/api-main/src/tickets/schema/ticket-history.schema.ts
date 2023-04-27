@@ -3,37 +3,51 @@ import { TicketHistoryEntryType, TicketStatus } from '../types';
 
 import { v4 as uuid } from 'uuid';
 import mongoose from 'mongoose';
+import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 
-export class TicketHistoryEntryCreated {
-  constructor(public title: string, public body: string) {}
+export class TicketHistoryEntry {
+  getDTO() {
+    return Object.fromEntries(
+      Object.getOwnPropertyNames(this).map((k) => [k, this[k]]),
+    );
+  }
+}
+export class TicketHistoryEntryCreated extends TicketHistoryEntry {
+  constructor(public title: string, public body: string) {
+    super();
+  }
 }
 
-export class TicketHistoryEntryStatusChange {
-  constructor(public status: TicketStatus) {}
+export class TicketHistoryEntryStatusChange extends TicketHistoryEntry {
+  constructor(public status: TicketStatus) {
+    super();
+  }
 }
 
 // The initiator field can be used for the user who commented
-export class TicketHistoryEntryCommentAdded {
-  constructor(public body: string) {}
+export class TicketHistoryEntryCommentAdded extends TicketHistoryEntry {
+  constructor(public body: string) {
+    super();
+  }
 }
 
-export class TicketHistoryEntryDeleted {}
-
-export class TicketHistoryEntryTitleChanged {
-  constructor(public title: string) {}
+export class TicketHistoryEntryDeleted extends TicketHistoryEntry {
+  constructor() {
+    super();
+  }
 }
 
-export class TicketHistoryEntryBodyChanged {
-  constructor(public body: string) {}
+export class TicketHistoryEntryTitleChanged extends TicketHistoryEntry {
+  constructor(public title: string) {
+    super();
+  }
 }
 
-export type TicketHistoryEntryTypeUnion =
-  | TicketHistoryEntryCreated
-  | TicketHistoryEntryDeleted
-  | TicketHistoryEntryStatusChange
-  | TicketHistoryEntryCommentAdded
-  | TicketHistoryEntryTitleChanged
-  | TicketHistoryEntryBodyChanged;
+export class TicketHistoryEntryBodyChanged extends TicketHistoryEntry {
+  constructor(public body: string) {
+    super();
+  }
+}
 
 export class TicketHistoryItem {
   constructor(
@@ -43,8 +57,17 @@ export class TicketHistoryItem {
     public initiator: User,
     public note: string,
     public entryType: TicketHistoryEntryType,
-    public entry: TicketHistoryEntryTypeUnion,
+    public entry: TicketHistoryEntry,
   ) {}
+
+  getDTO() {
+    return new TicketHistoryItemDTO(
+      this.initiator.getDTO(),
+      this.timestamp,
+      this.entryType,
+      this.entry.getDTO(),
+    );
+  }
 
   static create({
     groupId,
@@ -57,7 +80,7 @@ export class TicketHistoryItem {
     timestamp?: Date;
     initiator: User;
     note?: string;
-    entry: TicketHistoryEntryTypeUnion;
+    entry: TicketHistoryEntry;
   }): TicketHistoryItem {
     const resolvedGroupId = groupId ?? uuid();
     const resolvedTimestamp = timestamp ?? new Date();

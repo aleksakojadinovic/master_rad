@@ -16,7 +16,6 @@ import {
   TicketHistoryEntryStatusChange,
   TicketHistoryItem,
 } from './schema/ticket-history.schema';
-import { getTicketDTO } from './mappers/tickets-mapper';
 
 @Injectable()
 export class TicketsService {
@@ -44,7 +43,7 @@ export class TicketsService {
 
     await ticketModel.save();
 
-    return ok(getTicketDTO(ticketModel as Ticket));
+    return ok(ticketModel as Ticket);
   }
 
   findAll() {
