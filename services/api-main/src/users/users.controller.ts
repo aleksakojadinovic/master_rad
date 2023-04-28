@@ -16,7 +16,7 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { User } from './schema/user.schema';
-import { UserDTO } from './dto/user-dto';
+import { UserDTO } from './dto/user.dto';
 
 @Controller('users')
 export class UsersController {

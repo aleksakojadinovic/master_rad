@@ -10,7 +10,7 @@ import { Injectable } from '@nestjs/common';
 import { TicketHistoryItem } from '../schema/ticket-history.schema';
 import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 import { User } from 'src/users/schema/user.schema';
-import { UserDTO } from 'src/users/dto/user-dto';
+import { UserDTO } from 'src/users/dto/user.dto';
 
 @Injectable()
 export class TicketHistoryItemProfile extends AutomapperProfile {

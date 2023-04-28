@@ -8,7 +8,7 @@ import {
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { User } from '../schema/user.schema';
-import { UserDTO } from '../dto/user-dto';
+import { UserDTO } from '../dto/user.dto';
 import { Role } from '../schema/role.schema';
 import { RoleDTO } from '../dto/role.dto';
 
