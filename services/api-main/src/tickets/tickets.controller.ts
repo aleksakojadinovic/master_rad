@@ -20,7 +20,6 @@ import { ServiceErrorInterceptor } from 'src/interceptors';
 import { isValidObjectId } from 'mongoose';
 import { err } from 'neverthrow';
 import { ServiceErrors } from 'src/errors';
-import { User } from 'src/users/schema/user.schema';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketDTO } from './dto/ticket.dto';

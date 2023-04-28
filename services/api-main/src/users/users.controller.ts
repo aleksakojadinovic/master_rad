@@ -17,7 +17,6 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { User } from './schema/user.schema';
 import { UserDTO } from './dto/user-dto';
-import { Role } from './schema/role.schema';
 
 @Controller('users')
 export class UsersController {
