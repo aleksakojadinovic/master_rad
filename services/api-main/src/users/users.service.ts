@@ -52,7 +52,7 @@ export class UsersService {
       .findOne({ username })
       .select('+passwordHash')
       .populate('roles');
-    return user;
+    return user as User;
   }
 
   async findOne(id: string) {

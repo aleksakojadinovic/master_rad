@@ -76,33 +76,14 @@ export class TicketsController {
     @Param('id') id: string,
     @Body() updateTicketDto: UpdateTicketDto,
   ) {
-    const user = req.user as User;
-
-    // This is allowed either for agents or for authors of the ticket
-
-    // const hasRequiredRole = user.roles
-    //   .map(({ name }) => name)
-    //   .some((role) => ['agent', 'admin', 'customer'].includes(role));
-
-    // const isAdmin = user.roles.map(({ name }) => name).includes('admin');
-    // const isAgent = user.roles.map(({ name }) => name).includes('agent');
-    const isCustomer = user.roles.map(({ name }) => name).includes('customer');
-    const isTicketOwner = await this.ticketsService.isTicketOwner(user._id, id);
-
-    if (isCustomer && !isTicketOwner) {
-      return err({
-        type: ServiceErrors.ENTITY_NOT_FOUND,
-        message: 'Ticket not found.',
-      });
-    }
-
     const result = await this.ticketsService.update(
       id,
       req.user._id,
       updateTicketDto,
     );
+
     if (result.isOk()) {
-      const ticket = this.mapper.map(result.value as Ticket, Ticket, TicketDTO);
+      const ticket = this.mapper.map(result.value, Ticket, TicketDTO);
       return ticket;
     }
 

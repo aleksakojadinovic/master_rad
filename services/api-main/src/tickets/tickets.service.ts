@@ -92,6 +92,18 @@ export class TicketsService {
       });
     }
 
+    const user = await this.usersService.findOne(userId);
+
+    const isCustomer = user.roles.map(({ name }) => name).includes('customer');
+    const isTicketOwner = await this.isTicketOwner(userId, id);
+
+    if (isCustomer && !isTicketOwner) {
+      return err({
+        type: ServiceErrors.ENTITY_NOT_FOUND,
+        message: 'Ticket not found.',
+      });
+    }
+
     const ticketObject = await this.findOne(id);
 
     if (ticketObject.isErr()) {
@@ -99,8 +111,6 @@ export class TicketsService {
     }
 
     const ticket = ticketObject.value;
-
-    const user: User = await this.usersService.findOne(userId);
 
     if (!user) {
       return err({
@@ -152,7 +162,7 @@ export class TicketsService {
 
     await ticket.save();
 
-    return ok(ticket);
+    return ok(ticket as Ticket);
   }
 
   remove(id: number) {
