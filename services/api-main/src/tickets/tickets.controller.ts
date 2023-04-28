@@ -21,11 +21,17 @@ import { isValidObjectId } from 'mongoose';
 import { err } from 'neverthrow';
 import { ServiceErrors } from 'src/errors';
 import { User } from 'src/users/schema/user.schema';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
+import { TicketDTO } from './dto/ticket.dto';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')
 export class TicketsController {
-  constructor(private readonly ticketsService: TicketsService) {}
+  constructor(
+    private readonly ticketsService: TicketsService,
+    @InjectMapper() private readonly mapper: Mapper,
+  ) {}
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
@@ -57,8 +63,9 @@ export class TicketsController {
     const result = await this.ticketsService.findOne(id);
     if (result.isOk()) {
       // TODO
-      return null;
+      return this.mapper.map(result.value as Ticket, Ticket, TicketDTO);
     }
+
     return result.error;
   }
 
@@ -95,7 +102,7 @@ export class TicketsController {
       updateTicketDto,
     );
     if (result.isOk()) {
-      const ticket = (result.value as Ticket).getDTO();
+      const ticket = this.mapper.map(result.value as Ticket, Ticket, TicketDTO);
       return ticket;
     }
 

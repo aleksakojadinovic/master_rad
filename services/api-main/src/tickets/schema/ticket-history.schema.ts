@@ -62,7 +62,7 @@ export class TicketHistoryItem {
 
   getDTO() {
     return new TicketHistoryItemDTO(
-      this.initiator.getDTO(),
+      null,
       this.timestamp,
       this.entryType,
       this.entry.getDTO(),
