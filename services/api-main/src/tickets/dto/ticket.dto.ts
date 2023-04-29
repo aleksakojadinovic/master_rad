@@ -1,14 +1,11 @@
 import { UserDTO } from 'src/users/dto/user.dto';
 import { TicketHistoryItemDTO } from './ticket-history.dto';
+import { TicketState } from '../schema/ticket-state.schema';
 
 export class TicketDTO {
   constructor(
     public id: string,
-    public title: string,
-    public createdUser: UserDTO,
-    public body: string,
-    public createdAt: Date,
-    public status: number,
+    public state: TicketState,
     public history: TicketHistoryItemDTO[],
   ) {}
 }

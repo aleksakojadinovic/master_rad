@@ -16,11 +16,15 @@ import {
   TicketHistoryEntryStatusChange,
   TicketHistoryItem,
 } from './schema/ticket-history.schema';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
+import { TicketState } from './schema/ticket-state.schema';
 
 @Injectable()
 export class TicketsService {
   constructor(
     @InjectModel(Ticket.name) private ticketModel: Model<Ticket>,
+    @InjectMapper() private readonly mapper: Mapper,
     private usersService: UsersService,
   ) {}
 
@@ -67,7 +71,10 @@ export class TicketsService {
       });
     }
 
-    return ok(ticket);
+    const resolvedTicket = ticket as Ticket;
+    resolvedTicket.state = this.mapper.map(resolvedTicket, Ticket, TicketState);
+
+    return ok(resolvedTicket);
   }
 
   async isTicketOwner(userId: string, ticketId: string) {
@@ -104,13 +111,9 @@ export class TicketsService {
       });
     }
 
-    const ticketObject = await this.findOne(id);
+    // const ticketObject = await this.ticketModel.findOne({ _id: id });
 
-    if (ticketObject.isErr()) {
-      return ticketObject;
-    }
-
-    const ticket = ticketObject.value;
+    // const ticket = ticketObject.value;
 
     if (!user) {
       return err({

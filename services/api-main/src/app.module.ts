@@ -10,6 +10,8 @@ import { UserProfile } from './users/profiles/user.profile';
 import { RoleProfile } from './users/profiles/role.profile';
 import { TicketProfile } from './tickets/profiles/ticket.profile';
 import { TicketHistoryItemProfile } from './tickets/profiles/ticket-history.profile';
+import { TicketToTicketStateProfile } from './tickets/profiles/ticket-to-ticket-state.profile';
+import { TicketStateProfile } from './tickets/profiles/ticket-state.profile';
 
 const MAIN_DB_USERNAME = process.env.MAIN_DB_USERNAME;
 const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
@@ -30,6 +32,8 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
     RoleProfile,
     UserProfile,
     TicketProfile,
+    TicketToTicketStateProfile,
+    TicketStateProfile,
     TicketHistoryItemProfile,
   ],
 })

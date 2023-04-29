@@ -6,6 +6,7 @@ import {
   TicketHistoryItem,
   TicketHistoryItemSchemaType,
 } from './ticket-history.schema';
+import { TicketState } from './ticket-state.schema';
 
 @Schema()
 export class Ticket {
@@ -14,6 +15,8 @@ export class Ticket {
   }
 
   _id: string;
+
+  state: TicketState;
 
   @Prop({ type: [{ type: TicketHistoryItemSchemaType }] })
   history: TicketHistoryItem[];
