@@ -64,7 +64,6 @@ export class TicketsController {
       // TODO
       const ticket = result.value as Ticket;
       ticket.state = this.mapper.map(ticket, Ticket, TicketState);
-      console.log({ state: ticket.state });
       return this.mapper.map(ticket, Ticket, TicketDTO);
     }
 

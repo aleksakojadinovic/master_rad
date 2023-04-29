@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 import StatusChange from '../StatusChange/StatusChange';
 import CommentEditor from './CommentEditor';
 import { useUpdateTicketMutation } from '@/api/tickets';
+import { TicketHistoryEntryType } from '@/enums/tickets';
 
 export default function Ticket({ ticket }) {
   const [updateTicket, { isLoading, isSuccess }] = useUpdateTicketMutation();
@@ -21,25 +22,6 @@ export default function Ticket({ ticket }) {
 
   useEffect(() => {}, [isSuccess]);
 
-  const changes = useMemo(
-    () =>
-      [
-        ...ticket.comments.map((comment) => ({
-          comment,
-          index: comment.index,
-          type: 'comment',
-        })),
-        ...ticket.statusChanges.map((statusChange) => ({
-          statusChange,
-          index: statusChange.index,
-          type: 'statusChange',
-        })),
-      ].sort(({ index: index1 }, { index: index2 }) => {
-        return index1 - index2;
-      }),
-    [ticket.comments, ticket.statusChanges],
-  );
-
   const renderChanges = () => {
     const wrap = (content, index) => (
       <Box key={index} sx={{ marginTop: '12px' }}>
@@ -47,25 +29,40 @@ export default function Ticket({ ticket }) {
       </Box>
     );
 
-    return changes.map(({ type, comment, statusChange }, index) => {
-      if (type === 'statusChange') {
-        return wrap(
-          <Box
-            display="flex"
-            justifyContent="center"
-            marginTop="20px"
-            marginBottom="20px"
-          >
-            <Card>
-              <CardContent>
-                <StatusChange statusChange={statusChange} />
-              </CardContent>
-            </Card>
-          </Box>,
-          index,
-        );
+    // return changes.map(({ type, comment, statusChange }, index) => {
+    //   if (type === 'statusChange') {
+    // return wrap(
+    //   <Box
+    //     display="flex"
+    //     justifyContent="center"
+    //     marginTop="20px"
+    //     marginBottom="20px"
+    //   >
+    //     <Card>
+    //       <CardContent>
+    //         <StatusChange statusChange={statusChange} />
+    //       </CardContent>
+    //     </Card>
+    //   </Box>,
+    //   index,
+    // );
+    //   }
+    //   return wrap(<Comment comment={comment} />, index);
+    // });
+    return ticket.history.map((item, index) => {
+      switch (item.type) {
+        case TicketHistoryEntryType.COMMENT_ADDED:
+          return wrap(
+            <Comment
+              comment={{
+                ...item.payload,
+                user: item.user,
+                timestamp: item.timestamp,
+              }}
+            />,
+            index,
+          );
       }
-      return wrap(<Comment comment={comment} />, index);
     });
   };
 
@@ -92,7 +89,7 @@ export default function Ticket({ ticket }) {
         <Grid container>
           <Grid item xs={12} md={9}>
             <Box display="flex" alignItems="center" height="100%">
-              <Typography variant="h4">{ticket.title}</Typography>
+              <Typography variant="h4">{ticket.state.title}</Typography>
             </Box>
           </Grid>
           <Grid item xs={12} md={3}>
@@ -103,19 +100,20 @@ export default function Ticket({ ticket }) {
               height="100%"
             >
               <Typography component="div" sx={{ color: 'text.disabled' }}>
-                {formatDate(ticket.createdAt)}
+                {formatDate(ticket.state.createdAt)}
               </Typography>
               <Typography component="div" sx={{ color: 'secondary.main' }}>
-                by {ticket.createdUser.firstName} {ticket.createdUser.lastName}
+                by {ticket.state.createdBy.firstName}{' '}
+                {ticket.state.createdBy.lastName}
               </Typography>
-              <TicketStatusBadge status={ticket.status} />
+              <TicketStatusBadge status={ticket.state.status} />
             </Box>
           </Grid>
         </Grid>
       </CardContent>
       <Divider />
       <CardContent>
-        <Typography variant="body1">{ticket.body}</Typography>
+        <Typography variant="body1">{ticket.state.body}</Typography>
       </CardContent>
       <CardContent>{renderChanges()}</CardContent>
       <Box sx={{ marginTop: '12px' }}>

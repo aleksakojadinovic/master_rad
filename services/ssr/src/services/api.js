@@ -16,8 +16,8 @@ const baseQuery = fetchBaseQuery({
   baseUrl: isServer() ? 'http://host.docker.internal/api' : '/api',
   prepareHeaders: (headers, api) => {
     const accessToken = isServer()
-      ? parseCookie(api?.extra?.ctx?.req?.headers?.cookie).access_token ?? ''
-      : Cookies.get('access_token');
+      ? parseCookie(api?.extra?.ctx?.req?.headers?.cookie).accessToken ?? ''
+      : Cookies.get('accessToken');
 
     headers.set('Authorization', `Bearer ${accessToken}`);
     headers.set('X-Requested-With', 'XMLHttpRequest');

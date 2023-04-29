@@ -22,7 +22,6 @@ export class AuthController {
   @Header('content-type', 'application/json')
   @UseGuards(AuthGuard('jwt'))
   async me(@Request() req) {
-    // const accessToken = req.hea
     return req.user;
   }
 }

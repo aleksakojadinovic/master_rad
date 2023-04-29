@@ -55,7 +55,6 @@ export class TicketStateProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.title,
           mapFrom((source) => {
-            console.log({ source });
             return source.title;
           }),
         ),

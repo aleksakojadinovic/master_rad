@@ -22,7 +22,7 @@ function TicketViewPage(props) {
     selectGetTicketQueryResponse(state, id),
   );
 
-  const title = `${ticket.title} | STS`;
+  const title = `${ticket.state.title} | STS`;
 
   return (
     <Fragment>
