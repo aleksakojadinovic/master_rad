@@ -3,6 +3,7 @@ import React from 'react';
 import UserChip from '../User/UserChip';
 import { formatDate } from '@/utils';
 import TicketStatusBadge from '../Ticket/TicketStatusBadge';
+import { TicketStatus } from '@/enums/tickets';
 
 export default function StatusChange({
   statusChange: { statusFrom, statusTo, user, timestamp },
@@ -18,7 +19,7 @@ export default function StatusChange({
         </Typography>
       </Box>
       <Box sx={{ marginLeft: '6px' }} gap="10px">
-        <TicketStatusBadge status={statusFrom} />
+        <TicketStatusBadge status={statusFrom ?? TicketStatus.NEW} />
       </Box>
       <Box sx={{ marginLeft: '6px' }} gap="10px">
         <Typography variant="caption" color="text.disabled">

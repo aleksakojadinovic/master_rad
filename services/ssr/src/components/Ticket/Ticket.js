@@ -5,7 +5,6 @@ import { Box, Divider, Grid, Typography } from '@mui/material';
 import TicketStatusBadge from './TicketStatusBadge';
 import Comment from '../Comment/Comment';
 import { formatDate } from '@/utils';
-import { useMemo } from 'react';
 import StatusChange from '../StatusChange/StatusChange';
 import CommentEditor from './CommentEditor';
 import { useUpdateTicketMutation } from '@/api/tickets';
@@ -29,26 +28,8 @@ export default function Ticket({ ticket }) {
       </Box>
     );
 
-    // return changes.map(({ type, comment, statusChange }, index) => {
-    //   if (type === 'statusChange') {
-    // return wrap(
-    //   <Box
-    //     display="flex"
-    //     justifyContent="center"
-    //     marginTop="20px"
-    //     marginBottom="20px"
-    //   >
-    //     <Card>
-    //       <CardContent>
-    //         <StatusChange statusChange={statusChange} />
-    //       </CardContent>
-    //     </Card>
-    //   </Box>,
-    //   index,
-    // );
-    //   }
-    //   return wrap(<Comment comment={comment} />, index);
-    // });
+    let previousStatus = null;
+
     return ticket.history.map((item, index) => {
       switch (item.type) {
         case TicketHistoryEntryType.COMMENT_ADDED:
@@ -62,6 +43,34 @@ export default function Ticket({ ticket }) {
             />,
             index,
           );
+
+        case TicketHistoryEntryType.STATUS_CHANGED: {
+          const status = item.payload.status;
+          const prevStatus = previousStatus;
+          previousStatus = status;
+          return wrap(
+            <Box
+              display="flex"
+              justifyContent="center"
+              marginTop="20px"
+              marginBottom="20px"
+            >
+              <Card>
+                <CardContent>
+                  <StatusChange
+                    statusChange={{
+                      user: item.user,
+                      timestamp: item.timestamp,
+                      statusFrom: prevStatus,
+                      statusTo: status,
+                    }}
+                  />
+                </CardContent>
+              </Card>
+            </Box>,
+            index,
+          );
+        }
       }
     });
   };
