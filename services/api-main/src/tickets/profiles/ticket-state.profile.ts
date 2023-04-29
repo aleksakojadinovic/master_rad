@@ -7,13 +7,7 @@ import {
   mapFrom,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { Ticket } from '../schema/ticket.schema';
-import {
-  TicketHistoryEntryStatusChange,
-  TicketHistoryEntryTitleChanged,
-} from '../schema/ticket-history.schema';
 import { TicketState } from '../schema/ticket-state.schema';
-import { TicketHistoryEntryType, TicketStatus } from '../types';
 import { TicketStateDTO } from '../dto/ticket-state.dto';
 import { User } from 'src/users/schema/user.schema';
 import { UserDTO } from 'src/users/dto/user.dto';
@@ -61,6 +55,7 @@ export class TicketStateProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.title,
           mapFrom((source) => {
+            console.log({ source });
             return source.title;
           }),
         ),

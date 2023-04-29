@@ -27,7 +27,6 @@ export class UserProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.id,
           mapFrom((source) => {
-            console.log({ source });
             return source._id;
           }),
         ),

@@ -14,6 +14,7 @@ import {
   TicketHistoryEntryCommentAdded,
   TicketHistoryEntryCreated,
   TicketHistoryEntryStatusChange,
+  TicketHistoryEntryTitleChanged,
   TicketHistoryItem,
 } from './schema/ticket-history.schema';
 import { InjectMapper } from '@automapper/nestjs';
@@ -33,15 +34,27 @@ export class TicketsService {
 
     const ticketObject = new Ticket();
 
+    const groupId = uuid();
+
     const initialEntry = TicketHistoryItem.create({
       initiator: user,
-      entry: new TicketHistoryEntryCreated(
-        createTicketDto.title,
-        createTicketDto.body,
-      ),
+      groupId,
+      entry: new TicketHistoryEntryCreated(),
     });
 
-    ticketObject.history = [initialEntry];
+    const titleEntry = TicketHistoryItem.create({
+      initiator: user,
+      groupId,
+      entry: new TicketHistoryEntryTitleChanged(createTicketDto.title),
+    });
+
+    const bodyEntry = TicketHistoryItem.create({
+      initiator: user,
+      groupId,
+      entry: new TicketHistoryEntryBodyChanged(createTicketDto.body),
+    });
+
+    ticketObject.history = [initialEntry, titleEntry, bodyEntry];
 
     const ticketModel = new this.ticketModel(ticketObject);
 
@@ -74,7 +87,7 @@ export class TicketsService {
     const resolvedTicket = ticket as Ticket;
     resolvedTicket.state = this.mapper.map(resolvedTicket, Ticket, TicketState);
 
-    return ok(resolvedTicket);
+    return ok(ticket);
   }
 
   async isTicketOwner(userId: string, ticketId: string) {
@@ -111,9 +124,13 @@ export class TicketsService {
       });
     }
 
-    // const ticketObject = await this.ticketModel.findOne({ _id: id });
+    const ticketObject = await this.findOne(id);
 
-    // const ticket = ticketObject.value;
+    if (ticketObject.isErr()) {
+      return ticketObject;
+    }
+
+    const ticket = ticketObject.value;
 
     if (!user) {
       return err({

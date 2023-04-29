@@ -1,3 +1,11 @@
+import {
+  TicketHistoryEntryBodyChanged,
+  TicketHistoryEntryCreated,
+  TicketHistoryEntryDeleted,
+  TicketHistoryEntryStatusChange,
+  TicketHistoryEntryTitleChanged,
+} from './schema/ticket-history.schema';
+
 export enum TicketStatus {
   NEW,
   OPEN,
@@ -17,3 +25,10 @@ export enum TicketCategoryType {
   GENERAL_SUPPORT,
   TECH_SUPPORT,
 }
+
+export type TicketHistoryEntryTypeUnion =
+  | TicketHistoryEntryCreated
+  | TicketHistoryEntryDeleted
+  | TicketHistoryEntryStatusChange
+  | TicketHistoryEntryBodyChanged
+  | TicketHistoryEntryTitleChanged;

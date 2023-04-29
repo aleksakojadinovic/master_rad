@@ -23,6 +23,7 @@ import { ServiceErrors } from 'src/errors';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketDTO } from './dto/ticket.dto';
+import { TicketState } from './schema/ticket-state.schema';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')
@@ -35,9 +36,8 @@ export class TicketsController {
   @Post()
   @UseGuards(AuthGuard('jwt'))
   async create(@Request() req, @Body() createTicketDto: CreateTicketDto) {
-    // TODO: Antipattern?
     const result = await this.ticketsService.create(
-      req.user.id,
+      req.user._id,
       createTicketDto,
     );
     if (result.isErr) {
@@ -62,7 +62,10 @@ export class TicketsController {
     const result = await this.ticketsService.findOne(id);
     if (result.isOk()) {
       // TODO
-      return this.mapper.map(result.value as Ticket, Ticket, TicketDTO);
+      const ticket = result.value as Ticket;
+      ticket.state = this.mapper.map(ticket, Ticket, TicketState);
+      console.log({ state: ticket.state });
+      return this.mapper.map(ticket, Ticket, TicketDTO);
     }
 
     return result.error;
