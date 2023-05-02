@@ -19,7 +19,6 @@ import {
 } from './schema/ticket-history.schema';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketState } from './schema/ticket-state.schema';
 
 @Injectable()
 export class TicketsService {
@@ -83,9 +82,6 @@ export class TicketsService {
         message: 'Ticket not found',
       });
     }
-
-    const resolvedTicket = ticket as Ticket;
-    resolvedTicket.state = this.mapper.map(resolvedTicket, Ticket, TicketState);
 
     return ok(ticket);
   }

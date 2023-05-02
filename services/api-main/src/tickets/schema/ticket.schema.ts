@@ -6,7 +6,9 @@ import {
   TicketHistoryItem,
   TicketHistoryItemSchemaType,
 } from './ticket-history.schema';
-import { TicketState } from './ticket-state.schema';
+import { User } from 'src/users/schema/user.schema';
+import mongoose from 'mongoose';
+import { TicketStatus } from '../types';
 
 @Schema()
 export class Ticket {
@@ -16,7 +18,20 @@ export class Ticket {
 
   _id: string;
 
-  state: TicketState;
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  createdBy: User;
+
+  @Prop()
+  createdAt: Date;
+
+  @Prop()
+  title: string;
+
+  @Prop()
+  body: string;
+
+  @Prop()
+  status: TicketStatus;
 
   @Prop({ type: [{ type: TicketHistoryItemSchemaType }] })
   history: TicketHistoryItem[];

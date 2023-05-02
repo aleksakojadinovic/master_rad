@@ -23,7 +23,6 @@ import { ServiceErrors } from 'src/errors';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketDTO } from './dto/ticket.dto';
-import { TicketState } from './schema/ticket-state.schema';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')
@@ -63,7 +62,6 @@ export class TicketsController {
     if (result.isOk()) {
       // TODO
       const ticket = result.value as Ticket;
-      ticket.state = this.mapper.map(ticket, Ticket, TicketState);
       return this.mapper.map(ticket, Ticket, TicketDTO);
     }
 
