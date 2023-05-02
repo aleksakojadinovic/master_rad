@@ -4,6 +4,6 @@ import { TicketTagController } from './ticket-tag.controller';
 
 @Module({
   controllers: [TicketTagController],
-  providers: [TicketTagService]
+  providers: [TicketTagService],
 })
 export class TicketTagModule {}

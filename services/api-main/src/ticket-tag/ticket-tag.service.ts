@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
 import { UpdateTicketTagDto } from './dto/update-ticket-tag.dto';
