@@ -5,7 +5,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Ticket } from 'src/tickets/schema/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
-import { User } from 'src/users/schema/user.schema';
 import { ServiceErrors } from 'src/errors';
 import { ok, err } from 'neverthrow';
 import { v4 as uuid } from 'uuid';
@@ -19,6 +18,7 @@ import {
 } from './schema/ticket-history.schema';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
+import { TicketStatus } from './types';
 
 @Injectable()
 export class TicketsService {
@@ -29,31 +29,41 @@ export class TicketsService {
   ) {}
 
   async create(userId: string, createTicketDto: CreateTicketDto) {
-    const user: User = await this.usersService.findOne(userId);
+    const user = await this.usersService.findOne(userId);
 
     const ticketObject = new Ticket();
 
     const groupId = uuid();
+    const timestamp = new Date();
 
     const initialEntry = TicketHistoryItem.create({
       initiator: user,
       groupId,
+      timestamp,
       entry: new TicketHistoryEntryCreated(),
     });
 
     const titleEntry = TicketHistoryItem.create({
       initiator: user,
       groupId,
+      timestamp,
       entry: new TicketHistoryEntryTitleChanged(createTicketDto.title),
     });
 
     const bodyEntry = TicketHistoryItem.create({
       initiator: user,
       groupId,
+      timestamp,
       entry: new TicketHistoryEntryBodyChanged(createTicketDto.body),
     });
 
     ticketObject.history = [initialEntry, titleEntry, bodyEntry];
+
+    ticketObject.title = createTicketDto.title;
+    ticketObject.body = createTicketDto.body;
+    ticketObject.status = TicketStatus.NEW;
+    ticketObject.createdBy = user;
+    ticketObject.createdAt = timestamp;
 
     const ticketModel = new this.ticketModel(ticketObject);
 
@@ -67,14 +77,20 @@ export class TicketsService {
   }
 
   async findOne(id: string) {
-    const ticket = await this.ticketModel.findOne({ _id: id }).populate({
-      path: 'history.initiator',
-      model: 'User',
-      populate: {
-        path: 'roles',
-        model: 'Role',
-      },
-    });
+    const ticket = await this.ticketModel
+      .findOne({ _id: id })
+      .populate({
+        path: 'history.initiator',
+        model: 'User',
+        populate: {
+          path: 'roles',
+          model: 'Role',
+        },
+      })
+      .populate({
+        path: 'createdBy',
+        model: 'User',
+      });
 
     if (!ticket) {
       return err({
@@ -150,6 +166,8 @@ export class TicketsService {
           entry,
         }),
       );
+
+      ticket.status = updateTicketDto.status;
     }
 
     if (updateTicketDto.body != null) {
@@ -162,6 +180,7 @@ export class TicketsService {
           entry,
         }),
       );
+      ticket.body = updateTicketDto.body;
     }
 
     if (updateTicketDto.comment != null && updateTicketDto.comment.length > 0) {

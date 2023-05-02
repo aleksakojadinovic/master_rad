@@ -98,7 +98,7 @@ export default function Ticket({ ticket }) {
         <Grid container>
           <Grid item xs={12} md={9}>
             <Box display="flex" alignItems="center" height="100%">
-              <Typography variant="h4">{ticket.state.title}</Typography>
+              <Typography variant="h4">{ticket.title}</Typography>
             </Box>
           </Grid>
           <Grid item xs={12} md={3}>
@@ -109,20 +109,19 @@ export default function Ticket({ ticket }) {
               height="100%"
             >
               <Typography component="div" sx={{ color: 'text.disabled' }}>
-                {formatDate(ticket.state.createdAt)}
+                {formatDate(ticket.createdAt)}
               </Typography>
               <Typography component="div" sx={{ color: 'secondary.main' }}>
-                by {ticket.state.createdBy.firstName}{' '}
-                {ticket.state.createdBy.lastName}
+                by {ticket.createdBy.firstName} {ticket.createdBy.lastName}
               </Typography>
-              <TicketStatusBadge status={ticket.state.status} />
+              <TicketStatusBadge status={ticket.status} />
             </Box>
           </Grid>
         </Grid>
       </CardContent>
       <Divider />
       <CardContent>
-        <Typography variant="body1">{ticket.state.body}</Typography>
+        <Typography variant="body1">{ticket.body}</Typography>
       </CardContent>
       <CardContent>{renderChanges()}</CardContent>
       <Box sx={{ marginTop: '12px' }}>
