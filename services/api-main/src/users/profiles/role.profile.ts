@@ -11,7 +11,7 @@ export class RoleProfile extends AutomapperProfile {
   }
 
   override get profile() {
-    return (mapper) => {
+    return (mapper: Mapper) => {
       createMap(
         mapper,
         Role,
