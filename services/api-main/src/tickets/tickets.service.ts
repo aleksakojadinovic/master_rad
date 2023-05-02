@@ -166,7 +166,8 @@ export class TicketsService {
           entry,
         }),
       );
-
+      // TODO: maybe we should consider having a utility method that resolves this from history
+      // and then we call it once at the end
       ticket.status = updateTicketDto.status;
     }
 
@@ -195,9 +196,22 @@ export class TicketsService {
       );
     }
 
+    if (updateTicketDto.title != null) {
+      const entry = new TicketHistoryEntryTitleChanged(updateTicketDto.title);
+      ticket.history.push(
+        TicketHistoryItem.create({
+          groupId,
+          timestamp,
+          initiator: user,
+          entry,
+        }),
+      );
+      ticket.title = updateTicketDto.title;
+    }
+
     await ticket.save();
 
-    return ok(ticket as Ticket);
+    return ok(ticket);
   }
 
   remove(id: number) {
