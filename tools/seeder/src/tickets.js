@@ -151,12 +151,14 @@ async function main() {
         const history = mixed.map((entry) => ({
             groupId: Math.floor(Math.random() * 1000),
             timestamp: new Date(),
-            initiator: [...agents, createdBy][Math.floor(Math.random() * (customers.length + 1))]._id,
+            initiator: [...agents, ...(Array.from(Array(2*agents.length).keys()).map(() => createdBy))][Math.floor(Math.random() * (3 * customers.length))]._id,
             note: '',
             entryType: entry.status ? 3 : 4,
             entry
         }));
-
+        // console.log({createdBy});
+        // console.log({ history: history.map(({ initiator }) => initiator) });
+        // console.log([...agents, ...(Array.from(Array(agents.length).keys()).map(() => createdBy))].map(({ _id }) => _id));
         const ticket = {
             title, body, createdBy: createdBy._id, createdAt, status, history
         }
