@@ -52,7 +52,8 @@ function NavigationBar() {
         <img
           src="https://dev.sts.com/images/logo-no-background.svg"
           alt="Logo"
-          style={{ width: '111px', height: '40px' }}
+          style={{ width: '111px', height: '40px', cursor: 'pointer' }}
+          onClick={() => (window.location.href = '/')}
         />
       </div>
       <div>{renderRightSideContent()}</div>
