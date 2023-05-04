@@ -14,14 +14,23 @@ const roles = [
     { name: 'agent' },
     { name: 'customer' },
 ];
-
-
 const predefinedAdmin = { username: 'administrator' }
-
-
 const predefinedSuperAdmin = { username: 'superadministrator' }
 
 
+// TODO: Eventually make a CLI for this seeder so not to overwrite everything every time
+const predefinedAgents = [
+    { firstName: 'Emma', lastName: 'Smith' },
+    { firstName: 'Oliver', lastName: 'Johnson' },
+    { firstName: 'Ava', lastName: 'Brown' },
+    { firstName: 'Liam', lastName: 'Davis' },
+    { firstName: 'Sophia', lastName: 'Garcia' },
+    { firstName: 'Ethan', lastName: 'Martinez' },
+    { firstName: 'Isabella', lastName: 'Anderson' },
+    { firstName: 'Lucas', lastName: 'Hernandez' },
+    { firstName: 'Mia', lastName: 'Lopez' },
+    { firstName: 'Noah', lastName: 'Wilson' }
+];
 
 
 async function main() {
@@ -59,7 +68,7 @@ async function main() {
         roleIds = insertResult.insertedIds;
     }
 
-    let userIds = null;
+    let adminIds = null;
 
     async function seedPredefinedUsers() {
         const predefinedUsers = [predefinedAdmin, predefinedSuperAdmin].map(({ username }) => ({
@@ -81,15 +90,40 @@ async function main() {
 
         try {
             const result = await db.collection('users').insertMany(predefinedUsers);
-            userIds = result.insertedIds;
-            console.log(`Inserted ${result.insertedCount} users.`)
+            adminIds = result.insertedIds;
+            console.log(`Inserted ${result.insertedCount} users (admin and superadmin).`)
         } catch (e) {
             console.log('Failed to insert users', e);
         }
     }
 
+
+    let agentIds = null;
+
+
+    async function seedPredefinedAgents() {
+        const agentRoleId = roleIds[roles.map(({ name }) => name).indexOf('agent')]
+        try {
+            const agents = predefinedAgents.map(({ firstName, lastName }) => ({
+                username: firstName.toLowerCase(),
+                firstName,
+                lastName,
+                passwordHash: bcrypt.hashSync(firstName.toLowerCase(), 10),
+                roles: [agentRoleId]
+            }));
+
+            const result = await db.collection('users').insertMany(agents);
+            agentIds = result.insertedIds;
+            console.log(`Inserted ${result.insertedCount} agents`);
+
+        } catch (e) {
+            console.log(`Failed to insert agents`, e);
+        }
+    }
+
     await seedRoles();
     await seedPredefinedUsers();
+    await seedPredefinedAgents();
 
 
     process.exit(0);
