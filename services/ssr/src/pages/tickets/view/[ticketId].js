@@ -16,13 +16,17 @@ function TicketViewPage(props) {
   const router = useRouter();
   const id = router.query.ticketId;
 
-  useGetTicketQuery({ id });
+  const { isLoading, isFetching } = useGetTicketQuery({ id });
 
   const ticket = useSelector((state) =>
     selectGetTicketQueryResponse(state, id),
   );
 
-  const title = `${ticket.title} | STS`;
+  const title = `${ticket?.title} | STS`;
+
+  if (isLoading || isFetching) {
+    return 'Loading';
+  }
 
   return (
     <Fragment>

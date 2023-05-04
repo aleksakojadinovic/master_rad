@@ -72,8 +72,23 @@ export class TicketsService {
     return ok(ticketModel as Ticket);
   }
 
-  findAll() {
-    return `This action returns all tickets`;
+  async findAll() {
+    const tickets = await this.ticketModel
+      .find({})
+      .populate({
+        path: 'history.initiator',
+        model: 'User',
+        populate: {
+          path: 'roles',
+          model: 'Role',
+        },
+      })
+      .populate({
+        path: 'createdBy',
+        model: 'User',
+      });
+
+    return tickets;
   }
 
   async findOne(id: string) {
