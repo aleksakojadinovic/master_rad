@@ -57,5 +57,14 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  seeder:
+    container_name: seeder
+    image: node:18-alpine3.16
+    environment:
+      MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
+      MAIN_DB_PWD: ${MAIN_DB_PWD}
+    volumes:
+      - ./tools/seeder/:/app
+
 volumes:
   main-db-data:
