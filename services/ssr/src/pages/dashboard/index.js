@@ -13,7 +13,7 @@ function DashboardPage() {
   if (isLoading || isFetching) {
     return 'Loading...';
   }
-  
+
   return (
     <Fragment>
       <Typography variant="h3">Welcome, {user.firstName}</Typography>
