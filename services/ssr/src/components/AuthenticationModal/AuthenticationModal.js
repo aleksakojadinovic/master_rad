@@ -20,8 +20,8 @@ const modalContentStyles = {
 };
 
 function AuthenticationModal({ onClose }) {
-  const [username, setUsername] = useState('aleksa');
-  const [password, setPassowrd] = useState('aleksa123');
+  const [username, setUsername] = useState('ethan');
+  const [password, setPassowrd] = useState('ethan');
 
   const [triggerLogin, { data, isSuccess, isLoading }] = useLoginMutation();
 
