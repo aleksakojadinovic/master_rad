@@ -1,5 +1,6 @@
 import {
   TicketHistoryEntryBodyChanged,
+  TicketHistoryEntryCommentAdded,
   TicketHistoryEntryCreated,
   TicketHistoryEntryDeleted,
   TicketHistoryEntryStatusChange,
@@ -31,4 +32,5 @@ export type TicketHistoryEntryTypeUnion =
   | TicketHistoryEntryDeleted
   | TicketHistoryEntryStatusChange
   | TicketHistoryEntryBodyChanged
-  | TicketHistoryEntryTitleChanged;
+  | TicketHistoryEntryTitleChanged
+  | TicketHistoryEntryCommentAdded;

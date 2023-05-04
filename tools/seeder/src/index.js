@@ -32,6 +32,14 @@ const predefinedAgents = [
     { firstName: 'Noah', lastName: 'Wilson' }
 ];
 
+const predefinedCustomers = [
+    { firstName: 'Abigail', lastName: 'Jones' },
+    { firstName: 'William', lastName: 'Mitchell' },
+    { firstName: 'Samantha', lastName: 'Davis' },
+    { firstName: 'Christopher', lastName: 'Carter' },
+    { firstName: 'Olivia', lastName: 'Reynolds' }
+];
+
 
 async function main() {
     let client = null;
@@ -121,9 +129,30 @@ async function main() {
         }
     }
 
+    async function seedPredefinedCustomers() {
+        const customerRoleId = roleIds[roles.map(({ name }) => name).indexOf('customer')]
+        try {
+            const customers = predefinedCustomers.map(({ firstName, lastName }) => ({
+                username: firstName.toLowerCase(),
+                firstName,
+                lastName,
+                passwordHash: bcrypt.hashSync(firstName.toLowerCase(), 10),
+                roles: [customerRoleId]
+            }));
+
+            const result = await db.collection('users').insertMany(customers);
+            agentIds = result.insertedIds;
+            console.log(`Inserted ${result.insertedCount} customers`);
+
+        } catch (e) {
+            console.log(`Failed to insert customers`, e);
+        }
+    }
+
     await seedRoles();
     await seedPredefinedUsers();
     await seedPredefinedAgents();
+    await seedPredefinedCustomers();
 
 
     process.exit(0);
