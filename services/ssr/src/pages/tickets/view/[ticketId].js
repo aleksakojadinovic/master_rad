@@ -24,7 +24,7 @@ function TicketViewPage(props) {
 
   const title = `${ticket?.title} | STS`;
 
-  if (isLoading || isFetching) {
+  if (!ticket && (isLoading || isFetching)) {
     return 'Loading';
   }
 

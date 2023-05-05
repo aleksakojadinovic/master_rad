@@ -56,7 +56,7 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    return (await this.userModel.findById(id).populate('roles')) as User;
+    return await this.userModel.findById(id).populate('roles');
   }
 
   update(id: number) {
