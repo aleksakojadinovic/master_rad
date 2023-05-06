@@ -2,6 +2,7 @@ import {
   BadRequestException,
   CallHandler,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   NestInterceptor,
   NotFoundException,
@@ -24,6 +25,10 @@ export class ServiceErrorInterceptor implements NestInterceptor {
 
         if (errorCode === ServiceErrors.VALIDATION_FAILED) {
           throw new BadRequestException(value);
+        }
+
+        if (errorCode === ServiceErrors.PERMISSION_DENIED) {
+          throw new ForbiddenException(value);
         }
       }),
     );

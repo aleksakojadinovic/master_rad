@@ -21,6 +21,9 @@ export class Ticket {
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   createdBy: User;
 
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+  assignees: User[];
+
   @Prop()
   createdAt: Date;
 

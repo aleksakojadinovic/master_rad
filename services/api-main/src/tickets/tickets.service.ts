@@ -3,12 +3,13 @@ import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket } from 'src/tickets/schema/ticket.schema';
-import { Model, isValidObjectId } from 'mongoose';
+import mongoose, { Model, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
 import { ServiceErrors } from 'src/errors';
 import { ok, err } from 'neverthrow';
 import { v4 as uuid } from 'uuid';
 import {
+  TicketHistoryEntryAssigneesAdded,
   TicketHistoryEntryBodyChanged,
   TicketHistoryEntryCommentAdded,
   TicketHistoryEntryCreated,
@@ -19,6 +20,7 @@ import {
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketStatus } from './types';
+import { User } from 'src/users/schema/user.schema';
 
 @Injectable()
 export class TicketsService {
@@ -222,6 +224,50 @@ export class TicketsService {
         }),
       );
       ticket.title = updateTicketDto.title;
+    }
+
+    if (
+      updateTicketDto.assignees != null &&
+      updateTicketDto.assignees.length > 0
+    ) {
+      const assignees: User[] = [];
+      for (const assigneeId of updateTicketDto.assignees) {
+        if (!isValidObjectId(assigneeId)) {
+          return err({
+            type: ServiceErrors.VALIDATION_FAILED,
+            message: 'Invalid assignee user id',
+          });
+        }
+        const assigneeUser = await this.usersService.findOne(assigneeId);
+        if (!assigneeUser) {
+          return err({
+            type: ServiceErrors.ENTITY_NOT_FOUND,
+            message: 'User not found.',
+          });
+        }
+        if (assigneeUser.hasRole('customer')) {
+          return err({
+            type: ServiceErrors.PERMISSION_DENIED,
+            message: 'Cannot assign a customer to a ticket',
+          });
+        }
+        assignees.push(assigneeUser);
+      }
+      const entry = new TicketHistoryEntryAssigneesAdded(
+        updateTicketDto.assignees,
+      );
+      // Shit, how do I add user id here? It's a POJO not a model :(
+      ticket.history.push(
+        TicketHistoryItem.create({
+          groupId,
+          timestamp,
+          initiator: user,
+          entry,
+        }),
+      );
+      for (const a of assignees) {
+        ticket.assignees.push(a);
+      }
     }
 
     await ticket.save();

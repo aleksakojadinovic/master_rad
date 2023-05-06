@@ -43,6 +43,10 @@ export class TicketProfile extends AutomapperProfile {
           mapFrom((source) => mapper.map(source.createdBy, User, UserDTO)),
         ),
         forMember(
+          (destination) => destination.assignees,
+          mapFrom((source) => mapper.mapArray(source.assignees, User, UserDTO)),
+        ),
+        forMember(
           (destination) => destination.createdAt,
           mapFrom((source) => source.createdAt),
         ),
