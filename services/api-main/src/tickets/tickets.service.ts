@@ -109,7 +109,7 @@ export class TicketsService {
 
     if (!ticket) {
       return err({
-        error: ServiceErrors.ENTITY_NOT_FOUND,
+        type: ServiceErrors.ENTITY_NOT_FOUND,
         message: 'Ticket not found',
       });
     }
@@ -134,7 +134,7 @@ export class TicketsService {
   async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
     if (!isValidObjectId(id)) {
       return err({
-        error: ServiceErrors.VALIDATION_FAILED,
+        type: ServiceErrors.VALIDATION_FAILED,
         message: 'Invalid ticket id.',
       });
     }
@@ -161,7 +161,7 @@ export class TicketsService {
 
     if (!user) {
       return err({
-        error: ServiceErrors.ENTITY_NOT_FOUND,
+        type: ServiceErrors.ENTITY_NOT_FOUND,
         message: 'User not found',
       });
     }

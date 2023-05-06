@@ -6,7 +6,7 @@ function capitalizeFirstLetter(str) {
 }
 
 
-const url = `mongodb://${process.env.MAIN_DB_USERNAME}:${process.env.MAIN_DB_PWD}@maindb:27017`;
+const url = `mongodb://${process.env.MAIN_DB_USERNAME}:${process.env.MAIN_DB_PWD}@localhost:27017`;
 
 const roles = [
     { name: 'administrator' },

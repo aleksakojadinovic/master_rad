@@ -7,8 +7,8 @@ export const ticketsSlice = api.injectEndpoints({
       query: ({ id }) => ({
         url: `/tickets/${id}`,
       }),
-      providesTags: ({ id }) => {
-        return [{ type: 'getTicket', id }];
+      providesTags: (res) => {
+        return res ? [{ type: 'getTicket', id: res.id }] : [];
       },
     }),
     updateTicket: builder.mutation({

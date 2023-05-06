@@ -14,7 +14,6 @@ export class ServiceErrorInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       tap((value) => {
-        // TODO: rework this
         if (value.error == null) {
           return;
         }

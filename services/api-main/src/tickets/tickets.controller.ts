@@ -69,7 +69,7 @@ export class TicketsController {
       return this.mapper.map(ticket, Ticket, TicketDTO);
     }
 
-    return result.error;
+    return result;
   }
 
   @Patch(':id')
