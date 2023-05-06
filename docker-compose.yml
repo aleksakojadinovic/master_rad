@@ -59,7 +59,9 @@ services:
 
   seeder:
     container_name: seeder
-    image: node:18-alpine3.16
+    build:
+      context: ./tools/seeder
+      dockerfile: Dockerfile
     environment:
       MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
       MAIN_DB_PWD: ${MAIN_DB_PWD}

@@ -16,7 +16,7 @@ function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const url = `mongodb://${process.env.MAIN_DB_USERNAME}:${process.env.MAIN_DB_PWD}@localhost:27017`;
+const url = `mongodb://${process.env.MAIN_DB_USERNAME}:${process.env.MAIN_DB_PWD}@maindb:27017`;
 
 const MIN_TICKET_TITLE_LENGTH = 4;
 const MAX_TICKET_TITLE_LENGTH = 10;
