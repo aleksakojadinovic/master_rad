@@ -3,6 +3,7 @@ import { ticketsSlice, useGetTicketsQuery } from '@/api/tickets';
 import AgentDashboard from '@/features/agent-dashboard/AgentDashboard';
 import { wrapper } from '@/redux/store';
 import { Box, Typography } from '@mui/material';
+import Head from 'next/head';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -16,6 +17,9 @@ function DashboardPage() {
 
   return (
     <Fragment>
+      <Head>
+        <title>Agent Dashboard | STS</title>
+      </Head>
       <Typography variant="h3">Welcome, {user.firstName}</Typography>
       <Box sx={{ marginTop: '12px' }}>
         <AgentDashboard />
