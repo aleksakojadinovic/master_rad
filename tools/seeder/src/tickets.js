@@ -163,7 +163,7 @@ async function main() {
     const scs = history.filter(({ entryType }) => {
       return entryType === 3;
     });
-    const status = scs[scs.length - 1].status;
+    const status = scs[scs.length - 1].entry.status;
     const ticket = {
       title,
       body,

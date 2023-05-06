@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 
 export default function AgentDashboard() {
   const tickets = useSelector(selectGetTicketsQueryResponse);
+  console.log({ tickets });
   return (
     <Grid container gap={2}>
       {tickets.map((ticket) => (
