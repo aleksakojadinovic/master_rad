@@ -46,8 +46,12 @@ export class TicketsController {
   }
 
   @Get()
-  findAll() {
-    return this.ticketsService.findAll();
+  async findAll() {
+    return this.mapper.mapArray(
+      await this.ticketsService.findAll(),
+      Ticket,
+      TicketDTO,
+    );
   }
 
   @Get(':id')
@@ -65,7 +69,7 @@ export class TicketsController {
       return this.mapper.map(ticket, Ticket, TicketDTO);
     }
 
-    return result.error;
+    return result;
   }
 
   @Patch(':id')

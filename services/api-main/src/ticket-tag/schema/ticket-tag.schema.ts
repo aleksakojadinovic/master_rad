@@ -1,4 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
+import { TicketTagGroup } from './ticket-tag-group.schema';
 
 @Schema()
 export class TicketTag {
@@ -14,6 +16,9 @@ export class TicketTag {
 
   @Prop()
   description: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'TicketTagGroup' })
+  group: TicketTagGroup;
 }
 
-export const RoleSchema = SchemaFactory.createForClass(TicketTag);
+export const TicketTagSchema = SchemaFactory.createForClass(TicketTag);

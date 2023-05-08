@@ -9,6 +9,7 @@ import { ServiceErrors } from 'src/errors';
 import { ok, err } from 'neverthrow';
 import { v4 as uuid } from 'uuid';
 import {
+  TicketHistoryEntryAssigneesAdded,
   TicketHistoryEntryBodyChanged,
   TicketHistoryEntryCommentAdded,
   TicketHistoryEntryCreated,
@@ -19,6 +20,7 @@ import {
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketStatus } from './types';
+import { User } from 'src/users/schema/user.schema';
 
 @Injectable()
 export class TicketsService {
@@ -72,8 +74,23 @@ export class TicketsService {
     return ok(ticketModel as Ticket);
   }
 
-  findAll() {
-    return `This action returns all tickets`;
+  async findAll() {
+    const tickets = await this.ticketModel
+      .find({})
+      .populate({
+        path: 'history.initiator',
+        model: 'User',
+        populate: {
+          path: 'roles',
+          model: 'Role',
+        },
+      })
+      .populate({
+        path: 'createdBy',
+        model: 'User',
+      });
+
+    return tickets;
   }
 
   async findOne(id: string) {
@@ -94,7 +111,7 @@ export class TicketsService {
 
     if (!ticket) {
       return err({
-        error: ServiceErrors.ENTITY_NOT_FOUND,
+        type: ServiceErrors.ENTITY_NOT_FOUND,
         message: 'Ticket not found',
       });
     }
@@ -119,7 +136,7 @@ export class TicketsService {
   async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
     if (!isValidObjectId(id)) {
       return err({
-        error: ServiceErrors.VALIDATION_FAILED,
+        type: ServiceErrors.VALIDATION_FAILED,
         message: 'Invalid ticket id.',
       });
     }
@@ -146,7 +163,7 @@ export class TicketsService {
 
     if (!user) {
       return err({
-        error: ServiceErrors.ENTITY_NOT_FOUND,
+        type: ServiceErrors.ENTITY_NOT_FOUND,
         message: 'User not found',
       });
     }
@@ -207,6 +224,50 @@ export class TicketsService {
         }),
       );
       ticket.title = updateTicketDto.title;
+    }
+
+    if (
+      updateTicketDto.assignees != null &&
+      updateTicketDto.assignees.length > 0
+    ) {
+      const assignees: User[] = [];
+      for (const assigneeId of updateTicketDto.assignees) {
+        if (!isValidObjectId(assigneeId)) {
+          return err({
+            type: ServiceErrors.VALIDATION_FAILED,
+            message: 'Invalid assignee user id',
+          });
+        }
+        const assigneeUser = await this.usersService.findOne(assigneeId);
+        if (!assigneeUser) {
+          return err({
+            type: ServiceErrors.ENTITY_NOT_FOUND,
+            message: 'User not found.',
+          });
+        }
+        if (assigneeUser.hasRole('customer')) {
+          return err({
+            type: ServiceErrors.PERMISSION_DENIED,
+            message: 'Cannot assign a customer to a ticket',
+          });
+        }
+        assignees.push(assigneeUser);
+      }
+      const entry = new TicketHistoryEntryAssigneesAdded(
+        updateTicketDto.assignees,
+      );
+      // Shit, how do I add user id here? It's a POJO not a model :(
+      ticket.history.push(
+        TicketHistoryItem.create({
+          groupId,
+          timestamp,
+          initiator: user,
+          entry,
+        }),
+      );
+      for (const a of assignees) {
+        ticket.assignees.push(a);
+      }
     }
 
     await ticket.save();

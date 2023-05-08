@@ -6,6 +6,7 @@ export class TicketDTO {
   constructor(
     public id: string,
     public createdBy: UserDTO,
+    public assignees: UserDTO[],
     public createdAt: Date,
     public title: string,
     public body: string,

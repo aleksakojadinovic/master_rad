@@ -20,6 +20,7 @@ export enum TicketHistoryEntryType {
   STATUS_CHANGED,
   COMMEND_ADDED,
   DELETED,
+  ASSIGNEES_ADDED,
 }
 
 export enum TicketCategoryType {

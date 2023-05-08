@@ -7,8 +7,8 @@ export const ticketsSlice = api.injectEndpoints({
       query: ({ id }) => ({
         url: `/tickets/${id}`,
       }),
-      providesTags: ({ id }) => {
-        return [{ type: 'getTicket', id }];
+      providesTags: (res) => {
+        return res ? [{ type: 'getTicket', id: res.id }] : [];
       },
     }),
     updateTicket: builder.mutation({
@@ -19,10 +19,20 @@ export const ticketsSlice = api.injectEndpoints({
       }),
       invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
     }),
+    getTickets: builder.query({
+      query: () => ({
+        url: '/tickets',
+      }),
+    }),
   }),
+  overrideExisting: true,
 });
 
-export const { useGetTicketQuery, useUpdateTicketMutation } = ticketsSlice;
+export const {
+  useGetTicketQuery,
+  useUpdateTicketMutation,
+  useGetTicketsQuery,
+} = ticketsSlice;
 
 const selectGetTicketQueryResult = createSelector(
   [(state) => state, (_, id) => id],
@@ -41,5 +51,15 @@ export const selectGetTicketQueryIndicators = createSelector(
 
 export const selectGetTicketQueryResponse = createSelector(
   [selectGetTicketQueryResult],
+  (queryResult) => queryResult.data,
+);
+
+const selectGetTicketsQueryResult = createSelector(
+  [(state) => state, (_, id) => id],
+  (state) => ticketsSlice.endpoints.getTickets.select()(state),
+);
+
+export const selectGetTicketsQueryResponse = createSelector(
+  [selectGetTicketsQueryResult],
   (queryResult) => queryResult.data,
 );

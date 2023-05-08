@@ -31,6 +31,10 @@ export class TicketHistoryEntryBodyChanged {
   constructor(public body: string) {}
 }
 
+export class TicketHistoryEntryAssigneesAdded {
+  constructor(public assignees: string[]) {}
+}
+
 export class TicketHistoryItem {
   constructor(
     public groupId: string,
@@ -83,6 +87,10 @@ export class TicketHistoryItem {
 
     if (entry instanceof TicketHistoryEntryBodyChanged) {
       type = TicketHistoryEntryType.BODY_CHANGED;
+    }
+
+    if (entry instanceof TicketHistoryEntryAssigneesAdded) {
+      type = TicketHistoryEntryType.ASSIGNEES_ADDED;
     }
 
     return new TicketHistoryItem(

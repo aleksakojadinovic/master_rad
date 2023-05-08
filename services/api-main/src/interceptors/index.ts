@@ -2,6 +2,7 @@ import {
   BadRequestException,
   CallHandler,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   NestInterceptor,
   NotFoundException,
@@ -14,7 +15,6 @@ export class ServiceErrorInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       tap((value) => {
-        // TODO: rework this
         if (value.error == null) {
           return;
         }
@@ -25,6 +25,10 @@ export class ServiceErrorInterceptor implements NestInterceptor {
 
         if (errorCode === ServiceErrors.VALIDATION_FAILED) {
           throw new BadRequestException(value);
+        }
+
+        if (errorCode === ServiceErrors.PERMISSION_DENIED) {
+          throw new ForbiddenException(value);
         }
       }),
     );

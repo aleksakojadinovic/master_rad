@@ -5,4 +5,5 @@ export class UpdateTicketDto {
   body?: string;
   comment?: string;
   title?: string;
+  assignees?: string[];
 }

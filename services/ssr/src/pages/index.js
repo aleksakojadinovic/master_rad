@@ -11,13 +11,14 @@ export default IndexPage;
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
     const user = selectGetMeQueryResponse(store.getState());
-    if (user != null) {
+    if (user == null) {
+      return {};
+    }
+    if (user.roles.map(({ name }) => name).includes('agent'))
       return {
         redirect: {
           destination: '/dashboard',
         },
       };
-    }
-    return {};
   },
 );

@@ -39,6 +39,32 @@ export class User {
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }] })
   @AutoMap(() => Role)
   roles: Role[];
+
+  hasRole!: (role: string) => boolean;
+  isAdministrator!: () => boolean;
+  isSuperAdministrator!: () => boolean;
+  isAgent!: () => boolean;
+  isCustomer!: () => boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass<User>(User);
+
+UserSchema.methods.hasRole = function (role: string) {
+  return this.roles.map(({ name }) => name).includes(role);
+};
+
+UserSchema.methods.isAdministrator = function () {
+  return this.hasRole('administrator');
+};
+
+UserSchema.methods.isSuperAdministrator = function () {
+  return this.hasRole('superadministrator');
+};
+
+UserSchema.methods.isAgent = function () {
+  return this.hasRole('agent');
+};
+
+UserSchema.methods.isCustomer = function () {
+  return this.hasRole('customer');
+};

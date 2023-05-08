@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
-    "faker": "^6.6.6",
+    "faker": "^5.5.3",
     "lorem-ipsum": "^2.0.8",
     "mongodb": "^5.3.0",
     "mongoose": "^7.1.0"
