@@ -4,8 +4,9 @@ import { createSelector } from '@reduxjs/toolkit';
 export const ticketsSlice = api.injectEndpoints({
   endpoints: (builder) => ({
     getTicket: builder.query({
-      query: ({ id }) => ({
+      query: ({ id, ...params }) => ({
         url: `/tickets/${id}`,
+        params,
       }),
       providesTags: (res) => {
         return res ? [{ type: 'getTicket', id: res.id }] : [];
@@ -35,8 +36,8 @@ export const {
 } = ticketsSlice;
 
 const selectGetTicketQueryResult = createSelector(
-  [(state) => state, (_, id) => id],
-  (state, id) => ticketsSlice.endpoints.getTicket.select({ id })(state),
+  [(state) => state, (_, params) => params],
+  (state, params) => ticketsSlice.endpoints.getTicket.select(params)(state),
 );
 
 export const selectGetTicketQueryIndicators = createSelector(

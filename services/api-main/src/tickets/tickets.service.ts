@@ -21,6 +21,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketStatus } from './types';
 import { User } from 'src/users/schema/user.schema';
+import { TicketQueryDTO } from './dto/ticket-query.dto';
 
 @Injectable()
 export class TicketsService {
@@ -93,21 +94,28 @@ export class TicketsService {
     return tickets;
   }
 
-  async findOne(id: string) {
-    const ticket = await this.ticketModel
-      .findOne({ _id: id })
-      .populate({
-        path: 'history.initiator',
-        model: 'User',
-        populate: {
-          path: 'roles',
-          model: 'Role',
-        },
-      })
-      .populate({
-        path: 'createdBy',
-        model: 'User',
-      });
+  async findOne(id: string, queryDTO: TicketQueryDTO = new TicketQueryDTO()) {
+    const query = this.ticketModel.findOne({ _id: id });
+    queryDTO.includes.forEach((includeField) => {
+      if (includeField === 'createdBy') {
+        query.populate({
+          path: 'createdBy',
+          model: 'User',
+          populate: { path: 'roles', model: 'Role' },
+        });
+      }
+      if (includeField === 'historyInitiator') {
+        query.populate({
+          path: 'history.initiator',
+          model: 'User',
+          populate: {
+            path: 'roles',
+            model: 'Role',
+          },
+        });
+      }
+    });
+    const ticket = await query.exec();
 
     if (!ticket) {
       return err({

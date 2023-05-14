@@ -10,6 +10,8 @@ import {
   UseGuards,
   UseInterceptors,
   Req,
+  Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -23,14 +25,44 @@ import { ServiceErrors } from 'src/errors';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketDTO } from './dto/ticket.dto';
+import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
+import { BaseController } from 'src/classes/BaseController';
+import { TicketQueryDTO } from './dto/ticket-query.dto';
+import { TicketStatus } from './types';
+import { TicketQueryPipe } from './pipes/ticket-query.pipe';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')
-export class TicketsController {
+export class TicketsController extends BaseController {
   constructor(
     private readonly ticketsService: TicketsService,
     @InjectMapper() private readonly mapper: Mapper,
-  ) {}
+  ) {
+    super();
+  }
+
+  override getDefaultIncludeKeys(): string[] {
+    return ['createdBy', 'assignees', 'historyInitiator'];
+  }
+
+  override validateEntityQueryDTO(inputQuery: EntityQueryDTO): void {
+    super.validateEntityQueryDTO(inputQuery);
+    const query = inputQuery as TicketQueryDTO;
+    if (query.statuses != null) {
+      query.statuses.forEach((queryStatus) => {
+        if (
+          ![TicketStatus.CLOSED, TicketStatus.OPEN, TicketStatus.NEW].includes(
+            queryStatus,
+          )
+        ) {
+          throw new BadRequestException({
+            type: ServiceErrors.VALIDATION_FAILED,
+            message: `Invalid status ${queryStatus}`,
+          });
+        }
+      });
+    }
+  }
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
@@ -46,23 +78,29 @@ export class TicketsController {
   }
 
   @Get()
-  async findAll() {
-    return this.mapper.mapArray(
-      await this.ticketsService.findAll(),
-      Ticket,
-      TicketDTO,
-    );
+  async findAll(
+    @Req() Req,
+    @Query() queryDTO: TicketQueryDTO = new TicketQueryDTO(),
+  ) {
+    this.validateEntityQueryDTO(queryDTO);
+    this.enforcePagination(queryDTO);
+    return [];
   }
 
   @Get(':id')
-  async findOne(@Req() req, @Param('id') id: string) {
+  async findOne(
+    @Req() req,
+    @Param('id') id: string,
+    @Query(new TicketQueryPipe()) queryDTO: TicketQueryDTO,
+  ) {
+    this.validateEntityQueryDTO(queryDTO);
     if (!isValidObjectId(id)) {
       return err({
         type: ServiceErrors.VALIDATION_FAILED,
         message: 'Invalid ticket id',
       });
     }
-    const result = await this.ticketsService.findOne(id);
+    const result = await this.ticketsService.findOne(id, queryDTO);
     if (result.isOk()) {
       // TODO
       const ticket = result.value as Ticket;

@@ -11,6 +11,7 @@ import { User } from '../schema/user.schema';
 import { UserDTO } from '../dto/user.dto';
 import { Role } from '../schema/role.schema';
 import { RoleDTO } from '../dto/role.dto';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class UserProfile extends AutomapperProfile {
@@ -45,7 +46,12 @@ export class UserProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.roles,
           mapFrom((source) =>
-            source.roles.map((role) => mapper.map(role, Role, RoleDTO)),
+            source.roles.map((role) => {
+              if (role instanceof Types.ObjectId) {
+                return role.toString();
+              }
+              return mapper.map(role, Role, RoleDTO);
+            }),
           ),
         ),
       );
