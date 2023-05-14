@@ -2,13 +2,16 @@ import { selectGetMeQueryResponse } from '@/api/auth';
 import { ticketsSlice, useGetTicketsQuery } from '@/api/tickets';
 import AgentDashboard from '@/features/agent-dashboard/AgentDashboard';
 import { wrapper } from '@/redux/store';
+import { getAgentDashboardTicketsParams } from '@/utils/params';
 import { Box, Typography } from '@mui/material';
 import Head from 'next/head';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
 function DashboardPage() {
-  const { isLoading, isFetching } = useGetTicketsQuery();
+  const { isLoading, isFetching } = useGetTicketsQuery(
+    getAgentDashboardTicketsParams(),
+  );
   const user = useSelector(selectGetMeQueryResponse);
 
   if (isLoading || isFetching) {
@@ -48,10 +51,20 @@ export const getServerSideProps = wrapper.getServerSideProps(
       };
     }
 
-    store.dispatch(ticketsSlice.endpoints.getTickets.initiate());
+    store.dispatch(
+      ticketsSlice.endpoints.getTickets.initiate(
+        getAgentDashboardTicketsParams(),
+      ),
+    );
 
     await Promise.all(
       store.dispatch(ticketsSlice.util.getRunningQueriesThunk()),
+    );
+
+    console.log(
+      store.getState().api.queries[
+        'getTickets({"includes":[],"page":1,"perPage":10})'
+      ],
     );
 
     return {};

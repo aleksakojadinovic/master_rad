@@ -63,6 +63,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       ticketId,
     );
 
+    // TOOD: This doesnt work for some reason
     if (isError) {
       return {
         redirect: {

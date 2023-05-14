@@ -80,11 +80,17 @@ export class TicketsController extends BaseController {
   @Get()
   async findAll(
     @Req() Req,
-    @Query() queryDTO: TicketQueryDTO = new TicketQueryDTO(),
+    // TODO: Abstract these pipes out for other entities
+    @Query(new TicketQueryPipe()) queryDTO: TicketQueryDTO,
   ) {
+    // TODO: Consider moving this elsewhere
     this.validateEntityQueryDTO(queryDTO);
     this.enforcePagination(queryDTO);
-    return [];
+    const result = await this.ticketsService.findAll(queryDTO);
+    if (result.isOk()) {
+      return this.mapper.mapArray(result.value, Ticket, TicketDTO);
+    }
+    return result;
   }
 
   @Get(':id')
@@ -102,7 +108,6 @@ export class TicketsController extends BaseController {
     }
     const result = await this.ticketsService.findOne(id, queryDTO);
     if (result.isOk()) {
-      // TODO
       const ticket = result.value as Ticket;
       return this.mapper.map(ticket, Ticket, TicketDTO);
     }

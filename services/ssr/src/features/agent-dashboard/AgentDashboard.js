@@ -1,16 +1,18 @@
 import { selectGetTicketsQueryResponse } from '@/api/tickets';
 import TicketCard from '@/components/TicketCard/TicketCard';
+import TicketTableRow from '@/components/TicketTableRow/TicketTableRow';
+import { getAgentDashboardTicketsParams } from '@/utils/params';
 import { Grid } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 export default function AgentDashboard() {
-  const tickets = useSelector(selectGetTicketsQueryResponse);
+  const tickets = useSelector((state) =>
+    selectGetTicketsQueryResponse(state, getAgentDashboardTicketsParams()),
+  );
   return (
     <Grid container gap={2}>
       {tickets.map((ticket) => (
-        <Grid key={ticket.id} item xs={12} md={3}>
-          <TicketCard key={ticket.id} ticket={ticket} />
-        </Grid>
+        <TicketTableRow key={ticket.id} ticket={ticket} />
       ))}
     </Grid>
   );

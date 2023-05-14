@@ -21,8 +21,9 @@ export const ticketsSlice = api.injectEndpoints({
       invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
     }),
     getTickets: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: '/tickets',
+        params,
       }),
     }),
   }),
@@ -56,8 +57,8 @@ export const selectGetTicketQueryResponse = createSelector(
 );
 
 const selectGetTicketsQueryResult = createSelector(
-  [(state) => state, (_, id) => id],
-  (state) => ticketsSlice.endpoints.getTickets.select()(state),
+  [(state) => state, (_, params) => params],
+  (state, params) => ticketsSlice.endpoints.getTickets.select(params)(state),
 );
 
 export const selectGetTicketsQueryResponse = createSelector(
