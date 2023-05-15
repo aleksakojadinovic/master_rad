@@ -1,16 +1,27 @@
-import { PipeTransform, Injectable } from '@nestjs/common';
-import { TicketQueryDTO } from '../dto/ticket-query.dto';
+import { Injectable } from '@nestjs/common';
+import { EntityQueryPipe } from 'src/pipes/entity-query.pipe';
 
 @Injectable()
-export class TicketQueryPipe implements PipeTransform<any, TicketQueryDTO> {
-  transform(value: any): TicketQueryDTO {
-    return new TicketQueryDTO(
-      value.searchString ?? '',
-      value.includes ? value.includes.split(',') : [],
-      value.sortBy ?? '',
-      value.page ?? null,
-      value.perPage ?? null,
-      value.statuses ? value.statuses.split(',') : [],
+export class TicketQueryPipe extends EntityQueryPipe {
+  private static TICKETS_ALLOWED_INCLUDE_KEYS = [
+    'createdBy',
+    'historyInitiator',
+    'assignees',
+  ];
+  private static TICKETS_ALLOWED_SORT_KEYS = ['id'];
+  private static TICKETS_ALLOWED_FILTER_KEYS = [];
+
+  constructor(
+    enforcePagination = false,
+    allowedIncludeKeys = TicketQueryPipe.TICKETS_ALLOWED_INCLUDE_KEYS,
+    allowedSortKeys = TicketQueryPipe.TICKETS_ALLOWED_SORT_KEYS,
+    allowedFilterKeys = TicketQueryPipe.TICKETS_ALLOWED_FILTER_KEYS,
+  ) {
+    super(
+      allowedIncludeKeys,
+      allowedSortKeys,
+      allowedFilterKeys,
+      enforcePagination,
     );
   }
 }

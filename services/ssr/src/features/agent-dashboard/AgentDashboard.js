@@ -1,5 +1,4 @@
 import { selectGetTicketsQueryResponse } from '@/api/tickets';
-import TicketCard from '@/components/TicketCard/TicketCard';
 import TicketTableRow from '@/components/TicketTableRow/TicketTableRow';
 import { getAgentDashboardTicketsParams } from '@/utils/params';
 import { Grid } from '@mui/material';

@@ -11,7 +11,6 @@ import {
   UseInterceptors,
   Req,
   Query,
-  BadRequestException,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -25,10 +24,8 @@ import { ServiceErrors } from 'src/errors';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketDTO } from './dto/ticket.dto';
-import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
 import { BaseController } from 'src/classes/BaseController';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
-import { TicketStatus } from './types';
 import { TicketQueryPipe } from './pipes/ticket-query.pipe';
 
 @UseInterceptors(ServiceErrorInterceptor)
@@ -39,29 +36,6 @@ export class TicketsController extends BaseController {
     @InjectMapper() private readonly mapper: Mapper,
   ) {
     super();
-  }
-
-  override getDefaultIncludeKeys(): string[] {
-    return ['createdBy', 'assignees', 'historyInitiator'];
-  }
-
-  override validateEntityQueryDTO(inputQuery: EntityQueryDTO): void {
-    super.validateEntityQueryDTO(inputQuery);
-    const query = inputQuery as TicketQueryDTO;
-    if (query.statuses != null) {
-      query.statuses.forEach((queryStatus) => {
-        if (
-          ![TicketStatus.CLOSED, TicketStatus.OPEN, TicketStatus.NEW].includes(
-            queryStatus,
-          )
-        ) {
-          throw new BadRequestException({
-            type: ServiceErrors.VALIDATION_FAILED,
-            message: `Invalid status ${queryStatus}`,
-          });
-        }
-      });
-    }
   }
 
   @Post()
@@ -80,12 +54,8 @@ export class TicketsController extends BaseController {
   @Get()
   async findAll(
     @Req() Req,
-    // TODO: Abstract these pipes out for other entities
-    @Query(new TicketQueryPipe()) queryDTO: TicketQueryDTO,
+    @Query(new TicketQueryPipe(true)) queryDTO: TicketQueryDTO,
   ) {
-    // TODO: Consider moving this elsewhere
-    this.validateEntityQueryDTO(queryDTO);
-    this.enforcePagination(queryDTO);
     const result = await this.ticketsService.findAll(queryDTO);
     if (result.isOk()) {
       return this.mapper.mapArray(result.value, Ticket, TicketDTO);
