@@ -6,13 +6,11 @@ import { getAgentDashboardTicketsParams } from '@/utils/params';
 import { Box, Typography } from '@mui/material';
 import Head from 'next/head';
 import React, { Fragment } from 'react';
-import { useSelector } from 'react-redux';
 
 function DashboardPage() {
   const { isLoading, isFetching } = useGetTicketsQuery(
     getAgentDashboardTicketsParams(),
   );
-  const user = useSelector(selectGetMeQueryResponse);
 
   if (isLoading || isFetching) {
     return 'Loading...';
@@ -23,7 +21,7 @@ function DashboardPage() {
       <Head>
         <title>Agent Dashboard | STS</title>
       </Head>
-      <Typography variant="h3">Welcome, {user.firstName}</Typography>
+      <Typography variant="h3">Dashboard</Typography>
       <Box sx={{ marginTop: '12px' }}>
         <AgentDashboard />
       </Box>
@@ -59,12 +57,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     await Promise.all(
       store.dispatch(ticketsSlice.util.getRunningQueriesThunk()),
-    );
-
-    console.log(
-      store.getState().api.queries[
-        'getTickets({"includes":[],"page":1,"perPage":10})'
-      ],
     );
 
     return {};

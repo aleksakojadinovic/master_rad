@@ -1,7 +1,7 @@
 import { selectGetTicketsQueryResponse } from '@/api/tickets';
-import TicketTableRow from '@/components/TicketTableRow/TicketTableRow';
+import { TicketTable } from '@/components/TicketTable/TicketTable';
 import { getAgentDashboardTicketsParams } from '@/utils/params';
-import { Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 export default function AgentDashboard() {
@@ -9,10 +9,8 @@ export default function AgentDashboard() {
     selectGetTicketsQueryResponse(state, getAgentDashboardTicketsParams()),
   );
   return (
-    <Grid container gap={2}>
-      {tickets.map((ticket) => (
-        <TicketTableRow key={ticket.id} ticket={ticket} />
-      ))}
-    </Grid>
+    <Box>
+      <TicketTable tickets={tickets} />
+    </Box>
   );
 }
