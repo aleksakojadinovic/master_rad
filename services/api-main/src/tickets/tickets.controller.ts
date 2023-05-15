@@ -69,7 +69,6 @@ export class TicketsController extends BaseController {
     @Param('id') id: string,
     @Query(new TicketQueryPipe()) queryDTO: TicketQueryDTO,
   ) {
-    this.validateEntityQueryDTO(queryDTO);
     if (!isValidObjectId(id)) {
       return err({
         type: ServiceErrors.VALIDATION_FAILED,

@@ -11,8 +11,6 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
     private enforcePagination: boolean,
   ) {}
   transform(value: any): EntityQueryDTO {
-    // First we validate and then we transform
-    // TODO validate sortby, validate filters
     const includeKeys = value.includes ? value.includes.split(',') : [];
     const sortKey = value.sortBy ?? null;
     const filterKeys = Object.keys(value.filterKeys ?? {});
@@ -24,7 +22,9 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
           message: 'Empty include key found',
         });
       }
+
       if (!this.allowedIncludeKeys.includes(includeKey)) {
+        console.log(this.allowedIncludeKeys, 'does not contain', includeKey);
         throw new BadRequestException({
           type: ServiceErrors.VALIDATION_FAILED,
           message: `Invalid include key ${includeKey}`,
@@ -84,7 +84,6 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
         });
       }
     }
-
     return new EntityQueryDTO(
       value.searchString ?? '',
       includeKeys,
