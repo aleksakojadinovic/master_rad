@@ -52,10 +52,7 @@ export class TicketsController extends BaseController {
   }
 
   @Get()
-  async findAll(
-    @Req() Req,
-    @Query(new TicketQueryPipe(true)) queryDTO: TicketQueryDTO,
-  ) {
+  async findAll(@Query(new TicketQueryPipe(true)) queryDTO: TicketQueryDTO) {
     const result = await this.ticketsService.findAll(queryDTO);
     if (result.isOk()) {
       return this.mapper.mapArray(result.value, Ticket, TicketDTO);
@@ -65,7 +62,6 @@ export class TicketsController extends BaseController {
 
   @Get(':id')
   async findOne(
-    @Req() req,
     @Param('id') id: string,
     @Query(new TicketQueryPipe()) queryDTO: TicketQueryDTO,
   ) {
