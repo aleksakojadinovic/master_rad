@@ -9,7 +9,6 @@ import {
   Request,
   UseGuards,
   UseInterceptors,
-  Req,
   Query,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
