@@ -6,5 +6,6 @@ export class EntityQueryDTO {
     public sortBy: string[] = [],
     public page: number | null,
     public perPage: number | null,
+    public filters: any = {},
   ) {}
 }

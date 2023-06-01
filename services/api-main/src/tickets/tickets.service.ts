@@ -103,11 +103,15 @@ export class TicketsService extends BaseService {
     return ok(ticketModel as Ticket);
   }
 
-  async findAll(queryDTO: TicketQueryDTO) {
+  async findAll(queryDTO: EntityQueryDTO) {
     const query = this.ticketModel.find({});
 
     const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
+
+    if (queryDTO.filters.status) {
+      query.where('status', queryDTO.filters.status);
+    }
 
     query.skip((queryDTO.page - 1) * queryDTO.perPage).limit(queryDTO.perPage);
 

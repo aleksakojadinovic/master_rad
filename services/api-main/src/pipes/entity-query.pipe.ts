@@ -24,7 +24,6 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
       }
 
       if (!this.allowedIncludeKeys.includes(includeKey)) {
-        console.log(this.allowedIncludeKeys, 'does not contain', includeKey);
         throw new BadRequestException({
           type: ServiceErrors.VALIDATION_FAILED,
           message: `Invalid include key ${includeKey}`,
@@ -84,12 +83,21 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
         });
       }
     }
+    const filters = Object.fromEntries(
+      this.allowedFilterKeys
+        .map((allowedFilterKey) => {
+          return [allowedFilterKey, value[allowedFilterKey]];
+        })
+        .filter(([_, v]) => v !== undefined),
+    );
+
     return new EntityQueryDTO(
       value.searchString ?? '',
       includeKeys,
       value.sortBy ?? '',
       value.page ? parseInt(value.page, 10) : null,
       value.perPage ? parseInt(value.perPage) : null,
+      filters,
     );
   }
 }

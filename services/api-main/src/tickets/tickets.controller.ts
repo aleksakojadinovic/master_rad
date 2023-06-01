@@ -26,6 +26,7 @@ import { TicketDTO } from './dto/ticket.dto';
 import { BaseController } from 'src/classes/BaseController';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
 import { TicketQueryPipe } from './pipes/ticket-query.pipe';
+import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')
@@ -51,7 +52,7 @@ export class TicketsController extends BaseController {
   }
 
   @Get()
-  async findAll(@Query(new TicketQueryPipe(true)) queryDTO: TicketQueryDTO) {
+  async findAll(@Query(new TicketQueryPipe(true)) queryDTO: EntityQueryDTO) {
     const result = await this.ticketsService.findAll(queryDTO);
     if (result.isOk()) {
       return this.mapper.mapArray(result.value, Ticket, TicketDTO);

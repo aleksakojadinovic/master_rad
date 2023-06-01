@@ -63,5 +63,5 @@ const selectGetTicketsQueryResult = createSelector(
 
 export const selectGetTicketsQueryResponse = createSelector(
   [selectGetTicketsQueryResult],
-  (queryResult) => queryResult.data,
+  (queryResult) => queryResult.data ?? [],
 );

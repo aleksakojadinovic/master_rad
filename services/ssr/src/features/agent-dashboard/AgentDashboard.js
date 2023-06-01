@@ -1,6 +1,6 @@
 import { selectGetTicketsQueryResponse } from '@/api/tickets';
 import SelectPerPage from '@/components/SelectPerPage/SelectPerPage';
-import { TicketFilters } from '@/components/TicketFilters/TicketFilters';
+import TicketFilters from '@/components/TicketFilters/TicketFilters';
 import { TicketPagination } from '@/components/TicketTable/TicketPagination';
 import { TicketTable } from '@/components/TicketTable/TicketTable';
 import { getAgentDashboardTicketsParams } from '@/utils/params';
@@ -10,8 +10,6 @@ import { useSelector } from 'react-redux';
 
 export default function AgentDashboard({ page, perPage, filters }) {
   const router = useRouter();
-
-  const handleFiltersChange = (newFilters) => {};
 
   const resolveNewQueryParams = (newPage, newPerPage, newFilters) => {
     const sp = new URLSearchParams();
@@ -38,9 +36,16 @@ export default function AgentDashboard({ page, perPage, filters }) {
     resolveNewQueryParams(page, newPerPage, filters);
   };
 
+  const handleFiltersChange = (newFilters) => {
+    resolveNewQueryParams(page, perPage, newFilters);
+  };
+
   return (
     <Box>
-      <TicketFilters onFiltersChange={handleFiltersChange} />
+      <Box marginBottom="12px">
+        <TicketFilters filters={filters} onChange={handleFiltersChange} />
+      </Box>
+
       <TicketTable tickets={tickets} />
       <Box width="100%" display="flex" justifyContent="center" marginTop="12px">
         <Grid container>

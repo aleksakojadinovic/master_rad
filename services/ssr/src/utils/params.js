@@ -13,6 +13,6 @@ export function getAgentDashboardTicketsParams(
     page,
     perPage,
     includes: ['createdBy'],
-    filters,
+    ...filters,
   };
 }

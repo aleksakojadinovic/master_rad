@@ -9,14 +9,14 @@ export class TicketQueryDTO extends EntityQueryDTO {
     sortBy: string[] = [],
     page: number | null = null,
     perPage: number | null = null,
-    statuses: TicketStatus[] = [],
+    status: TicketStatus | null = null,
   ) {
     super(searchString, includes, sortBy, page, perPage);
-    this.statuses = statuses;
+    this.status = status;
   }
 
   @Transform(({ value }) =>
     value.split(',').map((status) => TicketStatus[status]),
   )
-  statuses?: TicketStatus[];
+  status?: TicketStatus;
 }

@@ -16,7 +16,6 @@ function DashboardPage({ page, perPage, filters, ...rest }) {
   if (isLoading || isFetching) {
     return 'Loading...';
   }
-
   return (
     <Fragment>
       <Head>
@@ -34,11 +33,9 @@ export default DashboardPage;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-    const {
-      page: pageParam,
-      perPage: perPageParam,
-      ...filters
-    } = context.query;
+    const { page: pageParam, perPage: perPageParam, ...rest } = context.query;
+
+    const filters = rest ?? {};
 
     const page = parseInt(pageParam, 10) || 1;
     const perPage = parseInt(perPageParam, 10) || 10;
@@ -61,7 +58,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     store.dispatch(
       ticketsSlice.endpoints.getTickets.initiate(
-        getAgentDashboardTicketsParams(page, perPage),
+        getAgentDashboardTicketsParams(page, perPage, filters),
       ),
     );
 
