@@ -1,7 +1,7 @@
 export const TicketStatus = {
-  NEW: '0',
-  OPEN: '1',
-  CLOSED: '2',
+  NEW: 'NEW',
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
 };
 
 export const TicketStatusText = {
