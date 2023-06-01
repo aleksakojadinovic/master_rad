@@ -4,8 +4,9 @@ import { createSelector } from '@reduxjs/toolkit';
 export const ticketsSlice = api.injectEndpoints({
   endpoints: (builder) => ({
     getTicket: builder.query({
-      query: ({ id }) => ({
+      query: ({ id, ...params }) => ({
         url: `/tickets/${id}`,
+        params,
       }),
       providesTags: (res) => {
         return res ? [{ type: 'getTicket', id: res.id }] : [];
@@ -20,8 +21,9 @@ export const ticketsSlice = api.injectEndpoints({
       invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
     }),
     getTickets: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: '/tickets',
+        params,
       }),
     }),
   }),
@@ -35,8 +37,8 @@ export const {
 } = ticketsSlice;
 
 const selectGetTicketQueryResult = createSelector(
-  [(state) => state, (_, id) => id],
-  (state, id) => ticketsSlice.endpoints.getTicket.select({ id })(state),
+  [(state) => state, (_, params) => params],
+  (state, params) => ticketsSlice.endpoints.getTicket.select(params)(state),
 );
 
 export const selectGetTicketQueryIndicators = createSelector(
@@ -55,11 +57,11 @@ export const selectGetTicketQueryResponse = createSelector(
 );
 
 const selectGetTicketsQueryResult = createSelector(
-  [(state) => state, (_, id) => id],
-  (state) => ticketsSlice.endpoints.getTickets.select()(state),
+  [(state) => state, (_, params) => params],
+  (state, params) => ticketsSlice.endpoints.getTickets.select(params)(state),
 );
 
 export const selectGetTicketsQueryResponse = createSelector(
   [selectGetTicketsQueryResult],
-  (queryResult) => queryResult.data,
+  (queryResult) => queryResult.data ?? [],
 );

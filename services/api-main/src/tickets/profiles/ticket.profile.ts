@@ -13,6 +13,7 @@ import { TicketHistoryItem } from '../schema/ticket-history.schema';
 import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 import { User } from 'src/users/schema/user.schema';
 import { UserDTO } from 'src/users/dto/user.dto';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class TicketProfile extends AutomapperProfile {
@@ -40,7 +41,13 @@ export class TicketProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.createdBy,
-          mapFrom((source) => mapper.map(source.createdBy, User, UserDTO)),
+          mapFrom((source) => {
+            if (source.createdBy instanceof Types.ObjectId) {
+              return source.createdBy.toString();
+            }
+
+            return mapper.map(source.createdBy, User, UserDTO);
+          }),
         ),
         forMember(
           (destination) => destination.assignees,

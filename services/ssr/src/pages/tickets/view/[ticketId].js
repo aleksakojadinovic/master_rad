@@ -6,6 +6,7 @@ import {
 } from '@/api/tickets';
 import Ticket from '@/components/Ticket/Ticket';
 import { wrapper } from '@/redux/store';
+import { getTicketViewQueryParams } from '@/utils/params';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { Fragment } from 'react';
@@ -16,10 +17,13 @@ function TicketViewPage(props) {
   const router = useRouter();
   const id = router.query.ticketId;
 
-  const { isLoading, isFetching } = useGetTicketQuery({ id });
+  const { isLoading, isFetching } = useGetTicketQuery({
+    id,
+    ...getTicketViewQueryParams(),
+  });
 
   const ticket = useSelector((state) =>
-    selectGetTicketQueryResponse(state, id),
+    selectGetTicketQueryResponse(state, { id, ...getTicketViewQueryParams() }),
   );
 
   const title = `${ticket?.title} | STS`;
@@ -43,7 +47,12 @@ export default TicketViewPage;
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     const ticketId = context.params.ticketId;
-    store.dispatch(ticketsSlice.endpoints.getTicket.initiate({ id: ticketId }));
+    store.dispatch(
+      ticketsSlice.endpoints.getTicket.initiate({
+        id: ticketId,
+        ...getTicketViewQueryParams(),
+      }),
+    );
 
     await Promise.all(
       store.dispatch(ticketsSlice.util.getRunningQueriesThunk()),
@@ -54,6 +63,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       ticketId,
     );
 
+    // TOOD: This doesnt work for some reason
     if (isError) {
       return {
         redirect: {

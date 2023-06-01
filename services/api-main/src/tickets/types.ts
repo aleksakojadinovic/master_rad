@@ -8,9 +8,9 @@ import {
 } from './schema/ticket-history.schema';
 
 export enum TicketStatus {
-  NEW,
-  OPEN,
-  CLOSED,
+  NEW = 'NEW',
+  OPEN = 'OPEN',
+  CLOSED = 'CLOSED',
 }
 
 export enum TicketHistoryEntryType {

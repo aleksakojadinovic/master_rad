@@ -9,7 +9,7 @@ import {
   Request,
   UseGuards,
   UseInterceptors,
-  Req,
+  Query,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -23,14 +23,20 @@ import { ServiceErrors } from 'src/errors';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketDTO } from './dto/ticket.dto';
+import { BaseController } from 'src/classes/BaseController';
+import { TicketQueryDTO } from './dto/ticket-query.dto';
+import { TicketQueryPipe } from './pipes/ticket-query.pipe';
+import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
 
 @UseInterceptors(ServiceErrorInterceptor)
 @Controller('tickets')
-export class TicketsController {
+export class TicketsController extends BaseController {
   constructor(
     private readonly ticketsService: TicketsService,
     @InjectMapper() private readonly mapper: Mapper,
-  ) {}
+  ) {
+    super();
+  }
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
@@ -46,25 +52,27 @@ export class TicketsController {
   }
 
   @Get()
-  async findAll() {
-    return this.mapper.mapArray(
-      await this.ticketsService.findAll(),
-      Ticket,
-      TicketDTO,
-    );
+  async findAll(@Query(new TicketQueryPipe(true)) queryDTO: EntityQueryDTO) {
+    const result = await this.ticketsService.findAll(queryDTO);
+    if (result.isOk()) {
+      return this.mapper.mapArray(result.value, Ticket, TicketDTO);
+    }
+    return result;
   }
 
   @Get(':id')
-  async findOne(@Req() req, @Param('id') id: string) {
+  async findOne(
+    @Param('id') id: string,
+    @Query(new TicketQueryPipe()) queryDTO: TicketQueryDTO,
+  ) {
     if (!isValidObjectId(id)) {
       return err({
         type: ServiceErrors.VALIDATION_FAILED,
         message: 'Invalid ticket id',
       });
     }
-    const result = await this.ticketsService.findOne(id);
+    const result = await this.ticketsService.findOne(id, queryDTO);
     if (result.isOk()) {
-      // TODO
       const ticket = result.value as Ticket;
       return this.mapper.map(ticket, Ticket, TicketDTO);
     }

@@ -21,14 +21,43 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketStatus } from './types';
 import { User } from 'src/users/schema/user.schema';
+import { TicketQueryDTO } from './dto/ticket-query.dto';
+import { BaseService } from 'src/classes/BaseService';
+import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
 
 @Injectable()
-export class TicketsService {
+export class TicketsService extends BaseService {
   constructor(
     @InjectModel(Ticket.name) private ticketModel: Model<Ticket>,
     @InjectMapper() private readonly mapper: Mapper,
     private usersService: UsersService,
-  ) {}
+  ) {
+    super();
+  }
+
+  override constructPopulate(queryDTO: EntityQueryDTO) {
+    const populations = [];
+    queryDTO.includes.forEach((includeField) => {
+      if (includeField === 'createdBy') {
+        populations.push({
+          path: 'createdBy',
+          model: 'User',
+          populate: { path: 'roles', model: 'Role' },
+        });
+      }
+      if (includeField === 'historyInitiator') {
+        populations.push({
+          path: 'history.initiator',
+          model: 'User',
+          populate: {
+            path: 'roles',
+            model: 'Role',
+          },
+        });
+      }
+    });
+    return populations;
+  }
 
   async create(userId: string, createTicketDto: CreateTicketDto) {
     const user = await this.usersService.findOne(userId);
@@ -74,40 +103,29 @@ export class TicketsService {
     return ok(ticketModel as Ticket);
   }
 
-  async findAll() {
-    const tickets = await this.ticketModel
-      .find({})
-      .populate({
-        path: 'history.initiator',
-        model: 'User',
-        populate: {
-          path: 'roles',
-          model: 'Role',
-        },
-      })
-      .populate({
-        path: 'createdBy',
-        model: 'User',
-      });
+  async findAll(queryDTO: EntityQueryDTO) {
+    const query = this.ticketModel.find({});
 
-    return tickets;
+    const populations = this.constructPopulate(queryDTO);
+    populations.forEach((p) => query.populate(p));
+
+    if (queryDTO.filters.status) {
+      query.where('status', queryDTO.filters.status);
+    }
+
+    query.skip((queryDTO.page - 1) * queryDTO.perPage).limit(queryDTO.perPage);
+
+    const tickets = await query.exec();
+    return ok(tickets);
   }
 
-  async findOne(id: string) {
-    const ticket = await this.ticketModel
-      .findOne({ _id: id })
-      .populate({
-        path: 'history.initiator',
-        model: 'User',
-        populate: {
-          path: 'roles',
-          model: 'Role',
-        },
-      })
-      .populate({
-        path: 'createdBy',
-        model: 'User',
-      });
+  async findOne(id: string, queryDTO: TicketQueryDTO = new TicketQueryDTO()) {
+    const query = this.ticketModel.findOne({ _id: id });
+
+    const populations = this.constructPopulate(queryDTO);
+    populations.forEach((p) => query.populate(p));
+
+    const ticket = await query.exec();
 
     if (!ticket) {
       return err({
