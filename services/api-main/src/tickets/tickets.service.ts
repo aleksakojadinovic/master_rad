@@ -109,6 +109,8 @@ export class TicketsService extends BaseService {
     const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
 
+    query.skip((queryDTO.page - 1) * queryDTO.perPage).limit(queryDTO.perPage);
+
     const tickets = await query.exec();
     return ok(tickets);
   }

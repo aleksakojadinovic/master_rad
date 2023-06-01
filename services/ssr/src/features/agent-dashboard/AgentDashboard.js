@@ -1,9 +1,10 @@
 import { selectGetTicketsQueryResponse } from '@/api/tickets';
+import SelectPerPage from '@/components/SelectPerPage/SelectPerPage';
 import { TicketFilters } from '@/components/TicketFilters/TicketFilters';
 import { TicketPagination } from '@/components/TicketTable/TicketPagination';
 import { TicketTable } from '@/components/TicketTable/TicketTable';
 import { getAgentDashboardTicketsParams } from '@/utils/params';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
@@ -29,8 +30,12 @@ export default function AgentDashboard({ page, perPage, filters }) {
     ),
   );
 
-  const onPageChange = (newPage) => {
+  const handlePageChange = (newPage) => {
     resolveNewQueryParams(newPage, perPage, filters);
+  };
+
+  const handlePerPageChange = (newPerPage) => {
+    resolveNewQueryParams(page, newPerPage, filters);
   };
 
   return (
@@ -38,7 +43,14 @@ export default function AgentDashboard({ page, perPage, filters }) {
       <TicketFilters onFiltersChange={handleFiltersChange} />
       <TicketTable tickets={tickets} />
       <Box width="100%" display="flex" justifyContent="center" marginTop="12px">
-        <TicketPagination onPageChange={onPageChange} />
+        <Grid container>
+          <Grid item xs={6}>
+            <TicketPagination page={page} onPageChange={handlePageChange} />
+          </Grid>
+          <Grid item xs={6}>
+            <SelectPerPage value={perPage} onChange={handlePerPageChange} />
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );

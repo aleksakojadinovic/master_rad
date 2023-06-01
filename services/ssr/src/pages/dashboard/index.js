@@ -7,9 +7,10 @@ import { Box, Typography } from '@mui/material';
 import Head from 'next/head';
 import React, { Fragment } from 'react';
 
-function DashboardPage({ page, perPage, filters }) {
+function DashboardPage({ page, perPage, filters, ...rest }) {
+  wrapper.useHydration(rest);
   const { isLoading, isFetching } = useGetTicketsQuery(
-    getAgentDashboardTicketsParams(),
+    getAgentDashboardTicketsParams(page, perPage),
   );
 
   if (isLoading || isFetching) {
@@ -33,6 +34,15 @@ export default DashboardPage;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
+    const {
+      page: pageParam,
+      perPage: perPageParam,
+      ...filters
+    } = context.query;
+
+    const page = parseInt(pageParam, 10) || 1;
+    const perPage = parseInt(perPageParam, 10) || 10;
+
     const user = selectGetMeQueryResponse(store.getState());
     if (user == null) {
       return {
@@ -51,22 +61,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     store.dispatch(
       ticketsSlice.endpoints.getTickets.initiate(
-        getAgentDashboardTicketsParams(),
+        getAgentDashboardTicketsParams(page, perPage),
       ),
     );
 
     await Promise.all(
       store.dispatch(ticketsSlice.util.getRunningQueriesThunk()),
     );
-
-    const {
-      page: pageParam,
-      perPage: perPageParam,
-      ...filters
-    } = context.query;
-
-    const page = parseInt(pageParam, 10) || 1;
-    const perPage = parseInt(perPageParam, 10) || 10;
 
     // TODO: Validate filters
 

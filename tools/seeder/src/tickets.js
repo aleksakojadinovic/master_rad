@@ -112,7 +112,7 @@ async function getAgents(db, adminRoleId) {
   return result;
 }
 
-const NUMBER_OF_TICKETS = 10;
+const NUMBER_OF_TICKETS = 1000;
 
 async function main() {
   let client = null;
