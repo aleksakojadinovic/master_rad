@@ -4,10 +4,15 @@ export function getTicketViewQueryParams() {
   };
 }
 
-export function getAgentDashboardTicketsParams() {
+export function getAgentDashboardTicketsParams(
+  page = 1,
+  perPage = 10,
+  filters = {},
+) {
   return {
-    page: 1,
-    perPage: 10,
+    page,
+    perPage,
     includes: ['createdBy'],
+    filters,
   };
 }

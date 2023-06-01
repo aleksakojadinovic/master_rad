@@ -33,6 +33,8 @@ const MAX_COMMENT_LENGTH = 30;
 const MIN_STATUS_CHANGES = 1;
 const MAX_STATUS_CHANGES = 4;
 
+const STATUSES = ['NEW', 'OPEN', 'CLOSED'];
+
 function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -82,7 +84,7 @@ function generateComments() {
 }
 
 function generateStatusChange() {
-  return { status: getRandomInt(0, 2) };
+  return { status: STATUSES[getRandomInt(0, 2)] };
 }
 
 function generateStatusChanges() {

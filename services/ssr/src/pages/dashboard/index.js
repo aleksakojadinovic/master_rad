@@ -7,7 +7,7 @@ import { Box, Typography } from '@mui/material';
 import Head from 'next/head';
 import React, { Fragment } from 'react';
 
-function DashboardPage() {
+function DashboardPage({ page, perPage, filters }) {
   const { isLoading, isFetching } = useGetTicketsQuery(
     getAgentDashboardTicketsParams(),
   );
@@ -23,7 +23,7 @@ function DashboardPage() {
       </Head>
       <Typography variant="h3">Dashboard</Typography>
       <Box sx={{ marginTop: '12px' }}>
-        <AgentDashboard />
+        <AgentDashboard page={page} perPage={perPage} filters={filters} />
       </Box>
     </Fragment>
   );
@@ -32,7 +32,7 @@ function DashboardPage() {
 export default DashboardPage;
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async () => {
+  (store) => async (context) => {
     const user = selectGetMeQueryResponse(store.getState());
     if (user == null) {
       return {
@@ -59,6 +59,23 @@ export const getServerSideProps = wrapper.getServerSideProps(
       store.dispatch(ticketsSlice.util.getRunningQueriesThunk()),
     );
 
-    return {};
+    const {
+      page: pageParam,
+      perPage: perPageParam,
+      ...filters
+    } = context.query;
+
+    const page = parseInt(pageParam, 10) || 1;
+    const perPage = parseInt(perPageParam, 10) || 10;
+
+    // TODO: Validate filters
+
+    return {
+      props: {
+        page,
+        perPage,
+        filters,
+      },
+    };
   },
 );

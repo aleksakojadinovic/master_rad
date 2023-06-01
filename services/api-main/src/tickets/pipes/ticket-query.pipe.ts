@@ -9,7 +9,7 @@ export class TicketQueryPipe extends EntityQueryPipe {
     'assignees',
   ];
   private static TICKETS_ALLOWED_SORT_KEYS = ['id'];
-  private static TICKETS_ALLOWED_FILTER_KEYS = [];
+  private static TICKETS_ALLOWED_FILTER_KEYS = ['status'];
 
   constructor(
     enforcePagination = false,

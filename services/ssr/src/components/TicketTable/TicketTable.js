@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 import TicketStatusBadge from '../Ticket/TicketStatusBadge';
 import { Typography, useTheme } from '@mui/material';
 import UserChip from '../User/UserChip';
+import Link from 'next/link';
 
 export function TicketTable({ tickets }) {
   const theme = useTheme();
@@ -25,6 +26,9 @@ export function TicketTable({ tickets }) {
             <TableCell align="center">
               {renderRowHeaderTitle('Status')}
             </TableCell>
+            <TableCell align="center">
+              {renderRowHeaderTitle('Actions')}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -41,9 +45,13 @@ export function TicketTable({ tickets }) {
                 <UserChip user={ticket.createdBy} />
               </TableCell>
               <TableCell>{ticket.title}</TableCell>
-
               <TableCell align="center">
                 <TicketStatusBadge status={ticket.status} />
+              </TableCell>
+              <TableCell align="center">
+                <Link href={`/tickets/view/${ticket.id}`} target="_blank">
+                  Open
+                </Link>
               </TableCell>
             </TableRow>
           ))}
