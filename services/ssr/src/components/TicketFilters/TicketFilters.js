@@ -1,4 +1,4 @@
-import { Box, Grid, TextField, Typography } from '@mui/material';
+import { Box, Grid, TextField } from '@mui/material';
 import TicketStatusFilter from './TicketStatusFilter';
 
 import React from 'react';
