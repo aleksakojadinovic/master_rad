@@ -10,7 +10,7 @@ import React, { Fragment } from 'react';
 function DashboardPage({ page, perPage, filters, ...rest }) {
   wrapper.useHydration(rest);
   const { isLoading, isFetching } = useGetTicketsQuery(
-    getAgentDashboardTicketsParams(page, perPage),
+    getAgentDashboardTicketsParams(page, perPage, filters),
   );
 
   if (isLoading || isFetching) {
