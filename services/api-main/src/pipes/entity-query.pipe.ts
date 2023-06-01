@@ -88,7 +88,7 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
         .map((allowedFilterKey) => {
           return [allowedFilterKey, value[allowedFilterKey]];
         })
-        .filter(([_, v]) => v !== undefined),
+        .filter(([, v]) => v !== undefined),
     );
 
     return new EntityQueryDTO(

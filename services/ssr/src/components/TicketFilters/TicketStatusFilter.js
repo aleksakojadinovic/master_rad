@@ -9,10 +9,18 @@ const TICKET_STATUS_VALUES = [
   TicketStatus.OPEN,
 ];
 
+const ANY_TICKET = '__ANY_TICKET__';
+
 function TicketStatusFilter({ value, onChange }) {
   const handleChange = (e) => {
+    if (e.target.value === ANY_TICKET) {
+      onChange('');
+      return;
+    }
     onChange(e.target.value);
   };
+
+  const resolvedValue = value || ANY_TICKET;
 
   return (
     <FormControl fullWidth>
@@ -21,11 +29,11 @@ function TicketStatusFilter({ value, onChange }) {
         sx={{ height: '40px' }}
         labelId="demo-simple-select-label"
         id="demo-simple-select"
-        value={value}
+        value={resolvedValue}
         label="Age"
         onChange={handleChange}
       >
-        <MenuItem value="">Any</MenuItem>
+        <MenuItem value={ANY_TICKET}>Any</MenuItem>
         {TICKET_STATUS_VALUES.map((ticketStatus) => (
           <MenuItem key={ticketStatus} value={ticketStatus}>
             <TicketStatusBadge status={ticketStatus} />
