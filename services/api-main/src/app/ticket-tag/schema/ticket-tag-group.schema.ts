@@ -6,7 +6,7 @@ import { Role } from 'src/app/users/schema/role.schema';
 export class TicketTagGroupPermissions {
   constructor(
     public canCreatorAdd: boolean,
-    public canCreatorDelete: boolean,
+    public canCreatorRemove: boolean,
     public canAddRoles: Role[],
     public canRemoveRoles: Role[],
   ) {}
@@ -23,15 +23,21 @@ export class TicketTagGroup {
   description: string;
 
   // Whether or not adding multiple tags is allowed in this group
+  // I do not plan on supporting more granular permissions, as in some combinations
+  // being possible and some not, as it seems like overkill
   @Prop()
   exclusive: boolean;
 
   @Prop({
     type: {
       canCreatorAdd: Boolean,
-      canCreatorDelete: Boolean,
-      canAddRoles: { type: [{ type: mongoose.Schema.Types.ObjectId }] },
-      canRemoveRoles: { type: [{ type: mongoose.Schema.Types.ObjectId }] },
+      canCreatorRemove: Boolean,
+      canAddRoles: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
+      },
+      canRemoveRoles: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
+      },
     },
   })
   permissions: TicketTagGroupPermissions;

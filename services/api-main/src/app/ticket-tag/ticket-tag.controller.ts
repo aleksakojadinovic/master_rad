@@ -10,6 +10,7 @@ import {
 import { TicketTagService } from './ticket-tag.service';
 import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
 import { UpdateTicketTagDto } from './dto/update-ticket-tag.dto';
+import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 
 @Controller('ticket-tag')
 export class TicketTagController {
@@ -18,6 +19,12 @@ export class TicketTagController {
   @Post()
   create(@Body() createTicketTagDto: CreateTicketTagDto) {
     return this.ticketTagService.create(createTicketTagDto);
+  }
+
+  @Post('group')
+  createGroup(@Body() createTicketTagGroupDTO: CreateTicketTagGroupDTO) {
+    // TODO: Validate
+    return this.ticketTagService.createGroup(createTicketTagGroupDTO);
   }
 
   @Get()
