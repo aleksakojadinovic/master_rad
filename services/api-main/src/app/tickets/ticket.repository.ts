@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Ticket } from 'src/tickets/schema/ticket.schema';
+import { Ticket } from 'src/app/tickets/schema/ticket.schema';
 import { Model } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
 import { InjectMapper } from '@automapper/nestjs';

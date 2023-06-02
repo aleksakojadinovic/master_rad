@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { TicketHistoryEntryTypeUnion } from './../types';
+import { TicketHistoryEntryTypeUnion } from '../types';
 import { User } from 'src/users/schema/user.schema';
 import { TicketHistoryEntryType, TicketStatus } from '../types';
 

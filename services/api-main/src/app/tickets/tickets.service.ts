@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Ticket } from 'src/tickets/schema/ticket.schema';
+import { Ticket } from 'src/app/tickets/schema/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
 import { ServiceErrors } from 'src/errors';

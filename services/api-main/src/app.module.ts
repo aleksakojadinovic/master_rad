@@ -3,13 +3,13 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { TicketsModule } from './tickets/tickets.module';
+import { TicketsModule } from './app/tickets/tickets.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { UserProfile } from './users/profiles/user.profile';
 import { RoleProfile } from './users/profiles/role.profile';
-import { TicketProfile } from './tickets/profiles/ticket.profile';
-import { TicketHistoryItemProfile } from './tickets/profiles/ticket-history.profile';
+import { TicketProfile } from './app/tickets/profiles/ticket.profile';
+import { TicketHistoryItemProfile } from './app/tickets/profiles/ticket-history.profile';
 import { TicketTagModule } from './ticket-tag/ticket-tag.module';
 
 const MAIN_DB_USERNAME = process.env.MAIN_DB_USERNAME;
