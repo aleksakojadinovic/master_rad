@@ -5,8 +5,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Ticket } from 'src/app/tickets/schema/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
-import { ServiceErrors } from 'src/errors';
-import { ok, err } from 'neverthrow';
 import { v4 as uuid } from 'uuid';
 import {
   TicketHistoryEntryAssigneesAdded,
@@ -24,6 +22,10 @@ import { User } from 'src/users/schema/user.schema';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
 import { BaseService } from 'src/classes/BaseService';
 import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
+import { TicketNotFoundError } from './errors/TicketNotFound';
+import { TicketIdNotValidError } from './errors/TicketIdNotValid';
+import { TicketAssigneeIdNotValidError } from './errors/TicketAssigneeIdNotValid';
+import { CannotAssignCustomer } from './errors/CannotAssignCustomer';
 
 @Injectable()
 export class TicketsService extends BaseService {
@@ -100,7 +102,7 @@ export class TicketsService extends BaseService {
 
     await ticketModel.save();
 
-    return ok(ticketModel as Ticket);
+    return ticketModel;
   }
 
   async findAll(queryDTO: EntityQueryDTO) {
@@ -116,35 +118,35 @@ export class TicketsService extends BaseService {
     query.skip((queryDTO.page - 1) * queryDTO.perPage).limit(queryDTO.perPage);
 
     const tickets = await query.exec();
-    return ok(tickets);
+    return tickets;
   }
 
   async findOne(id: string, queryDTO: TicketQueryDTO = new TicketQueryDTO()) {
+    console.log('lets go');
     const query = this.ticketModel.findOne({ _id: id });
 
     const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
-
     const ticket = await query.exec();
 
     if (!ticket) {
-      return err({
-        type: ServiceErrors.ENTITY_NOT_FOUND,
-        message: 'Ticket not found',
-      });
+      throw new TicketNotFoundError(id);
+      // return err({
+      //   type: ServiceErrors.ENTITY_NOT_FOUND,
+      //   message: 'Ticket not found',
+      // });
     }
 
-    return ok(ticket);
+    return ticket;
   }
 
   async isTicketOwner(userId: string, ticketId: string) {
-    const result = await this.findOne(ticketId);
-
-    if (result.isErr()) {
-      return result;
+    let ticket: Ticket;
+    try {
+      ticket = await this.findOne(ticketId);
+    } catch (e) {
+      throw e;
     }
-
-    const ticket = result.value as Ticket;
 
     const creatorId = ticket.history[0].initiator._id.toString();
 
@@ -153,10 +155,7 @@ export class TicketsService extends BaseService {
 
   async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
     if (!isValidObjectId(id)) {
-      return err({
-        type: ServiceErrors.VALIDATION_FAILED,
-        message: 'Invalid ticket id.',
-      });
+      throw new TicketIdNotValidError(id);
     }
 
     const user = await this.usersService.findOne(userId);
@@ -165,26 +164,22 @@ export class TicketsService extends BaseService {
     const isTicketOwner = await this.isTicketOwner(userId, id);
 
     if (isCustomer && !isTicketOwner) {
-      return err({
-        type: ServiceErrors.ENTITY_NOT_FOUND,
-        message: 'Ticket not found.',
-      });
+      throw new TicketNotFoundError(id);
     }
 
-    const ticketObject = await this.findOne(id);
+    const ticket = await this.findOne(id);
 
-    if (ticketObject.isErr()) {
-      return ticketObject;
+    if (!ticket) {
+      throw new TicketNotFoundError(id);
     }
 
-    const ticket = ticketObject.value;
-
-    if (!user) {
-      return err({
-        type: ServiceErrors.ENTITY_NOT_FOUND,
-        message: 'User not found',
-      });
-    }
+    // TODO
+    // if (!user) {
+    //   return err({
+    //     type: ServiceErrors.ENTITY_NOT_FOUND,
+    //     message: 'User not found',
+    //   });
+    // }
 
     const groupId = uuid();
     const timestamp = new Date();
@@ -251,23 +246,14 @@ export class TicketsService extends BaseService {
       const assignees: User[] = [];
       for (const assigneeId of updateTicketDto.assignees) {
         if (!isValidObjectId(assigneeId)) {
-          return err({
-            type: ServiceErrors.VALIDATION_FAILED,
-            message: 'Invalid assignee user id',
-          });
+          throw new TicketAssigneeIdNotValidError(assigneeId);
         }
         const assigneeUser = await this.usersService.findOne(assigneeId);
         if (!assigneeUser) {
-          return err({
-            type: ServiceErrors.ENTITY_NOT_FOUND,
-            message: 'User not found.',
-          });
+          throw new TicketAssigneeIdNotValidError(assigneeId);
         }
         if (assigneeUser.hasRole('customer')) {
-          return err({
-            type: ServiceErrors.PERMISSION_DENIED,
-            message: 'Cannot assign a customer to a ticket',
-          });
+          throw new CannotAssignCustomer(assigneeId);
         }
         assignees.push(assigneeUser);
       }
@@ -290,7 +276,7 @@ export class TicketsService extends BaseService {
 
     await ticket.save();
 
-    return ok(ticket);
+    return ticket;
   }
 
   remove(id: number) {
