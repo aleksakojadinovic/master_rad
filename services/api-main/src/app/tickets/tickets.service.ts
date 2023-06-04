@@ -24,7 +24,7 @@ import { BaseService } from 'src/classes/BaseService';
 import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
 import { TicketNotFoundError } from './errors/TicketNotFound';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
-import { TicketAssigneeIdNotValidError } from './errors/TicketAssigneeIdNotValid';
+import { AssigneeIdNotValidError } from './errors/AssigneeIdNotValid';
 import { CannotAssignCustomer } from './errors/CannotAssignCustomer';
 
 @Injectable()
@@ -246,11 +246,11 @@ export class TicketsService extends BaseService {
       const assignees: User[] = [];
       for (const assigneeId of updateTicketDto.assignees) {
         if (!isValidObjectId(assigneeId)) {
-          throw new TicketAssigneeIdNotValidError(assigneeId);
+          throw new AssigneeIdNotValidError(assigneeId);
         }
         const assigneeUser = await this.usersService.findOne(assigneeId);
         if (!assigneeUser) {
-          throw new TicketAssigneeIdNotValidError(assigneeId);
+          throw new AssigneeIdNotValidError(assigneeId);
         }
         if (assigneeUser.hasRole('customer')) {
           throw new CannotAssignCustomer(assigneeId);
