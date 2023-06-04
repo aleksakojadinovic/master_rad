@@ -10,7 +10,7 @@ import { UserProfile } from './app/users/profiles/user.profile';
 import { RoleProfile } from './app/users/profiles/role.profile';
 import { TicketProfile } from './app/tickets/profiles/ticket.profile';
 import { TicketHistoryItemProfile } from './app/tickets/profiles/ticket-history.profile';
-import { TicketTagModule } from './ticket-tag/ticket-tag.module';
+import { TicketTagModule } from './app/ticket-tag/ticket-tag.module';
 
 const MAIN_DB_USERNAME = process.env.MAIN_DB_USERNAME;
 const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
