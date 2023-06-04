@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { Role } from 'src/users/schema/role.schema';
+import { Role } from 'src/app/users/schema/role.schema';
 
 // TODO: Should this be on the tag level?
 export class TicketTagGroupPermissions {

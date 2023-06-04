@@ -1,4 +1,4 @@
-import { UserDTO } from 'src/users/dto/user.dto';
+import { UserDTO } from 'src/app/users/dto/user.dto';
 import { TicketHistoryItemDTO } from './ticket-history.dto';
 import { TicketStatus } from '../types';
 

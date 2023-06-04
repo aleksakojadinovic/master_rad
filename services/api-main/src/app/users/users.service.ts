@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 import { CreateUserResponseDto } from './dto/create-user-response.dto';
 import { getPasswordHash } from 'src/utils';
 import { RolesService } from './roles.service';
-import { Role } from 'src/users/schema/role.schema';
+import { Role } from 'src/app/users/schema/role.schema';
 
 @Injectable()
 export class UsersService {

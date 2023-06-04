@@ -11,8 +11,8 @@ import { Ticket } from '../schema/ticket.schema';
 import { TicketDTO } from '../dto/ticket.dto';
 import { TicketHistoryItem } from '../schema/ticket-history.schema';
 import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
-import { User } from 'src/users/schema/user.schema';
-import { UserDTO } from 'src/users/dto/user.dto';
+import { User } from 'src/app/users/schema/user.schema';
+import { UserDTO } from 'src/app/users/dto/user.dto';
 import { Types } from 'mongoose';
 
 @Injectable()

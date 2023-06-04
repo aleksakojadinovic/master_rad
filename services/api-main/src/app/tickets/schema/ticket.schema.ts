@@ -6,7 +6,7 @@ import {
   TicketHistoryItem,
   TicketHistoryItemSchemaType,
 } from './ticket-history.schema';
-import { User } from 'src/users/schema/user.schema';
+import { User } from 'src/app/users/schema/user.schema';
 import mongoose from 'mongoose';
 import { TicketStatus } from '../types';
 

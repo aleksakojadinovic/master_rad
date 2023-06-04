@@ -1,6 +1,6 @@
 import { validatePasswordHash } from 'src/utils';
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/app/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()

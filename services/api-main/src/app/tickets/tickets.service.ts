@@ -4,7 +4,7 @@ import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket } from 'src/app/tickets/schema/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/app/users/users.service';
 import { v4 as uuid } from 'uuid';
 import {
   TicketHistoryEntryAssigneesAdded,
@@ -18,7 +18,7 @@ import {
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketStatus } from './types';
-import { User } from 'src/users/schema/user.schema';
+import { User } from 'src/app/users/schema/user.schema';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
 import { BaseService } from 'src/classes/BaseService';
 import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
