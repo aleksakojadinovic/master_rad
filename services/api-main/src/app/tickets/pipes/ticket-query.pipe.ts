@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EntityQueryPipe } from 'src/pipes/entity-query.pipe';
+import { EntityQueryPipe } from 'src/codebase/pipes/entity-query.pipe';
 
 @Injectable()
 export class TicketQueryPipe extends EntityQueryPipe {
