@@ -23,7 +23,7 @@ import { TicketDTO } from './dto/ticket.dto';
 import { BaseController } from 'src/codebase/BaseController';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
 import { TicketQueryPipe } from './pipes/ticket-query.pipe';
-import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { TicketInterceptor } from './interceptors/ticket.interceptor';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
 

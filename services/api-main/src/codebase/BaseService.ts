@@ -1,4 +1,4 @@
-import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 
 export abstract class BaseService {
   costructFilters(): any {

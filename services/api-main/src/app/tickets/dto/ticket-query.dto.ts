@@ -1,4 +1,4 @@
-import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { TicketStatus } from '../types';
 import { Transform } from 'class-transformer';
 
