@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { HasRoles } from 'src/auth/has-roles.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { HasRoles } from 'src/app/auth/has-roles.decorator';
+import { RolesGuard } from 'src/app/auth/roles.guard';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { User } from './schema/user.schema';

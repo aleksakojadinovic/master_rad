@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './app/auth/auth.module';
 import { TicketsModule } from './app/tickets/tickets.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
