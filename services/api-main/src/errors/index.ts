@@ -1,5 +1,0 @@
-export enum ServiceErrors {
-  ENTITY_NOT_FOUND,
-  VALIDATION_FAILED,
-  PERMISSION_DENIED,
-}

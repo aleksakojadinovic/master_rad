@@ -1,6 +1,5 @@
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
-import { ServiceErrors } from 'src/errors';
 
 @Injectable()
 export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
@@ -15,17 +14,16 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
     const sortKey = value.sortBy ?? null;
     const filterKeys = Object.keys(value.filterKeys ?? {});
 
+    // TODO: Maybe interceptor should handle this but idk
     includeKeys.forEach((includeKey) => {
       if (includeKey.length === 0) {
         throw new BadRequestException({
-          type: ServiceErrors.VALIDATION_FAILED,
           message: 'Empty include key found',
         });
       }
 
       if (!this.allowedIncludeKeys.includes(includeKey)) {
         throw new BadRequestException({
-          type: ServiceErrors.VALIDATION_FAILED,
           message: `Invalid include key ${includeKey}`,
         });
       }
@@ -33,7 +31,6 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
 
     if (sortKey !== null && !this.allowedSortKeys.includes(sortKey)) {
       throw new BadRequestException({
-        type: ServiceErrors.VALIDATION_FAILED,
         message: `Invalid sort key ${sortKey}`,
       });
     }
@@ -41,7 +38,6 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
     filterKeys.forEach((filterKey) => {
       if (!this.allowedFilterKeys.includes(filterKey)) {
         throw new BadRequestException({
-          type: ServiceErrors.VALIDATION_FAILED,
           message: `Invalid filter key ${filterKey}`,
         });
       }
@@ -50,7 +46,6 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
     if (this.enforcePagination) {
       if (value.page == null || value.perPage == null) {
         throw new BadRequestException({
-          type: ServiceErrors.VALIDATION_FAILED,
           message: `Pagination is required`,
         });
       }
@@ -61,7 +56,6 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
       (value.page == null && value.perPage != null)
     ) {
       throw new BadRequestException({
-        type: ServiceErrors.VALIDATION_FAILED,
         message: `Pagination requires both page and perPage`,
       });
     }
@@ -69,7 +63,6 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
     if (value.page != null) {
       if (isNaN(value.page) || value.page <= 0) {
         throw new BadRequestException({
-          type: ServiceErrors.VALIDATION_FAILED,
           message: `Invalid page value ${value.page}`,
         });
       }
@@ -78,7 +71,6 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
     if (value.perPage != null) {
       if (isNaN(value.perPage) || value.perPage <= 0) {
         throw new BadRequestException({
-          type: ServiceErrors.VALIDATION_FAILED,
           message: `Invalid perPage value ${value.perPage}`,
         });
       }
