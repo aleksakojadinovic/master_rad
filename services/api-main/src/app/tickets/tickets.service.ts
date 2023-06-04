@@ -20,7 +20,7 @@ import { Mapper } from '@automapper/core';
 import { TicketStatus } from './types';
 import { User } from 'src/app/users/schema/user.schema';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
-import { BaseService } from 'src/classes/BaseService';
+import { BaseService } from 'src/codebase/BaseService';
 import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
 import { TicketNotFoundError } from './errors/TicketNotFound';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';

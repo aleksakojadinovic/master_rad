@@ -20,7 +20,7 @@ import { isValidObjectId } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketDTO } from './dto/ticket.dto';
-import { BaseController } from 'src/classes/BaseController';
+import { BaseController } from 'src/codebase/BaseController';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
 import { TicketQueryPipe } from './pipes/ticket-query.pipe';
 import { EntityQueryDTO } from 'src/dto/EntityQueryDTO';
