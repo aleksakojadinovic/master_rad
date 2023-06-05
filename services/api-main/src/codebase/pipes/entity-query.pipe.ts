@@ -1,6 +1,10 @@
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { InvalidPaginationParametersError } from '../errors/InvalidPaginationParameters';
+import { InvalidIncludeKeyError } from '../errors/InvalidIncludeKey';
+import { InvalidSortKey } from '../errors/InvalidSortKey';
+import { InvalidFilterKeyError } from '../errors/InvalidFilterKey';
+import { PaginationRequiredError } from '../errors/PaginationRequired';
 
 @Injectable()
 export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
@@ -18,37 +22,27 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
     // TODO: Maybe interceptor should handle this but idk
     includeKeys.forEach((includeKey) => {
       if (includeKey.length === 0) {
-        throw new BadRequestException({
-          message: 'Empty include key found',
-        });
+        throw new InvalidIncludeKeyError(includeKey);
       }
 
       if (!this.allowedIncludeKeys.includes(includeKey)) {
-        throw new BadRequestException({
-          message: `Invalid include key ${includeKey}`,
-        });
+        throw new InvalidIncludeKeyError(includeKey);
       }
     });
 
     if (sortKey !== null && !this.allowedSortKeys.includes(sortKey)) {
-      throw new BadRequestException({
-        message: `Invalid sort key ${sortKey}`,
-      });
+      throw new InvalidSortKey(sortKey);
     }
 
     filterKeys.forEach((filterKey) => {
       if (!this.allowedFilterKeys.includes(filterKey)) {
-        throw new BadRequestException({
-          message: `Invalid filter key ${filterKey}`,
-        });
+        throw new InvalidFilterKeyError(filterKey);
       }
     });
 
     if (this.enforcePagination) {
       if (value.page == null || value.perPage == null) {
-        throw new BadRequestException({
-          message: `Pagination is required`,
-        });
+        throw new PaginationRequiredError();
       }
     }
 
@@ -56,9 +50,7 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
       (value.page != null && value.perPage == null) ||
       (value.page == null && value.perPage != null)
     ) {
-      throw new BadRequestException({
-        message: `Pagination requires both page and perPage`,
-      });
+      throw new InvalidPaginationParametersError();
     }
 
     if (value.page != null) {
