@@ -1,0 +1,14 @@
+{
+  "dashboard.pageTitle": [
+    {
+      "type": 0,
+      "value": "Dashboard"
+    }
+  ],
+  "dashboard.title": [
+    {
+      "type": 0,
+      "value": "Agent Dashboard | STS"
+    }
+  ]
+}
