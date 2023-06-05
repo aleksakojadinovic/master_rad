@@ -1,4 +1,4 @@
-import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
+import { PipeTransform, Injectable } from '@nestjs/common';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { InvalidPaginationParametersError } from '../errors/InvalidPaginationParameters';
 import { InvalidIncludeKeyError } from '../errors/InvalidIncludeKey';

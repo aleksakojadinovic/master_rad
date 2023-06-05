@@ -4,9 +4,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
 import { Model } from 'mongoose';
 import { CreateUserResponseDto } from './dto/create-user-response.dto';
-import { getPasswordHash } from 'src/utils';
 import { RolesService } from './roles.service';
 import { Role } from 'src/app/users/schema/role.schema';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -27,7 +27,7 @@ export class UsersService {
       dto.username,
       dto.firstName,
       dto.lastName,
-      await getPasswordHash(dto.password),
+      await bcrypt.hash(dto.password, 10),
       roles,
     );
     const user = new this.userModel(userObject);
