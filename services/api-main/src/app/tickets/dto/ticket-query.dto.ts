@@ -15,8 +15,6 @@ export class TicketQueryDTO extends EntityQueryDTO {
     this.status = status;
   }
 
-  @Transform(({ value }) =>
-    value.split(',').map((status) => TicketStatus[status]),
-  )
+  @Transform(({ value }) => TicketStatus[value] ?? null)
   status?: TicketStatus;
 }
