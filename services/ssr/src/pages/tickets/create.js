@@ -1,8 +1,16 @@
 import CreateTicket from '@/features/create-ticket/CreateTicket';
-import React from 'react';
+import Head from 'next/head';
+import React, { Fragment } from 'react';
 
 function TicketsCreatePage() {
-  return <CreateTicket />;
+  return (
+    <Fragment>
+      <Head>
+        <title>Create a ticket | STS</title>
+      </Head>
+      <CreateTicket />
+    </Fragment>
+  );
 }
 
 export default TicketsCreatePage;
