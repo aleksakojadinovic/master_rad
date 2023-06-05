@@ -3,7 +3,7 @@ export class EntityQueryDTO {
   constructor(
     public searchString: string = '',
     public includes: string[] = [],
-    public sortBy: string[] = [],
+    public sortBy: string = null,
     public page: number | null,
     public perPage: number | null,
     public filters: any = {},

@@ -16,6 +16,7 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
   ) {}
   transform(value: any): EntityQueryDTO {
     const includeKeys = value.includes ? value.includes.split(',') : [];
+
     const sortKey = value.sortBy ?? null;
     const filterKeys = Object.keys(value.filterKeys ?? {});
 

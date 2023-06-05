@@ -6,7 +6,7 @@ export class TicketQueryDTO extends EntityQueryDTO {
   constructor(
     searchString = '',
     includes: string[] = [],
-    sortBy: string[] = [],
+    sortBy: string = null,
     page: number | null = null,
     perPage: number | null = null,
     status: TicketStatus | null = null,
