@@ -6,9 +6,13 @@ import { getAgentDashboardTicketsParams } from '@/utils/params';
 import { Box, Typography } from '@mui/material';
 import Head from 'next/head';
 import React, { Fragment } from 'react';
+import { useIntl } from 'react-intl';
 
 function DashboardPage({ page, perPage, filters, ...rest }) {
   wrapper.useHydration(rest);
+
+  const intl = useIntl();
+
   const { isLoading, isFetching } = useGetTicketsQuery(
     getAgentDashboardTicketsParams(page, perPage, filters),
   );
@@ -19,9 +23,11 @@ function DashboardPage({ page, perPage, filters, ...rest }) {
   return (
     <Fragment>
       <Head>
-        <title>Agent Dashboard | STS</title>
+        <title>{intl.formatMessage({ id: 'dashboard.title' })}</title>
       </Head>
-      <Typography variant="h3">Dashboard</Typography>
+      <Typography variant="h3">
+        {intl.formatMessage({ id: 'dashboard.pageTitle' })}
+      </Typography>
       <Box sx={{ marginTop: '12px' }}>
         <AgentDashboard page={page} perPage={perPage} filters={filters} />
       </Box>
