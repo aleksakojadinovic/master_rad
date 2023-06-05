@@ -122,7 +122,6 @@ export class TicketsService extends BaseService {
   }
 
   async findOne(id: string, queryDTO: TicketQueryDTO = new TicketQueryDTO()) {
-    console.log('lets go');
     const query = this.ticketModel.findOne({ _id: id });
 
     const populations = this.constructPopulate(queryDTO);

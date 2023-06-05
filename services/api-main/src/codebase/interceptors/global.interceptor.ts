@@ -14,7 +14,10 @@ export class GlobalInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((error) => {
-        console.log({ error });
+        if (error instanceof BadRequestException) {
+          throw error;
+        }
+
         if (error instanceof InvalidPaginationParametersError) {
           throw new BadRequestException(error.message);
         }
