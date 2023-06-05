@@ -12,7 +12,7 @@ export function getAgentDashboardTicketsParams(
   return {
     page,
     perPage,
-    includes: ['createdBy', 'nestoJosObde'],
+    includes: ['createdBy'],
     ...filters,
   };
 }

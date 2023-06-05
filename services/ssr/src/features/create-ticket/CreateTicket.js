@@ -11,7 +11,6 @@ import {
   TextareaAutosize,
   Typography,
 } from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 
@@ -22,12 +21,6 @@ function CreateTicket() {
   const handleSubmit = () => {
     createTicket({ title, body });
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      console.log(data);
-    }
-  }, [isSuccess, data]);
 
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
