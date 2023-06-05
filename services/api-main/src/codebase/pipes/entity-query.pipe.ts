@@ -1,5 +1,6 @@
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
+import { InvalidPaginationParametersError } from '../errors/InvalidPaginationParameters';
 
 @Injectable()
 export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
@@ -62,17 +63,13 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
 
     if (value.page != null) {
       if (isNaN(value.page) || value.page <= 0) {
-        throw new BadRequestException({
-          message: `Invalid page value ${value.page}`,
-        });
+        throw new InvalidPaginationParametersError();
       }
     }
 
     if (value.perPage != null) {
       if (isNaN(value.perPage) || value.perPage <= 0) {
-        throw new BadRequestException({
-          message: `Invalid perPage value ${value.perPage}`,
-        });
+        throw new InvalidPaginationParametersError();
       }
     }
     const filters = Object.fromEntries(

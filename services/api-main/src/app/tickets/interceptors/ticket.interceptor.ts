@@ -3,7 +3,6 @@ import {
   CallHandler,
   ExecutionContext,
   Injectable,
-  InternalServerErrorException,
   NestInterceptor,
   NotFoundException,
 } from '@nestjs/common';
@@ -34,7 +33,7 @@ export class TicketInterceptor implements NestInterceptor {
           throw new BadRequestException(error.message);
         }
 
-        throw new InternalServerErrorException('Something went wrong.');
+        throw error;
       }),
     );
   }
