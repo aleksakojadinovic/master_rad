@@ -3,7 +3,6 @@ import {
   CallHandler,
   ExecutionContext,
   Injectable,
-  InternalServerErrorException,
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
@@ -14,15 +13,12 @@ export class GlobalInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((error) => {
-        if (error instanceof BadRequestException) {
-          throw error;
-        }
-
+        //TODO: revisit the instanceof issue
         if (error instanceof InvalidPaginationParametersError) {
           throw new BadRequestException(error.message);
         }
 
-        throw new InternalServerErrorException('Something went wrong.');
+        throw error;
       }),
     );
   }

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useCreateTicketMutation } from '@/api/tickets';
 import {
   Alert,
@@ -15,7 +16,8 @@ import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 
 function CreateTicket() {
-  const [createTicket, { data, isSuccess }] = useCreateTicketMutation();
+  const [createTicket, { data, error, isSuccess, isError }] =
+    useCreateTicketMutation();
 
   const handleSubmit = () => {
     createTicket({ title, body });
@@ -40,20 +42,28 @@ function CreateTicket() {
         </Alert>
       );
     }
+    if (isError) {
+      return (
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          {error.data.message}
+        </Alert>
+      );
+    }
     return null;
   };
 
   return (
     <Fragment>
       {renderAlert()}
-      <Typography variant="caption">Describe your issue shortly</Typography>
+      <Typography variant="caption">Title of your issue</Typography>
       <TextField
         fullWidth
         placeholder="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <Box marginTop="12px">
+      {/* <Box marginTop="12px">
         <Typography variant="caption">
           How urgent would you say this issue is?
         </Typography>
@@ -67,12 +77,10 @@ function CreateTicket() {
           <FormControlLabel value="medium" control={<Radio />} label="Medium" />
           <FormControlLabel value="high" control={<Radio />} label="High" />
         </RadioGroup>
-      </Box>
+      </Box> */}
 
       <Box marginTop="12px">
-        <Typography variant="caption">
-          Describe your issue in as much detail as you want
-        </Typography>
+        <Typography variant="caption">Describe your issue in detail</Typography>
         <Box marginTop="12px">
           <TextareaAutosize
             minRows={10}
