@@ -1,7 +1,8 @@
+import CreateTicket from '@/features/create-ticket/CreateTicket';
 import React from 'react';
 
 function TicketsCreatePage() {
-  return <div>TicketsCreatePage</div>;
+  return <CreateTicket />;
 }
 
 export default TicketsCreatePage;
