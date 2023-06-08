@@ -15,8 +15,6 @@ function MyApp({ Component, pageProps }) {
   const { locale } = useRouter();
   const [shortLocale] = locale ? locale.split('-') : ['en'];
 
-  console.log({ locale });
-
   const messages = useMemo(() => {
     switch (shortLocale) {
       case 'en':

@@ -25,10 +25,22 @@
       "value": "."
     }
   ],
+  "create-ticket.ticket-description-text": [
+    {
+      "type": 0,
+      "value": "Describe your issue in detail"
+    }
+  ],
   "create-ticket.ticket-title-text": [
     {
       "type": 0,
-      "value": "Title of your ticket"
+      "value": "Title of your issue"
+    }
+  ],
+  "forms.submit": [
+    {
+      "type": 0,
+      "value": "Submit"
     }
   ],
   "query-status.error": [

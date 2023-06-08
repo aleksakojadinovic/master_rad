@@ -6,7 +6,7 @@ import {
   statusError,
   statusSuccess,
 } from '@/translations/query-statuses';
-import { createTicket } from '@/translations/ticket.create';
+import { createTicketMessages } from '@/translations/create-ticket';
 import {
   Alert,
   AlertTitle,
@@ -21,6 +21,7 @@ import {
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { formsMessages } from '@/translations/forms';
 
 function CreateTicket() {
   const intl = useIntl();
@@ -43,7 +44,7 @@ function CreateTicket() {
             {intl.formatMessage(queryStatusMessages.success)}
           </AlertTitle>
           <FormattedMessage
-            {...createTicket.success}
+            {...createTicketMessages.success}
             values={{
               NewTicketLink: (
                 <a href={`/tickets/view/${data.Id}`}>
@@ -71,7 +72,9 @@ function CreateTicket() {
   return (
     <Fragment>
       {renderAlert()}
-      <Typography variant="caption">Title of your issue</Typography>
+      <Typography variant="caption">
+        {intl.formatMessage(createTicketMessages.ticketTitleText)}
+      </Typography>
       <TextField
         fullWidth
         placeholder="Title"
@@ -95,7 +98,9 @@ function CreateTicket() {
       </Box> */}
 
       <Box marginTop="12px">
-        <Typography variant="caption">Describe your issue in detail</Typography>
+        <Typography variant="caption">
+          {intl.formatMessage(createTicketMessages.ticketDescriptionText)}
+        </Typography>
         <Box marginTop="12px">
           <TextareaAutosize
             minRows={10}
@@ -106,7 +111,9 @@ function CreateTicket() {
         </Box>
       </Box>
 
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleSubmit}>
+        {intl.formatMessage(formsMessages.submit)}
+      </Button>
     </Fragment>
   );
 }

@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 
-export const agentDashboard = defineMessages({
+export const agentDashboardMessages = defineMessages({
   title: {
     id: 'agent-dashboard.title',
     defaultMessage: 'Dashboard',

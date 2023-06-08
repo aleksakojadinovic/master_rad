@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 
-export const createTicket = defineMessages({
+export const createTicketMessages = defineMessages({
   success: {
     id: 'create-ticket.success',
     defaultMessage:
@@ -8,6 +8,10 @@ export const createTicket = defineMessages({
   },
   ticketTitleText: {
     id: 'create-ticket.ticket-title-text',
-    defaultMessage: 'Title of your ticket',
+    defaultMessage: 'Title of your issue',
+  },
+  ticketDescriptionText: {
+    id: 'create-ticket.ticket-description-text',
+    defaultMessage: 'Describe your issue in detail',
   },
 });
