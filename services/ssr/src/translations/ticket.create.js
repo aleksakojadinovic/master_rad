@@ -1,7 +1,13 @@
-import { defineMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
-export const ticketCreatedSuccessfully = defineMessage({
-  id: 'create-ticket',
-  defaultMessage:
-    'Ticket successfully created, you can see it {NewTicketLink}.',
+export const createTicket = defineMessages({
+  success: {
+    id: 'create-ticket.success',
+    defaultMessage:
+      'Ticket successfully created, you can see it {NewTicketLink}.',
+  },
+  ticketTitleText: {
+    id: 'create-ticket.ticket-title-text',
+    defaultMessage: 'Title of your ticket',
+  },
 });

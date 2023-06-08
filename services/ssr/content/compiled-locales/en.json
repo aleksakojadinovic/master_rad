@@ -11,7 +11,7 @@
       "value": "here"
     }
   ],
-  "create-ticket": [
+  "create-ticket.success": [
     {
       "type": 0,
       "value": "Ticket successfully created, you can see it "
@@ -23,6 +23,12 @@
     {
       "type": 0,
       "value": "."
+    }
+  ],
+  "create-ticket.ticket-title-text": [
+    {
+      "type": 0,
+      "value": "Title of your ticket"
     }
   ],
   "query-status.error": [

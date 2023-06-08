@@ -1,11 +1,12 @@
-import { defineMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
-export const statusSuccess = defineMessage({
-  id: 'query-status.success',
-  defaultMessage: 'Success',
-});
-
-export const statusError = defineMessage({
-  id: 'query-status.error',
-  defaultMessage: 'An error has occurred',
+export const queryStatusMessages = defineMessages({
+  success: {
+    id: 'query-status.success',
+    defaultMessage: 'Success',
+  },
+  error: {
+    id: 'query-status.error',
+    defaultMessage: 'An error has occurred',
+  },
 });

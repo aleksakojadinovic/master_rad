@@ -1,6 +1,8 @@
-import { defineMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
-export const clickHere = defineMessage({
-  id: 'click-here',
-  defaultMessage: 'here',
+export const globalMessages = defineMessages({
+  clickHere: {
+    id: 'click-here',
+    defaultMessage: 'here',
+  },
 });

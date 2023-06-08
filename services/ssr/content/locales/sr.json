@@ -1,7 +1,1 @@
-{
-  "agent-dashboard.title": "Početna strana",
-  "click-here": "ovde",
-  "create-ticket": "Tiket uspešno kreiran, možete ga videti {NewTicketLink}.",
-  "query-status.error": "Došlo je do greške",
-  "query-status.success": "Operacija je uspešna"
-}
+{}

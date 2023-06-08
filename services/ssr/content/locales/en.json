@@ -1,7 +1,8 @@
 {
   "agent-dashboard.title": "Dashboard",
   "click-here": "here",
-  "create-ticket": "Ticket successfully created, you can see it {NewTicketLink}.",
+  "create-ticket.success": "Ticket successfully created, you can see it {NewTicketLink}.",
+  "create-ticket.ticket-title-text": "Title of your ticket",
   "query-status.error": "An error has occurred",
   "query-status.success": "Success"
 }

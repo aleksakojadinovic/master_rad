@@ -1,8 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { useCreateTicketMutation } from '@/api/tickets';
-import { clickHere } from '@/translations/global';
-import { statusError, statusSuccess } from '@/translations/query-statuses';
-import { ticketCreatedSuccessfully } from '@/translations/ticket.create';
+import { clickHere, globalMessages } from '@/translations/global';
+import {
+  queryStatusMessages,
+  statusError,
+  statusSuccess,
+} from '@/translations/query-statuses';
+import { createTicket } from '@/translations/ticket.create';
 import {
   Alert,
   AlertTitle,
@@ -21,11 +25,11 @@ import { FormattedMessage, useIntl } from 'react-intl';
 function CreateTicket() {
   const intl = useIntl();
 
-  const [createTicket, { data, error, isSuccess, isError }] =
+  const [triggerCreateTicket, { data, error, isSuccess, isError }] =
     useCreateTicketMutation();
 
   const handleSubmit = () => {
-    createTicket({ title, body });
+    triggerCreateTicket({ title, body });
   };
 
   const [title, setTitle] = useState('');
@@ -35,13 +39,15 @@ function CreateTicket() {
     if (isSuccess) {
       return (
         <Alert severity="success">
-          <AlertTitle>{intl.formatMessage(statusSuccess)}</AlertTitle>
+          <AlertTitle>
+            {intl.formatMessage(queryStatusMessages.success)}
+          </AlertTitle>
           <FormattedMessage
-            {...ticketCreatedSuccessfully}
+            {...createTicket.success}
             values={{
               NewTicketLink: (
                 <a href={`/tickets/view/${data.Id}`}>
-                  {intl.formatMessage(clickHere)}
+                  {intl.formatMessage(globalMessages.clickHere)}
                 </a>
               ),
             }}
@@ -52,7 +58,9 @@ function CreateTicket() {
     if (isError) {
       return (
         <Alert severity="error">
-          <AlertTitle>{intl.formatMessage(statusError)}</AlertTitle>
+          <AlertTitle>
+            {intl.formatMessage(queryStatusMessages.error)}
+          </AlertTitle>
           {error.data.message}
         </Alert>
       );
