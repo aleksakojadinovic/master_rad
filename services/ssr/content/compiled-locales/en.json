@@ -1,2 +1,14 @@
 {
+  "agent-dashboard.title": [
+    {
+      "type": 0,
+      "value": "Dashboard"
+    }
+  ],
+  "query-status.success": [
+    {
+      "type": 0,
+      "value": "Success"
+    }
+  ]
 }

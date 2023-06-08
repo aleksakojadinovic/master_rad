@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useCreateTicketMutation } from '@/api/tickets';
+import { statusSuccess } from '@/translations/query-statuses';
 import {
   Alert,
   AlertTitle,
@@ -32,10 +33,7 @@ function CreateTicket() {
     if (isSuccess) {
       return (
         <Alert severity="success">
-          <AlertTitle>
-            {/* {intl.formatMessage({ id: 'statuses.success' })} */}
-            test
-          </AlertTitle>
+          <AlertTitle>{intl.formatMessage(statusSuccess)}</AlertTitle>
           Ticket successfully created, you can see it{' '}
           <Link href={`/tickets/view/${data.Id}`}>here</Link>
         </Alert>

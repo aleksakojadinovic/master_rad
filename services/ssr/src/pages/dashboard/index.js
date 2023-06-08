@@ -27,8 +27,7 @@ function DashboardPage({ page, perPage, filters, ...rest }) {
         <title>{intl.formatMessage(agentDashboardTitle)}</title>
       </Head>
       <Typography variant="h3">
-        {/* {intl.formatMessage({ id: 'dashboard.pageTitle' })} */}
-        mrs
+        {intl.formatMessage(agentDashboardTitle)}
       </Typography>
       <Box sx={{ marginTop: '12px' }}>
         <AgentDashboard page={page} perPage={perPage} filters={filters} />
