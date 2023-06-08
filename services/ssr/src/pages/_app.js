@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
   }, [shortLocale]);
 
   return (
-    <IntlProvider messages={messages} locale={shortLocale}>
+    <IntlProvider messages={messages} locale={shortLocale} onError={() => {}}>
       <Provider store={store}>
         <PageContainer>
           <AppWrapper Component={Component} pageProps={pageProps} />
