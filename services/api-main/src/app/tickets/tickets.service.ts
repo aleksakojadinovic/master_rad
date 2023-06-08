@@ -77,7 +77,7 @@ export class TicketsService extends BaseService {
       const diffMinutes = now.diff(createdAt, 'minutes');
 
       if (diffMinutes <= 10) {
-        // throw new TooSoonToCreateAnotherTicket(diffMinutes, 10 - diffMinutes);
+        throw new TooSoonToCreateAnotherTicket(diffMinutes, 10 - diffMinutes);
       }
     }
 

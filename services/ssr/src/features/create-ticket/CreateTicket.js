@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useCreateTicketMutation } from '@/api/tickets';
 import { clickHere } from '@/translations/global';
-import { statusSuccess } from '@/translations/query-statuses';
+import { statusError, statusSuccess } from '@/translations/query-statuses';
 import { ticketCreatedSuccessfully } from '@/translations/ticket.create';
 import {
   Alert,
@@ -52,7 +52,7 @@ function CreateTicket() {
     if (isError) {
       return (
         <Alert severity="error">
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>{intl.formatMessage(statusError)}</AlertTitle>
           {error.data.message}
         </Alert>
       );
