@@ -6,6 +6,7 @@ import { Ticket } from 'src/app/tickets/schema/ticket.schema';
 import { Model, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/app/users/users.service';
 import { v4 as uuid } from 'uuid';
+import * as moment from 'moment';
 import {
   TicketHistoryEntryAssigneesAdded,
   TicketHistoryEntryBodyChanged,
@@ -26,6 +27,7 @@ import { TicketNotFoundError } from './errors/TicketNotFound';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
 import { AssigneeIdNotValidError } from './errors/AssigneeIdNotValid';
 import { CannotAssignCustomer } from './errors/CannotAssignCustomer';
+import { TooSoonToCreateAnotherTicket } from './errors/TooSoonToCreateAnotherTicket';
 
 @Injectable()
 export class TicketsService extends BaseService {
@@ -63,6 +65,21 @@ export class TicketsService extends BaseService {
 
   async create(userId: string, createTicketDto: CreateTicketDto) {
     const user = await this.usersService.findOne(userId);
+    const mostRecentTicket = await this.ticketModel.findOne(
+      { createdBy: userId },
+      {},
+      { sort: { createdAt: -1 } },
+    );
+    if (mostRecentTicket) {
+      const createdAt = moment(mostRecentTicket.createdAt);
+      const now = moment();
+
+      const diffMinutes = now.diff(createdAt, 'minutes');
+
+      if (diffMinutes <= 10) {
+        // throw new TooSoonToCreateAnotherTicket(diffMinutes, 10 - diffMinutes);
+      }
+    }
 
     const ticketObject = new Ticket();
 

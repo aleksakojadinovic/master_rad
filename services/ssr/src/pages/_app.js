@@ -8,6 +8,7 @@ import React, { useMemo } from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import English from '../../content/compiled-locales/en.json';
+import Serbian from '../../content/compiled-locales/sr.json';
 
 function MyApp({ Component, pageProps }) {
   const store = wrapper.useStore();
@@ -18,11 +19,13 @@ function MyApp({ Component, pageProps }) {
     switch (shortLocale) {
       case 'en':
         return English;
+      case 'sr':
+        return Serbian;
     }
   }, [shortLocale]);
 
   return (
-    <IntlProvider messages={messages} locale={shortLocale}>
+    <IntlProvider messages={messages} locale={shortLocale} onError={() => {}}>
       <Provider store={store}>
         <PageContainer>
           <AppWrapper Component={Component} pageProps={pageProps} />

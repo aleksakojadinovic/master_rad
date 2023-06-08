@@ -17,7 +17,7 @@ function TicketViewPage(props) {
   const router = useRouter();
   const id = router.query.ticketId;
 
-  const { isLoading, isFetching } = useGetTicketQuery({
+  const { isLoading, isFetching, isError } = useGetTicketQuery({
     id,
     ...getTicketViewQueryParams(),
   });
@@ -30,6 +30,10 @@ function TicketViewPage(props) {
 
   if (!ticket && (isLoading || isFetching)) {
     return 'Loading';
+  }
+
+  if (isError) {
+    return 'Error';
   }
 
   return (

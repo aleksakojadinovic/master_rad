@@ -1,0 +1,10 @@
+{
+  "agent-dashboard.title": "Početna strana",
+  "click-here": "ovde",
+  "create-ticket.success": "Tiket uspešno podnet, možete ga videti {NewTicketLink}.",
+  "create-ticket.ticket-title-text": "Naslov vašeg problema",
+  "create-ticket.ticket-description-text": "Opišite Vaš problem detaljno",
+  "forms.submit": "Podnesi",
+  "query-status.error": "Došlo je do greške",
+  "query-status.success": "Operacija je uspešna"
+}

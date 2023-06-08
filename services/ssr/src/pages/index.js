@@ -14,11 +14,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (user == null) {
       return {};
     }
-    if (user.roles.map(({ name }) => name).includes('agent'))
+    if (user.roles.map(({ name }) => name).includes('agent')) {
       return {
         redirect: {
           destination: '/dashboard',
         },
       };
+    }
+    if (user.roles.map(({ name }) => name).includes('customer')) {
+      return {
+        redirect: {
+          destination: '/customer',
+        },
+      };
+    }
   },
 );

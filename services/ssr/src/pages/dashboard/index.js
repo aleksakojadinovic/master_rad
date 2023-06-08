@@ -2,6 +2,7 @@ import { selectGetMeQueryResponse } from '@/api/auth';
 import { ticketsSlice, useGetTicketsQuery } from '@/api/tickets';
 import AgentDashboard from '@/features/agent-dashboard/AgentDashboard';
 import { wrapper } from '@/redux/store';
+import { agentDashboardMessages } from '@/translations/agent-dashboard';
 import { getAgentDashboardTicketsParams } from '@/utils/params';
 import { Box, Typography } from '@mui/material';
 import Head from 'next/head';
@@ -23,10 +24,10 @@ function DashboardPage({ page, perPage, filters, ...rest }) {
   return (
     <Fragment>
       <Head>
-        <title>{intl.formatMessage({ id: 'dashboard.title' })}</title>
+        <title>{intl.formatMessage(agentDashboardMessages.title)}</title>
       </Head>
       <Typography variant="h3">
-        {intl.formatMessage({ id: 'dashboard.pageTitle' })}
+        {intl.formatMessage(agentDashboardMessages.title)}
       </Typography>
       <Box sx={{ marginTop: '12px' }}>
         <AgentDashboard page={page} perPage={perPage} filters={filters} />

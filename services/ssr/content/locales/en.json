@@ -1,4 +1,10 @@
 {
-  "dashboard.title": "Agent Dashboard | STS",
-  "dashboard.pageTitle": "Dashboard"
+  "agent-dashboard.title": "Dashboard",
+  "click-here": "here",
+  "create-ticket.success": "Ticket successfully created, you can see it {NewTicketLink}.",
+  "create-ticket.ticket-description-text": "Describe your issue in detail",
+  "create-ticket.ticket-title-text": "Title of your issue",
+  "forms.submit": "Submit",
+  "query-status.error": "An error has occurred",
+  "query-status.success": "Success"
 }

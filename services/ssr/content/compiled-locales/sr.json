@@ -2,19 +2,19 @@
   "agent-dashboard.title": [
     {
       "type": 0,
-      "value": "Dashboard"
+      "value": "Početna strana"
     }
   ],
   "click-here": [
     {
       "type": 0,
-      "value": "here"
+      "value": "ovde"
     }
   ],
   "create-ticket.success": [
     {
       "type": 0,
-      "value": "Ticket successfully created, you can see it "
+      "value": "Tiket uspešno podnet, možete ga videti "
     },
     {
       "type": 1,
@@ -28,31 +28,31 @@
   "create-ticket.ticket-description-text": [
     {
       "type": 0,
-      "value": "Describe your issue in detail"
+      "value": "Opišite Vaš problem detaljno"
     }
   ],
   "create-ticket.ticket-title-text": [
     {
       "type": 0,
-      "value": "Title of your issue"
+      "value": "Naslov vašeg problema"
     }
   ],
   "forms.submit": [
     {
       "type": 0,
-      "value": "Submit"
+      "value": "Podnesi"
     }
   ],
   "query-status.error": [
     {
       "type": 0,
-      "value": "An error has occurred"
+      "value": "Došlo je do greške"
     }
   ],
   "query-status.success": [
     {
       "type": 0,
-      "value": "Success"
+      "value": "Operacija je uspešna"
     }
   ]
 }

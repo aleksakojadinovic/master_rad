@@ -12,6 +12,13 @@ export const ticketsSlice = api.injectEndpoints({
         return res ? [{ type: 'getTicket', id: res.id }] : [];
       },
     }),
+    createTicket: builder.mutation({
+      query: (body) => ({
+        url: '/tickets',
+        method: 'POST',
+        body,
+      }),
+    }),
     updateTicket: builder.mutation({
       query: ({ id, ...update }) => ({
         url: `/tickets/${id}`,
@@ -34,6 +41,7 @@ export const {
   useGetTicketQuery,
   useUpdateTicketMutation,
   useGetTicketsQuery,
+  useCreateTicketMutation,
 } = ticketsSlice;
 
 const selectGetTicketQueryResult = createSelector(
