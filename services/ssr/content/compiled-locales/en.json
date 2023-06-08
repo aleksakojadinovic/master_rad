@@ -5,6 +5,16 @@
       "value": "Dashboard"
     }
   ],
+  "create-ticket": [
+    {
+      "type": 0,
+      "value": "Ticket successfully created, you can see it "
+    },
+    {
+      "type": 1,
+      "value": "NewTicketLink"
+    }
+  ],
   "query-status.success": [
     {
       "type": 0,

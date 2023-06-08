@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useCreateTicketMutation } from '@/api/tickets';
+import { clickHere } from '@/translations/global';
 import { statusSuccess } from '@/translations/query-statuses';
+import { ticketCreatedSuccessfully } from '@/translations/ticket.create';
 import {
   Alert,
   AlertTitle,
@@ -14,7 +16,7 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 function CreateTicket() {
   const intl = useIntl();
@@ -34,8 +36,16 @@ function CreateTicket() {
       return (
         <Alert severity="success">
           <AlertTitle>{intl.formatMessage(statusSuccess)}</AlertTitle>
-          Ticket successfully created, you can see it{' '}
-          <Link href={`/tickets/view/${data.Id}`}>here</Link>
+          <FormattedMessage
+            {...ticketCreatedSuccessfully}
+            values={{
+              NewTicketLink: (
+                <a href={`/tickets/view/${data.Id}`}>
+                  {intl.formatMessage(clickHere)}
+                </a>
+              ),
+            }}
+          />
         </Alert>
       );
     }

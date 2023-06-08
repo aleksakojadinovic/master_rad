@@ -1,4 +1,5 @@
 {
   "agent-dashboard.title": "Dashboard",
+  "create-ticket": "Ticket successfully created, you can see it {NewTicketLink}",
   "query-status.success": "Success"
 }
