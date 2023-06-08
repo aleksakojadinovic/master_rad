@@ -8,16 +8,21 @@ import React, { useMemo } from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import English from '../../content/compiled-locales/en.json';
+import Serbian from '../../content/compiled-locales/sr.json';
 
 function MyApp({ Component, pageProps }) {
   const store = wrapper.useStore();
   const { locale } = useRouter();
   const [shortLocale] = locale ? locale.split('-') : ['en'];
 
+  console.log({ locale });
+
   const messages = useMemo(() => {
     switch (shortLocale) {
       case 'en':
         return English;
+      case 'sr':
+        return Serbian;
     }
   }, [shortLocale]);
 

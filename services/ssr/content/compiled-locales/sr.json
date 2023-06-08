@@ -2,19 +2,19 @@
   "agent-dashboard.title": [
     {
       "type": 0,
-      "value": "Dashboard"
+      "value": "Početna strana"
     }
   ],
   "click-here": [
     {
       "type": 0,
-      "value": "here"
+      "value": "ovde"
     }
   ],
   "create-ticket": [
     {
       "type": 0,
-      "value": "Ticket successfully created, you can see it "
+      "value": "Tiket uspešno kreiran, možete ga videti "
     },
     {
       "type": 1,
@@ -28,13 +28,13 @@
   "query-status.error": [
     {
       "type": 0,
-      "value": "An error has occurred"
+      "value": "Došlo je do greške"
     }
   ],
   "query-status.success": [
     {
       "type": 0,
-      "value": "Success"
+      "value": "Operacija je uspešna"
     }
   ]
 }
