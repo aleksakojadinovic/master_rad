@@ -13,8 +13,11 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 
 function CreateTicket() {
+  const intl = useIntl();
+
   const [createTicket, { data, error, isSuccess, isError }] =
     useCreateTicketMutation();
 
@@ -29,7 +32,10 @@ function CreateTicket() {
     if (isSuccess) {
       return (
         <Alert severity="success">
-          <AlertTitle>Success</AlertTitle>
+          <AlertTitle>
+            {/* {intl.formatMessage({ id: 'statuses.success' })} */}
+            test
+          </AlertTitle>
           Ticket successfully created, you can see it{' '}
           <Link href={`/tickets/view/${data.Id}`}>here</Link>
         </Alert>
