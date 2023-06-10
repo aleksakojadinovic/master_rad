@@ -17,4 +17,24 @@ export const manageTagsMessages = defineMessages({
     id: 'tags.tag-permissions-text',
     defaultMessage: 'Permissions',
   },
+  whoCanAddText: {
+    id: 'tags.who-can-add-text',
+    defaultMessage: 'Who can add these tags?',
+  },
+  whoCanRemoveText: {
+    id: 'tags.who-can-remove-text',
+    defaultMessage: 'Who can remove these tags?',
+  },
+  canCreatorAddText: {
+    id: 'tags.can-creator-add-text',
+    defaultMessage: 'Can the ticket author add these tags?',
+  },
+  canCreatorRemoveText: {
+    id: 'tags.can-creator-remove-text',
+    defaultMessage: 'Can the ticket author remove these tags?',
+  },
+  tagsText: {
+    id: 'tags.tag-text',
+    defaultMessage: 'Tags',
+  },
 });

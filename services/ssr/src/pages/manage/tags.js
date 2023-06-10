@@ -1,4 +1,5 @@
 import { selectGetMeQueryResponse } from '@/api/auth';
+import { rolesSlice } from '@/api/roles';
 import { ticketTagGroupsSlice } from '@/api/ticket-tag-groups';
 import ManageTags from '@/features/manage-tags/ManageTags';
 import { wrapper } from '@/redux/store';
@@ -39,6 +40,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     store.dispatch(
       ticketTagGroupsSlice.endpoints.getTicketTagGroups.initiate(),
     );
+
+    store.dispatch(rolesSlice.endpoints.getRoles.initiate());
 
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
 

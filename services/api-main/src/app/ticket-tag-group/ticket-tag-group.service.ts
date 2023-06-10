@@ -2,7 +2,6 @@ import { RolesService } from '../users/roles.service';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
 import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
-import { UpdateTicketTagDto } from './dto/update-ticket-tag.dto';
 import {
   TicketTagGroup,
   TicketTagGroupPermissions,
@@ -99,7 +98,7 @@ export class TicketTagGroupService extends BaseService {
     return this.ticketTagGroupModel.findOne({ _id: id });
   }
 
-  update(id: number, updateTicketTagDto: UpdateTicketTagDto) {
+  update(id: number) {
     return `This action updates a #${id} ticketTag`;
   }
 

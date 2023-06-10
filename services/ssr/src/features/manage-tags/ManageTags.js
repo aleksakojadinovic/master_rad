@@ -1,23 +1,37 @@
 import {
-  selectGetTicketTagGroupsQueryResponse,
+  selectTicketTagGroups,
   useGetTicketTagGroupsQuery,
 } from '@/api/ticket-tag-groups';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
-import TicketTagGroup from './components/TicketTagGroup';
+import TicketTagGroupAdmin from './components/TicketTagGroupAdmin';
+import { Box } from '@mui/material';
+import { useGetRolesQuery } from '@/api/roles';
 
 function ManageTags() {
-  const { isLoading, isFetching } = useGetTicketTagGroupsQuery();
-  const ticketTagGroups = useSelector(selectGetTicketTagGroupsQueryResponse);
+  const { isLoading: isTagGroupsLoading, isFetching: isTagGroupsFetching } =
+    useGetTicketTagGroupsQuery();
 
-  if (isLoading || isFetching) {
+  const { isLoading: isRolesLoading, isFetching: isRolesFetching } =
+    useGetRolesQuery();
+
+  const ticketTagGroups = useSelector(selectTicketTagGroups);
+
+  if (
+    isTagGroupsLoading ||
+    isTagGroupsFetching ||
+    isRolesLoading ||
+    isRolesFetching
+  ) {
     return 'Loading...';
   }
 
   return (
     <Fragment>
       {ticketTagGroups.map((group) => (
-        <TicketTagGroup key={group.id} {...group} />
+        <Box key={group.id} sx={{ marginTop: '12px' }}>
+          <TicketTagGroupAdmin {...group} />
+        </Box>
       ))}
     </Fragment>
   );

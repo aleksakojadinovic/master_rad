@@ -14,4 +14,8 @@ export class RolesService {
   async findMany(ids: string[]): Promise<Role[]> {
     return await this.roleModel.find({ _id: { $in: ids } });
   }
+
+  async findAll(): Promise<Role[]> {
+    return await this.roleModel.find({});
+  }
 }

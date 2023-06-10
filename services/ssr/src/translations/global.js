@@ -5,4 +5,12 @@ export const globalMessages = defineMessages({
     id: 'click-here',
     defaultMessage: 'here',
   },
+  yes: {
+    id: 'global.yes',
+    defaultMessage: 'Yes',
+  },
+  no: {
+    id: 'global.no',
+    defaultMessage: 'No',
+  },
 });
