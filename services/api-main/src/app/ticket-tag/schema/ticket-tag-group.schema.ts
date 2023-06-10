@@ -12,6 +12,10 @@ export class TicketTagGroupPermissions {
   ) {}
 }
 
+export class Tag {
+  constructor(public name: string, public description: string) {}
+}
+
 @Schema()
 export class TicketTagGroup {
   _id: string;
@@ -41,6 +45,11 @@ export class TicketTagGroup {
     },
   })
   permissions: TicketTagGroupPermissions;
+
+  @Prop({
+    type: [{ name: String, description: String }],
+  })
+  tags: Tag[];
 }
 
 export const TicketTagGroupSchema =

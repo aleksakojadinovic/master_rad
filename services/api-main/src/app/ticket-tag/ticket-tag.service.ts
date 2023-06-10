@@ -9,6 +9,8 @@ import {
 } from './schema/ticket-tag-group.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { TicketTagGroupNotFoundError } from './errors/TicketTagGroupNotFound';
+import { TicketTagNameAlreadyExistsError } from './errors/TicketTagNameAlreadyExists';
 
 @Injectable()
 export class TicketTagService {
@@ -51,12 +53,29 @@ export class TicketTagService {
     return 'test';
   }
 
+  async addTagsToGroup(id: string, tags: CreateTicketTagDto[]) {
+    const group = await this.findOne(id);
+    if (!group) {
+      throw new TicketTagGroupNotFoundError();
+    }
+    const currentTagNames = group.tags.map(({ name }) => name);
+    const requestedTagNames = tags.map(({ name }) => name);
+    if (currentTagNames.some((name) => requestedTagNames.includes(name))) {
+      throw new TicketTagNameAlreadyExistsError();
+    }
+
+    tags.forEach((tag) => group.tags.push(tag));
+
+    await group.save();
+    return group;
+  }
+
   findAll() {
     return `This action returns all ticketTag`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ticketTag`;
+  findOne(id: string) {
+    return this.ticketTagGroupModel.findOne({ _id: id });
   }
 
   update(id: number, updateTicketTagDto: UpdateTicketTagDto) {
