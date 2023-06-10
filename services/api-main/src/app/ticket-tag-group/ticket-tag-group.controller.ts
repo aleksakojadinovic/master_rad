@@ -8,33 +8,47 @@ import {
   Delete,
   BadRequestException,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
-import { TicketTagService } from './ticket-tag.service';
+import { TicketTagGroupService } from './ticket-tag-group.service';
 import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { UpdateTicketTagGroupDTO } from './dto/update-ticket-tag-group.dto';
 import { isValidObjectId } from 'mongoose';
 import { TicketTagInterceptor } from './interceptors/ticket-tag.interceptor';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
+import { TicketTagGroup } from './schema/ticket-tag-group.schema';
+import { TicketTagGroupDTO } from './dto/ticket-tag-group.dto';
+import { TicketTagGroupQueryPipe } from './pipes/ticket-tag-group-query.pipe';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 
 @UseInterceptors(TicketTagInterceptor)
-@Controller('ticket-tag')
-export class TicketTagController {
-  constructor(private readonly ticketTagService: TicketTagService) {}
+@Controller('ticket-tag-group')
+export class TicketTagGroupController {
+  constructor(
+    private readonly ticketTagGroupService: TicketTagGroupService,
+    @InjectMapper() private readonly mapper: Mapper,
+  ) {}
 
   @Post()
-  create(@Body() createTicketTagDto: CreateTicketTagDto) {
-    return this.ticketTagService.create(createTicketTagDto);
-  }
-
-  @Post('group')
-  createGroup(@Body() createTicketTagGroupDTO: CreateTicketTagGroupDTO) {
-    // TODO: Validate
-    return this.ticketTagService.createGroup(createTicketTagGroupDTO);
+  create(@Body() createTicketTagGroupDTO: CreateTicketTagGroupDTO) {
+    // TODO: Validate, protect
+    return this.ticketTagGroupService.create(createTicketTagGroupDTO);
   }
 
   @Get()
-  findAll() {
-    return this.ticketTagService.findAll();
+  async findAll(
+    @Query(new TicketTagGroupQueryPipe(false)) queryDTO: EntityQueryDTO,
+  ) {
+    // TODO: protect
+
+    const ticketTagGroups = await this.ticketTagGroupService.findAll(queryDTO);
+    return this.mapper.mapArray(
+      ticketTagGroups,
+      TicketTagGroup,
+      TicketTagGroupDTO,
+    );
   }
 
   @Get(':id')
@@ -54,7 +68,10 @@ export class TicketTagController {
     switch (updateTicketTagDto.action) {
       case 'ADD_TAGS':
         const tags = this.getAddTagsPayload(updateTicketTagDto.payload);
-        const result = await this.ticketTagService.addTagsToGroup(id, tags);
+        const result = await this.ticketTagGroupService.addTagsToGroup(
+          id,
+          tags,
+        );
         // TODO map
         return result;
       default:
@@ -66,7 +83,7 @@ export class TicketTagController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.ticketTagService.remove(+id);
+    return this.ticketTagGroupService.remove(+id);
   }
 
   private getAddTagsPayload(payload: any): CreateTicketTagDto[] {

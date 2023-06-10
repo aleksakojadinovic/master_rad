@@ -1,4 +1,4 @@
-import { RolesService } from './../users/roles.service';
+import { RolesService } from '../users/roles.service';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
 import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
@@ -11,20 +11,37 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { TicketTagGroupNotFoundError } from './errors/TicketTagGroupNotFound';
 import { TicketTagNameAlreadyExistsError } from './errors/TicketTagNameAlreadyExists';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
+import { BaseService } from 'src/codebase/BaseService';
 
 @Injectable()
-export class TicketTagService {
+export class TicketTagGroupService extends BaseService {
   constructor(
     @InjectModel(TicketTagGroup.name)
     private ticketTagGroupModel: Model<TicketTagGroup>,
     private rolesService: RolesService,
-  ) {}
-
-  create(createTicketTagDto: CreateTicketTagDto) {
-    return 'This action adds a new ticketTag';
+  ) {
+    super();
   }
 
-  async createGroup(dto: CreateTicketTagGroupDTO) {
+  override constructPopulate(queryDTO: EntityQueryDTO): any[] {
+    const populations = [];
+    queryDTO.includes.forEach((includeField) => {
+      if (includeField === 'role') {
+        populations.push({
+          path: 'permissions.canAddRoles',
+          model: 'Role',
+        });
+        populations.push({
+          path: 'permissions.canRemoveRoles',
+          model: 'Role',
+        });
+      }
+    });
+    return populations;
+  }
+
+  async create(dto: CreateTicketTagGroupDTO) {
     const ticketTagGroupObject = new TicketTagGroup();
     ticketTagGroupObject.name = dto.name;
     ticketTagGroupObject.description = dto.description;
@@ -70,8 +87,12 @@ export class TicketTagService {
     return group;
   }
 
-  findAll() {
-    return `This action returns all ticketTag`;
+  async findAll(queryDTO: EntityQueryDTO) {
+    const query = this.ticketTagGroupModel.find({});
+    const populations = this.constructPopulate(queryDTO);
+    populations.forEach((p) => query.populate(p));
+    const groups = await query.exec();
+    return groups;
   }
 
   findOne(id: string) {

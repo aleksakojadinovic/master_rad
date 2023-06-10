@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
 import { InvalidPaginationParametersError } from '../errors/InvalidPaginationParameters';
+import { PaginationRequiredError } from '../errors/PaginationRequired';
 
 @Injectable()
 export class GlobalInterceptor implements NestInterceptor {
@@ -14,6 +15,10 @@ export class GlobalInterceptor implements NestInterceptor {
     return next.handle().pipe(
       catchError((error) => {
         if (error instanceof InvalidPaginationParametersError) {
+          throw new BadRequestException(error.message);
+        }
+
+        if (error instanceof PaginationRequiredError) {
           throw new BadRequestException(error.message);
         }
 

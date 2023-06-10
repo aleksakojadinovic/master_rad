@@ -10,7 +10,9 @@ import { UserProfile } from './app/users/profiles/user.profile';
 import { RoleProfile } from './app/users/profiles/role.profile';
 import { TicketProfile } from './app/tickets/profiles/ticket.profile';
 import { TicketHistoryItemProfile } from './app/tickets/profiles/ticket-history.profile';
-import { TicketTagModule } from './app/ticket-tag/ticket-tag.module';
+import { TicketTagProfile } from './app/ticket-tag-group/profiles/ticket-tag.profile';
+import { TicketTagGroupProfile } from './app/ticket-tag-group/profiles/ticket-tag-group.profile';
+import { TicketTagGroupModule } from './app/ticket-tag-group/ticket-tag-group.module';
 
 const MAIN_DB_USERNAME = process.env.MAIN_DB_USERNAME;
 const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
@@ -25,7 +27,7 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
     UsersModule,
     AuthModule,
     TicketsModule,
-    TicketTagModule,
+    TicketTagGroupModule,
   ],
   providers: [
     AppService,
@@ -33,6 +35,8 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
     UserProfile,
     TicketProfile,
     TicketHistoryItemProfile,
+    TicketTagProfile,
+    TicketTagGroupProfile,
   ],
 })
 export class AppModule {}

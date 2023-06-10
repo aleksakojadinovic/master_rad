@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { TicketTagService } from './ticket-tag.service';
-import { TicketTagController } from './ticket-tag.controller';
+import { TicketTagGroupService } from './ticket-tag-group.service';
+import { TicketTagGroupController } from './ticket-tag-group.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
   TicketTagGroup,
@@ -10,8 +10,8 @@ import { TicketTag, TicketTagSchema } from './schema/ticket-tag.schema';
 import { UsersModule } from '../users/users.module';
 
 @Module({
-  controllers: [TicketTagController],
-  providers: [TicketTagService],
+  controllers: [TicketTagGroupController],
+  providers: [TicketTagGroupService],
   imports: [
     UsersModule,
     MongooseModule.forFeature([
@@ -22,4 +22,4 @@ import { UsersModule } from '../users/users.module';
     ]),
   ],
 })
-export class TicketTagModule {}
+export class TicketTagGroupModule {}
