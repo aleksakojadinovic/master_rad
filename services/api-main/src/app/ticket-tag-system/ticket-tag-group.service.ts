@@ -12,6 +12,7 @@ import { TicketTagGroupNotFoundError } from './errors/TicketTagGroupNotFound';
 import { TicketTagNameAlreadyExistsError } from './errors/TicketTagNameAlreadyExists';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { BaseService } from 'src/codebase/BaseService';
+import { TicketTagService } from './ticket-tag.service';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
@@ -19,6 +20,7 @@ export class TicketTagGroupService extends BaseService {
     @InjectModel(TicketTagGroup.name)
     private ticketTagGroupModel: Model<TicketTagGroup>,
     private rolesService: RolesService,
+    private ticketTagService: TicketTagService,
   ) {
     super();
   }
@@ -70,17 +72,30 @@ export class TicketTagGroupService extends BaseService {
   }
 
   async addTagsToGroup(id: string, tags: CreateTicketTagDto[]) {
-    const group = await this.findOne(id);
+    const group = await this.ticketTagGroupModel
+      .findById(id)
+      .populate({ path: 'tags', model: 'TicketTag' });
+
     if (!group) {
       throw new TicketTagGroupNotFoundError();
     }
+
     const currentTagNames = group.tags.map(({ name }) => name);
     const requestedTagNames = tags.map(({ name }) => name);
     if (currentTagNames.some((name) => requestedTagNames.includes(name))) {
       throw new TicketTagNameAlreadyExistsError();
     }
 
-    tags.forEach((tag) => group.tags.push(tag));
+    const tagModels = await Promise.all(
+      tags.map(async (tag) => {
+        const model = this.ticketTagService.create(
+          new CreateTicketTagDto(tag.name, tag.description, id),
+        );
+        return model;
+      }),
+    );
+
+    tagModels.forEach((model) => group.tags.push(model));
 
     await group.save();
     return group;

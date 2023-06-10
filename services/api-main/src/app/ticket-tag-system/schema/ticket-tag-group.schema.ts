@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Role } from 'src/app/users/schema/role.schema';
+import { TicketTag } from './ticket-tag.schema';
 
 // TODO: Should this be on the tag level?
 export class TicketTagGroupPermissions {
@@ -10,10 +11,6 @@ export class TicketTagGroupPermissions {
     public canAddRoles: Role[],
     public canRemoveRoles: Role[],
   ) {}
-}
-
-export class Tag {
-  constructor(public name: string, public description: string) {}
 }
 
 @Schema()
@@ -46,10 +43,8 @@ export class TicketTagGroup {
   })
   permissions: TicketTagGroupPermissions;
 
-  @Prop({
-    type: [{ name: String, description: String }],
-  })
-  tags: Tag[];
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TicketTag' }] })
+  tags: TicketTag[];
 }
 
 export const TicketTagGroupSchema =

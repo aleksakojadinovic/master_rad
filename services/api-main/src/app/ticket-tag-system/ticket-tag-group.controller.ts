@@ -101,7 +101,7 @@ export class TicketTagGroupController {
       }
     }
     return payload.tags.map(
-      ({ name, description }) => new CreateTicketTagDto(name, description),
+      ({ name, description }) => new CreateTicketTagDto(name, description, ''),
     );
   }
 }

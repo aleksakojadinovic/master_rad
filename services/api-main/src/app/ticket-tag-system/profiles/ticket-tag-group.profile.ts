@@ -36,9 +36,15 @@ export class TicketTagGroupProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.tags,
-          mapFrom((source) =>
-            mapper.mapArray(source.tags, TicketTag, TicketTagDTO),
-          ),
+          mapFrom((source) => {
+            const mappedTags = source.tags.map((tag) => {
+              if (tag instanceof Types.ObjectId) {
+                return tag.toString();
+              }
+              return mapper.map(tag, TicketTag, TicketTagDTO);
+            });
+            return mappedTags;
+          }),
         ),
         forMember(
           (destination) => destination.permissions,

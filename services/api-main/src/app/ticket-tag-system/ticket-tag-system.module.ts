@@ -8,10 +8,11 @@ import {
 } from './schema/ticket-tag-group.schema';
 import { TicketTag, TicketTagSchema } from './schema/ticket-tag.schema';
 import { UsersModule } from '../users/users.module';
+import { TicketTagService } from './ticket-tag.service';
 
 @Module({
   controllers: [TicketTagGroupController],
-  providers: [TicketTagGroupService],
+  providers: [TicketTagGroupService, TicketTagService],
   imports: [
     UsersModule,
     MongooseModule.forFeature([
@@ -22,4 +23,4 @@ import { UsersModule } from '../users/users.module';
     ]),
   ],
 })
-export class TicketTagGroupModule {}
+export class TicketTagSystemModule {}
