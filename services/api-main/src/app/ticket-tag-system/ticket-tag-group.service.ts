@@ -38,6 +38,12 @@ export class TicketTagGroupService extends BaseService {
           model: 'Role',
         });
       }
+      if (includeField === 'tags') {
+        populations.push({
+          path: 'tags',
+          model: 'TicketTag',
+        });
+      }
     });
     return populations;
   }

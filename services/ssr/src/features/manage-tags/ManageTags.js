@@ -7,15 +7,18 @@ import { useSelector } from 'react-redux';
 import TicketTagGroupAdmin from './components/TicketTagGroupAdmin';
 import { Box } from '@mui/material';
 import { useGetRolesQuery } from '@/api/roles';
+import { getManageTagsParams } from './utils/params';
 
 function ManageTags() {
   const { isLoading: isTagGroupsLoading, isFetching: isTagGroupsFetching } =
-    useGetTicketTagGroupsQuery();
+    useGetTicketTagGroupsQuery(getManageTagsParams());
 
   const { isLoading: isRolesLoading, isFetching: isRolesFetching } =
     useGetRolesQuery();
 
-  const ticketTagGroups = useSelector(selectTicketTagGroups);
+  const ticketTagGroups = useSelector((state) =>
+    selectTicketTagGroups(state, getManageTagsParams()),
+  );
 
   if (
     isTagGroupsLoading ||

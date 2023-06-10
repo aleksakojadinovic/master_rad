@@ -8,6 +8,7 @@ import {
 import { Observable, catchError } from 'rxjs';
 import { InvalidPaginationParametersError } from '../errors/InvalidPaginationParameters';
 import { PaginationRequiredError } from '../errors/PaginationRequired';
+import { InvalidIncludeKeyError } from '../errors/InvalidIncludeKey';
 
 @Injectable()
 export class GlobalInterceptor implements NestInterceptor {
@@ -19,6 +20,10 @@ export class GlobalInterceptor implements NestInterceptor {
         }
 
         if (error instanceof PaginationRequiredError) {
+          throw new BadRequestException(error.message);
+        }
+
+        if (error instanceof InvalidIncludeKeyError) {
           throw new BadRequestException(error.message);
         }
 

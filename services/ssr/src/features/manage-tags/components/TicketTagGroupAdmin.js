@@ -14,7 +14,6 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 function TicketTagGroupAdmin({
-  id,
   name,
   description,
   tags,

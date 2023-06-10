@@ -18,8 +18,12 @@ export const { useGetTicketTagGroupsQuery } = ticketTagGroupsSlice;
 
 const selectGetTicketTagGroupsQueryResult = createSelector(
   [(state) => state, (_, params) => params],
-  (state, params) =>
-    ticketTagGroupsSlice.endpoints.getTicketTagGroups.select(params)(state),
+  (state, params) => {
+    console.log({ params });
+    return ticketTagGroupsSlice.endpoints.getTicketTagGroups.select(params)(
+      state,
+    );
+  },
 );
 
 export const selectGetTicketTagGroupsQueryIndicators = createSelector(
@@ -41,7 +45,7 @@ export const selectTicketTagGroups = createSelector(
   [selectGetTicketTagGroupsQueryResult, selectGetRolesQueryResponse],
   (queryResult, roles) => {
     const groups = queryResult.data ?? [];
-    return groups.map((group) => ({
+    const result = groups.map((group) => ({
       ...group,
       permissions: {
         ...group.permission,
@@ -53,5 +57,7 @@ export const selectTicketTagGroups = createSelector(
         ),
       },
     }));
+
+    return result;
   },
 );

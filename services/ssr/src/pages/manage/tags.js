@@ -2,6 +2,7 @@ import { selectGetMeQueryResponse } from '@/api/auth';
 import { rolesSlice } from '@/api/roles';
 import { ticketTagGroupsSlice } from '@/api/ticket-tag-groups';
 import ManageTags from '@/features/manage-tags/ManageTags';
+import { getManageTagsParams } from '@/features/manage-tags/utils/params';
 import { wrapper } from '@/redux/store';
 import api from '@/services/api';
 import { manageTagsMessages } from '@/translations/manage-tags';
@@ -37,8 +38,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
       };
     }
 
+    const params = getManageTagsParams();
+
     store.dispatch(
-      ticketTagGroupsSlice.endpoints.getTicketTagGroups.initiate(),
+      ticketTagGroupsSlice.endpoints.getTicketTagGroups.initiate(params),
     );
 
     store.dispatch(rolesSlice.endpoints.getRoles.initiate());
