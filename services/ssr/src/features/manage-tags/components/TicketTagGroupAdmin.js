@@ -91,6 +91,26 @@ function TicketTagGroupAdmin({
           <Typography variant="body1">
             {intl.formatMessage(manageTagsMessages.canCreatorRemoveText)}
           </Typography>
+          <FormControl>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              value={permissions.canCreatorAdd ? 'yes' : 'no'}
+              name="radio-buttons-group"
+              onChange={() => {}}
+              row
+            >
+              <FormControlLabel
+                value="yes"
+                control={<Radio />}
+                label={intl.formatMessage(globalMessages.yes)}
+              />
+              <FormControlLabel
+                value={permissions.canCreatorRemove ? 'yes' : 'no'}
+                control={<Radio />}
+                label={intl.formatMessage(globalMessages.no)}
+              />
+            </RadioGroup>
+          </FormControl>
         </Box>
       </Box>
       <Divider />
