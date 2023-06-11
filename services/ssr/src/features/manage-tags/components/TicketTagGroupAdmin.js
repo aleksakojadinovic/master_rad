@@ -1,6 +1,12 @@
 import ChipList from '@/components/ChipList/ChipList';
+import {
+  resolveTagDescription,
+  resolveTagName,
+  useTagDescription,
+  useTagName,
+} from '@/features/tags/utils';
 import { globalMessages } from '@/translations/global';
-import { manageTagsMessages } from '@/translations/manage-tags';
+import { manageTagsMessages } from '@/translations/tags';
 import {
   Box,
   Divider,
@@ -12,15 +18,15 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import TagAdmin from './TagAdmin';
 
-function TicketTagGroupAdmin({
-  name,
-  description,
-  tags,
-  permissions,
-  onUpdate,
-}) {
+function TicketTagGroupAdmin({ group }) {
+  const { tags, permissions } = group;
+  const resolvedName = useTagName(group);
+  const resolvedDescription = useTagDescription(group);
+
   const intl = useIntl();
+
   return (
     <Box border="1px solid gray" paddingLeft="12px">
       <Box display="flex" alignItems="center">
@@ -29,21 +35,23 @@ function TicketTagGroupAdmin({
           {intl.formatMessage(manageTagsMessages.tagNameText)}:
         </Typography>
         &nbsp;
-        <Typography variant="h5">{name}</Typography>
+        <Typography variant="h5">{resolvedName}</Typography>
       </Box>
       <Divider />
       <Box>
         <Typography variant="h6" color="gray">
           {intl.formatMessage(manageTagsMessages.tagDescriptionText)}:
         </Typography>
-        <Typography variant="body1">{description}</Typography>
+        <Typography variant="body1">{resolvedDescription}</Typography>
       </Box>
       <Divider />
       <Box marginBottom="12px">
         <Typography variant="h6" color="gray">
           {intl.formatMessage(manageTagsMessages.tagsText)}:
         </Typography>
-        <ChipList items={tags} />
+        {tags.map((tag) => (
+          <TagAdmin key={tag.id} tag={tag} />
+        ))}
       </Box>
       <Divider />
       <Box>

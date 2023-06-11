@@ -3,5 +3,6 @@ export class CreateTicketTagDto {
     public name: string,
     public description: string,
     public groupId: string,
+    public groupName: string,
   ) {}
 }

@@ -19,6 +19,8 @@ export class TicketTagService extends BaseService {
       name: dto.name,
       description: dto.description,
       group: dto.groupId,
+      nameIntlKey: `tag_${dto.groupName}_${dto.name}_Title`,
+      descriptionIntlKey: `tag_${dto.groupName}_${dto.name}_Description`,
     });
 
     const tag = await newTicketTag.save();

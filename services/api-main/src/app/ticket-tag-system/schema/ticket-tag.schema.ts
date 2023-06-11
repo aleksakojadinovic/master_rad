@@ -19,6 +19,12 @@ export class TicketTag {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'TicketTagGroup' })
   group: TicketTagGroup;
+
+  @Prop({ type: String })
+  nameIntlKey: string;
+
+  @Prop({ type: String })
+  descriptionIntlKey: string;
 }
 
 export const TicketTagSchema = SchemaFactory.createForClass(TicketTag);

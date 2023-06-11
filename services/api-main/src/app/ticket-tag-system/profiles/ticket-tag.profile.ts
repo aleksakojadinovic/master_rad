@@ -28,6 +28,14 @@ export class TicketTagProfile extends AutomapperProfile {
           (destination) => destination.description,
           mapFrom((source) => source.description),
         ),
+        forMember(
+          (destination) => destination.nameIntlKey,
+          mapFrom((source) => source.nameIntlKey),
+        ),
+        forMember(
+          (destination) => destination.descriptionIntlKey,
+          mapFrom((source) => source.descriptionIntlKey),
+        ),
       );
     };
   }

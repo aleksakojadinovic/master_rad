@@ -38,3 +38,38 @@ export const manageTagsMessages = defineMessages({
     defaultMessage: 'Tags',
   },
 });
+
+export const dynamicTagValuees = defineMessages({
+  tagGroup_Urgency_Title: {
+    id: 'tagGroup_Urgency_Title',
+    defaultMessage: 'Urgency',
+  },
+  tagGroup_Urgency_Description: {
+    id: 'tagGroup_Urgency_Description',
+    defaultMessage: 'How urgent is this ticket?',
+  },
+  tag_Urgency_Urgent_Title: {
+    id: 'tag_Urgency_Urgent_Title',
+    defaultMessage: 'Urgent',
+  },
+  tag_Urgency_Urgent_Description: {
+    id: 'tag_Urgency_Urgent_Description',
+    defaultMessage: 'Requires immediate attention',
+  },
+  tag_Urgency_Moderate_Title: {
+    id: 'tag_Urgency_Moderate_Title',
+    defaultMessage: 'Moderate',
+  },
+  tag_Urgency_Moderate_Description: {
+    id: 'tag_Urgency_Moderate_Description',
+    defaultMessage: 'Should be addressed soon',
+  },
+  tag_Urgency_Low_Title: {
+    id: 'tag_Urgency_Low_Title',
+    defaultMessage: 'Low',
+  },
+  tag_Urgency_Low_Description: {
+    id: 'tag_Urgency_Low_Description',
+    defaultMessage: 'Address when you have the time',
+  },
+});

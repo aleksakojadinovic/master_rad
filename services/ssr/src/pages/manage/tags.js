@@ -5,7 +5,7 @@ import ManageTags from '@/features/manage-tags/ManageTags';
 import { getManageTagsParams } from '@/features/manage-tags/utils/params';
 import { wrapper } from '@/redux/store';
 import api from '@/services/api';
-import { manageTagsMessages } from '@/translations/manage-tags';
+import { manageTagsMessages } from '@/translations/tags';
 import Head from 'next/head';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';

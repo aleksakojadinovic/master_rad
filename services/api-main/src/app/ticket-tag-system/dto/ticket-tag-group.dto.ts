@@ -8,5 +8,7 @@ export class TicketTagGroupDTO {
     public description: string,
     public tags: TicketTagDTO[],
     public permissions: TicketTagGroupPermissionsDTO,
+    public nameIntlKey: string,
+    public descriptionIntlKey: string,
   ) {}
 }

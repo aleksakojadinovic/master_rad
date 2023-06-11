@@ -33,7 +33,7 @@ function ManageTags() {
     <Fragment>
       {ticketTagGroups.map((group) => (
         <Box key={group.id} sx={{ marginTop: '12px' }}>
-          <TicketTagGroupAdmin {...group} />
+          <TicketTagGroupAdmin group={group} />
         </Box>
       ))}
     </Fragment>

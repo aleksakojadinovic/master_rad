@@ -45,6 +45,13 @@ export class TicketTagGroup {
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TicketTag' }] })
   tags: TicketTag[];
+
+  @Prop({ type: String })
+  nameIntlKey: string;
+  x;
+
+  @Prop({ type: String })
+  descriptionIntlKey: string;
 }
 
 export const TicketTagGroupSchema =

@@ -19,7 +19,6 @@ export const { useGetTicketTagGroupsQuery } = ticketTagGroupsSlice;
 const selectGetTicketTagGroupsQueryResult = createSelector(
   [(state) => state, (_, params) => params],
   (state, params) => {
-    console.log({ params });
     return ticketTagGroupsSlice.endpoints.getTicketTagGroups.select(params)(
       state,
     );

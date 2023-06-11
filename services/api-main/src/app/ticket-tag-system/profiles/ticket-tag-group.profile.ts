@@ -75,6 +75,14 @@ export class TicketTagGroupProfile extends AutomapperProfile {
             return mappedPermissiones;
           }),
         ),
+        forMember(
+          (destination) => destination.nameIntlKey,
+          mapFrom((source) => source.nameIntlKey),
+        ),
+        forMember(
+          (destination) => destination.descriptionIntlKey,
+          mapFrom((source) => source.descriptionIntlKey),
+        ),
       );
     };
   }

@@ -32,9 +32,12 @@ export class TicketTagGroupController {
   ) {}
 
   @Post()
-  create(@Body() createTicketTagGroupDTO: CreateTicketTagGroupDTO) {
+  async create(@Body() createTicketTagGroupDTO: CreateTicketTagGroupDTO) {
     // TODO: Validate, protect
-    return this.ticketTagGroupService.create(createTicketTagGroupDTO);
+    const group = await this.ticketTagGroupService.create(
+      createTicketTagGroupDTO,
+    );
+    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO);
   }
 
   @Get()
@@ -101,7 +104,8 @@ export class TicketTagGroupController {
       }
     }
     return payload.tags.map(
-      ({ name, description }) => new CreateTicketTagDto(name, description, ''),
+      ({ name, description }) =>
+        new CreateTicketTagDto(name, description, '', ''),
     );
   }
 }

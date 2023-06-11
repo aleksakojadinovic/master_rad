@@ -13,12 +13,16 @@ import { TicketTagNameAlreadyExistsError } from './errors/TicketTagNameAlreadyEx
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketTagService } from './ticket-tag.service';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
+import { TicketTagGroupDTO } from './dto/ticket-tag-group.dto';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
   constructor(
     @InjectModel(TicketTagGroup.name)
     private ticketTagGroupModel: Model<TicketTagGroup>,
+    @InjectMapper() private readonly mapper: Mapper,
     private rolesService: RolesService,
     private ticketTagService: TicketTagService,
   ) {
@@ -53,6 +57,8 @@ export class TicketTagGroupService extends BaseService {
     ticketTagGroupObject.name = dto.name;
     ticketTagGroupObject.description = dto.description;
     ticketTagGroupObject.exclusive = dto.exclusive;
+    ticketTagGroupObject.nameIntlKey = `tagGroup_${dto.name}_Title`;
+    ticketTagGroupObject.descriptionIntlKey = `tagGroup_${dto.name}_Description`;
     // TODO: err handling of this service
     const resolvedCanAddRoles = await this.rolesService.findMany(
       dto.canAddRoles,
@@ -74,7 +80,7 @@ export class TicketTagGroupService extends BaseService {
     const model = new this.ticketTagGroupModel(ticketTagGroupObject);
     await model.save();
 
-    return 'test';
+    return model;
   }
 
   async addTagsToGroup(id: string, tags: CreateTicketTagDto[]) {
@@ -95,7 +101,7 @@ export class TicketTagGroupService extends BaseService {
     const tagModels = await Promise.all(
       tags.map(async (tag) => {
         const model = this.ticketTagService.create(
-          new CreateTicketTagDto(tag.name, tag.description, id),
+          new CreateTicketTagDto(tag.name, tag.description, id, group.name),
         );
         return model;
       }),
@@ -104,7 +110,7 @@ export class TicketTagGroupService extends BaseService {
     tagModels.forEach((model) => group.tags.push(model));
 
     await group.save();
-    return group;
+    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO);
   }
 
   async findAll(queryDTO: EntityQueryDTO) {
