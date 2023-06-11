@@ -1,10 +1,5 @@
 import ChipList from '@/components/ChipList/ChipList';
-import {
-  resolveTagDescription,
-  resolveTagName,
-  useTagDescription,
-  useTagName,
-} from '@/features/tags/utils';
+import { useTagDescription, useTagName } from '@/features/tags/utils';
 import { globalMessages } from '@/translations/global';
 import { manageTagsMessages } from '@/translations/tags';
 import {

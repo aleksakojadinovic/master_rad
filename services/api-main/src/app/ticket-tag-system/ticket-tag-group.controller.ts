@@ -54,10 +54,10 @@ export class TicketTagGroupController {
     );
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return null;
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return null;
+  // }
 
   @Patch(':id')
   async update(
