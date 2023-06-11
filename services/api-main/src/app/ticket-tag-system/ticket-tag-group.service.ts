@@ -121,8 +121,15 @@ export class TicketTagGroupService extends BaseService {
     return groups;
   }
 
-  findOne(id: string) {
-    return this.ticketTagGroupModel.findOne({ _id: id });
+  async findOne(id: string, queryDTO: EntityQueryDTO) {
+    const query = this.ticketTagGroupModel.findOne({ _id: id });
+    const populatinos = this.constructPopulate(queryDTO);
+    populatinos.forEach((p) => query.populate(p));
+    const group = await query.exec();
+    if (!group) {
+      throw new TicketTagGroupNotFoundError();
+    }
+    return group;
   }
 
   update(id: number) {

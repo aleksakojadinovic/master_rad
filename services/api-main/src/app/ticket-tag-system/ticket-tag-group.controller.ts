@@ -40,6 +40,15 @@ export class TicketTagGroupController {
     return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO);
   }
 
+  @Get(':id')
+  async findOne(
+    @Param('id') id: string,
+    @Query(new TicketTagGroupQueryPipe(false)) queryDTO: EntityQueryDTO,
+  ) {
+    const group = await this.ticketTagGroupService.findOne(id, queryDTO);
+    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO);
+  }
+
   @Get()
   async findAll(
     @Query(new TicketTagGroupQueryPipe(false)) queryDTO: EntityQueryDTO,
