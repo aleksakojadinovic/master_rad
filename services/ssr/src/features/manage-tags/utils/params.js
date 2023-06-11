@@ -1,3 +1,1 @@
-export const getManageTagsParams = () => ({
-  includes: ['tags'],
-});
+export const getManageTagsParams = () => ({});

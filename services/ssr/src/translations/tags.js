@@ -37,6 +37,10 @@ export const manageTagsMessages = defineMessages({
     id: 'tags.tag-text',
     defaultMessage: 'Tags',
   },
+  addNewText: {
+    id: 'tags.add-new-group-text',
+    defaultMessage: 'Add new tag group',
+  },
 });
 
 export const dynamicTagValuees = defineMessages({

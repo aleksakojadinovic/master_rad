@@ -4,11 +4,14 @@ import { globalMessages } from '@/translations/global';
 import { manageTagsMessages } from '@/translations/tags';
 import {
   Box,
+  Button,
+  Chip,
   Divider,
   FormControl,
   FormControlLabel,
   Radio,
   RadioGroup,
+  TextField,
   Typography,
 } from '@mui/material';
 import React from 'react';
@@ -23,30 +26,39 @@ function TicketTagGroupAdmin({ group }) {
   const intl = useIntl();
 
   return (
-    <Box border="1px solid gray" paddingLeft="12px">
-      <Box display="flex" alignItems="center">
+    <Box border="1px solid gray" padding="12px">
+      <Box display="flex" alignItems="center" marginBottom="12px">
         {/* TODO: Figure out how to do translations here */}
         <Typography variant="h6" color="gray">
           {intl.formatMessage(manageTagsMessages.tagNameText)}:
         </Typography>
         &nbsp;
-        <Typography variant="h5">{resolvedName}</Typography>
+        <TextField
+          fullWidth
+          placeholder={intl.formatMessage(manageTagsMessages.tagNameText)}
+          value={group.name}
+        />
       </Box>
       <Divider />
-      <Box>
+      <Box marginBottom="12px">
         <Typography variant="h6" color="gray">
           {intl.formatMessage(manageTagsMessages.tagDescriptionText)}:
         </Typography>
-        <Typography variant="body1">{resolvedDescription}</Typography>
+        <TextField fullWidth value={resolvedDescription} />
       </Box>
       <Divider />
       <Box marginBottom="12px">
         <Typography variant="h6" color="gray">
           {intl.formatMessage(manageTagsMessages.tagsText)}:
         </Typography>
-        {tags.map((tag) => (
-          <TagAdmin key={tag.id} tag={tag} />
-        ))}
+        <Box display="flex" flexWrap="wrap">
+          {tags.map((tag) => (
+            <Box key={tag.id} marginRight="5px">
+              <TagAdmin tag={tag} />
+            </Box>
+          ))}
+          <Chip label="+" color="info" onClick={() => {}} />
+        </Box>
       </Box>
       <Divider />
       <Box>

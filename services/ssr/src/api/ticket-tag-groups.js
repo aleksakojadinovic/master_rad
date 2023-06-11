@@ -10,11 +10,18 @@ export const ticketTagGroupsSlice = api.injectEndpoints({
         params,
       }),
     }),
+    getTicketTagGroup: builder.query({
+      query: ({ id, ...params }) => ({
+        url: `/ticket-tag-group/${id}`,
+        params,
+      }),
+    }),
   }),
   overrideExisting: true,
 });
 
-export const { useGetTicketTagGroupsQuery } = ticketTagGroupsSlice;
+export const { useGetTicketTagGroupsQuery, useGetTicketTagGroupQuery } =
+  ticketTagGroupsSlice;
 
 const selectGetTicketTagGroupsQueryResult = createSelector(
   [(state) => state, (_, params) => params],
@@ -59,4 +66,18 @@ export const selectTicketTagGroups = createSelector(
 
     return result;
   },
+);
+
+const selectGetTicketTagGroupQueryResult = createSelector(
+  [(state) => state, (_, params) => params],
+  (state, params) => {
+    return ticketTagGroupsSlice.endpoints.getTicketTagGroup.select(params)(
+      state,
+    );
+  },
+);
+
+export const selectGetTicketTagGroupQueryResponse = createSelector(
+  [selectGetTicketTagGroupQueryResult],
+  (queryResult) => queryResult.data ?? [],
 );

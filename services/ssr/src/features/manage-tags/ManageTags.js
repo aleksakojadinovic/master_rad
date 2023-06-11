@@ -4,12 +4,15 @@ import {
 } from '@/api/ticket-tag-groups';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
-import TicketTagGroupAdmin from './components/TicketTagGroupAdmin';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useGetRolesQuery } from '@/api/roles';
 import { getManageTagsParams } from './utils/params';
+import TicketTagGroupPreview from './components/TicketTagGroupPreview';
+import { useIntl } from 'react-intl';
+import { manageTagsMessages } from '@/translations/tags';
 
 function ManageTags() {
+  const intl = useIntl();
   const { isLoading: isTagGroupsLoading, isFetching: isTagGroupsFetching } =
     useGetTicketTagGroupsQuery(getManageTagsParams());
 
@@ -31,9 +34,18 @@ function ManageTags() {
 
   return (
     <Fragment>
+      <Box display="flex" width="100%" justifyContent="flex-end">
+        <Button
+          variant="contained"
+          onClick={() => window.open('/manage/tags/create')}
+        >
+          {intl.formatMessage(manageTagsMessages.addNewText)}
+        </Button>
+      </Box>
       {ticketTagGroups.map((group) => (
         <Box key={group.id} sx={{ marginTop: '12px' }}>
-          <TicketTagGroupAdmin group={group} />
+          {/* <TicketTagGroupAdmin group={group} /> */}
+          <TicketTagGroupPreview group={group} />
         </Box>
       ))}
     </Fragment>
