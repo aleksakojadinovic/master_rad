@@ -1,5 +1,5 @@
 import { useTagDescription, useTagName } from '@/features/tags/utils';
-import { Chip, Tooltip } from '@mui/material';
+import { Box, Button, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 
 function TagAdmin({ tag }) {
@@ -8,7 +8,24 @@ function TagAdmin({ tag }) {
 
   return (
     <Tooltip title={resolvedDescription}>
-      <Chip label={resolvedName} />
+      <Box
+        display="flex"
+        flexDirection="column"
+        padding="12px"
+        border="1px solid gray"
+      >
+        <Box>
+          <Typography variant="body2" color="gray">
+            {tag.nameIntlKey}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="body1">{resolvedName}</Typography>
+        </Box>
+        <Box>
+          <Button>Delete</Button>
+        </Box>
+      </Box>
     </Tooltip>
   );
 }

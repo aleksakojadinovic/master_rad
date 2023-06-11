@@ -27,14 +27,6 @@ export class TicketTagGroupProfile extends AutomapperProfile {
           mapFrom((source) => source._id),
         ),
         forMember(
-          (destination) => destination.name,
-          mapFrom((source) => source.name),
-        ),
-        forMember(
-          (destination) => destination.description,
-          mapFrom((source) => source.description),
-        ),
-        forMember(
           (destination) => destination.tags,
           mapFrom((source) => {
             const mappedTags = source.tags.map((tag) => {

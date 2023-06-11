@@ -4,6 +4,10 @@ import { Model } from 'mongoose';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketTag } from './schema/ticket-tag.schema';
 import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
+import {
+  createTicketTagDescriptionIntlKey,
+  createTicketTagNameIntlKey,
+} from './utils';
 
 @Injectable()
 export class TicketTagService extends BaseService {
@@ -16,11 +20,12 @@ export class TicketTagService extends BaseService {
 
   async create(dto: CreateTicketTagDto) {
     const newTicketTag = new this.ticketTagModel({
-      name: dto.name,
-      description: dto.description,
       group: dto.groupId,
-      nameIntlKey: `tag_${dto.groupName}_${dto.name}_Title`,
-      descriptionIntlKey: `tag_${dto.groupName}_${dto.name}_Description`,
+      nameIntlKey: createTicketTagNameIntlKey(dto.groupName, dto.name),
+      descriptionIntlKey: createTicketTagDescriptionIntlKey(
+        dto.groupName,
+        dto.name,
+      ),
     });
 
     const tag = await newTicketTag.save();

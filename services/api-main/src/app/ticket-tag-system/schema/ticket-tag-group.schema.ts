@@ -17,12 +17,6 @@ export class TicketTagGroupPermissions {
 export class TicketTagGroup {
   _id: string;
 
-  @Prop()
-  name: string;
-
-  @Prop()
-  description: string;
-
   // Whether or not adding multiple tags is allowed in this group
   // I do not plan on supporting more granular permissions, as in some combinations
   // being possible and some not, as it seems like overkill
@@ -48,7 +42,6 @@ export class TicketTagGroup {
 
   @Prop({ type: String })
   nameIntlKey: string;
-  x;
 
   @Prop({ type: String })
   descriptionIntlKey: string;

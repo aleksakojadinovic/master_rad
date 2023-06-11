@@ -1,17 +1,14 @@
 import ChipList from '@/components/ChipList/ChipList';
-import { useTagDescription, useTagName } from '@/features/tags/utils';
+import { useTagName } from '@/features/tags/utils';
 import { globalMessages } from '@/translations/global';
 import { manageTagsMessages } from '@/translations/tags';
 import {
   Box,
-  Button,
-  Chip,
   Divider,
   FormControl,
   FormControlLabel,
   Radio,
   RadioGroup,
-  TextField,
   Typography,
 } from '@mui/material';
 import React from 'react';
@@ -21,7 +18,6 @@ import TagAdmin from './TagAdmin';
 function TicketTagGroupAdmin({ group }) {
   const { tags, permissions } = group;
   const resolvedName = useTagName(group);
-  const resolvedDescription = useTagDescription(group);
 
   const intl = useIntl();
 
@@ -29,22 +25,15 @@ function TicketTagGroupAdmin({ group }) {
     <Box border="1px solid gray" padding="12px">
       <Box display="flex" alignItems="center" marginBottom="12px">
         {/* TODO: Figure out how to do translations here */}
-        <Typography variant="h6" color="gray">
-          {intl.formatMessage(manageTagsMessages.tagNameText)}:
+
+        <Typography variant="body1" color="gray">
+          {group.nameIntlKey}, {group.descriptionIntlKey}
         </Typography>
-        &nbsp;
-        <TextField
-          fullWidth
-          placeholder={intl.formatMessage(manageTagsMessages.tagNameText)}
-          value={group.name}
-        />
       </Box>
-      <Divider />
-      <Box marginBottom="12px">
-        <Typography variant="h6" color="gray">
-          {intl.formatMessage(manageTagsMessages.tagDescriptionText)}:
+      <Box>
+        <Typography variant="h5" color="blue">
+          {resolvedName}
         </Typography>
-        <TextField fullWidth value={resolvedDescription} />
       </Box>
       <Divider />
       <Box marginBottom="12px">
@@ -53,11 +42,10 @@ function TicketTagGroupAdmin({ group }) {
         </Typography>
         <Box display="flex" flexWrap="wrap">
           {tags.map((tag) => (
-            <Box key={tag.id} marginRight="5px">
+            <Box key={tag.id} margin="12px" width="100%">
               <TagAdmin tag={tag} />
             </Box>
           ))}
-          <Chip label="+" color="info" onClick={() => {}} />
         </Box>
       </Box>
       <Divider />

@@ -16,6 +16,10 @@ import { TicketTagService } from './ticket-tag.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketTagGroupDTO } from './dto/ticket-tag-group.dto';
+import {
+  createTicketTagGroupDescriptionIntlKey,
+  createTicketTagGroupNameIntlKey,
+} from './utils';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
@@ -54,11 +58,12 @@ export class TicketTagGroupService extends BaseService {
 
   async create(dto: CreateTicketTagGroupDTO) {
     const ticketTagGroupObject = new TicketTagGroup();
-    ticketTagGroupObject.name = dto.name;
-    ticketTagGroupObject.description = dto.description;
+    ticketTagGroupObject.nameIntlKey = createTicketTagGroupNameIntlKey(
+      dto.name,
+    );
+    ticketTagGroupObject.descriptionIntlKey =
+      createTicketTagGroupDescriptionIntlKey(dto.name);
     ticketTagGroupObject.exclusive = dto.exclusive;
-    ticketTagGroupObject.nameIntlKey = `tagGroup_${dto.name}_Title`;
-    ticketTagGroupObject.descriptionIntlKey = `tagGroup_${dto.name}_Description`;
     // TODO: err handling of this service
     const resolvedCanAddRoles = await this.rolesService.findMany(
       dto.canAddRoles,
@@ -92,16 +97,23 @@ export class TicketTagGroupService extends BaseService {
       throw new TicketTagGroupNotFoundError();
     }
 
-    const currentTagNames = group.tags.map(({ name }) => name);
-    const requestedTagNames = tags.map(({ name }) => name);
-    if (currentTagNames.some((name) => requestedTagNames.includes(name))) {
+    const currentTagIntlKeys = group.tags.map(({ nameIntlKey }) => nameIntlKey);
+    const requestedTagIntlKeys = tags.map(({ name }) => name);
+    if (
+      currentTagIntlKeys.some((name) => requestedTagIntlKeys.includes(name))
+    ) {
       throw new TicketTagNameAlreadyExistsError();
     }
 
     const tagModels = await Promise.all(
       tags.map(async (tag) => {
         const model = this.ticketTagService.create(
-          new CreateTicketTagDto(tag.name, tag.description, id, group.name),
+          new CreateTicketTagDto(
+            tag.name,
+            tag.description,
+            id,
+            group.nameIntlKey,
+          ),
         );
         return model;
       }),
