@@ -25,6 +25,7 @@ import { TicketTagGroupDTO } from './dto/ticket-tag-group.dto';
 import { TicketTagGroupQueryPipe } from './pipes/ticket-tag-group-query.pipe';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { Request } from 'express';
+import { resolveLanguageCode } from 'src/codebase/utils';
 
 @UseInterceptors(TicketTagInterceptor)
 @Controller('ticket-tag-group')
@@ -35,12 +36,18 @@ export class TicketTagGroupController {
   ) {}
 
   @Post()
-  async create(@Body() createTicketTagGroupDTO: CreateTicketTagGroupDTO) {
+  async create(
+    @Body() createTicketTagGroupDTO: CreateTicketTagGroupDTO,
+    @Req() req: Request,
+  ) {
     // TODO: Validate, protect
+    const languageCode = resolveLanguageCode(req);
     const group = await this.ticketTagGroupService.create(
       createTicketTagGroupDTO,
     );
-    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO);
+    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
+      extraArgs: () => ({ languageCode }),
+    });
   }
 
   @Get(':id')
@@ -49,7 +56,7 @@ export class TicketTagGroupController {
     @Query(new TicketTagGroupQueryPipe(false)) queryDTO: EntityQueryDTO,
     @Req() req: Request,
   ) {
-    const languageCode = req.cookies['language_code'] ?? 'en';
+    const languageCode = resolveLanguageCode(req);
     const group = await this.ticketTagGroupService.findOne(id, queryDTO);
     return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
       extraArgs: () => ({ languageCode }),
@@ -86,10 +93,13 @@ export class TicketTagGroupController {
   async update(
     @Param('id') id: string,
     @Body() updateTicketTagDto: UpdateTicketTagGroupDTO,
+    @Req() req: Request,
   ) {
     if (!isValidObjectId(id)) {
       throw new BadRequestException(`Invalid group id: ${id}`);
     }
+
+    const languageCode = resolveLanguageCode(req);
 
     switch (updateTicketTagDto.action) {
       case 'ADD_TAGS':

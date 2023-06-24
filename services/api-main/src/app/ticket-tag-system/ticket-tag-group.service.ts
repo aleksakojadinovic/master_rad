@@ -94,6 +94,8 @@ export class TicketTagGroupService extends BaseService {
       throw new TicketTagGroupNotFoundError();
     }
 
+    // TODO: Prevent duplicates
+
     // const currentTagIntlKeys = group.tags.map(({ nameIntlKey }) => nameIntlKey);
     // const requestedTagIntlKeys = tags.map(({ name }) => name);
     // if (
