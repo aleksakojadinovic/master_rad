@@ -67,21 +67,21 @@ export class TicketTagGroupController {
   async findAll(
     @Headers('accept-language') acceptLanguage: any,
     @Query(new TicketTagGroupQueryPipe(false)) queryDTO: EntityQueryDTO,
+    @Req() req: Request,
   ) {
     // TODO: protect
-    console.log({ acceptLanguage });
-    return [];
-    // const ticketTagGroups = await this.ticketTagGroupService.findAll(queryDTO);
-    // return this.mapper.mapArray(
-    //   ticketTagGroups,
-    //   TicketTagGroup,
-    //   TicketTagGroupDTO,
-    //   {
-    //     extraArgs: () => ({
-    //       x: 5,
-    //     }),
-    //   },
-    // );
+    const languageCode = resolveLanguageCode(req);
+    const ticketTagGroups = await this.ticketTagGroupService.findAll(queryDTO);
+    return this.mapper.mapArray(
+      ticketTagGroups,
+      TicketTagGroup,
+      TicketTagGroupDTO,
+      {
+        extraArgs: () => ({
+          languageCode,
+        }),
+      },
+    );
   }
 
   // @Get(':id')

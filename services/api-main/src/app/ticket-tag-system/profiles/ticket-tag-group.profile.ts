@@ -34,12 +34,14 @@ export class TicketTagGroupProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.tags,
-          mapFrom((source) => {
+          mapWithArguments((source, extra) => {
             const mappedTags = source.tags.map((tag) => {
               if (tag instanceof Types.ObjectId) {
                 return tag.toString();
               }
-              return mapper.map(tag, TicketTag, TicketTagDTO);
+              return mapper.map(tag, TicketTag, TicketTagDTO, {
+                extraArgs: () => ({ languageCode: extra['languageCode'] }),
+              });
             });
             return mappedTags;
           }),
