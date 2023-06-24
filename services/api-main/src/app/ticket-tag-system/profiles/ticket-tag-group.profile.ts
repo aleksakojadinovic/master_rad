@@ -1,5 +1,11 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
-import { Mapper, createMap, forMember, mapFrom } from '@automapper/core';
+import {
+  Mapper,
+  createMap,
+  forMember,
+  mapFrom,
+  mapWithArguments,
+} from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { TicketTag } from '../schema/ticket-tag.schema';
 import { TicketTagDTO } from '../dto/ticket-tag.dto';
@@ -68,12 +74,18 @@ export class TicketTagGroupProfile extends AutomapperProfile {
           }),
         ),
         forMember(
-          (destination) => destination.nameIntlKey,
-          mapFrom((source) => ''),
+          (destination) => destination.name,
+          mapWithArguments(
+            (source, extraArgs) =>
+              source.nameIntl[extraArgs['languageCode'] as string],
+          ),
         ),
         forMember(
-          (destination) => destination.descriptionIntlKey,
-          mapFrom((source) => ''),
+          (destination) => destination.description,
+          mapWithArguments(
+            (source, extraArgs) =>
+              source.descriptionIntl[extraArgs['languageCode'] as string],
+          ),
         ),
       );
     };

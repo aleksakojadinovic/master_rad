@@ -59,7 +59,7 @@ export class TicketTagGroupService extends BaseService {
   async create(dto: CreateTicketTagGroupDTO) {
     const ticketTagGroupObject = new TicketTagGroup();
     ticketTagGroupObject.nameIntl = dto.nameIntl;
-    ticketTagGroupObject.descriptionIntlKey = dto.descriptionIntl;
+    ticketTagGroupObject.descriptionIntl = dto.descriptionIntl;
     ticketTagGroupObject.exclusive = dto.exclusive;
     // TODO: err handling of this service
     const resolvedCanAddRoles = await this.rolesService.findMany(

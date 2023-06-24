@@ -4,10 +4,6 @@ import { Model } from 'mongoose';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketTag } from './schema/ticket-tag.schema';
 import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
-import {
-  createTicketTagDescriptionIntlKey,
-  createTicketTagNameIntlKey,
-} from './utils';
 
 @Injectable()
 export class TicketTagService extends BaseService {

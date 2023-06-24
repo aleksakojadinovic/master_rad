@@ -45,7 +45,7 @@ export class TicketTagGroup {
   nameIntl: IntlValue;
 
   @Prop({ type: Object })
-  descriptionIntlKey: IntlValue;
+  descriptionIntl: IntlValue;
 }
 
 export const TicketTagGroupSchema =

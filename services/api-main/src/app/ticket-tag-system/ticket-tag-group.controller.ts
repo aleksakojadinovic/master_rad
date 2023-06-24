@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   Query,
   Headers,
+  Req,
 } from '@nestjs/common';
 import { TicketTagGroupService } from './ticket-tag-group.service';
 import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
@@ -23,6 +24,7 @@ import { TicketTagGroup } from './schema/ticket-tag-group.schema';
 import { TicketTagGroupDTO } from './dto/ticket-tag-group.dto';
 import { TicketTagGroupQueryPipe } from './pipes/ticket-tag-group-query.pipe';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
+import { Request } from 'express';
 
 @UseInterceptors(TicketTagInterceptor)
 @Controller('ticket-tag-group')
@@ -45,9 +47,13 @@ export class TicketTagGroupController {
   async findOne(
     @Param('id') id: string,
     @Query(new TicketTagGroupQueryPipe(false)) queryDTO: EntityQueryDTO,
+    @Req() req: Request,
   ) {
+    const languageCode = req.cookies['language_code'] ?? 'en';
     const group = await this.ticketTagGroupService.findOne(id, queryDTO);
-    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO);
+    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
+      extraArgs: () => ({ languageCode }),
+    });
   }
 
   @Get()

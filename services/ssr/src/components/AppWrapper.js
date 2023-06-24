@@ -13,7 +13,9 @@ function AppWrapper({ Component, pageProps }) {
       <Box sx={{ marginTop: '24px', minHeight: '800px' }}>
         <Component {...pageProps} />
       </Box>
-      <Footer />
+      <Box sx={{ marginTop: '36px' }}>
+        <Footer />
+      </Box>
     </Fragment>
   );
 }
