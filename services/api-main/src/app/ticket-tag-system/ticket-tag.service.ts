@@ -21,11 +21,8 @@ export class TicketTagService extends BaseService {
   async create(dto: CreateTicketTagDto) {
     const newTicketTag = new this.ticketTagModel({
       group: dto.groupId,
-      nameIntlKey: createTicketTagNameIntlKey(dto.groupName, dto.name),
-      descriptionIntlKey: createTicketTagDescriptionIntlKey(
-        dto.groupName,
-        dto.name,
-      ),
+      nameIntl: dto.nameIntl,
+      descriptionIntl: dto.descriptionIntl,
     });
 
     const tag = await newTicketTag.save();

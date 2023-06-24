@@ -13,4 +13,8 @@ export const globalMessages = defineMessages({
     id: 'global.no',
     defaultMessage: 'No',
   },
+  language: {
+    id: 'global.language',
+    defaultMessage: 'Language',
+  },
 });

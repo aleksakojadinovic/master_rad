@@ -9,6 +9,7 @@ import {
   BadRequestException,
   UseInterceptors,
   Query,
+  Headers,
 } from '@nestjs/common';
 import { TicketTagGroupService } from './ticket-tag-group.service';
 import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
@@ -51,16 +52,23 @@ export class TicketTagGroupController {
 
   @Get()
   async findAll(
+    @Headers('accept-language') acceptLanguage: any,
     @Query(new TicketTagGroupQueryPipe(false)) queryDTO: EntityQueryDTO,
   ) {
     // TODO: protect
-
-    const ticketTagGroups = await this.ticketTagGroupService.findAll(queryDTO);
-    return this.mapper.mapArray(
-      ticketTagGroups,
-      TicketTagGroup,
-      TicketTagGroupDTO,
-    );
+    console.log({ acceptLanguage });
+    return [];
+    // const ticketTagGroups = await this.ticketTagGroupService.findAll(queryDTO);
+    // return this.mapper.mapArray(
+    //   ticketTagGroups,
+    //   TicketTagGroup,
+    //   TicketTagGroupDTO,
+    //   {
+    //     extraArgs: () => ({
+    //       x: 5,
+    //     }),
+    //   },
+    // );
   }
 
   // @Get(':id')
@@ -103,18 +111,16 @@ export class TicketTagGroupController {
       throw new BadRequestException('Invalid payload');
     }
     for (const tag of payload.tags) {
-      if (!tag.name) {
-        throw new BadRequestException(`Invalid tag name ${tag.name}`);
+      if (!tag.nameIntl) {
+        throw new BadRequestException(`Tag nameIntl is required`);
       }
-      if (!tag.description) {
-        throw new BadRequestException(
-          `Invalid tag description ${tag.description}`,
-        );
+      if (!tag.descriptionIntl) {
+        throw new BadRequestException(`Tag descritionIntl is required`);
       }
     }
     return payload.tags.map(
-      ({ name, description }) =>
-        new CreateTicketTagDto(name, description, '', ''),
+      ({ nameIntl, descriptionIntl }) =>
+        new CreateTicketTagDto(nameIntl, descriptionIntl, ''),
     );
   }
 }

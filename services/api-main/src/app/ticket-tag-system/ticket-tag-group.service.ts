@@ -58,11 +58,8 @@ export class TicketTagGroupService extends BaseService {
 
   async create(dto: CreateTicketTagGroupDTO) {
     const ticketTagGroupObject = new TicketTagGroup();
-    ticketTagGroupObject.nameIntlKey = createTicketTagGroupNameIntlKey(
-      dto.name,
-    );
-    ticketTagGroupObject.descriptionIntlKey =
-      createTicketTagGroupDescriptionIntlKey(dto.name);
+    ticketTagGroupObject.nameIntl = dto.nameIntl;
+    ticketTagGroupObject.descriptionIntlKey = dto.descriptionIntl;
     ticketTagGroupObject.exclusive = dto.exclusive;
     // TODO: err handling of this service
     const resolvedCanAddRoles = await this.rolesService.findMany(
@@ -97,23 +94,18 @@ export class TicketTagGroupService extends BaseService {
       throw new TicketTagGroupNotFoundError();
     }
 
-    const currentTagIntlKeys = group.tags.map(({ nameIntlKey }) => nameIntlKey);
-    const requestedTagIntlKeys = tags.map(({ name }) => name);
-    if (
-      currentTagIntlKeys.some((name) => requestedTagIntlKeys.includes(name))
-    ) {
-      throw new TicketTagNameAlreadyExistsError();
-    }
+    // const currentTagIntlKeys = group.tags.map(({ nameIntlKey }) => nameIntlKey);
+    // const requestedTagIntlKeys = tags.map(({ name }) => name);
+    // if (
+    //   currentTagIntlKeys.some((name) => requestedTagIntlKeys.includes(name))
+    // ) {
+    //   throw new TicketTagNameAlreadyExistsError();
+    // }
 
     const tagModels = await Promise.all(
       tags.map(async (tag) => {
         const model = this.ticketTagService.create(
-          new CreateTicketTagDto(
-            tag.name,
-            tag.description,
-            id,
-            group.nameIntlKey,
-          ),
+          new CreateTicketTagDto(tag.nameIntl, tag.descriptionIntl, id),
         );
         return model;
       }),

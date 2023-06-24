@@ -2,6 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Role } from 'src/app/users/schema/role.schema';
 import { TicketTag } from './ticket-tag.schema';
+import { IntlValue } from 'src/codebase/types/IntlValue';
 
 // TODO: Should this be on the tag level?
 export class TicketTagGroupPermissions {
@@ -40,11 +41,11 @@ export class TicketTagGroup {
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TicketTag' }] })
   tags: TicketTag[];
 
-  @Prop({ type: String })
-  nameIntlKey: string;
+  @Prop({ type: Object })
+  nameIntl: IntlValue;
 
-  @Prop({ type: String })
-  descriptionIntlKey: string;
+  @Prop({ type: Object })
+  descriptionIntlKey: IntlValue;
 }
 
 export const TicketTagGroupSchema =

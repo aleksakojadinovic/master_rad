@@ -69,11 +69,11 @@ export class TicketTagGroupProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.nameIntlKey,
-          mapFrom((source) => source.nameIntlKey),
+          mapFrom((source) => ''),
         ),
         forMember(
           (destination) => destination.descriptionIntlKey,
-          mapFrom((source) => source.descriptionIntlKey),
+          mapFrom((source) => ''),
         ),
       );
     };
