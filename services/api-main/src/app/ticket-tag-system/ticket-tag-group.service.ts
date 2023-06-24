@@ -116,7 +116,7 @@ export class TicketTagGroupService extends BaseService {
     tagModels.forEach((model) => group.tags.push(model));
 
     await group.save();
-    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO);
+    return group;
   }
 
   async findAll(queryDTO: EntityQueryDTO) {

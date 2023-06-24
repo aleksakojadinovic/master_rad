@@ -109,7 +109,9 @@ export class TicketTagGroupController {
           tags,
         );
         // TODO map
-        return result;
+        return this.mapper.map(result, TicketTagGroup, TicketTagGroupDTO, {
+          extraArgs: () => ({ languageCode }),
+        });
       default:
         throw new BadRequestException(
           `Unknown action: ${updateTicketTagDto.action}`,
