@@ -1,5 +1,5 @@
 import { Autocomplete, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 
 function RolePicker({ roles, onSelect }) {
   const options = roles.map(({ id, name }) => ({ id, label: name }));

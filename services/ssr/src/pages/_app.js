@@ -3,7 +3,6 @@ import AppWrapper from '@/components/AppWrapper';
 import PageContainer from '@/components/PageContainer/PageContainer';
 import { wrapper } from '@/redux/store';
 import App from 'next/app';
-import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';

@@ -1,13 +1,12 @@
 import IntlTable from '@/components/IntlTable/IntlTable';
-import { LanguageContext } from '@/context/LanguageContext';
 import { globalMessages } from '@/translations/global';
 import { manageTagsMessages } from '@/translations/tags';
 import { Box, Button, Typography } from '@mui/material';
-import React, { useContext } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 function TagAdmin({ tag, onChange, onClose }) {
-  const currentLanguageCode = useContext(LanguageContext);
+  // const currentLanguageCode = useContext(LanguageContext);
   const intl = useIntl();
   return (
     <Box

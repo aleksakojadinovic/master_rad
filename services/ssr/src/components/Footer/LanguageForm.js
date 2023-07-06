@@ -1,9 +1,8 @@
 import { LanguageContext } from '@/context/LanguageContext';
 import { globalMessages } from '@/translations/global';
-import { isServer } from '@/utils';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import Cookies from 'js-cookie';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useIntl } from 'react-intl';
 
 function LanguageForm() {

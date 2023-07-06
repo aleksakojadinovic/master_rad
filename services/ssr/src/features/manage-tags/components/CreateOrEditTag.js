@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import TicketTagGroupAdmin from './TicketTagGroupAdmin';
 
 function CreateOrEditTagGroups({ tag, isCreate }) {
-  const [tagGroupInput, setTagGroupInput] = useState(() =>
+  const [tagGroupInput] = useState(() =>
     isCreate
       ? {
           name: '',

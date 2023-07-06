@@ -1,16 +1,7 @@
 import ChipList from '@/components/ChipList/ChipList';
 import { globalMessages } from '@/translations/global';
 import { manageTagsMessages } from '@/translations/tags';
-import {
-  Box,
-  Button,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Divider, Typography } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import TagAdmin from './TagAdmin';
@@ -153,7 +144,7 @@ function TicketTagGroupAdmin({ group }) {
               }}
             />
             <RolePicker
-              key={whoCanRemoveAvailableRoles}
+              key={whoCanRemoveKey}
               roles={whoCanRemoveAvailableRoles}
               onSelect={(newRole) => {
                 setPermissions((currentPermissions) => ({
