@@ -25,9 +25,6 @@ function TicketTagGroupAdmin({ group }) {
   console.log({ permissions });
   const intl = useIntl();
 
-  const intlYes = intl.formatMessage(globalMessages.yes);
-  const intlNo = intl.formatMessage(globalMessages.no);
-
   const hasChanges = useMemo(
     () =>
       !(
@@ -61,11 +58,33 @@ function TicketTagGroupAdmin({ group }) {
                     ),
                   )
                 }
+                onClose={() =>
+                  setTags((currentTags) =>
+                    currentTags.filter(
+                      (currentTag) => currentTag.id !== tag.id,
+                    ),
+                  )
+                }
               />
             </Box>
           ))}
           <Box marginTop="8px">
-            <Button>Add</Button>
+            <Button
+              onClick={() =>
+                setTags((currentTags) => [
+                  ...currentTags,
+                  {
+                    id: `new-tag-${currentTags.length}`,
+                    name: '',
+                    description: '',
+                    nameIntl: { en: '', sr: '' },
+                    descriptionIntl: { en: '', sr: '' },
+                  },
+                ])
+              }
+            >
+              {intl.formatMessage(manageTagsMessages.addNewTag)}
+            </Button>
           </Box>
         </Box>
       </Box>

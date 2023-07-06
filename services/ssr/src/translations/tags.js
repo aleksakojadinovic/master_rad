@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl';
 
 export const manageTagsMessages = defineMessages({
+  editSingleTitle: {
+    id: 'manage-tags.edit-single',
+    defaultMessage: 'Edit tag | STS',
+  },
   title: {
     id: 'manage-tags.title',
     defaultMessage: 'Manage Tags | STS',
@@ -52,5 +56,9 @@ export const manageTagsMessages = defineMessages({
   languageCode: {
     id: 'tags.lang-code',
     defaultMessage: 'Language',
+  },
+  addNewTag: {
+    id: 'manage-tags.addNew',
+    defaultMessage: 'Add new tag',
   },
 });

@@ -33,4 +33,8 @@ export const globalMessages = defineMessages({
     id: 'global.save',
     defaultMessage: 'Save',
   },
+  delete: {
+    id: 'global.delete',
+    defaultMessage: 'Delete',
+  },
 });

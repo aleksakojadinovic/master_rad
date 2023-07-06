@@ -6,14 +6,25 @@ import {
 import TicketTagGroupAdmin from '@/features/manage-tags/components/TicketTagGroupAdmin';
 import { wrapper } from '@/redux/store';
 import api from '@/services/api';
-import React from 'react';
+import { manageTagsMessages } from '@/translations/tags';
+import Head from 'next/head';
+import React, { Fragment } from 'react';
+import { useIntl } from 'react-intl';
 
 function EditTagGroupRoute({ id }) {
+  const intl = useIntl();
   const { data: tagGroup } = useGetTicketTagGroupQuery({
     id,
     includes: ['tags', 'role'],
   });
-  return <TicketTagGroupAdmin group={tagGroup} />;
+  return (
+    <Fragment>
+      <Head>
+        <title>{intl.formatMessage(manageTagsMessages.editSingleTitle)}</title>
+      </Head>
+      <TicketTagGroupAdmin group={tagGroup} />
+    </Fragment>
+  );
 }
 
 export default EditTagGroupRoute;
