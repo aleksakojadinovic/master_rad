@@ -16,6 +16,9 @@ import { useIntl } from 'react-intl';
 import TagAdmin from './TagAdmin';
 
 import _ from 'lodash';
+import { useSelector } from 'react-redux';
+import { selectGetRolesQueryResponse } from '@/api/roles';
+import RolePicker from '@/components/RolePicker/RolePicker';
 
 function TicketTagGroupAdmin({ group }) {
   const { tags: originalTags, permissions: originalPermissions } = group;
@@ -31,6 +34,14 @@ function TicketTagGroupAdmin({ group }) {
         _.isEqual(permissions, originalPermissions)
       ),
     [tags, permissions, originalTags, originalPermissions],
+  );
+
+  const roles = useSelector(selectGetRolesQueryResponse);
+  const whoCanAddAvailableRoles = roles.filter(
+    (role) => !permissions.canAddRoles.map(({ id }) => id).includes(role.id),
+  );
+  const whoCanRemoveAvailableRoles = roles.filter(
+    (role) => !permissions.canRemoveRoles.map(({ id }) => id).includes(role.id),
   );
 
   return (
@@ -93,17 +104,43 @@ function TicketTagGroupAdmin({ group }) {
         <Typography variant="h6" color="gray">
           {intl.formatMessage(manageTagsMessages.tagPermissionsText)}:
         </Typography>
-        <Box marginBottom="12px">
+        <Box marginBottom="12px" width="100%">
           <Typography variant="body1">
             {intl.formatMessage(manageTagsMessages.whoCanAddText)}
           </Typography>
-          <ChipList items={permissions.canAddRoles} onClose={() => {}} />
+          <Box display="flex" width="100%">
+            <ChipList
+              items={permissions.canAddRoles}
+              onClose={(closedId) => {
+                setPermissions((currentPermission) => ({
+                  ...currentPermission,
+                  canAddRoles: currentPermission.canAddRoles.filter(
+                    ({ id }) => id !== closedId,
+                  ),
+                }));
+              }}
+            />
+            <RolePicker roles={whoCanAddAvailableRoles} />
+          </Box>
         </Box>
         <Box marginBottom="12px">
           <Typography variant="body1">
             {intl.formatMessage(manageTagsMessages.whoCanRemoveText)}
           </Typography>
-          <ChipList items={permissions.canRemoveRoles} onClose={() => {}} />
+          <Box display="flex">
+            <ChipList
+              items={permissions.canRemoveRoles}
+              onClose={(closedId) => {
+                setPermissions((currentPermission) => ({
+                  ...currentPermission,
+                  canRemoveRoles: currentPermission.canRemoveRoles.filter(
+                    ({ id }) => id !== closedId,
+                  ),
+                }));
+              }}
+            />
+            <RolePicker roles={whoCanRemoveAvailableRoles} />
+          </Box>
         </Box>
         <Box marginBottom="12px">
           <Typography variant="body1">
