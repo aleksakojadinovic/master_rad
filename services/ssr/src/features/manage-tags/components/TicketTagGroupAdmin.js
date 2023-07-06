@@ -10,10 +10,20 @@ import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import { selectGetRolesQueryResponse } from '@/api/roles';
 import RolePicker from '@/components/RolePicker/RolePicker';
+import IntlTable from '@/components/IntlTable/IntlTable';
 
 function TicketTagGroupAdmin({ group }) {
-  const { tags: originalTags, permissions: originalPermissions } = group;
+  const {
+    nameIntl: originalNameIntl,
+    descriptionIntl: originalDescriptionIntl,
+    tags: originalTags,
+    permissions: originalPermissions,
+  } = group;
 
+  const [nameIntl, setNameIntl] = useState(originalNameIntl);
+  const [descriptionIntl, setDescriptionIntl] = useState(
+    originalDescriptionIntl,
+  );
   const [tags, setTags] = useState(originalTags);
   const [permissions, setPermissions] = useState(originalPermissions);
   const intl = useIntl();
@@ -22,9 +32,20 @@ function TicketTagGroupAdmin({ group }) {
     () =>
       !(
         _.isEqual(tags, originalTags) &&
-        _.isEqual(permissions, originalPermissions)
+        _.isEqual(permissions, originalPermissions) &&
+        _.isEqual(nameIntl, originalNameIntl) &&
+        _.isEqual(descriptionIntl, originalDescriptionIntl)
       ),
-    [tags, permissions, originalTags, originalPermissions],
+    [
+      tags,
+      permissions,
+      originalTags,
+      originalPermissions,
+      nameIntl,
+      descriptionIntl,
+      originalNameIntl,
+      originalDescriptionIntl,
+    ],
   );
 
   const roles = useSelector(selectGetRolesQueryResponse);
@@ -44,6 +65,27 @@ function TicketTagGroupAdmin({ group }) {
         <Typography variant="h5" color="blue">
           {group.name}
         </Typography>
+        <Typography variant="h6" color="gray">
+          {group.description}
+        </Typography>
+        <Typography variant="body2">
+          {intl.formatMessage(globalMessages.name)}
+        </Typography>
+        <IntlTable
+          value={nameIntl}
+          onChange={(newIntl) => {
+            setNameIntl(newIntl);
+          }}
+        />
+        <Typography variant="body2">
+          {intl.formatMessage(globalMessages.description)}
+        </Typography>
+        <IntlTable
+          value={descriptionIntl}
+          onChange={(newIntl) => {
+            setDescriptionIntl(newIntl);
+          }}
+        />
       </Box>
       <Divider />
       <Box marginBottom="12px">

@@ -26,12 +26,18 @@ function TagAdmin({ tag, onChange, onClose }) {
         <Typography variant="body2">{tag.description}</Typography>
       </Box>
       <Box marginTop="8px">
+        <Typography variant="body2">
+          {intl.formatMessage(globalMessages.name)}
+        </Typography>
         <IntlTable
           value={tag.nameIntl}
           onChange={(newIntl) => onChange({ ...tag, nameIntl: newIntl })}
         />
       </Box>
       <Box marginTop="8px">
+        <Typography variant="body2">
+          {intl.formatMessage(globalMessages.description)}
+        </Typography>
         <IntlTable
           value={tag.descriptionIntl}
           onChange={(newIntl) => onChange({ ...tag, descriptionIntl: newIntl })}
