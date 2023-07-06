@@ -92,7 +92,7 @@ export class TicketTagGroupProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.descriptionIntl,
-          mapFrom((source) => source.nameIntl),
+          mapFrom((source) => source.descriptionIntl),
         ),
       );
     };

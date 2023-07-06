@@ -11,6 +11,7 @@ import {
   Query,
   Headers,
   Req,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TicketTagGroupService } from './ticket-tag-group.service';
 import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
@@ -92,31 +93,17 @@ export class TicketTagGroupController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateTicketTagDto: UpdateTicketTagGroupDTO,
+    @Body(new ValidationPipe({ transform: true }))
+    updateTicketTagDto: UpdateTicketTagGroupDTO,
     @Req() req: Request,
   ) {
     if (!isValidObjectId(id)) {
       throw new BadRequestException(`Invalid group id: ${id}`);
     }
 
-    const languageCode = resolveLanguageCode(req);
+    console.log(updateTicketTagDto);
 
-    switch (updateTicketTagDto.action) {
-      case 'ADD_TAGS':
-        const tags = this.getAddTagsPayload(updateTicketTagDto.payload);
-        const result = await this.ticketTagGroupService.addTagsToGroup(
-          id,
-          tags,
-        );
-        // TODO map
-        return this.mapper.map(result, TicketTagGroup, TicketTagGroupDTO, {
-          extraArgs: () => ({ languageCode }),
-        });
-      default:
-        throw new BadRequestException(
-          `Unknown action: ${updateTicketTagDto.action}`,
-        );
-    }
+    return 'testing';
   }
 
   @Delete(':id')
