@@ -2,7 +2,7 @@ import ChipList from '@/components/ChipList/ChipList';
 import { globalMessages } from '@/translations/global';
 import { manageTagsMessages } from '@/translations/tags';
 import { Box, Button, Divider, Typography } from '@mui/material';
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import TagAdmin from './TagAdmin';
 
@@ -11,8 +11,11 @@ import { useSelector } from 'react-redux';
 import { selectGetRolesQueryResponse } from '@/api/roles';
 import RolePicker from '@/components/RolePicker/RolePicker';
 import IntlTable from '@/components/IntlTable/IntlTable';
+import { LanguageContext } from '@/context/LanguageContext';
 
 function TicketTagGroupAdmin({ group }) {
+  const languageCode = useContext(LanguageContext);
+
   const {
     nameIntl: originalNameIntl,
     descriptionIntl: originalDescriptionIntl,
@@ -27,6 +30,10 @@ function TicketTagGroupAdmin({ group }) {
   const [tags, setTags] = useState(originalTags);
   const [permissions, setPermissions] = useState(originalPermissions);
   const intl = useIntl();
+
+  const resolvedGroupName =
+    nameIntl[languageCode] ||
+    intl.formatMessage(manageTagsMessages.newTagGroupPlaceholder);
 
   const hasChanges = useMemo(
     () =>
@@ -63,7 +70,7 @@ function TicketTagGroupAdmin({ group }) {
     <Box border="1px solid gray" padding="12px">
       <Box>
         <Typography variant="h5" color="blue">
-          {group.name}
+          {resolvedGroupName}
         </Typography>
         <Typography variant="h6" color="gray">
           {group.description}

@@ -65,4 +65,8 @@ export const manageTagsMessages = defineMessages({
     id: 'manage-tags.newTagPlaceholder',
     defaultMessage: 'New tag',
   },
+  newTagGroupPlaceholder: {
+    id: 'manage-tags.newTagPlaceholder',
+    defaultMessage: 'New tag group',
+  },
 });

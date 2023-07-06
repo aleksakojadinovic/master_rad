@@ -5,14 +5,12 @@ function CreateOrEditTagGroups({ tag, isCreate }) {
   const [tagGroupInput] = useState(() =>
     isCreate
       ? {
-          name: '',
-          description: '',
+          nameIntl: { en: '', sr: '' },
+          descriptionIntl: { en: '', sr: '' },
           tags: [],
           permissions: {
             canAddRoles: [],
             canRemoveRoles: [],
-            canCreatorAdd: false,
-            canCreatorRemove: false,
           },
         }
       : { ...tag },
