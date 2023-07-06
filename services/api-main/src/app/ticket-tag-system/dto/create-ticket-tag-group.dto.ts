@@ -5,8 +5,6 @@ export class CreateTicketTagGroupDTO {
     public nameIntl: IntlValue,
     public descriptionIntl: IntlValue,
     public exclusive: boolean,
-    public canCreatorAdd: boolean,
-    public canCreatorRemove: boolean,
     public canAddRoles: string[],
     public canRemoveRoles: string[],
   ) {}

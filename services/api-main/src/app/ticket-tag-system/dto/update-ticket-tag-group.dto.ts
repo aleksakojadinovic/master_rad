@@ -6,5 +6,6 @@ export class UpdateTicketTagGroupDTO {
     public payload: any,
     public nameIntl: IntlValue,
     public descriptionIntl: IntlValue,
+    public permissions: any,
   ) {}
 }
