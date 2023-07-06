@@ -71,8 +71,6 @@ export class TicketTagGroupService extends BaseService {
 
     // TODO: Thissss maybe shouldnt be a class but a plain type D:
     const permissions = new TicketTagGroupPermissions(
-      dto.canCreatorAdd,
-      dto.canCreatorRemove,
       resolvedCanAddRoles,
       resolvedCanRemoveRoles,
     );

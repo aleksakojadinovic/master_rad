@@ -66,8 +66,6 @@ export class TicketTagGroupProfile extends AutomapperProfile {
               },
             );
             const mappedPermissiones = new TicketTagGroupPermissionsDTO(
-              source.permissions.canCreatorAdd,
-              source.permissions.canCreatorRemove,
               mappedCanAddRoles,
               mappedCanRemoveRoles,
             );
