@@ -88,6 +88,14 @@ export class TicketTagGroupProfile extends AutomapperProfile {
               source.descriptionIntl[extraArgs['languageCode'] as string],
           ),
         ),
+        forMember(
+          (destination) => destination.nameIntl,
+          mapFrom((source) => source.nameIntl),
+        ),
+        forMember(
+          (destination) => destination.descriptionIntl,
+          mapFrom((source) => source.nameIntl),
+        ),
       );
     };
   }

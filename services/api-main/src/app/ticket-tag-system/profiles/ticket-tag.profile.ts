@@ -40,6 +40,14 @@ export class TicketTagProfile extends AutomapperProfile {
               source.descriptionIntl[extraArgs['languageCode'] as string],
           ),
         ),
+        forMember(
+          (destination) => destination.nameIntl,
+          mapFrom((source) => source.nameIntl),
+        ),
+        forMember(
+          (destination) => destination.descriptionIntl,
+          mapFrom((source) => source.descriptionIntl),
+        ),
       );
     };
   }

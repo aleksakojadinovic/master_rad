@@ -1,9 +1,9 @@
 import ChipList from '@/components/ChipList/ChipList';
-import { useTagName } from '@/features/tags/utils';
 import { globalMessages } from '@/translations/global';
 import { manageTagsMessages } from '@/translations/tags';
 import {
   Box,
+  Button,
   Divider,
   FormControl,
   FormControlLabel,
@@ -11,28 +11,37 @@ import {
   RadioGroup,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import TagAdmin from './TagAdmin';
 
-function TicketTagGroupAdmin({ group }) {
-  const { tags, permissions } = group;
-  const resolvedName = useTagName(group);
+import _ from 'lodash';
 
+function TicketTagGroupAdmin({ group }) {
+  const { tags: originalTags, permissions: originalPermissions } = group;
+
+  const [tags, setTags] = useState(originalTags);
+  const [permissions, setPermissions] = useState(originalPermissions);
+  console.log({ permissions });
   const intl = useIntl();
+
+  const intlYes = intl.formatMessage(globalMessages.yes);
+  const intlNo = intl.formatMessage(globalMessages.no);
+
+  const hasChanges = useMemo(
+    () =>
+      !(
+        _.isEqual(tags, originalTags) &&
+        _.isEqual(permissions, originalPermissions)
+      ),
+    [tags, permissions, originalTags, originalPermissions],
+  );
 
   return (
     <Box border="1px solid gray" padding="12px">
-      <Box display="flex" alignItems="center" marginBottom="12px">
-        {/* TODO: Figure out how to do translations here */}
-
-        <Typography variant="body1" color="gray">
-          {group.nameIntlKey}, {group.descriptionIntlKey}
-        </Typography>
-      </Box>
       <Box>
         <Typography variant="h5" color="blue">
-          {resolvedName}
+          {group.name}
         </Typography>
       </Box>
       <Divider />
@@ -43,9 +52,21 @@ function TicketTagGroupAdmin({ group }) {
         <Box display="flex" flexWrap="wrap">
           {tags.map((tag) => (
             <Box key={tag.id} margin="12px" width="100%">
-              <TagAdmin tag={tag} />
+              <TagAdmin
+                tag={tag}
+                onChange={(newTag) =>
+                  setTags((currentTags) =>
+                    currentTags.map((currentTag) =>
+                      currentTag.id === newTag.id ? newTag : currentTag,
+                    ),
+                  )
+                }
+              />
             </Box>
           ))}
+          <Box marginTop="8px">
+            <Button>Add</Button>
+          </Box>
         </Box>
       </Box>
       <Divider />
@@ -71,10 +92,13 @@ function TicketTagGroupAdmin({ group }) {
           </Typography>
           <FormControl>
             <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
               value={permissions.canCreatorAdd ? 'yes' : 'no'}
-              name="radio-buttons-group"
-              onChange={() => {}}
+              onChange={(e) => {
+                setPermissions((currentPermissions) => ({
+                  ...currentPermissions,
+                  canCreatorAdd: e.target.value === 'yes' ? true : false,
+                }));
+              }}
               row
             >
               <FormControlLabel
@@ -83,7 +107,7 @@ function TicketTagGroupAdmin({ group }) {
                 label={intl.formatMessage(globalMessages.yes)}
               />
               <FormControlLabel
-                value={permissions.canCreatorRemove ? 'yes' : 'no'}
+                value="no"
                 control={<Radio />}
                 label={intl.formatMessage(globalMessages.no)}
               />
@@ -96,10 +120,13 @@ function TicketTagGroupAdmin({ group }) {
           </Typography>
           <FormControl>
             <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              value={permissions.canCreatorAdd ? 'yes' : 'no'}
-              name="radio-buttons-group"
-              onChange={() => {}}
+              value={permissions.canCreatorRemove ? 'yes' : 'no'}
+              onChange={(e) => {
+                setPermissions((currentPermissions) => ({
+                  ...currentPermissions,
+                  canCreatorRemove: e.target.value === 'yes' ? true : false,
+                }));
+              }}
               row
             >
               <FormControlLabel
@@ -108,7 +135,7 @@ function TicketTagGroupAdmin({ group }) {
                 label={intl.formatMessage(globalMessages.yes)}
               />
               <FormControlLabel
-                value={permissions.canCreatorRemove ? 'yes' : 'no'}
+                value="no"
                 control={<Radio />}
                 label={intl.formatMessage(globalMessages.no)}
               />
@@ -117,6 +144,9 @@ function TicketTagGroupAdmin({ group }) {
         </Box>
       </Box>
       <Divider />
+      <Button disabled={!hasChanges}>
+        {intl.formatMessage(globalMessages.save)}
+      </Button>
     </Box>
   );
 }

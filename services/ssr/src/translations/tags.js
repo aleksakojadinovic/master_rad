@@ -49,39 +49,8 @@ export const manageTagsMessages = defineMessages({
     id: 'tags.tag-intl-key-text',
     defaultMessage: 'Intl keys',
   },
-});
-
-export const dynamicTagValuees = defineMessages({
-  tagGroup_Urgency_Name: {
-    id: 'tagGroup_Urgency_Name',
-    defaultMessage: 'Urgency',
-  },
-  tagGroup_Urgency_Description: {
-    id: 'tagGroup_Urgency_Description',
-    defaultMessage: 'How urgent is this ticket?',
-  },
-  tag_Urgency_Urgent_Name: {
-    id: 'tag_Urgency_Urgent_Name',
-    defaultMessage: 'Urgent',
-  },
-  tag_Urgency_Urgent_Description: {
-    id: 'tag_Urgency_Urgent_Description',
-    defaultMessage: 'Requires immediate attention',
-  },
-  tag_Urgency_Moderate_Name: {
-    id: 'tag_Urgency_Moderate_Name',
-    defaultMessage: 'Moderate',
-  },
-  tag_Urgency_Moderate_Description: {
-    id: 'tag_Urgency_Moderate_Description',
-    defaultMessage: 'Should be addressed soon',
-  },
-  tag_Urgency_Low_Name: {
-    id: 'tag_Urgency_Low_Name',
-    defaultMessage: 'Low',
-  },
-  tag_Urgency_Low_Description: {
-    id: 'tag_Urgency_Low_Description',
-    defaultMessage: 'Address when you have the time',
+  languageCode: {
+    id: 'tags.lang-code',
+    defaultMessage: 'Language',
   },
 });
