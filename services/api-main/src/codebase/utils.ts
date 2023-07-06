@@ -14,5 +14,12 @@ export function resolveLanguageCode(req: Request) {
   if (parsedLanguages.length === 0) {
     return 'en';
   }
+
+  const code = parsedLanguages[0].code;
+
+  if (!['en', 'sr'].includes(code)) {
+    return 'en';
+  }
+
   return parsedLanguages[0].code;
 }

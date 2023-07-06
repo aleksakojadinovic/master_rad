@@ -17,4 +17,8 @@ export const globalMessages = defineMessages({
     id: 'global.language',
     defaultMessage: 'Language',
   },
+  notFound: {
+    id: 'global.not-found',
+    defaultMessage: 'Page not found | STS',
+  },
 });

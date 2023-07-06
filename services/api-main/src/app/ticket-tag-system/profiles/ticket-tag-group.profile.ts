@@ -77,10 +77,9 @@ export class TicketTagGroupProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.name,
-          mapWithArguments(
-            (source, extraArgs) =>
-              source.nameIntl[extraArgs['languageCode'] as string],
-          ),
+          mapWithArguments((source, extraArgs) => {
+            return source.nameIntl[extraArgs['languageCode'] as string];
+          }),
         ),
         forMember(
           (destination) => destination.description,

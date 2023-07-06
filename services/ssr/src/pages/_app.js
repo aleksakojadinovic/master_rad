@@ -14,7 +14,6 @@ import Cookies from 'js-cookie';
 import { LanguageProvider } from '@/context/LanguageContext';
 
 function MyApp({ Component, pageProps, languageCode }) {
-  console.log({ languageCode });
   const store = wrapper.useStore();
 
   const messages = useMemo(() => {

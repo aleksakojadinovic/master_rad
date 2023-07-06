@@ -19,9 +19,15 @@ const baseQuery = fetchBaseQuery({
       ? parseCookie(api?.extra?.ctx?.req?.headers?.cookie).accessToken ?? ''
       : Cookies.get('accessToken');
 
+    const languageCode =
+      (isServer()
+        ? parseCookie(api?.extra?.ctx?.req?.headers?.cookie).language_code ?? ''
+        : Cookies.get('language_code')) ?? 'en';
+
     headers.set('Authorization', `Bearer ${accessToken}`);
     headers.set('X-Requested-With', 'XMLHttpRequest');
     headers.set('Access-Control-Allow-Origin', '*');
+    headers.set('Accept-Language', languageCode);
     return headers;
   },
 });
