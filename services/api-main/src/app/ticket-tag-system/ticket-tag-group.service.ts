@@ -15,11 +15,6 @@ import { BaseService } from 'src/codebase/BaseService';
 import { TicketTagService } from './ticket-tag.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketTagGroupDTO } from './dto/ticket-tag-group.dto';
-import {
-  createTicketTagGroupDescriptionIntlKey,
-  createTicketTagGroupNameIntlKey,
-} from './utils';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
