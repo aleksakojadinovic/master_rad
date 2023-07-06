@@ -44,6 +44,9 @@ function TicketTagGroupAdmin({ group }) {
     (role) => !permissions.canRemoveRoles.map(({ id }) => id).includes(role.id),
   );
 
+  const [whoCanAddKey, setWhoCanAddKey] = useState(0);
+  const [whoCanRemoveKey, setWhoCanRemoveKey] = useState(0);
+
   return (
     <Box border="1px solid gray" padding="12px">
       <Box>
@@ -120,7 +123,17 @@ function TicketTagGroupAdmin({ group }) {
                 }));
               }}
             />
-            <RolePicker roles={whoCanAddAvailableRoles} />
+            <RolePicker
+              key={whoCanAddKey}
+              roles={whoCanAddAvailableRoles}
+              onSelect={(newRole) => {
+                setPermissions((currentPermissions) => ({
+                  ...currentPermissions,
+                  canAddRoles: [...currentPermissions.canAddRoles, newRole],
+                }));
+                setWhoCanAddKey((prev) => (prev + 1) % 10000);
+              }}
+            />
           </Box>
         </Box>
         <Box marginBottom="12px">
@@ -139,64 +152,21 @@ function TicketTagGroupAdmin({ group }) {
                 }));
               }}
             />
-            <RolePicker roles={whoCanRemoveAvailableRoles} />
+            <RolePicker
+              key={whoCanRemoveAvailableRoles}
+              roles={whoCanRemoveAvailableRoles}
+              onSelect={(newRole) => {
+                setPermissions((currentPermissions) => ({
+                  ...currentPermissions,
+                  canRemoveRoles: [
+                    ...currentPermissions.canRemoveRoles,
+                    newRole,
+                  ],
+                }));
+                setWhoCanRemoveKey((prev) => (prev + 1) % 10000);
+              }}
+            />
           </Box>
-        </Box>
-        <Box marginBottom="12px">
-          <Typography variant="body1">
-            {intl.formatMessage(manageTagsMessages.canCreatorAddText)}
-          </Typography>
-          <FormControl>
-            <RadioGroup
-              value={permissions.canCreatorAdd ? 'yes' : 'no'}
-              onChange={(e) => {
-                setPermissions((currentPermissions) => ({
-                  ...currentPermissions,
-                  canCreatorAdd: e.target.value === 'yes' ? true : false,
-                }));
-              }}
-              row
-            >
-              <FormControlLabel
-                value="yes"
-                control={<Radio />}
-                label={intl.formatMessage(globalMessages.yes)}
-              />
-              <FormControlLabel
-                value="no"
-                control={<Radio />}
-                label={intl.formatMessage(globalMessages.no)}
-              />
-            </RadioGroup>
-          </FormControl>
-        </Box>
-        <Box marginBottom="12px">
-          <Typography variant="body1">
-            {intl.formatMessage(manageTagsMessages.canCreatorRemoveText)}
-          </Typography>
-          <FormControl>
-            <RadioGroup
-              value={permissions.canCreatorRemove ? 'yes' : 'no'}
-              onChange={(e) => {
-                setPermissions((currentPermissions) => ({
-                  ...currentPermissions,
-                  canCreatorRemove: e.target.value === 'yes' ? true : false,
-                }));
-              }}
-              row
-            >
-              <FormControlLabel
-                value="yes"
-                control={<Radio />}
-                label={intl.formatMessage(globalMessages.yes)}
-              />
-              <FormControlLabel
-                value="no"
-                control={<Radio />}
-                label={intl.formatMessage(globalMessages.no)}
-              />
-            </RadioGroup>
-          </FormControl>
         </Box>
       </Box>
       <Divider />
