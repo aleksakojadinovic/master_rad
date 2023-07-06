@@ -22,7 +22,6 @@ function TicketTagGroupAdmin({ group }) {
 
   const [tags, setTags] = useState(originalTags);
   const [permissions, setPermissions] = useState(originalPermissions);
-  console.log({ permissions });
   const intl = useIntl();
 
   const hasChanges = useMemo(
@@ -79,6 +78,7 @@ function TicketTagGroupAdmin({ group }) {
                     description: '',
                     nameIntl: { en: '', sr: '' },
                     descriptionIntl: { en: '', sr: '' },
+                    isNew: true,
                   },
                 ])
               }

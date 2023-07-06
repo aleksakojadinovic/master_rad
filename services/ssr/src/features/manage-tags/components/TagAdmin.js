@@ -1,7 +1,8 @@
 import IntlTable from '@/components/IntlTable/IntlTable';
 import { LanguageContext } from '@/context/LanguageContext';
 import { globalMessages } from '@/translations/global';
-import { Box, Button, Tooltip, Typography } from '@mui/material';
+import { manageTagsMessages } from '@/translations/tags';
+import { Box, Button, Typography } from '@mui/material';
 import React, { useContext } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -17,7 +18,9 @@ function TagAdmin({ tag, onChange, onClose }) {
     >
       <Box>
         <Typography variant="body1" color="gray">
-          {tag.name}
+          {tag.isNew
+            ? intl.formatMessage(manageTagsMessages.newTagPlaceholder)
+            : tag.name}
         </Typography>
       </Box>
       <Box>
