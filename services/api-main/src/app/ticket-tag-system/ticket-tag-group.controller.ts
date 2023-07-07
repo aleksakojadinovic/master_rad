@@ -93,15 +93,16 @@ export class TicketTagGroupController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body(new ValidationPipe({ transform: true }))
-    updateTicketTagDto: UpdateTicketTagGroupDTO,
+    @Body(new ValidationPipe())
+    updateTicketTagGroupDto: UpdateTicketTagGroupDTO,
     @Req() req: Request,
   ) {
     if (!isValidObjectId(id)) {
       throw new BadRequestException(`Invalid group id: ${id}`);
     }
+    console.log(updateTicketTagGroupDto);
 
-    console.log(updateTicketTagDto);
+    await this.ticketTagGroupService.update(id, updateTicketTagGroupDto);
 
     return 'testing';
   }

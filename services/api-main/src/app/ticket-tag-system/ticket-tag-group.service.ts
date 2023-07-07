@@ -15,6 +15,9 @@ import { BaseService } from 'src/codebase/BaseService';
 import { TicketTagService } from './ticket-tag.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
+import { UpdateTicketTagGroupDTO } from './dto/update-ticket-tag-group.dto';
+import * as _ from 'lodash';
+import { IntlValue } from 'src/codebase/types/IntlValue';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
@@ -78,39 +81,39 @@ export class TicketTagGroupService extends BaseService {
     return model;
   }
 
-  async addTagsToGroup(id: string, tags: CreateTicketTagDto[]) {
-    const group = await this.ticketTagGroupModel
-      .findById(id)
-      .populate({ path: 'tags', model: 'TicketTag' });
+  // async addTagsToGroup(id: string, tags: CreateTicketTagDto[]) {
+  //   const group = await this.ticketTagGroupModel
+  //     .findById(id)
+  //     .populate({ path: 'tags', model: 'TicketTag' });
 
-    if (!group) {
-      throw new TicketTagGroupNotFoundError();
-    }
+  //   if (!group) {
+  //     throw new TicketTagGroupNotFoundError();
+  //   }
 
-    // TODO: Prevent duplicates
+  //   // TODO: Prevent duplicates
 
-    // const currentTagIntlKeys = group.tags.map(({ nameIntlKey }) => nameIntlKey);
-    // const requestedTagIntlKeys = tags.map(({ name }) => name);
-    // if (
-    //   currentTagIntlKeys.some((name) => requestedTagIntlKeys.includes(name))
-    // ) {
-    //   throw new TicketTagNameAlreadyExistsError();
-    // }
+  //   // const currentTagIntlKeys = group.tags.map(({ nameIntlKey }) => nameIntlKey);
+  //   // const requestedTagIntlKeys = tags.map(({ name }) => name);
+  //   // if (
+  //   //   currentTagIntlKeys.some((name) => requestedTagIntlKeys.includes(name))
+  //   // ) {
+  //   //   throw new TicketTagNameAlreadyExistsError();
+  //   // }
 
-    const tagModels = await Promise.all(
-      tags.map(async (tag) => {
-        const model = this.ticketTagService.create(
-          new CreateTicketTagDto(tag.nameIntl, tag.descriptionIntl, id),
-        );
-        return model;
-      }),
-    );
+  //   const tagModels = await Promise.all(
+  //     tags.map(async (tag) => {
+  //       const model = this.ticketTagService.create(
+  //         new CreateTicketTagDto(tag.nameIntl, tag.descriptionIntl, id),
+  //       );
+  //       return model;
+  //     }),
+  //   );
 
-    tagModels.forEach((model) => group.tags.push(model));
+  //   tagModels.forEach((model) => group.tags.push(model));
 
-    await group.save();
-    return group;
-  }
+  //   await group.save();
+  //   return group;
+  // }
 
   async findAll(queryDTO: EntityQueryDTO) {
     const query = this.ticketTagGroupModel.find({});
@@ -131,7 +134,44 @@ export class TicketTagGroupService extends BaseService {
     return group;
   }
 
-  update(id: number) {
+  private updateIntlValue(
+    document: TicketTagGroup,
+    newIntlValue: IntlValue | null,
+    isName: boolean,
+  ) {
+    if (newIntlValue === null) {
+      return;
+    }
+
+    const originalValue = isName ? document.nameIntl : document.descriptionIntl;
+
+    if (_.isEqual(originalValue, newIntlValue)) {
+      return;
+    }
+
+    if (isName) {
+      document.nameIntl = newIntlValue;
+    } else {
+      document.descriptionIntl = newIntlValue;
+    }
+  }
+
+  private updatePermissions(document: TicketTagGroup, permissions: any) {}
+
+  async update(id: string, dto: UpdateTicketTagGroupDTO) {
+    const group = await this.ticketTagGroupModel.findById(id);
+
+    if (!group) {
+      throw new TicketTagGroupNotFoundError();
+    }
+
+    this.updateIntlValue(group, dto.nameIntl, true);
+    this.updateIntlValue(group, dto.descriptionIntl, false);
+
+    if (dto.nameIntl === null || _.isEqual(group.nameIntl, dto.nameIntl)) {
+      // Nothing to update for nameIntl
+    }
+
     return `This action updates a #${id} ticketTag`;
   }
 
