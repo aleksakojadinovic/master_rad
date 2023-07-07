@@ -10,7 +10,6 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
-  Modal,
   Typography,
 } from '@mui/material';
 import React, {

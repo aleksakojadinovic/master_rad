@@ -1,7 +1,6 @@
 import { RolesService } from '../users/roles.service';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
-import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
 import {
   TicketTagGroup,
   TicketTagGroupPermissions,
@@ -9,7 +8,6 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { TicketTagGroupNotFoundError } from './errors/TicketTagGroupNotFound';
-import { TicketTagNameAlreadyExistsError } from './errors/TicketTagNameAlreadyExists';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketTagService } from './ticket-tag.service';
@@ -21,8 +19,6 @@ import {
 } from './dto/update-ticket-tag-group.dto';
 import * as _ from 'lodash';
 import { IntlValue } from 'src/codebase/types/IntlValue';
-
-type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
