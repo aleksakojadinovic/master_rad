@@ -15,9 +15,14 @@ import { BaseService } from 'src/codebase/BaseService';
 import { TicketTagService } from './ticket-tag.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { UpdateTicketTagGroupDTO } from './dto/update-ticket-tag-group.dto';
+import {
+  UpdateTicketTagGroupDTO,
+  UpdateTicketTagGroupPermissionsDTO,
+} from './dto/update-ticket-tag-group.dto';
 import * as _ from 'lodash';
 import { IntlValue } from 'src/codebase/types/IntlValue';
+
+type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
@@ -123,10 +128,11 @@ export class TicketTagGroupService extends BaseService {
     return groups;
   }
 
-  async findOne(id: string, queryDTO: EntityQueryDTO) {
+  public async findOne(id: string, queryDTO: EntityQueryDTO) {
     const query = this.ticketTagGroupModel.findOne({ _id: id });
-    const populatinos = this.constructPopulate(queryDTO);
-    populatinos.forEach((p) => query.populate(p));
+    const populations = this.constructPopulate(queryDTO);
+
+    populations.forEach((p) => query.populate(p));
     const group = await query.exec();
     if (!group) {
       throw new TicketTagGroupNotFoundError();
@@ -149,6 +155,8 @@ export class TicketTagGroupService extends BaseService {
       return;
     }
 
+    // ? Should we allow for omitted locale values or assume they're always sent? Check for best practices
+
     if (isName) {
       document.nameIntl = newIntlValue;
     } else {
@@ -156,10 +164,40 @@ export class TicketTagGroupService extends BaseService {
     }
   }
 
-  private updatePermissions(document: TicketTagGroup, permissions: any) {}
+  private async updatePermissions(
+    document: TicketTagGroup,
+    newPermissionsValue: UpdateTicketTagGroupPermissionsDTO | null,
+  ) {
+    if (newPermissionsValue === null) {
+      return;
+    }
+
+    if (newPermissionsValue.canAddRoles !== null) {
+      // TODO handle roles not exists
+      const newCanAddRoles = await Promise.all(
+        newPermissionsValue.canAddRoles.map((roleId) =>
+          this.rolesService.findById(roleId),
+        ),
+      );
+      document.permissions.canAddRoles = newCanAddRoles;
+    }
+
+    if (newPermissionsValue.canRemoveRoles !== null) {
+      const newCanRemoveRoles = await Promise.all(
+        newPermissionsValue.canRemoveRoles.map((roleId) =>
+          this.rolesService.findById(roleId),
+        ),
+      );
+      document.permissions.canRemoveRoles = newCanRemoveRoles;
+    }
+  }
 
   async update(id: string, dto: UpdateTicketTagGroupDTO) {
-    const group = await this.ticketTagGroupModel.findById(id);
+    // const group = await this.ticketTagGroupModel.findById(id);
+    const group = await this.findOne(
+      id,
+      new EntityQueryDTO('', ['tags', 'role'], '', 0, null),
+    );
 
     if (!group) {
       throw new TicketTagGroupNotFoundError();
@@ -167,10 +205,13 @@ export class TicketTagGroupService extends BaseService {
 
     this.updateIntlValue(group, dto.nameIntl, true);
     this.updateIntlValue(group, dto.descriptionIntl, false);
+    await this.updatePermissions(group, dto.permissions);
 
-    if (dto.nameIntl === null || _.isEqual(group.nameIntl, dto.nameIntl)) {
-      // Nothing to update for nameIntl
-    }
+    console.log('after updates');
+    console.log(group.permissions);
+    console.log('-------');
+
+    await group.save();
 
     return `This action updates a #${id} ticketTag`;
   }
