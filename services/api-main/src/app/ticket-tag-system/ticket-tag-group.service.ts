@@ -207,13 +207,9 @@ export class TicketTagGroupService extends BaseService {
     this.updateIntlValue(group, dto.descriptionIntl, false);
     await this.updatePermissions(group, dto.permissions);
 
-    console.log('after updates');
-    console.log(group.permissions);
-    console.log('-------');
-
     await group.save();
 
-    return `This action updates a #${id} ticketTag`;
+    return group;
   }
 
   remove(id: number) {

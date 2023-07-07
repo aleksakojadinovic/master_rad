@@ -16,12 +16,22 @@ export const ticketTagGroupsSlice = api.injectEndpoints({
         params,
       }),
     }),
+    updateTicketTagGroup: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `/ticket-tag-group/${id}`,
+        method: 'PATCH',
+        body: patch,
+      }),
+    }),
   }),
   overrideExisting: true,
 });
 
-export const { useGetTicketTagGroupsQuery, useGetTicketTagGroupQuery } =
-  ticketTagGroupsSlice;
+export const {
+  useGetTicketTagGroupsQuery,
+  useGetTicketTagGroupQuery,
+  useUpdateTicketTagGroupMutation,
+} = ticketTagGroupsSlice;
 
 const selectGetTicketTagGroupsQueryResult = createSelector(
   [(state) => state, (_, params) => params],

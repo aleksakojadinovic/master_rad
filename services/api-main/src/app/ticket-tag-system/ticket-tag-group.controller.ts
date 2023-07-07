@@ -100,11 +100,16 @@ export class TicketTagGroupController {
     if (!isValidObjectId(id)) {
       throw new BadRequestException(`Invalid group id: ${id}`);
     }
-    console.log(updateTicketTagGroupDto);
+    const languageCode = resolveLanguageCode(req);
 
-    await this.ticketTagGroupService.update(id, updateTicketTagGroupDto);
+    const group = await this.ticketTagGroupService.update(
+      id,
+      updateTicketTagGroupDto,
+    );
 
-    return 'testing';
+    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
+      extraArgs: () => ({ languageCode }),
+    });
   }
 
   @Delete(':id')
