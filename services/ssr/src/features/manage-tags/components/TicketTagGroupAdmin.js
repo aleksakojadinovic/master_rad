@@ -59,6 +59,8 @@ function TicketTagGroupAdmin({ group }) {
     nameIntl[languageCode] ||
     intl.formatMessage(manageTagsMessages.newTagGroupPlaceholder);
 
+  const resolvedGroupDescription = descriptionIntl[languageCode] || null;
+
   const hasChanges = useMemo(
     () =>
       !(
@@ -134,7 +136,7 @@ function TicketTagGroupAdmin({ group }) {
         {resolvedGroupName}
       </Typography>
       <Typography variant="h6" color="gray">
-        {group.description}
+        {resolvedGroupDescription}
       </Typography>
       <Typography variant="body2">
         {intl.formatMessage(globalMessages.name)}
