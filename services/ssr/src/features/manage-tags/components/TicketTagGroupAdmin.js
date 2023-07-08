@@ -23,6 +23,7 @@ import ServerActionDialog from '@/components/ServerActionDialog/ServerActionDial
 
 function TicketTagGroupAdmin({ group }) {
   const languageCode = useContext(LanguageContext);
+  const intl = useIntl();
 
   const [update, { isLoading, isError, isSuccess, reset }] =
     useUpdateTicketTagGroupMutation();
@@ -40,7 +41,6 @@ function TicketTagGroupAdmin({ group }) {
   );
   const [tags, setTags] = useState(originalTags);
   const [permissions, setPermissions] = useState(originalPermissions);
-  const intl = useIntl();
 
   useEffect(() => {
     setNameIntl(originalNameIntl);
@@ -90,6 +90,22 @@ function TicketTagGroupAdmin({ group }) {
   const [whoCanAddKey, setWhoCanAddKey] = useState(0);
   const [whoCanRemoveKey, setWhoCanRemoveKey] = useState(0);
 
+  const statusMessage = useMemo(() => {
+    if (isSuccess) {
+      return intl.formatMessage(
+        manageTagsMessages.successUpdatingTicketTagGroup,
+      );
+    }
+    if (isError) {
+      return intl.formatMessage(manageTagsMessages.errorUpdatingTicketTagGroup);
+    }
+    if (isLoading) {
+      return intl.formatMessage(
+        manageTagsMessages.loadingUpdatingTicketTagGroup,
+      );
+    }
+  }, [isLoading, isSuccess, isError, intl]);
+
   const handleSubmit = () => {
     // TODO: Validation D:
     const patchObject = {
@@ -107,8 +123,7 @@ function TicketTagGroupAdmin({ group }) {
   const renderDialog = () => (
     <ServerActionDialog
       indicators={{ isLoading, isError, isSuccess }}
-      message={'idk'}
-      title={'Updating this shit'}
+      message={statusMessage}
       onClose={reset}
     />
   );

@@ -73,10 +73,11 @@ function ServerActionDialog({
     return <Alert severity={severity}>{message ?? null}</Alert>;
   };
 
-  console.log({ isLoading, isError, isSuccess });
-
+  if (!open) {
+    return null;
+  }
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{renderContent()}</DialogContent>
       <DialogActions>

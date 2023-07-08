@@ -61,4 +61,16 @@ export const manageTagsMessages = defineMessages({
     id: 'manage-tags.newTagPlaceholder',
     defaultMessage: 'New tag group',
   },
+  loadingUpdatingTicketTagGroup: {
+    id: 'manage-tags.update-loading',
+    defaultMessage: 'Updating tags...',
+  },
+  successUpdatingTicketTagGroup: {
+    id: 'manage-tags.update-success',
+    defaultMessage: 'Successfully updated tags!',
+  },
+  errorUpdatingTicketTagGroup: {
+    id: 'manage-tags.update-error',
+    defaultMessage: 'Error updating tags!',
+  },
 });
