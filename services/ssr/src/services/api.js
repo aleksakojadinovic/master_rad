@@ -45,5 +45,5 @@ export default createApi({
   },
   keepUnusedFor: 1000,
   endpoints: () => ({}),
-  tagTypes: ['getTicket'],
+  tagTypes: ['getTicket', 'ticket-tag-groups', 'ticket-tag-group'],
 });

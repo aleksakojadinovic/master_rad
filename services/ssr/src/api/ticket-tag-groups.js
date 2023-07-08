@@ -9,12 +9,16 @@ export const ticketTagGroupsSlice = api.injectEndpoints({
         url: '/ticket-tag-group',
         params,
       }),
+      providesTags: ['ticket-tag-groups'],
     }),
     getTicketTagGroup: builder.query({
       query: ({ id, ...params }) => ({
         url: `/ticket-tag-group/${id}`,
         params,
       }),
+      providesTags: (_result, error, args) => {
+        return error ? [] : [{ type: 'ticket-tag-group', id: args.id }];
+      },
     }),
     updateTicketTagGroup: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -22,6 +26,11 @@ export const ticketTagGroupsSlice = api.injectEndpoints({
         method: 'PATCH',
         body: patch,
       }),
+      invalidatesTags: (_result, error, args) => {
+        return error
+          ? []
+          : [{ type: 'ticket-tag-group', id: args.id }, 'ticket-tag-group'];
+      },
     }),
   }),
   overrideExisting: true,

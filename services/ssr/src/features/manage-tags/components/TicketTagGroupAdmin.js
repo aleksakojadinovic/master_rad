@@ -1,17 +1,7 @@
 import ChipList from '@/components/ChipList/ChipList';
 import { globalMessages } from '@/translations/global';
 import { manageTagsMessages } from '@/translations/tags';
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Divider,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Divider, Typography } from '@mui/material';
 import React, {
   Fragment,
   useContext,
@@ -29,13 +19,12 @@ import RolePicker from '@/components/RolePicker/RolePicker';
 import IntlTable from '@/components/IntlTable/IntlTable';
 import { LanguageContext } from '@/context/LanguageContext';
 import { useUpdateTicketTagGroupMutation } from '@/api/ticket-tag-groups';
-import FullPageSpinner from '@/components/FullPageSpinner/FullPageSpinner';
+import ServerActionDialog from '@/components/ServerActionDialog/ServerActionDialog';
 
 function TicketTagGroupAdmin({ group }) {
-  const [isFeedbackModalVisible, setIsFeedbackModalVisible] = useState(false);
   const languageCode = useContext(LanguageContext);
 
-  const [update, { isLoading, isError, isSuccess }] =
+  const [update, { isLoading, isError, isSuccess, reset }] =
     useUpdateTicketTagGroupMutation();
 
   const {
@@ -52,6 +41,19 @@ function TicketTagGroupAdmin({ group }) {
   const [tags, setTags] = useState(originalTags);
   const [permissions, setPermissions] = useState(originalPermissions);
   const intl = useIntl();
+
+  useEffect(() => {
+    setNameIntl(originalNameIntl);
+    setDescriptionIntl(originalDescriptionIntl);
+    setTags(originalTags);
+    setPermissions(originalPermissions);
+  }, [
+    group,
+    originalNameIntl,
+    originalDescriptionIntl,
+    originalTags,
+    originalPermissions,
+  ]);
 
   const resolvedGroupName =
     nameIntl[languageCode] ||
@@ -102,175 +104,169 @@ function TicketTagGroupAdmin({ group }) {
     update({ id: group.id, ...patchObject });
   };
 
-  useEffect(() => {
-    if (isSuccess || isError) {
-      setIsFeedbackModalVisible(true);
-    }
-  }, [isSuccess, isError]);
+  const renderDialog = () => (
+    <ServerActionDialog
+      indicators={{ isLoading, isError, isSuccess }}
+      message={'idk'}
+      title={'Updating this shit'}
+      onClose={reset}
+    />
+  );
+
+  const renderGroupNameAndDescriptionForm = () => (
+    <Box>
+      <Typography variant="h5" color="blue">
+        {resolvedGroupName}
+      </Typography>
+      <Typography variant="h6" color="gray">
+        {group.description}
+      </Typography>
+      <Typography variant="body2">
+        {intl.formatMessage(globalMessages.name)}
+      </Typography>
+      <IntlTable
+        value={nameIntl}
+        onChange={(newIntl) => {
+          setNameIntl(newIntl);
+        }}
+      />
+      <Typography variant="body2">
+        {intl.formatMessage(globalMessages.description)}
+      </Typography>
+      <IntlTable
+        value={descriptionIntl}
+        onChange={(newIntl) => {
+          setDescriptionIntl(newIntl);
+        }}
+      />
+    </Box>
+  );
+
+  const renderTagsForm = () => (
+    <Box marginBottom="12px">
+      <Typography variant="h6" color="gray">
+        {intl.formatMessage(manageTagsMessages.tagsText)}:
+      </Typography>
+      <Box display="flex" flexWrap="wrap">
+        {tags.map((tag) => (
+          <Box key={tag.id} margin="12px" width="100%">
+            <TagAdmin
+              tag={tag}
+              onChange={(newTag) =>
+                setTags((currentTags) =>
+                  currentTags.map((currentTag) =>
+                    currentTag.id === newTag.id ? newTag : currentTag,
+                  ),
+                )
+              }
+              onClose={() =>
+                setTags((currentTags) =>
+                  currentTags.filter((currentTag) => currentTag.id !== tag.id),
+                )
+              }
+            />
+          </Box>
+        ))}
+        {/* TODO: This is so very stupid, find a better way */}
+        <Box marginTop="8px">
+          <Button
+            onClick={() =>
+              setTags((currentTags) => [
+                ...currentTags,
+                {
+                  id: `new-tag-${currentTags.length}`,
+                  name: '',
+                  description: '',
+                  // TODO: Don't use hardcoded locales
+                  nameIntl: { en: '', sr: '' },
+                  descriptionIntl: { en: '', sr: '' },
+                  isNew: true,
+                },
+              ])
+            }
+          >
+            {intl.formatMessage(manageTagsMessages.addNewTag)}
+          </Button>
+        </Box>
+      </Box>
+    </Box>
+  );
+
+  const renderPermissionsForm = () => (
+    <Box>
+      <Typography variant="h6" color="gray">
+        {intl.formatMessage(manageTagsMessages.tagPermissionsText)}:
+      </Typography>
+      <Box marginBottom="12px" width="100%">
+        <Typography variant="body1">
+          {intl.formatMessage(manageTagsMessages.whoCanAddText)}
+        </Typography>
+        <Box display="flex" width="100%">
+          <ChipList
+            items={permissions.canAddRoles}
+            onClose={(closedId) => {
+              setPermissions((currentPermission) => ({
+                ...currentPermission,
+                canAddRoles: currentPermission.canAddRoles.filter(
+                  ({ id }) => id !== closedId,
+                ),
+              }));
+            }}
+          />
+          <RolePicker
+            key={whoCanAddKey}
+            roles={whoCanAddAvailableRoles}
+            onSelect={(newRole) => {
+              setPermissions((currentPermissions) => ({
+                ...currentPermissions,
+                canAddRoles: [...currentPermissions.canAddRoles, newRole],
+              }));
+              setWhoCanAddKey((prev) => (prev + 1) % 10000);
+            }}
+          />
+        </Box>
+      </Box>
+      <Box marginBottom="12px">
+        <Typography variant="body1">
+          {intl.formatMessage(manageTagsMessages.whoCanRemoveText)}
+        </Typography>
+        <Box display="flex">
+          <ChipList
+            items={permissions.canRemoveRoles}
+            onClose={(closedId) => {
+              setPermissions((currentPermission) => ({
+                ...currentPermission,
+                canRemoveRoles: currentPermission.canRemoveRoles.filter(
+                  ({ id }) => id !== closedId,
+                ),
+              }));
+            }}
+          />
+          <RolePicker
+            key={whoCanRemoveKey}
+            roles={whoCanRemoveAvailableRoles}
+            onSelect={(newRole) => {
+              setPermissions((currentPermissions) => ({
+                ...currentPermissions,
+                canRemoveRoles: [...currentPermissions.canRemoveRoles, newRole],
+              }));
+              setWhoCanRemoveKey((prev) => (prev + 1) % 10000);
+            }}
+          />
+        </Box>
+      </Box>
+    </Box>
+  );
 
   return (
     <Fragment>
-      <FullPageSpinner open={isLoading} />
-      <Dialog
-        open={isFeedbackModalVisible}
-        onClose={() => setIsFeedbackModalVisible(false)}
-      >
-        <DialogTitle>test</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {isSuccess
-              ? 'Ticket tag group successfully updated'
-              : 'An error has occurred'}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsFeedbackModalVisible(false)}>
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {renderDialog()}
       <Box border="1px solid gray" padding="12px">
-        <Box>
-          <Typography variant="h5" color="blue">
-            {resolvedGroupName}
-          </Typography>
-          <Typography variant="h6" color="gray">
-            {group.description}
-          </Typography>
-          <Typography variant="body2">
-            {intl.formatMessage(globalMessages.name)}
-          </Typography>
-          <IntlTable
-            value={nameIntl}
-            onChange={(newIntl) => {
-              setNameIntl(newIntl);
-            }}
-          />
-          <Typography variant="body2">
-            {intl.formatMessage(globalMessages.description)}
-          </Typography>
-          <IntlTable
-            value={descriptionIntl}
-            onChange={(newIntl) => {
-              setDescriptionIntl(newIntl);
-            }}
-          />
-        </Box>
+        {renderGroupNameAndDescriptionForm()}
         <Divider />
-        <Box marginBottom="12px">
-          <Typography variant="h6" color="gray">
-            {intl.formatMessage(manageTagsMessages.tagsText)}:
-          </Typography>
-          <Box display="flex" flexWrap="wrap">
-            {tags.map((tag) => (
-              <Box key={tag.id} margin="12px" width="100%">
-                <TagAdmin
-                  tag={tag}
-                  onChange={(newTag) =>
-                    setTags((currentTags) =>
-                      currentTags.map((currentTag) =>
-                        currentTag.id === newTag.id ? newTag : currentTag,
-                      ),
-                    )
-                  }
-                  onClose={() =>
-                    setTags((currentTags) =>
-                      currentTags.filter(
-                        (currentTag) => currentTag.id !== tag.id,
-                      ),
-                    )
-                  }
-                />
-              </Box>
-            ))}
-            <Box marginTop="8px">
-              <Button
-                onClick={() =>
-                  setTags((currentTags) => [
-                    ...currentTags,
-                    {
-                      id: `new-tag-${currentTags.length}`,
-                      name: '',
-                      description: '',
-                      nameIntl: { en: '', sr: '' },
-                      descriptionIntl: { en: '', sr: '' },
-                      isNew: true,
-                    },
-                  ])
-                }
-              >
-                {intl.formatMessage(manageTagsMessages.addNewTag)}
-              </Button>
-            </Box>
-          </Box>
-        </Box>
+        {renderTagsForm()}
         <Divider />
-        <Box>
-          <Typography variant="h6" color="gray">
-            {intl.formatMessage(manageTagsMessages.tagPermissionsText)}:
-          </Typography>
-          <Box marginBottom="12px" width="100%">
-            <Typography variant="body1">
-              {intl.formatMessage(manageTagsMessages.whoCanAddText)}
-            </Typography>
-            <Box display="flex" width="100%">
-              <ChipList
-                items={permissions.canAddRoles}
-                onClose={(closedId) => {
-                  setPermissions((currentPermission) => ({
-                    ...currentPermission,
-                    canAddRoles: currentPermission.canAddRoles.filter(
-                      ({ id }) => id !== closedId,
-                    ),
-                  }));
-                }}
-              />
-              <RolePicker
-                key={whoCanAddKey}
-                roles={whoCanAddAvailableRoles}
-                onSelect={(newRole) => {
-                  setPermissions((currentPermissions) => ({
-                    ...currentPermissions,
-                    canAddRoles: [...currentPermissions.canAddRoles, newRole],
-                  }));
-                  setWhoCanAddKey((prev) => (prev + 1) % 10000);
-                }}
-              />
-            </Box>
-          </Box>
-          <Box marginBottom="12px">
-            <Typography variant="body1">
-              {intl.formatMessage(manageTagsMessages.whoCanRemoveText)}
-            </Typography>
-            <Box display="flex">
-              <ChipList
-                items={permissions.canRemoveRoles}
-                onClose={(closedId) => {
-                  setPermissions((currentPermission) => ({
-                    ...currentPermission,
-                    canRemoveRoles: currentPermission.canRemoveRoles.filter(
-                      ({ id }) => id !== closedId,
-                    ),
-                  }));
-                }}
-              />
-              <RolePicker
-                key={whoCanRemoveKey}
-                roles={whoCanRemoveAvailableRoles}
-                onSelect={(newRole) => {
-                  setPermissions((currentPermissions) => ({
-                    ...currentPermissions,
-                    canRemoveRoles: [
-                      ...currentPermissions.canRemoveRoles,
-                      newRole,
-                    ],
-                  }));
-                  setWhoCanRemoveKey((prev) => (prev + 1) % 10000);
-                }}
-              />
-            </Box>
-          </Box>
-        </Box>
+        {renderPermissionsForm()}
         <Divider />
         <Button disabled={!hasChanges} onClick={handleSubmit}>
           {intl.formatMessage(globalMessages.save)}

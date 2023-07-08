@@ -44,7 +44,6 @@ function ManageTags() {
       </Box>
       {ticketTagGroups.map((group) => (
         <Box key={group.id} sx={{ marginTop: '12px' }}>
-          {/* <TicketTagGroupAdmin group={group} /> */}
           <TicketTagGroupPreview group={group} />
         </Box>
       ))}
