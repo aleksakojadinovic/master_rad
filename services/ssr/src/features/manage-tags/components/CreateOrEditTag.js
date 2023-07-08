@@ -15,7 +15,7 @@ function CreateOrEditTagGroups({ tag, isCreate }) {
         }
       : { ...tag },
   );
-  return <TicketTagGroupAdmin group={tagGroupInput} />;
+  return <TicketTagGroupAdmin group={tagGroupInput} isCreate />;
 }
 
 export default CreateOrEditTagGroups;

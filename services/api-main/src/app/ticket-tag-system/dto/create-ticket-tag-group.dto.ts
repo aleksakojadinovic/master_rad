@@ -1,11 +1,15 @@
+import { Expose, Transform, Type } from 'class-transformer';
+import { IsOptional } from 'class-validator';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 
 export class CreateTicketTagGroupDTO {
-  constructor(
-    public nameIntl: IntlValue,
-    public descriptionIntl: IntlValue,
-    public exclusive: boolean,
-    public canAddRoles: string[],
-    public canRemoveRoles: string[],
-  ) {}
+  @Expose()
+  @IsOptional()
+  @Transform(({ value }) => (value !== undefined ? value : null))
+  public nameIntl?: IntlValue | null;
+
+  @Expose()
+  @IsOptional()
+  @Transform(({ value }) => (value !== undefined ? value : null))
+  public descriptionIntl?: IntlValue | null;
 }

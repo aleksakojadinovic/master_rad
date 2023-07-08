@@ -32,6 +32,18 @@ export const ticketTagGroupsSlice = api.injectEndpoints({
           : [{ type: 'ticket-tag-group', id: args.id }, 'ticket-tag-group'];
       },
     }),
+    createTicketTagGroup: builder.mutation({
+      query: ({ ...body }) => ({
+        url: '/ticket-tag-group/',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: (_result, error, args) => {
+        return error
+          ? []
+          : [{ type: 'ticket-tag-group', id: args.id }, 'ticket-tag-group'];
+      },
+    }),
   }),
   overrideExisting: true,
 });
@@ -40,6 +52,7 @@ export const {
   useGetTicketTagGroupsQuery,
   useGetTicketTagGroupQuery,
   useUpdateTicketTagGroupMutation,
+  useCreateTicketTagGroupMutation,
 } = ticketTagGroupsSlice;
 
 const selectGetTicketTagGroupsQueryResult = createSelector(

@@ -14,7 +14,7 @@ import { TicketTagService } from './ticket-tag.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import {
-  UpdateTicketTagGroupDTO,
+  CreateOrUpdateTicketTagGroupDTO,
   UpdateTicketTagGroupPermissionsDTO,
   UpdateTicketTagGroupTagsDTO,
 } from './dto/update-ticket-tag-group.dto';
@@ -61,24 +61,13 @@ export class TicketTagGroupService extends BaseService {
 
   async create(dto: CreateTicketTagGroupDTO) {
     const ticketTagGroupObject = new TicketTagGroup();
+
+    // TODO prevent name duplicates (should also be done on update, but too lazy now)
+
     ticketTagGroupObject.nameIntl = dto.nameIntl;
     ticketTagGroupObject.descriptionIntl = dto.descriptionIntl;
-    ticketTagGroupObject.exclusive = dto.exclusive;
-    // TODO: err handling of this service
-    const resolvedCanAddRoles = await this.rolesService.findMany(
-      dto.canAddRoles,
-    );
-    const resolvedCanRemoveRoles = await this.rolesService.findMany(
-      dto.canRemoveRoles,
-    );
-
-    // TODO: Thissss maybe shouldnt be a class but a plain type D:
-    const permissions = new TicketTagGroupPermissions(
-      resolvedCanAddRoles,
-      resolvedCanRemoveRoles,
-    );
-
-    ticketTagGroupObject.permissions = permissions;
+    ticketTagGroupObject.permissions = new TicketTagGroupPermissions([], []);
+    ticketTagGroupObject.tags = [];
 
     const model = new this.ticketTagGroupModel(ticketTagGroupObject);
     await model.save();
@@ -268,7 +257,7 @@ export class TicketTagGroupService extends BaseService {
     }
   }
 
-  async update(id: string, dto: UpdateTicketTagGroupDTO) {
+  async update(id: string, dto: CreateOrUpdateTicketTagGroupDTO) {
     const group = await this.findOne(
       id,
       new EntityQueryDTO('', ['tags', 'role'], '', 0, null),

@@ -50,7 +50,7 @@ export class UpdateTicketTagGroupTagsDTO {
   public addOrUpdateTags?: CreateTicketTagDTO[] | null;
 }
 
-export class UpdateTicketTagGroupDTO {
+export class CreateOrUpdateTicketTagGroupDTO {
   @Expose()
   @IsOptional()
   @Transform(({ value }) => (value !== undefined ? value : null))

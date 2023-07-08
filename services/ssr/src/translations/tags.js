@@ -73,4 +73,16 @@ export const manageTagsMessages = defineMessages({
     id: 'manage-tags.update-error',
     defaultMessage: 'Error updating tags!',
   },
+  loadingCreatingTicketTagGroup: {
+    id: 'manage-tags.creating-loading',
+    defaultMessage: 'Creating tags...',
+  },
+  successCreatingTicketTagGroup: {
+    id: 'manage-tags.create-success',
+    defaultMessage: 'Successfully created tags!',
+  },
+  errorCreatingTicketTagGroup: {
+    id: 'manage-tags.create-error',
+    defaultMessage: 'Error creating tags!',
+  },
 });

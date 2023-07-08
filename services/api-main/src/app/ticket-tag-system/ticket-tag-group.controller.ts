@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { TicketTagGroupService } from './ticket-tag-group.service';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
-import { UpdateTicketTagGroupDTO } from './dto/update-ticket-tag-group.dto';
+import { CreateOrUpdateTicketTagGroupDTO } from './dto/update-ticket-tag-group.dto';
 import { isValidObjectId } from 'mongoose';
 import { TicketTagInterceptor } from './interceptors/ticket-tag.interceptor';
 import { InjectMapper } from '@automapper/nestjs';
@@ -93,7 +93,7 @@ export class TicketTagGroupController {
   async update(
     @Param('id') id: string,
     @Body(new ValidationPipe())
-    updateTicketTagGroupDto: UpdateTicketTagGroupDTO,
+    updateTicketTagGroupDto: CreateOrUpdateTicketTagGroupDTO,
     @Req() req: Request,
   ) {
     if (!isValidObjectId(id)) {

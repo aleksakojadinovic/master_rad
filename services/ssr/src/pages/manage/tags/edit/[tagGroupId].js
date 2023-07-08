@@ -22,7 +22,7 @@ function EditTagGroupRoute({ id }) {
       <Head>
         <title>{intl.formatMessage(manageTagsMessages.editSingleTitle)}</title>
       </Head>
-      <TicketTagGroupAdmin group={tagGroup} />
+      <TicketTagGroupAdmin group={tagGroup} isCreate={false} />
     </Fragment>
   );
 }
