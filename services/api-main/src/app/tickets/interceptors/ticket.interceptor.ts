@@ -19,23 +19,23 @@ export class TicketInterceptor implements NestInterceptor {
     return next.handle().pipe(
       catchError((error) => {
         if (error instanceof TicketNotFoundError) {
-          throw new NotFoundException(error.message);
+          throw new NotFoundException(error.getPayload());
         }
 
         if (error instanceof TicketIdNotValidError) {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(error.getPayload());
         }
 
         if (error instanceof AssigneeIdNotValidError) {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(error.getPayload());
         }
 
         if (error instanceof CannotAssignCustomer) {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(error.getPayload());
         }
 
         if (error instanceof TooSoonToCreateAnotherTicket) {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(error.getPayload());
         }
 
         throw error;

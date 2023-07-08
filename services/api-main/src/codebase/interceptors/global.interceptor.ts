@@ -16,15 +16,15 @@ export class GlobalInterceptor implements NestInterceptor {
     return next.handle().pipe(
       catchError((error) => {
         if (error instanceof InvalidPaginationParametersError) {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(error.getPayload());
         }
 
         if (error instanceof PaginationRequiredError) {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(error.getPayload());
         }
 
         if (error instanceof InvalidIncludeKeyError) {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(error.getPayload());
         }
 
         throw error;

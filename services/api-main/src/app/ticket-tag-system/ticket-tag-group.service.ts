@@ -233,9 +233,23 @@ export class TicketTagGroupService extends BaseService {
     const addDTOs = dto.addOrUpdateTags.filter((dto) => dto.id == null);
     const updateDTOs = dto.addOrUpdateTags.filter((dto) => dto.id != null);
 
-    for (const addDTO of addDTOs) {
-      this.preventIntlNameDuplicates(document.nameIntl, addDTO.nameIntl);
-    }
+    // const addOrUpdateNameIntls = dto.addOrUpdateTags.map(
+    //   ({ nameIntl }) => nameIntl,
+    // );
+
+    // const existingNameIntls = document.tags.map(({ nameIntl }) => nameIntl);
+
+    //   for (const addOrUpdate of dto.addOrUpdateTags) {
+    //     for (const existingTag of document.tags) {
+
+    //     }
+    //   }
+
+    // for (const addOrUpdateNameIntl of addOrUpdateNameIntls) {
+    //   for (const existingNameIntl of existingNameIntls) {
+    //     this.preventIntlNameDuplicates(addOrUpdateNameIntl, existingNameIntl);
+    //   }
+    // }
 
     for (const updateDTO of updateDTOs) {
       if (
