@@ -11,11 +11,13 @@ import {
 } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
+import ErrorMessage from '../Errors/ErrorMessage';
 
 function ServerActionDialog({
   onClose,
   message,
   indicators: { isSuccess, isError, isLoading },
+  error,
 }) {
   const intl = useIntl();
 
@@ -69,6 +71,14 @@ function ServerActionDialog({
 
     if (isLoading) {
       return renderSpinner();
+    }
+
+    if (isError) {
+      return (
+        <Alert severity="error">
+          <ErrorMessage error={error.data} />
+        </Alert>
+      );
     }
     return <Alert severity={severity}>{message ?? null}</Alert>;
   };

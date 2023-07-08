@@ -1,11 +1,11 @@
 import {
   BadRequestException,
   CallHandler,
+  ConflictException,
   ExecutionContext,
   Injectable,
   NestInterceptor,
   NotFoundException,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
 import { TicketTagGroupNotFoundError } from '../errors/TicketTagGroupNotFound';
@@ -13,13 +13,13 @@ import { TicketTagNameAlreadyExistsError } from '../errors/TicketTagNameAlreadyE
 import { CannotRemoveAndAddOrUpdateTicketTagError } from '../errors/CannotRemoveAndAddOrUpdateTicketTag';
 import { TicketTagNotFoundError } from '../errors/TicketTagNotFound';
 import { TicketTagDuplicateNameError } from '../errors/TicketTagDuplicateName';
+import { TicketTagGroupDuplicateNameError } from '../errors/TicketTagGroupDuplicateNameError';
 
 @Injectable()
 export class TicketTagInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((error) => {
-        console.log(error);
         if (error instanceof TicketTagGroupNotFoundError) {
           throw new NotFoundException(error.getPayload());
         }
@@ -37,7 +37,11 @@ export class TicketTagInterceptor implements NestInterceptor {
         }
 
         if (error instanceof TicketTagDuplicateNameError) {
-          throw new UnprocessableEntityException(error.getPayload());
+          throw new ConflictException(error.getPayload());
+        }
+
+        if (error instanceof TicketTagGroupDuplicateNameError) {
+          throw new ConflictException(error.getPayload());
         }
 
         throw error;

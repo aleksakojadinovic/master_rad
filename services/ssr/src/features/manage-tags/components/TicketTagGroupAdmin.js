@@ -46,6 +46,7 @@ function TicketTagGroupAdmin({ group, isCreate }) {
       isError: isCreateError,
       isSuccess: isCreateSuccess,
       reset: resetCreate,
+      error: createError,
     },
   ] = useCreateTicketTagGroupMutation();
 
@@ -184,6 +185,7 @@ function TicketTagGroupAdmin({ group, isCreate }) {
       indicators={indicators}
       message={statusMessage}
       onClose={isCreate ? resetCreate : resetUpdate}
+      error={createError}
     />
   );
 

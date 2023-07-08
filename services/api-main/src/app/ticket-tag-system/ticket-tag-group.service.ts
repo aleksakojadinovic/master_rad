@@ -23,6 +23,7 @@ import { IntlValue } from 'src/codebase/types/IntlValue';
 import { CannotRemoveAndAddOrUpdateTicketTagError } from './errors/CannotRemoveAndAddOrUpdateTicketTag';
 import { TicketTagDuplicateNameError } from './errors/TicketTagDuplicateName';
 import { TicketTagNotFoundError } from './errors/TicketTagNotFound';
+import { TicketTagGroupDuplicateNameError } from './errors/TicketTagGroupDuplicateNameError';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
@@ -60,10 +61,22 @@ export class TicketTagGroupService extends BaseService {
   }
 
   async create(dto: CreateTicketTagGroupDTO) {
+    const intlKeys = Object.keys(dto.nameIntl);
+    const nameClashCondition = intlKeys.map((key) => ({
+      [`nameIntl.${key}`]: dto.nameIntl[key],
+    }));
+
+    const duplicate = await this.ticketTagGroupModel.findOne({
+      $or: nameClashCondition,
+    });
+
+    if (duplicate) {
+      throw new TicketTagGroupDuplicateNameError();
+    }
+
     const ticketTagGroupObject = new TicketTagGroup();
 
     // TODO prevent name duplicates (should also be done on update, but too lazy now)
-
     ticketTagGroupObject.nameIntl = dto.nameIntl;
     ticketTagGroupObject.descriptionIntl = dto.descriptionIntl;
     ticketTagGroupObject.permissions = new TicketTagGroupPermissions([], []);
