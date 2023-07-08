@@ -14,7 +14,6 @@ import { useIntl } from 'react-intl';
 
 function ServerActionDialog({
   onClose,
-  title,
   message,
   indicators: { isSuccess, isError, isLoading },
 }) {
@@ -24,6 +23,19 @@ function ServerActionDialog({
     () => isLoading || isSuccess || isError,
     [isLoading, isSuccess, isError],
   );
+
+  const title = useMemo(() => {
+    if (isSuccess) {
+      return intl.formatMessage(dialogsMessages.success);
+    }
+    if (isError) {
+      return intl.formatMessage(dialogsMessages.isError);
+    }
+    if (isLoading) {
+      return intl.formatMessage(dialogsMessages.loading);
+    }
+    return null;
+  }, [isLoading, isError, isSuccess, intl]);
 
   const severity = useMemo(() => {
     if (isSuccess) {
@@ -60,6 +72,8 @@ function ServerActionDialog({
     }
     return <Alert severity={severity}>{message ?? null}</Alert>;
   };
+
+  console.log({ isLoading, isError, isSuccess });
 
   return (
     <Dialog open={open} onClose={onClose}>
