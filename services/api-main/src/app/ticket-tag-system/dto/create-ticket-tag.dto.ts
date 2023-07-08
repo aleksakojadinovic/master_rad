@@ -1,9 +1,18 @@
+import { Expose } from 'class-transformer';
+import { IsOptional, Validate } from 'class-validator';
+import { IsValidObjectId } from 'src/codebase/pipes/objectid-pipe';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 
-export class CreateTicketTagDto {
-  constructor(
-    public nameIntl: IntlValue,
-    public descriptionIntl: IntlValue,
-    public groupId: string,
-  ) {}
+// TODO rename to createOrUpdate
+export class CreateTicketTagDTO {
+  @Expose()
+  @IsOptional()
+  @Validate(IsValidObjectId)
+  public id?: string | null;
+
+  @Expose()
+  public nameIntl: IntlValue;
+
+  @Expose()
+  public descriptionIntl: IntlValue;
 }

@@ -9,6 +9,8 @@ import {
 import { Observable, catchError } from 'rxjs';
 import { TicketTagGroupNotFoundError } from '../errors/TicketTagGroupNotFound';
 import { TicketTagNameAlreadyExistsError } from '../errors/TicketTagNameAlreadyExists';
+import { CannotRemoveAndAddOrUpdateTicketTagError } from '../errors/CannotRemoveAndAddOrUpdateTicketTag';
+import { TicketTagNotFoundError } from '../errors/TicketTagNotFound';
 
 @Injectable()
 export class TicketTagInterceptor implements NestInterceptor {
@@ -21,6 +23,14 @@ export class TicketTagInterceptor implements NestInterceptor {
 
         if (error instanceof TicketTagNameAlreadyExistsError) {
           throw new BadRequestException(error.message);
+        }
+
+        if (error instanceof CannotRemoveAndAddOrUpdateTicketTagError) {
+          throw new BadRequestException(error.message);
+        }
+
+        if (error instanceof TicketTagNotFoundError) {
+          throw new NotFoundException(error.message);
         }
 
         throw error;

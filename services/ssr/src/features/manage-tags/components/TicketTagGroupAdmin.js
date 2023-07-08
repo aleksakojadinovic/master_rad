@@ -20,6 +20,7 @@ import IntlTable from '@/components/IntlTable/IntlTable';
 import { LanguageContext } from '@/context/LanguageContext';
 import { useUpdateTicketTagGroupMutation } from '@/api/ticket-tag-groups';
 import ServerActionDialog from '@/components/ServerActionDialog/ServerActionDialog';
+import { constructTagUpdateDTO } from '../utils/params';
 
 function TicketTagGroupAdmin({ group }) {
   const languageCode = useContext(LanguageContext);
@@ -110,6 +111,9 @@ function TicketTagGroupAdmin({ group }) {
 
   const handleSubmit = () => {
     // TODO: Validation D:
+
+    const tagChangesDTO = constructTagUpdateDTO(originalTags, tags);
+
     const patchObject = {
       permissions: {
         canAddRoles: permissions.canAddRoles.map(({ id }) => id),
@@ -118,6 +122,10 @@ function TicketTagGroupAdmin({ group }) {
       nameIntl,
       descriptionIntl,
     };
+
+    if (Object.keys(tagChangesDTO).length > 0) {
+      patchObject.tags = tagChangesDTO;
+    }
 
     update({ id: group.id, ...patchObject });
   };

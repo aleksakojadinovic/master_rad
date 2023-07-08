@@ -14,7 +14,6 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { TicketTagGroupService } from './ticket-tag-group.service';
-import { CreateTicketTagDto } from './dto/create-ticket-tag.dto';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { UpdateTicketTagGroupDTO } from './dto/update-ticket-tag-group.dto';
 import { isValidObjectId } from 'mongoose';
@@ -115,23 +114,5 @@ export class TicketTagGroupController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.ticketTagGroupService.remove(+id);
-  }
-
-  private getAddTagsPayload(payload: any): CreateTicketTagDto[] {
-    if (!payload || !payload.tags || !Array.isArray(payload.tags)) {
-      throw new BadRequestException('Invalid payload');
-    }
-    for (const tag of payload.tags) {
-      if (!tag.nameIntl) {
-        throw new BadRequestException(`Tag nameIntl is required`);
-      }
-      if (!tag.descriptionIntl) {
-        throw new BadRequestException(`Tag descritionIntl is required`);
-      }
-    }
-    return payload.tags.map(
-      ({ nameIntl, descriptionIntl }) =>
-        new CreateTicketTagDto(nameIntl, descriptionIntl, ''),
-    );
   }
 }

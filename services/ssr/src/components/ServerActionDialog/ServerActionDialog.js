@@ -29,7 +29,7 @@ function ServerActionDialog({
       return intl.formatMessage(dialogsMessages.success);
     }
     if (isError) {
-      return intl.formatMessage(dialogsMessages.isError);
+      return intl.formatMessage(dialogsMessages.error);
     }
     if (isLoading) {
       return intl.formatMessage(dialogsMessages.loading);

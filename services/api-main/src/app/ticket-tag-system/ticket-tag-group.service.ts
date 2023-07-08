@@ -16,9 +16,13 @@ import { Mapper } from '@automapper/core';
 import {
   UpdateTicketTagGroupDTO,
   UpdateTicketTagGroupPermissionsDTO,
+  UpdateTicketTagGroupTagsDTO,
 } from './dto/update-ticket-tag-group.dto';
 import * as _ from 'lodash';
 import { IntlValue } from 'src/codebase/types/IntlValue';
+import { CannotRemoveAndAddOrUpdateTicketTagError } from './errors/CannotRemoveAndAddOrUpdateTicketTag';
+import { TicketTagDuplicateNameError } from './errors/TicketTagDuplicateName';
+import { TicketTagNotFoundError } from './errors/TicketTagNotFound';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
@@ -136,6 +140,18 @@ export class TicketTagGroupService extends BaseService {
     return group;
   }
 
+  private preventIntlNameDuplicates(
+    currentIntlValues: IntlValue,
+    newIntlValues: IntlValue,
+  ) {
+    const intlKeys = Object.keys(currentIntlValues);
+    for (const intlKey of intlKeys) {
+      if (currentIntlValues[intlKey] === newIntlValues[intlKey]) {
+        throw new TicketTagDuplicateNameError();
+      }
+    }
+  }
+
   private updateIntlValue(
     document: TicketTagGroup,
     newIntlValue: IntlValue | null,
@@ -188,8 +204,71 @@ export class TicketTagGroupService extends BaseService {
     }
   }
 
+  // So this can either add or remove tags, the question is what the hell I'm sending
+  private async updateTags(
+    document: TicketTagGroup,
+    dto: UpdateTicketTagGroupTagsDTO | null,
+  ) {
+    if (dto === null) {
+      return;
+    }
+
+    // Whatever is in add or update cannot be in remove, because it makes no sense
+    if (dto.removeIds !== null && dto.addOrUpdateTags !== null) {
+      if (
+        dto.removeIds.some((removeId) =>
+          dto.addOrUpdateTags.some(
+            (addOrUpdateDTO) =>
+              addOrUpdateDTO.id && addOrUpdateDTO.id === removeId,
+          ),
+        )
+      ) {
+        throw new CannotRemoveAndAddOrUpdateTicketTagError();
+      }
+    }
+
+    // Remove the ones that are requested for removal
+    // Should we delete them from the database?
+    // TODO: Untag all tagged tickets from ticket service, leaving for later
+    // TODO: API doesn't care but frontend should warn about this
+    if (dto.removeIds !== null) {
+      document.tags = document.tags.filter(
+        (tag) => !dto.removeIds.includes(tag._id.toString()),
+      );
+    }
+
+    if (dto.addOrUpdateTags === null) {
+      return;
+    }
+
+    const addDTOs = dto.addOrUpdateTags.filter((dto) => dto.id == null);
+    const updateDTOs = dto.addOrUpdateTags.filter((dto) => dto.id != null);
+
+    for (const addDTO of addDTOs) {
+      this.preventIntlNameDuplicates(document.nameIntl, addDTO.nameIntl);
+    }
+
+    for (const updateDTO of updateDTOs) {
+      if (
+        !document.tags.map(({ _id }) => _id.toString()).includes(updateDTO.id)
+      ) {
+        throw new TicketTagNotFoundError();
+      }
+    }
+
+    for (const addDTO of addDTOs) {
+      const tag = await this.ticketTagService.create(addDTO, document._id);
+      document.tags.push(tag);
+    }
+
+    for (const updateDTO of updateDTOs) {
+      const tag = await this.ticketTagService.update(updateDTO);
+      const index = document.tags.findIndex(({ _id }) => _id === tag._id);
+      document.tags[index] = tag;
+    }
+  }
+
   async update(id: string, dto: UpdateTicketTagGroupDTO) {
-    // const group = await this.ticketTagGroupModel.findById(id);
     const group = await this.findOne(
       id,
       new EntityQueryDTO('', ['tags', 'role'], '', 0, null),
@@ -202,6 +281,8 @@ export class TicketTagGroupService extends BaseService {
     this.updateIntlValue(group, dto.nameIntl, true);
     this.updateIntlValue(group, dto.descriptionIntl, false);
     await this.updatePermissions(group, dto.permissions);
+
+    await this.updateTags(group, dto.tags);
 
     await group.save();
 
