@@ -17,7 +17,9 @@ function RolePicker({ roles, onSelect }) {
       isOptionEqualToValue={(option, value) => option.id === value.id}
       renderInput={(props) => <TextField {...props} size="small" />}
       onSelect={(e) => {
-        const selectedRole = roles.find((role) => role.name === e.target.value);
+        const selectedRole = roles.find(
+          (role) => role.name.toLowerCase() === e.target.value.toLowerCase(),
+        );
         if (!selectedRole) {
           return;
         }

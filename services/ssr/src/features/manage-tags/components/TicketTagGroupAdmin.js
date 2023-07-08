@@ -232,6 +232,7 @@ function TicketTagGroupAdmin({ group }) {
             key={whoCanAddKey}
             roles={whoCanAddAvailableRoles}
             onSelect={(newRole) => {
+              console.log('qweqwe');
               setPermissions((currentPermissions) => ({
                 ...currentPermissions,
                 canAddRoles: [...currentPermissions.canAddRoles, newRole],
