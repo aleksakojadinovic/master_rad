@@ -15,11 +15,10 @@ function RolePicker({ roles, onSelect }) {
       disablePortal
       options={options}
       isOptionEqualToValue={(option, value) => option.id === value.id}
+      getOptionLabel={({ label }) => label}
       renderInput={(props) => <TextField {...props} size="small" />}
-      onSelect={(e) => {
-        const selectedRole = roles.find(
-          (role) => role.name.toLowerCase() === e.target.value.toLowerCase(),
-        );
+      onChange={(_e, val) => {
+        const selectedRole = roles.find((role) => role.id === val.id);
         if (!selectedRole) {
           return;
         }

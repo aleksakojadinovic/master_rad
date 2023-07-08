@@ -42,7 +42,7 @@ export const manageTagsMessages = defineMessages({
     defaultMessage: 'Intl key',
   },
   tagIntlKeysText: {
-    id: 'tags.tag-intl-key-text',
+    id: 'tags.tag-intl-keys-text',
     defaultMessage: 'Intl keys',
   },
   languageCode: {
@@ -54,11 +54,11 @@ export const manageTagsMessages = defineMessages({
     defaultMessage: 'Add new tag',
   },
   newTagPlaceholder: {
-    id: 'manage-tags.newTagPlaceholder',
+    id: 'manage-tags.new-tag-placeholder',
     defaultMessage: 'New tag',
   },
   newTagGroupPlaceholder: {
-    id: 'manage-tags.newTagPlaceholder',
+    id: 'manage-tags.new-tag-group-placeholder',
     defaultMessage: 'New tag group',
   },
   loadingUpdatingTicketTagGroup: {

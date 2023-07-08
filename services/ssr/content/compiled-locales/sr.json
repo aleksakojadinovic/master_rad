@@ -2,7 +2,7 @@
   "agent-dashboard.title": [
     {
       "type": 0,
-      "value": "Početna strana"
+      "value": "Kontrolna tabla"
     }
   ],
   "click-here": [
@@ -14,7 +14,7 @@
   "create-ticket.success": [
     {
       "type": 0,
-      "value": "Tiket uspešno podnet, možete ga videti "
+      "value": "Tiket uspešno kreiran, možete ga videti "
     },
     {
       "type": 1,
@@ -28,7 +28,7 @@
   "create-ticket.ticket-description-text": [
     {
       "type": 0,
-      "value": "Opišite Vaš problem detaljno"
+      "value": "Opisite svoj problem detaljno"
     }
   ],
   "create-ticket.ticket-title-text": [
@@ -37,10 +37,148 @@
       "value": "Naslov vašeg problema"
     }
   ],
+  "dialog.close": [
+    {
+      "type": 0,
+      "value": "Zatvori"
+    }
+  ],
+  "dialog.error": [
+    {
+      "type": 0,
+      "value": "Došlo je do greške"
+    }
+  ],
+  "dialog.loading": [
+    {
+      "type": 0,
+      "value": "Učitavanje..."
+    }
+  ],
+  "dialogs.success": [
+    {
+      "type": 0,
+      "value": "Operacija uspešna"
+    }
+  ],
+  "forms.page": [
+    {
+      "type": 0,
+      "value": "Strana"
+    }
+  ],
+  "forms.perPage": [
+    {
+      "type": 0,
+      "value": "Po strani"
+    }
+  ],
+  "forms.search": [
+    {
+      "type": 0,
+      "value": "Pretraga"
+    }
+  ],
   "forms.submit": [
     {
       "type": 0,
-      "value": "Podnesi"
+      "value": "Potvrdi"
+    }
+  ],
+  "global.delete": [
+    {
+      "type": 0,
+      "value": "Obriši"
+    }
+  ],
+  "global.description": [
+    {
+      "type": 0,
+      "value": "Opis"
+    }
+  ],
+  "global.language": [
+    {
+      "type": 0,
+      "value": "Jezik"
+    }
+  ],
+  "global.name": [
+    {
+      "type": 0,
+      "value": "Ime"
+    }
+  ],
+  "global.no": [
+    {
+      "type": 0,
+      "value": "Ne"
+    }
+  ],
+  "global.not-found": [
+    {
+      "type": 0,
+      "value": "Stranica nije pronađena | STS"
+    }
+  ],
+  "global.save": [
+    {
+      "type": 0,
+      "value": "Sačuvaj"
+    }
+  ],
+  "global.yes": [
+    {
+      "type": 0,
+      "value": "Da"
+    }
+  ],
+  "manage-tags.addNew": [
+    {
+      "type": 0,
+      "value": "Dodaj novu oznaku"
+    }
+  ],
+  "manage-tags.edit-single": [
+    {
+      "type": 0,
+      "value": "Uredi oznaku | STS"
+    }
+  ],
+  "manage-tags.new-tag-group-placeholder": [
+    {
+      "type": 0,
+      "value": "Nova grupa oznaka"
+    }
+  ],
+  "manage-tags.new-tag-placeholder": [
+    {
+      "type": 0,
+      "value": "Nova oznaka"
+    }
+  ],
+  "manage-tags.title": [
+    {
+      "type": 0,
+      "value": "Upravljanje oznakama | STS"
+    }
+  ],
+  "manage-tags.update-error": [
+    {
+      "type": 0,
+      "value": "Greška pri ažuriranju oznaka!"
+    }
+  ],
+  "manage-tags.update-loading": [
+    {
+      "type": 0,
+      "value": "Ažuriranje oznaka..."
+    }
+  ],
+  "manage-tags.update-success": [
+    {
+      "type": 0,
+      "value": "Uspešno ažurirane oznake!"
     }
   ],
   "query-status.error": [
@@ -52,7 +190,91 @@
   "query-status.success": [
     {
       "type": 0,
-      "value": "Operacija je uspešna"
+      "value": "Uspešno"
+    }
+  ],
+  "roles.administrator": [
+    {
+      "type": 0,
+      "value": "Administrator"
+    }
+  ],
+  "roles.agent": [
+    {
+      "type": 0,
+      "value": "Agent"
+    }
+  ],
+  "roles.customer": [
+    {
+      "type": 0,
+      "value": "Korisnik"
+    }
+  ],
+  "roles.superadministrator": [
+    {
+      "type": 0,
+      "value": "Superadministrator"
+    }
+  ],
+  "tags.add-new-group-text": [
+    {
+      "type": 0,
+      "value": "Dodaj novu grupu oznaka"
+    }
+  ],
+  "tags.lang-code": [
+    {
+      "type": 0,
+      "value": "Jezik"
+    }
+  ],
+  "tags.tag-description-text": [
+    {
+      "type": 0,
+      "value": "Opis"
+    }
+  ],
+  "tags.tag-intl-key-text": [
+    {
+      "type": 0,
+      "value": "Intl ključ"
+    }
+  ],
+  "tags.tag-intl-keys-text": [
+    {
+      "type": 0,
+      "value": "Intl ključevi"
+    }
+  ],
+  "tags.tag-name-text": [
+    {
+      "type": 0,
+      "value": "Ime"
+    }
+  ],
+  "tags.tag-permissions-text": [
+    {
+      "type": 0,
+      "value": "Dozvole"
+    }
+  ],
+  "tags.tag-text": [
+    {
+      "type": 0,
+      "value": "Oznake"
+    }
+  ],
+  "tags.who-can-add-text": [
+    {
+      "type": 0,
+      "value": "Ko može da doda ove oznake?"
+    }
+  ],
+  "tags.who-can-remove-text": [
+    {
+      "type": 0,
+      "value": "Ko može da ukloni ove oznake?"
     }
   ]
 }
