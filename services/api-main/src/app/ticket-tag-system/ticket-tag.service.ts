@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketTag } from './schema/ticket-tag.schema';
 import { CreateTicketTagDTO } from './dto/create-ticket-tag.dto';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 
 @Injectable()
 export class TicketTagService extends BaseService {
@@ -12,6 +13,27 @@ export class TicketTagService extends BaseService {
     private ticketTagModel: Model<TicketTag>,
   ) {
     super();
+  }
+
+  override constructPopulate(queryDTO: EntityQueryDTO): any[] {
+    const populations = [];
+    queryDTO.includes.forEach((includeField) => {
+      if (includeField === 'group') {
+        populations.push({
+          path: 'group',
+          model: 'TicketTagGroup',
+        });
+      }
+    });
+    return populations;
+  }
+
+  async findAll(queryDTO: EntityQueryDTO) {
+    const query = this.ticketTagModel.find({});
+    const populations = this.constructPopulate(queryDTO);
+    populations.forEach((p) => query.populate(p));
+    const tags = await query.exec();
+    return tags;
   }
 
   async findById(id: string) {

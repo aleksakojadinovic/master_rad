@@ -8,7 +8,13 @@ import {
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { TicketTag } from '../schema/ticket-tag.schema';
-import { TicketTagDTO } from '../dto/ticket-tag.dto';
+import {
+  TicketTagDTO,
+  TicketTagTicketTagGroupDTO,
+} from '../dto/ticket-tag.dto';
+import { Types } from 'mongoose';
+import { TicketTagGroup } from '../schema/ticket-tag-group.schema';
+import { TicketTagGroupDTO } from '../dto/ticket-tag-group.dto';
 
 @Injectable()
 export class TicketTagProfile extends AutomapperProfile {
@@ -47,6 +53,22 @@ export class TicketTagProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.descriptionIntl,
           mapFrom((source) => source.descriptionIntl),
+        ),
+        forMember(
+          (destination) => destination.group,
+          mapWithArguments((source, extra) => {
+            if (source.group instanceof Types.ObjectId) {
+              return new TicketTagTicketTagGroupDTO(
+                source.group.toString(),
+                '',
+                '',
+              );
+            }
+
+            return mapper.map(source.group, TicketTagGroup, TicketTagGroupDTO, {
+              extraArgs: () => ({ languageCode: extra['languageCode'] }),
+            });
+          }),
         ),
       );
     };

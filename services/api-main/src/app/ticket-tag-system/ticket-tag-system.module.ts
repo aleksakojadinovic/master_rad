@@ -9,9 +9,10 @@ import {
 import { TicketTag, TicketTagSchema } from './schema/ticket-tag.schema';
 import { UsersModule } from '../users/users.module';
 import { TicketTagService } from './ticket-tag.service';
+import { TicketTagController } from './ticket-tag.controller';
 
 @Module({
-  controllers: [TicketTagGroupController],
+  controllers: [TicketTagGroupController, TicketTagController],
   providers: [TicketTagGroupService, TicketTagService],
   imports: [
     UsersModule,
