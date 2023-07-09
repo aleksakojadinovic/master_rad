@@ -1,9 +1,9 @@
 import { rolesSlice } from '@/api/roles';
 import {
   selectGetTicketTagGroupQueryResponse,
-  ticketTagGroupsSlice,
+  ticketTagSystemSlice,
   useGetTicketTagGroupQuery,
-} from '@/api/ticket-tag-groups';
+} from '@/api/ticket-tag-system';
 import ManageTagsLayout from '@/features/manage-tags/Layout';
 import TicketTagGroupAdmin from '@/features/manage-tags/components/TicketTagGroupAdmin';
 import { wrapper } from '@/redux/store';
@@ -43,7 +43,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       params: { tagGroupId: id },
     } = context;
     store.dispatch(
-      ticketTagGroupsSlice.endpoints.getTicketTagGroup.initiate({
+      ticketTagSystemSlice.endpoints.getTicketTagGroup.initiate({
         id,
         includes: ['tags', 'role'],
       }),

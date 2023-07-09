@@ -1,6 +1,6 @@
 import { selectGetMeQueryResponse } from '@/api/auth';
 import { rolesSlice } from '@/api/roles';
-import { ticketTagGroupsSlice } from '@/api/ticket-tag-groups';
+import { ticketTagSystemSlice } from '@/api/ticket-tag-system';
 import ManageTagsLayout from '@/features/manage-tags/Layout';
 import ManageTags from '@/features/manage-tags/ManageTags';
 import { getManageTagsParams } from '@/features/manage-tags/utils/params';
@@ -44,7 +44,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const params = getManageTagsParams();
 
     store.dispatch(
-      ticketTagGroupsSlice.endpoints.getTicketTagGroups.initiate(params),
+      ticketTagSystemSlice.endpoints.getTicketTagGroups.initiate(params),
     );
 
     store.dispatch(rolesSlice.endpoints.getRoles.initiate());

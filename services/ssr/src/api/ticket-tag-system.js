@@ -2,7 +2,7 @@ import api from '@/services/api';
 import { createSelector } from '@reduxjs/toolkit';
 import { selectGetRolesQueryResponse } from './roles';
 
-export const ticketTagGroupsSlice = api.injectEndpoints({
+export const ticketTagSystemSlice = api.injectEndpoints({
   endpoints: (builder) => ({
     getTicketTagGroups: builder.query({
       query: (params) => ({
@@ -44,6 +44,12 @@ export const ticketTagGroupsSlice = api.injectEndpoints({
           : [{ type: 'ticket-tag-group', id: args.id }, 'ticket-tag-group'];
       },
     }),
+    getTicketTags: builder.query({
+      query: (params) => ({
+        url: '/ticket-tag/',
+        params,
+      }),
+    }),
   }),
   overrideExisting: true,
 });
@@ -53,12 +59,13 @@ export const {
   useGetTicketTagGroupQuery,
   useUpdateTicketTagGroupMutation,
   useCreateTicketTagGroupMutation,
-} = ticketTagGroupsSlice;
+  useGetTicketTagsQuery,
+} = ticketTagSystemSlice;
 
 const selectGetTicketTagGroupsQueryResult = createSelector(
   [(state) => state, (_, params) => params],
   (state, params) => {
-    return ticketTagGroupsSlice.endpoints.getTicketTagGroups.select(params)(
+    return ticketTagSystemSlice.endpoints.getTicketTagGroups.select(params)(
       state,
     );
   },
@@ -103,7 +110,7 @@ export const selectTicketTagGroups = createSelector(
 const selectGetTicketTagGroupQueryResult = createSelector(
   [(state) => state, (_, params) => params],
   (state, params) => {
-    return ticketTagGroupsSlice.endpoints.getTicketTagGroup.select(params)(
+    return ticketTagSystemSlice.endpoints.getTicketTagGroup.select(params)(
       state,
     );
   },
@@ -111,5 +118,27 @@ const selectGetTicketTagGroupQueryResult = createSelector(
 
 export const selectGetTicketTagGroupQueryResponse = createSelector(
   [selectGetTicketTagGroupQueryResult],
+  (queryResult) => queryResult.data ?? [],
+);
+
+const selectGetTicketTagsQueryResult = createSelector(
+  [(state) => state, (_, params) => params],
+  (state, params) => {
+    return ticketTagSystemSlice.endpoints.getTicketTags.select(params)(state);
+  },
+);
+
+export const selectGetTicketTagsQueryIndicators = createSelector(
+  [selectGetTicketTagsQueryResult],
+  ({ isLoading, isError, isUninitialized, isSuccess }) => ({
+    isLoading,
+    isError,
+    isUninitialized,
+    isSuccess,
+  }),
+);
+
+export const selectGetTicketTagsQueryResponse = createSelector(
+  [selectGetTicketTagsQueryResult],
   (queryResult) => queryResult.data ?? [],
 );

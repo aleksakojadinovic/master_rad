@@ -21,7 +21,7 @@ import { LanguageContext } from '@/context/LanguageContext';
 import {
   useCreateTicketTagGroupMutation,
   useUpdateTicketTagGroupMutation,
-} from '@/api/ticket-tag-groups';
+} from '@/api/ticket-tag-system';
 import ServerActionDialog from '@/components/ServerActionDialog/ServerActionDialog';
 import { constructTagUpdateDTO } from '../utils/params';
 

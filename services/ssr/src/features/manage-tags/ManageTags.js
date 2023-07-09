@@ -1,7 +1,7 @@
 import {
   selectTicketTagGroups,
   useGetTicketTagGroupsQuery,
-} from '@/api/ticket-tag-groups';
+} from '@/api/ticket-tag-system';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Button } from '@mui/material';

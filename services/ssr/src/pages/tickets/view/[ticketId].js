@@ -1,4 +1,8 @@
 import {
+  ticketTagSystemSlice,
+  useGetTicketTagsQuery,
+} from '@/api/ticket-tag-system';
+import {
   selectGetTicketQueryIndicators,
   selectGetTicketQueryResponse,
   ticketsSlice,
@@ -20,6 +24,10 @@ function TicketViewPage(props) {
   const { isLoading, isFetching, isError } = useGetTicketQuery({
     id,
     ...getTicketViewQueryParams(),
+  });
+
+  useGetTicketTagsQuery({
+    includes: 'group',
   });
 
   const ticket = useSelector((state) =>
@@ -55,6 +63,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
       ticketsSlice.endpoints.getTicket.initiate({
         id: ticketId,
         ...getTicketViewQueryParams(),
+      }),
+    );
+
+    store.dispatch(
+      ticketTagSystemSlice.endpoints.getTicketTags.initiate({
+        includes: 'group',
       }),
     );
 
