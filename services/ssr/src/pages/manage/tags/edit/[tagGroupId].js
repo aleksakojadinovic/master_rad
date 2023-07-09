@@ -1,8 +1,10 @@
 import { rolesSlice } from '@/api/roles';
 import {
+  selectGetTicketTagGroupQueryResponse,
   ticketTagGroupsSlice,
   useGetTicketTagGroupQuery,
 } from '@/api/ticket-tag-groups';
+import ManageTagsLayout from '@/features/manage-tags/Layout';
 import TicketTagGroupAdmin from '@/features/manage-tags/components/TicketTagGroupAdmin';
 import { wrapper } from '@/redux/store';
 import api from '@/services/api';
@@ -11,7 +13,7 @@ import Head from 'next/head';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
 
-function EditTagGroupRoute({ id }) {
+function EditTagGroupRoute({ id, tag }) {
   const intl = useIntl();
   const { data: tagGroup } = useGetTicketTagGroupQuery({
     id,
@@ -20,7 +22,11 @@ function EditTagGroupRoute({ id }) {
   return (
     <Fragment>
       <Head>
-        <title>{intl.formatMessage(manageTagsMessages.editSingleTitle)}</title>
+        <title>
+          {intl.formatMessage(manageTagsMessages.editSingleTitle, {
+            tagName: tag.name,
+          })}
+        </title>
       </Head>
       <TicketTagGroupAdmin group={tagGroup} isCreate={false} />
     </Fragment>
@@ -28,6 +34,8 @@ function EditTagGroupRoute({ id }) {
 }
 
 export default EditTagGroupRoute;
+
+EditTagGroupRoute.Layout = ManageTagsLayout;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
@@ -42,10 +50,15 @@ export const getServerSideProps = wrapper.getServerSideProps(
     );
 
     store.dispatch(rolesSlice.endpoints.getRoles.initiate());
-
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
+
+    const tag = selectGetTicketTagGroupQueryResponse(store.getState(), {
+      id,
+      includes: ['tags', 'role'],
+    });
+
     return {
-      props: { id },
+      props: { id, isEditPage: true, tag },
     };
   },
 );

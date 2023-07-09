@@ -1,4 +1,5 @@
 import { rolesSlice } from '@/api/roles';
+import ManageTagsLayout from '@/features/manage-tags/Layout';
 import CreateOrEditTagGroups from '@/features/manage-tags/components/CreateOrEditTag';
 import { wrapper } from '@/redux/store';
 import api from '@/services/api';
@@ -14,10 +15,18 @@ function CreateTagRoute() {
 
 export default CreateTagRoute;
 
+CreateTagRoute.Layout = ManageTagsLayout;
+
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
     store.dispatch(rolesSlice.endpoints.getRoles.initiate());
 
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
+
+    return {
+      props: {
+        isCreatePage: true,
+      },
+    };
   },
 );

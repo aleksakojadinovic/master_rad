@@ -11,7 +11,7 @@ import { TicketNotFoundError } from '../errors/TicketNotFound';
 import { TicketIdNotValidError } from '../errors/TicketIdNotValid';
 import { AssigneeIdNotValidError } from '../errors/AssigneeIdNotValid';
 import { CannotAssignCustomer } from '../errors/CannotAssignCustomer';
-import { TooSoonToCreateAnotherTicket } from '../errors/TooSoonToCreateAnotherTicket';
+import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {
@@ -34,7 +34,7 @@ export class TicketInterceptor implements NestInterceptor {
           throw new BadRequestException(error.getPayload());
         }
 
-        if (error instanceof TooSoonToCreateAnotherTicket) {
+        if (error instanceof TooSoonToCreateAnotherTicketError) {
           throw new BadRequestException(error.getPayload());
         }
 

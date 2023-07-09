@@ -6,12 +6,15 @@ import Footer from './Footer/Footer';
 
 function AppWrapper({ Component, pageProps }) {
   wrapper.useHydration(pageProps);
+  const PageLayoutComponent = Component.Layout || (({ children }) => children);
 
   return (
     <Fragment>
       <NavigationBar />
       <Box sx={{ marginTop: '24px', minHeight: '800px' }}>
-        <Component {...pageProps} />
+        <PageLayoutComponent {...pageProps}>
+          <Component {...pageProps} />
+        </PageLayoutComponent>
       </Box>
       <Box sx={{ marginTop: '36px' }}>
         <Footer />

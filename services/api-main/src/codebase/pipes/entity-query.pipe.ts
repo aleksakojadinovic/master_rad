@@ -2,7 +2,7 @@ import { PipeTransform, Injectable } from '@nestjs/common';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { InvalidPaginationParametersError } from '../errors/InvalidPaginationParameters';
 import { InvalidIncludeKeyError } from '../errors/InvalidIncludeKey';
-import { InvalidSortKey } from '../errors/InvalidSortKey';
+import { InvalidSortKeyError } from '../errors/InvalidSortKey';
 import { InvalidFilterKeyError } from '../errors/InvalidFilterKey';
 import { PaginationRequiredError } from '../errors/PaginationRequired';
 
@@ -32,7 +32,7 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
     });
 
     if (sortKey !== null && !this.allowedSortKeys.includes(sortKey)) {
-      throw new InvalidSortKey(sortKey);
+      throw new InvalidSortKeyError(sortKey);
     }
 
     filterKeys.forEach((filterKey) => {

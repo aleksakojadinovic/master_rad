@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 export const manageTagsMessages = defineMessages({
   editSingleTitle: {
     id: 'manage-tags.edit-single',
-    defaultMessage: 'Edit tag | STS',
+    defaultMessage: 'Edit tag "{tagName}"| STS',
   },
   title: {
     id: 'manage-tags.title',
@@ -84,5 +84,17 @@ export const manageTagsMessages = defineMessages({
   errorCreatingTicketTagGroup: {
     id: 'manage-tags.create-error',
     defaultMessage: 'Error creating tags!',
+  },
+  homeBreadcrumbText: {
+    id: 'manage-tags.home-breadcrumb',
+    defaultMessage: 'Manage tags',
+  },
+  createTagBreadcrumbText: {
+    id: 'manage-tags.create-breadcrumb',
+    defaultMessage: 'Create a new tag',
+  },
+  editTagBreadcrumbText: {
+    id: 'manage-tags.edit-breadcrumb',
+    defaultMessage: 'Editing tag "{tagName}"',
   },
 });

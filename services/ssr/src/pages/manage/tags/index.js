@@ -1,6 +1,7 @@
 import { selectGetMeQueryResponse } from '@/api/auth';
 import { rolesSlice } from '@/api/roles';
 import { ticketTagGroupsSlice } from '@/api/ticket-tag-groups';
+import ManageTagsLayout from '@/features/manage-tags/Layout';
 import ManageTags from '@/features/manage-tags/ManageTags';
 import { getManageTagsParams } from '@/features/manage-tags/utils/params';
 import { wrapper } from '@/redux/store';
@@ -23,6 +24,8 @@ function ManageTagsRoute() {
 }
 
 export default ManageTagsRoute;
+
+ManageTagsRoute.Layout = ManageTagsLayout;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
@@ -48,6 +51,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
 
-    return { props: {} };
+    return {
+      props: {
+        isHomePage: true,
+      },
+    };
   },
 );

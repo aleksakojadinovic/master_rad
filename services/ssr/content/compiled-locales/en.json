@@ -5,6 +5,18 @@
       "value": "Dashboard"
     }
   ],
+  "api-errors.generic-error": [
+    {
+      "type": 0,
+      "value": "Something went wrong. Please contact support"
+    }
+  ],
+  "api-errors.ticket-tag-group-name-duplicate-error": [
+    {
+      "type": 0,
+      "value": "A tag group with this name already exists"
+    }
+  ],
   "click-here": [
     {
       "type": 0,
@@ -139,10 +151,62 @@
       "value": "Add new tag"
     }
   ],
+  "manage-tags.create-breadcrumb": [
+    {
+      "type": 0,
+      "value": "Create a new tag"
+    }
+  ],
+  "manage-tags.create-error": [
+    {
+      "type": 0,
+      "value": "Error creating tags!"
+    }
+  ],
+  "manage-tags.create-success": [
+    {
+      "type": 0,
+      "value": "Successfully created tags!"
+    }
+  ],
+  "manage-tags.creating-loading": [
+    {
+      "type": 0,
+      "value": "Creating tags..."
+    }
+  ],
+  "manage-tags.edit-breadcrumb": [
+    {
+      "type": 0,
+      "value": "Editing tag \""
+    },
+    {
+      "type": 1,
+      "value": "tagName"
+    },
+    {
+      "type": 0,
+      "value": "\""
+    }
+  ],
   "manage-tags.edit-single": [
     {
       "type": 0,
-      "value": "Edit tag | STS"
+      "value": "Edit tag \""
+    },
+    {
+      "type": 1,
+      "value": "tagName"
+    },
+    {
+      "type": 0,
+      "value": "\"| STS"
+    }
+  ],
+  "manage-tags.home-breadcrumb": [
+    {
+      "type": 0,
+      "value": "Manage tags"
     }
   ],
   "manage-tags.new-tag-group-placeholder": [
