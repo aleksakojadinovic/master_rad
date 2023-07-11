@@ -26,7 +26,7 @@ import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { TicketNotFoundError } from './errors/TicketNotFound';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
 import { AssigneeIdNotValidError } from './errors/AssigneeIdNotValid';
-import { CannotAssignCustomer } from './errors/CannotAssignCustomer';
+import { CannotAssignCustomerError } from './errors/CannotAssignCustomer';
 import { TicketTagService } from '../ticket-tag-system/ticket-tag.service';
 import { OverlapInTagIdsError } from './errors/OverlapInTagIds';
 import { NotAllowedToAddThisTagError } from './errors/NotAllowedToAddThisTag';
@@ -267,15 +267,17 @@ export class TicketsService extends BaseService {
     ) {
       const assignees: User[] = [];
       for (const assigneeId of updateTicketDto.assignees) {
+        // TODO: FFS this is a controller thing
         if (!isValidObjectId(assigneeId)) {
           throw new AssigneeIdNotValidError(assigneeId);
         }
+
         const assigneeUser = await this.usersService.findOne(assigneeId);
         if (!assigneeUser) {
           throw new AssigneeIdNotValidError(assigneeId);
         }
         if (assigneeUser.hasRole('customer')) {
-          throw new CannotAssignCustomer(assigneeId);
+          throw new CannotAssignCustomerError(assigneeId);
         }
         assignees.push(assigneeUser);
       }

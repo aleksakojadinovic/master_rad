@@ -11,7 +11,7 @@ import { Observable, catchError } from 'rxjs';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
 import { TicketIdNotValidError } from '../errors/TicketIdNotValid';
 import { AssigneeIdNotValidError } from '../errors/AssigneeIdNotValid';
-import { CannotAssignCustomer } from '../errors/CannotAssignCustomer';
+import { CannotAssignCustomerError } from '../errors/CannotAssignCustomer';
 import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
 import { NotAllowedToAddThisTagError } from '../errors/NotAllowedToAddThisTag';
 import { NotAllowedToRemoveThisTagError } from '../errors/NotAllowedToRemoveThisTag';
@@ -33,7 +33,7 @@ export class TicketInterceptor implements NestInterceptor {
           throw new BadRequestException(error.getPayload());
         }
 
-        if (error instanceof CannotAssignCustomer) {
+        if (error instanceof CannotAssignCustomerError) {
           throw new BadRequestException(error.getPayload());
         }
 
