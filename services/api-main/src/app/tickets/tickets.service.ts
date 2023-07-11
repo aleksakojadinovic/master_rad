@@ -27,6 +27,10 @@ import { TicketNotFoundError } from './errors/TicketNotFound';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
 import { AssigneeIdNotValidError } from './errors/AssigneeIdNotValid';
 import { CannotAssignCustomer } from './errors/CannotAssignCustomer';
+import { TicketTagService } from '../ticket-tag-system/ticket-tag.service';
+import { OverlapInTagIdsError } from './errors/OverlapInTagIds';
+import { NotAllowedToAddThisTagError } from './errors/NotAllowedToAddThisTag';
+import { NotAllowedToRemoveThisTagError } from './errors/NotAllowedToRemoveThisTag';
 // import { TooSoonToCreateAnotherTicket } from './errors/TooSoonToCreateAnotherTicket';
 
 @Injectable()
@@ -34,6 +38,7 @@ export class TicketsService extends BaseService {
   constructor(
     @InjectModel(Ticket.name) private ticketModel: Model<Ticket>,
     @InjectMapper() private readonly mapper: Mapper,
+    private ticketTagService: TicketTagService,
     private usersService: UsersService,
   ) {
     super();
@@ -176,6 +181,7 @@ export class TicketsService extends BaseService {
 
     const user = await this.usersService.findOne(userId);
 
+    const userRoleIds = user.roles.map((role) => role._id);
     const isCustomer = user.roles.map(({ name }) => name).includes('customer');
     const isTicketOwner = await this.isTicketOwner(userId, id);
 
@@ -288,6 +294,48 @@ export class TicketsService extends BaseService {
       for (const a of assignees) {
         ticket.assignees.push(a);
       }
+    }
+
+    const addTags = updateTicketDto.addTags || [];
+    const removeTags = updateTicketDto.removeTags || [];
+
+    if (addTags.some((addId) => removeTags.includes(addId))) {
+      throw new OverlapInTagIdsError();
+    }
+
+    if (removeTags.length > 0) {
+      const tagsToRemove = await this.ticketTagService.findMany(
+        removeTags,
+        new EntityQueryDTO('', ['group'], '', 0, 0),
+      );
+      tagsToRemove.forEach((tag) => {
+        if (
+          tag.group.permissions.canRemoveRoles
+            .map((r) => r._id)
+            .some((id) => userRoleIds.includes(id))
+        ) {
+          throw new NotAllowedToRemoveThisTagError();
+        }
+        ticket.tags.push(tag);
+      });
+      ticket.tags = ticket.tags.filter((tag) => !removeTags.includes(tag._id));
+    }
+
+    if (addTags.length > 0) {
+      const tagsToAdd = await this.ticketTagService.findMany(
+        addTags,
+        new EntityQueryDTO('', ['group'], '', 0, 0),
+      );
+      tagsToAdd.forEach((tag) => {
+        if (
+          tag.group.permissions.canAddRoles
+            .map((r) => r._id)
+            .some((id) => userRoleIds.includes(id))
+        ) {
+          throw new NotAllowedToAddThisTagError();
+        }
+        ticket.tags.push(tag);
+      });
     }
 
     await ticket.save();

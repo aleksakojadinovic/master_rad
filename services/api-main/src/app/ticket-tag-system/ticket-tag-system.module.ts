@@ -14,6 +14,7 @@ import { TicketTagController } from './ticket-tag.controller';
 @Module({
   controllers: [TicketTagGroupController, TicketTagController],
   providers: [TicketTagGroupService, TicketTagService],
+  exports: [TicketTagService],
   imports: [
     UsersModule,
     MongooseModule.forFeature([

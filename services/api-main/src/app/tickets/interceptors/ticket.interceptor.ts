@@ -2,6 +2,7 @@ import {
   BadRequestException,
   CallHandler,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   NestInterceptor,
   NotFoundException,
@@ -12,6 +13,8 @@ import { TicketIdNotValidError } from '../errors/TicketIdNotValid';
 import { AssigneeIdNotValidError } from '../errors/AssigneeIdNotValid';
 import { CannotAssignCustomer } from '../errors/CannotAssignCustomer';
 import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
+import { NotAllowedToAddThisTagError } from '../errors/NotAllowedToAddThisTag';
+import { NotAllowedToRemoveThisTagError } from '../errors/NotAllowedToRemoveThisTag';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {
@@ -36,6 +39,14 @@ export class TicketInterceptor implements NestInterceptor {
 
         if (error instanceof TooSoonToCreateAnotherTicketError) {
           throw new BadRequestException(error.getPayload());
+        }
+
+        if (error instanceof NotAllowedToAddThisTagError) {
+          throw new ForbiddenException(error.getPayload());
+        }
+
+        if (error instanceof NotAllowedToRemoveThisTagError) {
+          throw new ForbiddenException(error.getPayload());
         }
 
         throw error;

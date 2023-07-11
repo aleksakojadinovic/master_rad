@@ -14,6 +14,7 @@ import { CannotRemoveAndAddOrUpdateTicketTagError } from '../errors/CannotRemove
 import { TicketTagNotFoundError } from '../errors/TicketTagNotFound';
 import { TicketTagDuplicateNameError } from '../errors/TicketTagDuplicateName';
 import { TicketTagGroupDuplicateNameError } from '../errors/TicketTagGroupDuplicateNameError';
+import { OverlapInTagIdsError } from 'src/app/tickets/errors/OverlapInTagIds';
 
 @Injectable()
 export class TicketTagInterceptor implements NestInterceptor {
@@ -41,6 +42,10 @@ export class TicketTagInterceptor implements NestInterceptor {
         }
 
         if (error instanceof TicketTagGroupDuplicateNameError) {
+          throw new ConflictException(error.getPayload());
+        }
+
+        if (error instanceof OverlapInTagIdsError) {
           throw new ConflictException(error.getPayload());
         }
 

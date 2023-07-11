@@ -9,8 +9,10 @@ import StatusChange from '../StatusChange/StatusChange';
 import CommentEditor from './CommentEditor';
 import { useUpdateTicketMutation } from '@/api/tickets';
 import { TicketHistoryEntryType } from '@/enums/tickets';
+import { useIntl } from 'react-intl';
 
 export default function Ticket({ ticket }) {
+  const intl = useIntl();
   const [updateTicket, { isLoading, isSuccess }] = useUpdateTicketMutation();
 
   const canAddComment = true;

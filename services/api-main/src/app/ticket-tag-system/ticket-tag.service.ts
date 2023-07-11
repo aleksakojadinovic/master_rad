@@ -60,4 +60,12 @@ export class TicketTagService extends BaseService {
     await ticketTag.save();
     return ticketTag;
   }
+
+  async findMany(ids: string[], queryDTO: EntityQueryDTO) {
+    const query = this.ticketTagModel.find({ _id: { $in: ids } });
+    const populations = this.constructPopulate(queryDTO);
+    populations.forEach((p) => query.populate(p));
+    const tags = await query.exec();
+    return tags;
+  }
 }
