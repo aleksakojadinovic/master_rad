@@ -52,6 +52,7 @@ function ManageTagsLayout({
     if (isEditPage) {
       return [getHomeBreadcrumb(), getEditBreadcrumb()];
     }
+    return [];
   };
 
   const breadcrumbs = getBreadcrumbs();
