@@ -31,7 +31,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
     const user = selectGetMeQueryResponse(store.getState());
     if (user == null) {
-      return {};
+      return {
+        redirect: {
+          destination: '/404',
+        },
+      };
     }
     if (!user.roles.map(({ name }) => name).includes('administrator')) {
       return {

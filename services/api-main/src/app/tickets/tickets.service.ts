@@ -315,9 +315,13 @@ export class TicketsService extends BaseService {
       );
       tagsToRemove.forEach((tag) => {
         if (
-          tag.group.permissions.canRemoveRoles
-            .map((r) => r._id)
-            .some((id) => userRoleIds.includes(id))
+          !userRoleIds.some((userRoleId) => {
+            const isAllowed = tag.group.permissions.canRemoveRoles
+              .map((r) => r._id.toString())
+              .includes(userRoleId.toString());
+
+            return isAllowed;
+          })
         ) {
           throw new NotAllowedToRemoveThisTagError();
         }
@@ -333,9 +337,13 @@ export class TicketsService extends BaseService {
       );
       tagsToAdd.forEach((tag) => {
         if (
-          tag.group.permissions.canAddRoles
-            .map((r) => r._id)
-            .some((id) => userRoleIds.includes(id))
+          !userRoleIds.some((userRoleId) => {
+            const isAllowed = tag.group.permissions.canAddRoles
+              .map((r) => r._id.toString())
+              .includes(userRoleId.toString());
+
+            return isAllowed;
+          })
         ) {
           throw new NotAllowedToAddThisTagError();
         }
