@@ -308,6 +308,7 @@ export class TicketsService extends BaseService {
       throw new OverlapInTagIdsError();
     }
 
+    // TODO: Move this check to a util function since it's very repetitive
     if (removeTags.length > 0) {
       const tagsToRemove = await this.ticketTagService.findMany(
         removeTags,
