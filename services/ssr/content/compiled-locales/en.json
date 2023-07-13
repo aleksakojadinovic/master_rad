@@ -287,6 +287,12 @@
       "value": "Add new tag group"
     }
   ],
+  "tags.add-tag": [
+    {
+      "type": 0,
+      "value": "Add a tag"
+    }
+  ],
   "tags.lang-code": [
     {
       "type": 0,
@@ -339,6 +345,24 @@
     {
       "type": 0,
       "value": "Who can remove these tags?"
+    }
+  ],
+  "ticket-status.closed": [
+    {
+      "type": 0,
+      "value": "Closed"
+    }
+  ],
+  "ticket-status.new": [
+    {
+      "type": 0,
+      "value": "New"
+    }
+  ],
+  "ticket-status.open": [
+    {
+      "type": 0,
+      "value": "Open"
     }
   ]
 }

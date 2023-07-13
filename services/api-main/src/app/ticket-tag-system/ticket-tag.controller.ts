@@ -1,17 +1,8 @@
-import {
-  Controller,
-  Get,
-  UseInterceptors,
-  Query,
-  Headers,
-  Req,
-} from '@nestjs/common';
+import { Controller, Get, UseInterceptors, Query, Req } from '@nestjs/common';
 import { TicketTagGroupService } from './ticket-tag-group.service';
 import { TicketTagInterceptor } from './interceptors/ticket-tag.interceptor';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketTagGroup } from './schema/ticket-tag-group.schema';
-import { TicketTagGroupDTO } from './dto/ticket-tag-group.dto';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { Request } from 'express';
 import { resolveLanguageCode } from 'src/codebase/utils';

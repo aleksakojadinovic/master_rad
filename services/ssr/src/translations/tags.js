@@ -97,4 +97,8 @@ export const manageTagsMessages = defineMessages({
     id: 'manage-tags.edit-breadcrumb',
     defaultMessage: 'Editing tag "{tagName}"',
   },
+  addATag: {
+    id: 'tags.add-tag',
+    defaultMessage: 'Add a tag',
+  },
 });

@@ -43,6 +43,7 @@
   "roles.customer": "Customer",
   "roles.superadministrator": "Superadministrator",
   "tags.add-new-group-text": "Add new tag group",
+  "tags.add-tag": "Add a tag",
   "tags.lang-code": "Language",
   "tags.tag-description-text": "Description",
   "tags.tag-intl-key-text": "Intl key",
@@ -51,5 +52,8 @@
   "tags.tag-permissions-text": "Permissions",
   "tags.tag-text": "Tags",
   "tags.who-can-add-text": "Who can add these tags?",
-  "tags.who-can-remove-text": "Who can remove these tags?"
+  "tags.who-can-remove-text": "Who can remove these tags?",
+  "ticket-status.closed": "Closed",
+  "ticket-status.new": "New",
+  "ticket-status.open": "Open"
 }

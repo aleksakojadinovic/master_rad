@@ -46,8 +46,6 @@ function TagForm({ ticketTags, onSelect }) {
     });
   }, [tags, tagGroups]);
 
-  console.log({ groupedTicketTags });
-
   return (
     <Box display="flex" flexWrap="wrap" alignItems="center">
       {groupIds.map((groupId) => (
