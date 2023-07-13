@@ -1,9 +1,12 @@
 import { Autocomplete, TextField } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 
 function TagPicker({ tags, onSelect }) {
+  const [key, setKey] = useState(1);
+
   return (
     <Autocomplete
+      key={key}
       sx={{ width: '250px' }}
       disablePortal
       options={tags}
@@ -16,6 +19,7 @@ function TagPicker({ tags, onSelect }) {
         if (!selectedTag) {
           return;
         }
+        setKey((k) => k + 1);
         onSelect(selectedTag.id);
       }}
     />

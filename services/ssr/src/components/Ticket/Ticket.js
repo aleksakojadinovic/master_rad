@@ -9,15 +9,9 @@ import StatusChange from '../StatusChange/StatusChange';
 import CommentEditor from './CommentEditor';
 import { useUpdateTicketMutation } from '@/api/tickets';
 import { TicketHistoryEntryType } from '@/enums/tickets';
-import { useIntl } from 'react-intl';
 import TagForm from './TagForm';
-import {
-  useGetTicketTagGroupsQuery,
-  useGetTicketTagsQuery,
-} from '@/api/ticket-tag-system';
 
 export default function Ticket({ ticket }) {
-  const intl = useIntl();
   const [updateTicket, { isLoading, isSuccess }] = useUpdateTicketMutation();
 
   // const { data: tags } = useGetTicketTagsQuery();
