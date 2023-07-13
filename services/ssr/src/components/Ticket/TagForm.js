@@ -62,8 +62,8 @@ function TagForm({ ticketTags, onSelect }) {
         >
           <Box>
             <Box display="flex" width="100%" justifyContent="center">
-              <Typography variant="body2">
-                {groupedTicketTags[groupId].groupName}
+              <Typography>
+                <small>{groupedTicketTags[groupId].groupName}</small>
               </Typography>
             </Box>
 

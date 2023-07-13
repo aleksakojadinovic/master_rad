@@ -13,7 +13,9 @@ function TagPicker({ tags, onSelect }) {
       isOptionEqualToValue={(option, value) => option.id === value.id}
       getOptionLabel={({ name }) => name}
       groupBy={(option) => option.groupName}
-      renderInput={(props) => <TextField {...props} size="small" />}
+      renderInput={(props) => (
+        <TextField {...props} size="small" placeholder="Add a tag" />
+      )}
       onChange={(_e, val) => {
         const selectedTag = tags.find((tag) => tag.id === val.id);
         if (!selectedTag) {
