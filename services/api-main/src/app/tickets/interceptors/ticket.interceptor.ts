@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   CallHandler,
+  ConflictException,
   ExecutionContext,
   ForbiddenException,
   Injectable,
@@ -15,6 +16,7 @@ import { CannotAssignCustomerError } from '../errors/CannotAssignCustomer';
 import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
 import { NotAllowedToAddThisTagError } from '../errors/NotAllowedToAddThisTag';
 import { NotAllowedToRemoveThisTagError } from '../errors/NotAllowedToRemoveThisTag';
+import { DuplicateTagError } from '../errors/DuplicateTag';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {
@@ -47,6 +49,10 @@ export class TicketInterceptor implements NestInterceptor {
 
         if (error instanceof NotAllowedToRemoveThisTagError) {
           throw new ForbiddenException(error.getPayload());
+        }
+
+        if (error instanceof DuplicateTagError) {
+          throw new ConflictException(error.getPayload());
         }
 
         throw error;

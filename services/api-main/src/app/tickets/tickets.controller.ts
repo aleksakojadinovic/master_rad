@@ -6,10 +6,10 @@ import {
   Patch,
   Param,
   Delete,
-  Request,
   UseGuards,
   UseInterceptors,
   Query,
+  Req,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -26,6 +26,8 @@ import { TicketQueryPipe } from './pipes/ticket-query.pipe';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { TicketInterceptor } from './interceptors/ticket.interceptor';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
+import { resolveLanguageCode } from 'src/codebase/utils';
+import { Request } from 'express';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
@@ -39,7 +41,7 @@ export class TicketsController extends BaseController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  async create(@Request() req, @Body() createTicketDto: CreateTicketDto) {
+  async create(@Req() req, @Body() createTicketDto: CreateTicketDto) {
     const ticket = await this.ticketsService.create(
       req.user._id,
       createTicketDto,
@@ -57,18 +59,22 @@ export class TicketsController extends BaseController {
   async findOne(
     @Param('id') id: string,
     @Query(new TicketQueryPipe()) queryDTO: TicketQueryDTO,
+    @Req() req: Request,
   ) {
+    const languageCode = resolveLanguageCode(req);
     if (!isValidObjectId(id)) {
       throw new TicketIdNotValidError(id);
     }
     const ticket = await this.ticketsService.findOne(id, queryDTO);
-    return this.mapper.map(ticket, Ticket, TicketDTO);
+    return this.mapper.map(ticket, Ticket, TicketDTO, {
+      extraArgs: () => ({ languageCode }),
+    });
   }
 
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
   async update(
-    @Request() req,
+    @Req() req,
     @Param('id') id: string,
     @Body() updateTicketDto: UpdateTicketDto,
   ) {

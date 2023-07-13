@@ -5,6 +5,7 @@ import {
   createMap,
   forMember,
   mapFrom,
+  mapWithArguments,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { Ticket } from '../schema/ticket.schema';
@@ -14,6 +15,8 @@ import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 import { User } from 'src/app/users/schema/user.schema';
 import { UserDTO } from 'src/app/users/dto/user.dto';
 import { Types } from 'mongoose';
+import { TicketTag } from 'src/app/ticket-tag-system/schema/ticket-tag.schema';
+import { TicketTagDTO } from 'src/app/ticket-tag-system/dto/ticket-tag.dto';
 
 @Injectable()
 export class TicketProfile extends AutomapperProfile {
@@ -68,6 +71,19 @@ export class TicketProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.status,
           mapFrom((source) => source.status),
+        ),
+        forMember(
+          (destination) => destination.tags,
+          mapWithArguments((source, extra) => {
+            return source.tags.map((tag) => {
+              if (tag instanceof Types.ObjectId) {
+                return tag;
+              }
+              return mapper.map(tag, TicketTag, TicketTagDTO, {
+                extraArgs: () => ({ languageCode: extra['languageCode'] }),
+              });
+            });
+          }),
         ),
       );
     };

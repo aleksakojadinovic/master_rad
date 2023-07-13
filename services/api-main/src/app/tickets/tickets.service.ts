@@ -31,6 +31,7 @@ import { TicketTagService } from '../ticket-tag-system/ticket-tag.service';
 import { OverlapInTagIdsError } from './errors/OverlapInTagIds';
 import { NotAllowedToAddThisTagError } from './errors/NotAllowedToAddThisTag';
 import { NotAllowedToRemoveThisTagError } from './errors/NotAllowedToRemoveThisTag';
+import { DuplicateTagError } from './errors/DuplicateTag';
 // import { TooSoonToCreateAnotherTicket } from './errors/TooSoonToCreateAnotherTicket';
 
 @Injectable()
@@ -62,6 +63,12 @@ export class TicketsService extends BaseService {
             path: 'roles',
             model: 'Role',
           },
+        });
+      }
+      if (includeField === 'tags') {
+        populations.push({
+          path: 'tags',
+          model: 'TicketTag',
         });
       }
     });
@@ -152,10 +159,6 @@ export class TicketsService extends BaseService {
 
     if (!ticket) {
       throw new TicketNotFoundError(id);
-      // return err({
-      //   type: ServiceErrors.ENTITY_NOT_FOUND,
-      //   message: 'Ticket not found',
-      // });
     }
 
     return ticket;
@@ -335,6 +338,14 @@ export class TicketsService extends BaseService {
             .some((id) => userRoleIds.includes(id))
         ) {
           throw new NotAllowedToAddThisTagError();
+        }
+
+        if (
+          ticket.tags.find((currentTagId) => {
+            return currentTagId.toString() === tag.id;
+          })
+        ) {
+          throw new DuplicateTagError();
         }
         ticket.tags.push(tag);
       });
