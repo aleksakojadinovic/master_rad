@@ -172,7 +172,7 @@ export class TicketsService extends BaseService {
       throw e;
     }
 
-    const creatorId = ticket.history[0].initiator._id.toString();
+    const creatorId = ticket.createdBy._id.toString();
 
     return userId === creatorId;
   }
