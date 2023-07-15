@@ -16,6 +16,7 @@ function TagForm({ ticketTags, onSelect }) {
     if (!tags || !tagGroups) {
       return [];
     }
+
     return ticketTags.reduce((acc, curr) => {
       if (!acc[curr.group.id]) {
         acc[curr.group.id] = {

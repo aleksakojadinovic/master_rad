@@ -24,6 +24,7 @@ import { CannotRemoveAndAddOrUpdateTicketTagError } from './errors/CannotRemoveA
 import { TicketTagDuplicateNameError } from './errors/TicketTagDuplicateName';
 import { TicketTagNotFoundError } from './errors/TicketTagNotFound';
 import { TicketTagGroupDuplicateNameError } from './errors/TicketTagGroupDuplicateNameError';
+import { User } from '../users/schema/user.schema';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
@@ -79,8 +80,17 @@ export class TicketTagGroupService extends BaseService {
     // TODO prevent name duplicates (should also be done on update, but too lazy now)
     ticketTagGroupObject.nameIntl = dto.nameIntl;
     ticketTagGroupObject.descriptionIntl = dto.descriptionIntl;
-    ticketTagGroupObject.permissions = new TicketTagGroupPermissions([], []);
     ticketTagGroupObject.tags = [];
+
+    const defaultRoles = await this.rolesService.findManyByName([
+      'administrator',
+      'superadministrator',
+    ]);
+
+    ticketTagGroupObject.permissions = new TicketTagGroupPermissions(
+      defaultRoles,
+      defaultRoles,
+    );
 
     const model = new this.ticketTagGroupModel(ticketTagGroupObject);
     await model.save();
@@ -122,8 +132,15 @@ export class TicketTagGroupService extends BaseService {
   //   return group;
   // }
 
-  async findAll(queryDTO: EntityQueryDTO) {
-    const query = this.ticketTagGroupModel.find({});
+  async findAll(queryDTO: EntityQueryDTO, user: User) {
+    const userRoleIds = user.roles.map(({ _id }) => _id);
+    const query = this.ticketTagGroupModel.find({
+      $or: [
+        { 'permissions.canAddRoles': { $in: userRoleIds } },
+        { 'permissions.canRemoveRoles': { $in: userRoleIds } },
+      ],
+    });
+
     const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
     const groups = await query.exec();

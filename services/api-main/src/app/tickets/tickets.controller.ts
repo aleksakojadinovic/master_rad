@@ -28,6 +28,9 @@ import { TicketInterceptor } from './interceptors/ticket.interceptor';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
 import { resolveLanguageCode } from 'src/codebase/utils';
 import { Request } from 'express';
+import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
+import { User } from '../users/schema/user.schema';
+import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
@@ -56,16 +59,18 @@ export class TicketsController extends BaseController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findOne(
     @Param('id') id: string,
     @Query(new TicketQueryPipe()) queryDTO: TicketQueryDTO,
     @Req() req: Request,
+    @GetUserInfo() user: User,
   ) {
     const languageCode = resolveLanguageCode(req);
     if (!isValidObjectId(id)) {
       throw new TicketIdNotValidError(id);
     }
-    const ticket = await this.ticketsService.findOne(id, queryDTO);
+    const ticket = await this.ticketsService.findOne(id, user, queryDTO);
     return this.mapper.map(ticket, Ticket, TicketDTO, {
       extraArgs: () => ({ languageCode }),
     });

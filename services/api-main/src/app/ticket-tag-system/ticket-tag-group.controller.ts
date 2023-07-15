@@ -74,12 +74,14 @@ export class TicketTagGroupController {
     @Headers('accept-language') acceptLanguage: any,
     @Query(new TicketTagGroupQueryPipe(false)) queryDTO: EntityQueryDTO,
     @Req() req: Request,
-    @GetUserInfo() user: User | null,
+    @GetUserInfo() user: User,
   ) {
-    console.log(user.roles);
     // TODO: protect
     const languageCode = resolveLanguageCode(req);
-    const ticketTagGroups = await this.ticketTagGroupService.findAll(queryDTO);
+    const ticketTagGroups = await this.ticketTagGroupService.findAll(
+      queryDTO,
+      user,
+    );
     return this.mapper.mapArray(
       ticketTagGroups,
       TicketTagGroup,

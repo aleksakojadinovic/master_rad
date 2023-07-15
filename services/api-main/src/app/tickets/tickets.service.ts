@@ -3,7 +3,7 @@ import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket } from 'src/app/tickets/schema/ticket.schema';
-import { Model, isValidObjectId } from 'mongoose';
+import { Model, Types, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/app/users/users.service';
 import { v4 as uuid } from 'uuid';
 import * as moment from 'moment';
@@ -32,6 +32,7 @@ import { OverlapInTagIdsError } from './errors/OverlapInTagIds';
 import { NotAllowedToAddThisTagError } from './errors/NotAllowedToAddThisTag';
 import { NotAllowedToRemoveThisTagError } from './errors/NotAllowedToRemoveThisTag';
 import { DuplicateTagError } from './errors/DuplicateTag';
+import { TicketTag } from '../ticket-tag-system/schema/ticket-tag.schema';
 // import { TooSoonToCreateAnotherTicket } from './errors/TooSoonToCreateAnotherTicket';
 
 @Injectable()
@@ -69,6 +70,10 @@ export class TicketsService extends BaseService {
         populations.push({
           path: 'tags',
           model: 'TicketTag',
+          populate: {
+            path: 'group',
+            model: 'TicketTagGroup',
+          },
         });
       }
     });
@@ -150,31 +155,61 @@ export class TicketsService extends BaseService {
     return tickets;
   }
 
-  async findOne(id: string, queryDTO: TicketQueryDTO = new TicketQueryDTO()) {
-    const query = this.ticketModel.findOne({ _id: id });
+  async findOne(
+    id: string,
+    user: User,
+    queryDTO: TicketQueryDTO = new TicketQueryDTO(),
+  ) {
+    // Don't like it but I don't think there is another way
+    const userRoleIds = user.roles.map(({ _id }) => _id);
+    const query = this.ticketModel.findOne({ _id: id }).populate({
+      path: 'tags',
+      model: 'TicketTag',
+      populate: { path: 'group', model: 'TicketTagGroup' },
+    });
 
     const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
     const ticket = await query.exec();
 
+    ticket.tags = ticket.tags.filter((tag) => {
+      const canAdd = userRoleIds.some((userRoleId) =>
+        tag.group.permissions.canAddRoles
+          .map(({ _id }) => _id.toString())
+          .includes(userRoleId.toString()),
+      );
+      const canRemove = userRoleIds.some((userRoleId) =>
+        tag.group.permissions.canRemoveRoles
+          .map(({ _id }) => _id.toString())
+          .includes(userRoleId.toString()),
+      );
+      return canAdd || canRemove;
+    });
+
     if (!ticket) {
       throw new TicketNotFoundError(id);
+    }
+
+    if (!queryDTO.includes.includes('tags')) {
+      ticket.tags = ticket.tags.map(
+        ({ _id }) => _id as unknown as Types.ObjectId as unknown as TicketTag,
+      );
     }
 
     return ticket;
   }
 
-  async isTicketOwner(userId: string, ticketId: string) {
+  async isTicketOwner(user: User, ticketId: string) {
     let ticket: Ticket;
     try {
-      ticket = await this.findOne(ticketId);
+      ticket = await this.findOne(ticketId, user);
     } catch (e) {
       throw e;
     }
 
     const creatorId = ticket.createdBy._id.toString();
 
-    return userId === creatorId;
+    return user._id.toString() === creatorId.toString();
   }
 
   async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
@@ -186,13 +221,13 @@ export class TicketsService extends BaseService {
 
     const userRoleIds = user.roles.map((role) => role._id);
     const isCustomer = user.roles.map(({ name }) => name).includes('customer');
-    const isTicketOwner = await this.isTicketOwner(userId, id);
+    const isTicketOwner = await this.isTicketOwner(user, id);
 
     if (isCustomer && !isTicketOwner) {
       throw new TicketNotFoundError(id);
     }
 
-    const ticket = await this.findOne(id);
+    const ticket = await this.findOne(id, user);
 
     if (!ticket) {
       throw new TicketNotFoundError(id);

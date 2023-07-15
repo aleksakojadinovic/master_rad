@@ -5,6 +5,7 @@ import { BaseService } from 'src/codebase/BaseService';
 import { TicketTag } from './schema/ticket-tag.schema';
 import { CreateTicketTagDTO } from './dto/create-ticket-tag.dto';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
+import { User } from '../users/schema/user.schema';
 
 @Injectable()
 export class TicketTagService extends BaseService {
@@ -28,12 +29,29 @@ export class TicketTagService extends BaseService {
     return populations;
   }
 
-  async findAll(queryDTO: EntityQueryDTO) {
-    const query = this.ticketTagModel.find({});
-    const populations = this.constructPopulate(queryDTO);
-    populations.forEach((p) => query.populate(p));
-    const tags = await query.exec();
-    return tags;
+  async findAll(queryDTO: EntityQueryDTO, user: User) {
+    const userRoleIds = user.roles.map(({ _id }) => _id);
+    const tags = await this.ticketTagModel.find({}).populate({
+      path: 'group',
+      model: 'TicketTagGroup',
+    });
+
+    const allowedTags = tags.filter((tag) => {
+      const canAdd = userRoleIds.some((userRoleId) =>
+        tag.group.permissions.canAddRoles
+          .map(({ _id }) => _id.toString())
+          .includes(userRoleId.toString()),
+      );
+      const canRemove = userRoleIds.some((userRoleId) =>
+        tag.group.permissions.canRemoveRoles
+          .map(({ _id }) => _id.toString())
+          .includes(userRoleId.toString()),
+      );
+
+      return canAdd || canRemove;
+    });
+
+    return allowedTags;
   }
 
   async findById(id: string) {
