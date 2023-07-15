@@ -12,6 +12,7 @@ import {
   Headers,
   Req,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { TicketTagGroupService } from './ticket-tag-group.service';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
@@ -26,6 +27,10 @@ import { TicketTagGroupQueryPipe } from './pipes/ticket-tag-group-query.pipe';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { Request } from 'express';
 import { resolveLanguageCode } from 'src/codebase/utils';
+import { AuthGuard } from '@nestjs/passport';
+import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
+import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
+import { User } from '../users/schema/user.schema';
 
 @UseInterceptors(TicketTagInterceptor)
 @Controller('ticket-tag-group')
@@ -64,11 +69,14 @@ export class TicketTagGroupController {
   }
 
   @Get()
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findAll(
     @Headers('accept-language') acceptLanguage: any,
     @Query(new TicketTagGroupQueryPipe(false)) queryDTO: EntityQueryDTO,
     @Req() req: Request,
+    @GetUserInfo() user: User | null,
   ) {
+    console.log(user.roles);
     // TODO: protect
     const languageCode = resolveLanguageCode(req);
     const ticketTagGroups = await this.ticketTagGroupService.findAll(queryDTO);

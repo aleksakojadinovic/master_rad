@@ -55,8 +55,11 @@ export class UsersService {
     return user;
   }
 
-  async findOne(id: string) {
-    return await this.userModel.findById(id).populate('roles');
+  findOne(id: string) {
+    return this.userModel
+      .findById(id)
+      .select('-passwordHash')
+      .populate('roles');
   }
 
   update(id: number) {
