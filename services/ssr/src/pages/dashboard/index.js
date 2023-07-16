@@ -55,7 +55,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
         },
       };
     }
-    if (!user.roles.map(({ name }) => name).includes('agent')) {
+    if (
+      !user.roles.map(({ name }) => name).includes('agent') &&
+      !user.roles.map(({ name }) => name).includes('administrator')
+    ) {
       return {
         redirect: {
           destination: '/404',

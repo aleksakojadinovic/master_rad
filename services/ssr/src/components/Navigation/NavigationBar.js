@@ -1,5 +1,6 @@
 import { selectGetMeQueryResponse, useGetMeQuery } from '@/api/auth';
 import { Box, Button } from '@mui/material';
+import Cookies from 'js-cookie';
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -19,9 +20,19 @@ function NavigationBar() {
   const renderRightSideContent = () => {
     if (user != null) {
       return (
-        <Button>
-          {user.firstName} {user.lastName}
-        </Button>
+        <Box>
+          <Button>
+            {user.firstName} {user.lastName}
+          </Button>
+          <Button
+            onClick={() => {
+              Cookies.remove('accessToken');
+              window.location.reload();
+            }}
+          >
+            Logout
+          </Button>
+        </Box>
       );
     }
     if (isAuthModalOpen) {

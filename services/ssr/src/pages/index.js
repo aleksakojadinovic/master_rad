@@ -1,9 +1,10 @@
 import { selectGetMeQueryResponse } from '@/api/auth';
 import { wrapper } from '@/redux/store';
+import Link from 'next/link';
 import React from 'react';
 
 function IndexPage() {
-  return <div>IndexPage</div>;
+  return <Link href="/dashboard">Dashboard</Link>;
 }
 
 export default IndexPage;

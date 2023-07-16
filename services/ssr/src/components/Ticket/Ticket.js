@@ -9,14 +9,26 @@ import StatusChange from '../StatusChange/StatusChange';
 import CommentEditor from './CommentEditor';
 import { useUpdateTicketMutation } from '@/api/tickets';
 import { TicketHistoryEntryType } from '@/enums/tickets';
+import TagForm from './TagForm';
 
 export default function Ticket({ ticket }) {
   const [updateTicket, { isLoading, isSuccess }] = useUpdateTicketMutation();
+
+  // const { data: tags } = useGetTicketTagsQuery();
+  // const { data: tagGroups } = useGetTicketTagGroupsQuery();
 
   const canAddComment = true;
 
   const handleSubmitComment = (comment) => {
     updateTicket({ id: ticket.id, comment });
+  };
+
+  const handleAddTag = (tagId) => {
+    updateTicket({ id: ticket.id, addTags: [tagId] });
+  };
+
+  const handleDeleteTag = (tagId) => {
+    updateTicket({ id: ticket.id, removeTags: [tagId] });
   };
 
   useEffect(() => {}, [isSuccess]);
@@ -119,6 +131,21 @@ export default function Ticket({ ticket }) {
           </Grid>
         </Grid>
       </CardContent>
+      <Divider />
+      <Box
+        marginLeft="12px"
+        marginTop="4px"
+        marginBottom="4px"
+        marginRight="12px"
+        width="100%"
+      >
+        <TagForm
+          ticketTags={ticket.tags}
+          onSelect={handleAddTag}
+          onDelete={handleDeleteTag}
+        />
+      </Box>
+
       <Divider />
       <CardContent>
         <Typography variant="body1">{ticket.body}</Typography>

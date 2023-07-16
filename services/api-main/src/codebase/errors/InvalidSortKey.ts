@@ -1,6 +1,6 @@
 import { BaseError } from './BaseError';
 
-export class InvalidSortKey extends BaseError {
+export class InvalidSortKeyError extends BaseError {
   constructor(key: string) {
     super(`Invalid sort key: ${key}`);
   }

@@ -14,6 +14,7 @@ async function bootstrap() {
       exceptionFactory: (errors: ValidationError[]) => {
         throw new BadRequestException({
           message: 'Validation failed',
+          type: 'ValidationError',
           validation: errors,
         });
       },

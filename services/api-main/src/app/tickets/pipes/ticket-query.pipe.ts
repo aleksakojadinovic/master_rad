@@ -7,6 +7,7 @@ export class TicketQueryPipe extends EntityQueryPipe {
     'createdBy',
     'historyInitiator',
     'assignees',
+    'tags',
   ];
   private static TICKETS_ALLOWED_SORT_KEYS = ['id'];
   private static TICKETS_ALLOWED_FILTER_KEYS = ['status'];

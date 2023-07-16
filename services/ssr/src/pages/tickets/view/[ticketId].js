@@ -58,6 +58,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }),
     );
 
+    // store.dispatch(
+    //   ticketTagSystemSlice.endpoints.getTicketTags.initiate({
+    //     includes: 'group',
+    //   }),
+    // );
+
     await Promise.all(
       store.dispatch(ticketsSlice.util.getRunningQueriesThunk()),
     );

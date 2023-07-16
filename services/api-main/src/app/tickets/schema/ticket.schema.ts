@@ -9,6 +9,7 @@ import {
 import { User } from 'src/app/users/schema/user.schema';
 import mongoose from 'mongoose';
 import { TicketStatus } from '../types';
+import { TicketTag } from 'src/app/ticket-tag-system/schema/ticket-tag.schema';
 
 @Schema()
 export class Ticket {
@@ -35,6 +36,9 @@ export class Ticket {
 
   @Prop()
   status: TicketStatus;
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TicketTag' }] })
+  tags: TicketTag[];
 
   @Prop({ type: [{ type: TicketHistoryItemSchemaType }] })
   history: TicketHistoryItem[];

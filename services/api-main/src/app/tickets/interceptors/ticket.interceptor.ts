@@ -1,7 +1,9 @@
 import {
   BadRequestException,
   CallHandler,
+  ConflictException,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   NestInterceptor,
   NotFoundException,
@@ -10,8 +12,11 @@ import { Observable, catchError } from 'rxjs';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
 import { TicketIdNotValidError } from '../errors/TicketIdNotValid';
 import { AssigneeIdNotValidError } from '../errors/AssigneeIdNotValid';
-import { CannotAssignCustomer } from '../errors/CannotAssignCustomer';
-import { TooSoonToCreateAnotherTicket } from '../errors/TooSoonToCreateAnotherTicket';
+import { CannotAssignCustomerError } from '../errors/CannotAssignCustomer';
+import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
+import { NotAllowedToAddThisTagError } from '../errors/NotAllowedToAddThisTag';
+import { NotAllowedToRemoveThisTagError } from '../errors/NotAllowedToRemoveThisTag';
+import { DuplicateTagError } from '../errors/DuplicateTag';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {
@@ -19,23 +24,35 @@ export class TicketInterceptor implements NestInterceptor {
     return next.handle().pipe(
       catchError((error) => {
         if (error instanceof TicketNotFoundError) {
-          throw new NotFoundException(error.message);
+          throw new NotFoundException(error.getPayload());
         }
 
         if (error instanceof TicketIdNotValidError) {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(error.getPayload());
         }
 
         if (error instanceof AssigneeIdNotValidError) {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(error.getPayload());
         }
 
-        if (error instanceof CannotAssignCustomer) {
-          throw new BadRequestException(error.message);
+        if (error instanceof CannotAssignCustomerError) {
+          throw new BadRequestException(error.getPayload());
         }
 
-        if (error instanceof TooSoonToCreateAnotherTicket) {
-          throw new BadRequestException(error.message);
+        if (error instanceof TooSoonToCreateAnotherTicketError) {
+          throw new BadRequestException(error.getPayload());
+        }
+
+        if (error instanceof NotAllowedToAddThisTagError) {
+          throw new ForbiddenException(error.getPayload());
+        }
+
+        if (error instanceof NotAllowedToRemoveThisTagError) {
+          throw new ForbiddenException(error.getPayload());
+        }
+
+        if (error instanceof DuplicateTagError) {
+          throw new ConflictException(error.getPayload());
         }
 
         throw error;

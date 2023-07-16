@@ -5,6 +5,18 @@
       "value": "Dashboard"
     }
   ],
+  "api-errors.generic-error": [
+    {
+      "type": 0,
+      "value": "Something went wrong. Please contact support"
+    }
+  ],
+  "api-errors.ticket-tag-group-name-duplicate-error": [
+    {
+      "type": 0,
+      "value": "A tag group with this name already exists"
+    }
+  ],
   "click-here": [
     {
       "type": 0,
@@ -37,10 +49,200 @@
       "value": "Title of your issue"
     }
   ],
+  "dialog.close": [
+    {
+      "type": 0,
+      "value": "Close"
+    }
+  ],
+  "dialog.error": [
+    {
+      "type": 0,
+      "value": "An error has occurred"
+    }
+  ],
+  "dialog.loading": [
+    {
+      "type": 0,
+      "value": "Loading..."
+    }
+  ],
+  "dialogs.success": [
+    {
+      "type": 0,
+      "value": "Operation successful"
+    }
+  ],
+  "forms.page": [
+    {
+      "type": 0,
+      "value": "Page"
+    }
+  ],
+  "forms.perPage": [
+    {
+      "type": 0,
+      "value": "Per page"
+    }
+  ],
+  "forms.search": [
+    {
+      "type": 0,
+      "value": "Search"
+    }
+  ],
   "forms.submit": [
     {
       "type": 0,
       "value": "Submit"
+    }
+  ],
+  "global.delete": [
+    {
+      "type": 0,
+      "value": "Delete"
+    }
+  ],
+  "global.description": [
+    {
+      "type": 0,
+      "value": "Description"
+    }
+  ],
+  "global.language": [
+    {
+      "type": 0,
+      "value": "Language"
+    }
+  ],
+  "global.name": [
+    {
+      "type": 0,
+      "value": "Name"
+    }
+  ],
+  "global.no": [
+    {
+      "type": 0,
+      "value": "No"
+    }
+  ],
+  "global.not-found": [
+    {
+      "type": 0,
+      "value": "Page not found | STS"
+    }
+  ],
+  "global.save": [
+    {
+      "type": 0,
+      "value": "Save"
+    }
+  ],
+  "global.yes": [
+    {
+      "type": 0,
+      "value": "Yes"
+    }
+  ],
+  "manage-tags.addNew": [
+    {
+      "type": 0,
+      "value": "Add new tag"
+    }
+  ],
+  "manage-tags.create-breadcrumb": [
+    {
+      "type": 0,
+      "value": "Create a new tag"
+    }
+  ],
+  "manage-tags.create-error": [
+    {
+      "type": 0,
+      "value": "Error creating tags!"
+    }
+  ],
+  "manage-tags.create-success": [
+    {
+      "type": 0,
+      "value": "Successfully created tags!"
+    }
+  ],
+  "manage-tags.creating-loading": [
+    {
+      "type": 0,
+      "value": "Creating tags..."
+    }
+  ],
+  "manage-tags.edit-breadcrumb": [
+    {
+      "type": 0,
+      "value": "Editing tag \""
+    },
+    {
+      "type": 1,
+      "value": "tagName"
+    },
+    {
+      "type": 0,
+      "value": "\""
+    }
+  ],
+  "manage-tags.edit-single": [
+    {
+      "type": 0,
+      "value": "Edit tag \""
+    },
+    {
+      "type": 1,
+      "value": "tagName"
+    },
+    {
+      "type": 0,
+      "value": "\"| STS"
+    }
+  ],
+  "manage-tags.home-breadcrumb": [
+    {
+      "type": 0,
+      "value": "Manage tags"
+    }
+  ],
+  "manage-tags.new-tag-group-placeholder": [
+    {
+      "type": 0,
+      "value": "New tag group"
+    }
+  ],
+  "manage-tags.new-tag-placeholder": [
+    {
+      "type": 0,
+      "value": "New tag"
+    }
+  ],
+  "manage-tags.title": [
+    {
+      "type": 0,
+      "value": "Manage Tags | STS"
+    }
+  ],
+  "manage-tags.update-error": [
+    {
+      "type": 0,
+      "value": "Error updating tags!"
+    }
+  ],
+  "manage-tags.update-loading": [
+    {
+      "type": 0,
+      "value": "Updating tags..."
+    }
+  ],
+  "manage-tags.update-success": [
+    {
+      "type": 0,
+      "value": "Successfully updated tags!"
     }
   ],
   "query-status.error": [
@@ -53,6 +255,114 @@
     {
       "type": 0,
       "value": "Success"
+    }
+  ],
+  "roles.administrator": [
+    {
+      "type": 0,
+      "value": "Administrator"
+    }
+  ],
+  "roles.agent": [
+    {
+      "type": 0,
+      "value": "Agent"
+    }
+  ],
+  "roles.customer": [
+    {
+      "type": 0,
+      "value": "Customer"
+    }
+  ],
+  "roles.superadministrator": [
+    {
+      "type": 0,
+      "value": "Superadministrator"
+    }
+  ],
+  "tags.add-new-group-text": [
+    {
+      "type": 0,
+      "value": "Add new tag group"
+    }
+  ],
+  "tags.add-tag": [
+    {
+      "type": 0,
+      "value": "Add a tag"
+    }
+  ],
+  "tags.lang-code": [
+    {
+      "type": 0,
+      "value": "Language"
+    }
+  ],
+  "tags.tag-description-text": [
+    {
+      "type": 0,
+      "value": "Description"
+    }
+  ],
+  "tags.tag-intl-key-text": [
+    {
+      "type": 0,
+      "value": "Intl key"
+    }
+  ],
+  "tags.tag-intl-keys-text": [
+    {
+      "type": 0,
+      "value": "Intl keys"
+    }
+  ],
+  "tags.tag-name-text": [
+    {
+      "type": 0,
+      "value": "Name"
+    }
+  ],
+  "tags.tag-permissions-text": [
+    {
+      "type": 0,
+      "value": "Permissions"
+    }
+  ],
+  "tags.tag-text": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "tags.who-can-add-text": [
+    {
+      "type": 0,
+      "value": "Who can add these tags?"
+    }
+  ],
+  "tags.who-can-remove-text": [
+    {
+      "type": 0,
+      "value": "Who can remove these tags?"
+    }
+  ],
+  "ticket-status.closed": [
+    {
+      "type": 0,
+      "value": "Closed"
+    }
+  ],
+  "ticket-status.new": [
+    {
+      "type": 0,
+      "value": "New"
+    }
+  ],
+  "ticket-status.open": [
+    {
+      "type": 0,
+      "value": "Open"
     }
   ]
 }
