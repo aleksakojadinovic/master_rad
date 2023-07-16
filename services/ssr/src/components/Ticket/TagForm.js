@@ -49,7 +49,7 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
   const groupIds = Array.from(Object.keys(groupedTicketTags));
 
   const resolvedTags = useMemo(() => {
-    if (!tags || !tagGroups) {
+    if (!tags || !tagGroups || !ticketTags) {
       return [];
     }
 
@@ -59,13 +59,14 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
           _.intersection(roleIds, tag.group.permissions.canAddRoles).length > 0
         );
       })
+      .filter((tag) => !ticketTags.map(({ id }) => id).includes(tag.id))
       .map((tag) => {
         return {
           ...tag,
           groupName: tagGroups.find((g) => g.id === tag.group.id).name,
         };
       });
-  }, [tags, tagGroups, roleIds]);
+  }, [tags, tagGroups, roleIds, ticketTags]);
 
   const handleDelete = (id) => {
     onDelete(id);
