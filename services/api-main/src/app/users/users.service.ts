@@ -53,6 +53,10 @@ export class UsersService {
       .includes('superadministrator');
     const isAgent = user.roles.map(({ name }) => name).includes('agent');
 
+    const superAdminId = await this.rolesService.findByName(
+      'superadministrator',
+    );
+
     const roleNames: string[] = queryDTO.filters.roles ?? [];
     roleNames.forEach((role: string) => {
       if (role === 'superadministrator' && !isSuperAdmin) {
@@ -69,6 +73,10 @@ export class UsersService {
 
     if (roleIds.length > 0) {
       query.where({ roles: { $in: roleIds } });
+    }
+
+    if (!isSuperAdmin && roleIds.length === 0) {
+      query.where({ roles: { $nin: [superAdminId] } });
     }
 
     if (queryDTO.includes.includes('roles')) {

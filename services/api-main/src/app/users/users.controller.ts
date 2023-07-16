@@ -49,7 +49,7 @@ export class UsersController {
 
   @Get()
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
-  findAll(
+  async findAll(
     @Query(new UsersQueryPipe(true), new ValidationPipe({ transform: true }))
     queryDTO: UsersQueryDTO,
     @GetUserInfo() user: User,
@@ -63,8 +63,8 @@ export class UsersController {
     ) {
       throw new UnauthorizedException();
     }
-    console.log(queryDTO);
-    return this.usersService.findAll(queryDTO, user);
+    const users = await this.usersService.findAll(queryDTO, user);
+    return this.mapper.mapArray(users, User, UserDTO);
   }
 
   @Get(':id')

@@ -55,7 +55,6 @@ export class TicketsController extends BaseController {
   @Get()
   @UseGuards(AuthGuard('jwt'))
   async findAll(@Query(new TicketQueryPipe(true)) queryDTO: EntityQueryDTO) {
-    console.log({ queryDTO });
     const tickets = await this.ticketsService.findAll(queryDTO);
     return this.mapper.mapArray(tickets, Ticket, TicketDTO);
   }
