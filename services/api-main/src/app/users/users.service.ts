@@ -83,6 +83,12 @@ export class UsersService {
       query.populate({ path: 'roles', model: 'Role' });
     }
 
+    if (queryDTO.page && queryDTO.perPage) {
+      query
+        .skip((queryDTO.page - 1) * queryDTO.perPage)
+        .limit(queryDTO.perPage);
+    }
+
     return query.exec();
   }
 
