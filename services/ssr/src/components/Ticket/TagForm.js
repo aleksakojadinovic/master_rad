@@ -88,11 +88,7 @@ function TagForm({ ticketTags, onSelect }) {
           </Box>
         </Box>
       ))}
-      {/* {groupedTicketTags.map((tag) => (
-        <Box key={tag.id} marginRight="8px">
-          <TagChip tag={tag} />
-        </Box>
-      ))} */}
+
       <TagPicker tags={resolvedTags} onSelect={onSelect} />
     </Box>
   );
