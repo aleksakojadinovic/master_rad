@@ -57,25 +57,21 @@ export class UsersService {
       'superadministrator',
     );
 
-    const roleNames: string[] = queryDTO.filters.roles ?? [];
-    roleNames.forEach((role: string) => {
-      if (role === 'superadministrator' && !isSuperAdmin) {
-        throw new CannotSearchThisRoleError('superadministrator');
-      }
-    });
+    const roleName: string = queryDTO.filters.roles ?? null;
+    if (roleName === 'superadministrator' && !isSuperAdmin) {
+      throw new CannotSearchThisRoleError('superadministrator');
+    }
 
-    const roleIds =
-      roleNames.length > 0
-        ? await this.rolesService.findManyByName(roleNames)
-        : [];
+    const roleId =
+      roleName !== null ? await this.rolesService.findByName(roleName) : null;
 
     const query = this.userModel.find({});
 
-    if (roleIds.length > 0) {
-      query.where({ roles: { $in: roleIds } });
+    if (roleName !== null) {
+      query.where({ roles: { $in: [roleId] } });
     }
 
-    if (!isSuperAdmin && roleIds.length === 0) {
+    if (!isSuperAdmin && roleName !== null) {
       query.where({ roles: { $nin: [superAdminId] } });
     }
 

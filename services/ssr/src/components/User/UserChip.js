@@ -1,7 +1,10 @@
 import { Avatar, Chip } from '@mui/material';
 import React from 'react';
 
-export default function UserChip({ user: { firstName, lastName, roles } }) {
+export default function UserChip({
+  user: { firstName, lastName, roles },
+  onClick,
+}) {
   const initials = `${firstName[0]}${lastName[0]}`;
   const fullName = `${firstName} ${lastName}`;
 
@@ -16,6 +19,7 @@ export default function UserChip({ user: { firstName, lastName, roles } }) {
       variant={variant}
       avatar={<Avatar sx={{ bgcolor: 'blue' }}>{initials}</Avatar>}
       label={fullName}
+      onClick={onClick ?? undefined}
     />
   );
 }
