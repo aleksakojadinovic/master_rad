@@ -184,8 +184,6 @@ function TicketTagGroupAdmin({ group, isCreate }) {
   const handleUpdate = () => {
     const tagChangesDTO = constructTagUpdateDTO(originalTags, tags);
 
-    console.log(permissions);
-
     const patchObject = {
       permissions: {
         canAddRoles: permissions.canAddRoles.map(({ id }) => id),
@@ -199,8 +197,6 @@ function TicketTagGroupAdmin({ group, isCreate }) {
     if (Object.keys(tagChangesDTO).length > 0) {
       patchObject.tags = tagChangesDTO;
     }
-
-    console.log('patching with', patchObject);
 
     update({ id: group.id, ...patchObject });
   };

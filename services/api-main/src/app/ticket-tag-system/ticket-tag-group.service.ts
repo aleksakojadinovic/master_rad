@@ -230,7 +230,6 @@ export class TicketTagGroupService extends BaseService {
       document.permissions.canRemoveRoles = roles;
     }
 
-    console.log({ newPermissionsValue });
     if (newPermissionsValue.canSeeRoles !== null) {
       const roles = await this.rolesService.findMany(
         newPermissionsValue.canSeeRoles,
@@ -242,8 +241,6 @@ export class TicketTagGroupService extends BaseService {
       // );
       document.permissions.canSeeRoles = roles;
     }
-
-    console.log('setting', document.permissions.canSeeRoles);
   }
 
   // So this can either add or remove tags, the question is what the hell I'm sending
