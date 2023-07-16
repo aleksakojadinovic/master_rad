@@ -11,7 +11,7 @@ import { selectGetMeQueryResponse } from '@/api/auth';
 import _ from 'lodash';
 
 // TODO: Too much coupling, this should be two components - one for tag list one for picker
-function TagForm({ ticketTags, onSelect }) {
+function TagForm({ ticketTags, onSelect, onDelete }) {
   // We fetch them here and not SSR because they're not SSR-relevant
   const user = useSelector(selectGetMeQueryResponse);
   const roleIds = user.roles.map(({ Id }) => Id);
@@ -68,7 +68,7 @@ function TagForm({ ticketTags, onSelect }) {
   }, [tags, tagGroups, roleIds]);
 
   const handleDelete = (id) => {
-    console.log('deleting', id);
+    onDelete(id);
   };
 
   return (

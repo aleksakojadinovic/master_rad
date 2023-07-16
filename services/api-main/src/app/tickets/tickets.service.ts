@@ -357,9 +357,10 @@ export class TicketsService extends BaseService {
         ) {
           throw new NotAllowedToRemoveThisTagError();
         }
-        ticket.tags.push(tag);
       });
-      ticket.tags = ticket.tags.filter((tag) => !removeTags.includes(tag._id));
+      ticket.tags = ticket.tags.filter(
+        (tag) => !removeTags.includes(tag._id.toString()),
+      );
     }
 
     if (addTags.length > 0) {

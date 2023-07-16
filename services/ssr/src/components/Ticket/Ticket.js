@@ -27,6 +27,10 @@ export default function Ticket({ ticket }) {
     updateTicket({ id: ticket.id, addTags: [tagId] });
   };
 
+  const handleDeleteTag = (tagId) => {
+    updateTicket({ id: ticket.id, removeTags: [tagId] });
+  };
+
   useEffect(() => {}, [isSuccess]);
 
   const renderChanges = () => {
@@ -135,7 +139,11 @@ export default function Ticket({ ticket }) {
         marginRight="12px"
         width="100%"
       >
-        <TagForm ticketTags={ticket.tags} onSelect={handleAddTag} />
+        <TagForm
+          ticketTags={ticket.tags}
+          onSelect={handleAddTag}
+          onDelete={handleDeleteTag}
+        />
       </Box>
 
       <Divider />
