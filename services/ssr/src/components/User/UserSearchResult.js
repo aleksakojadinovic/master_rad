@@ -20,8 +20,6 @@ function UserSearchResult({ users }) {
     const element = document.getElementById(`user-${currentHoverElement}`);
     const elementTop = element.offsetTop;
 
-    console.log({ elementTop });
-
     resultsRef.current.scrollTop = elementTop;
   }, [currentHoverElement]);
 
@@ -50,7 +48,12 @@ function UserSearchResult({ users }) {
   }, [handleKeyDown]);
 
   return (
-    <Box ref={resultsRef} height="350px" sx={{ overflowY: 'scroll' }}>
+    <Box
+      ref={resultsRef}
+      height="350px"
+      sx={{ overflowY: 'scroll' }}
+      position="relative"
+    >
       {users.map((u, index) => (
         <Box
           key={u.id}
