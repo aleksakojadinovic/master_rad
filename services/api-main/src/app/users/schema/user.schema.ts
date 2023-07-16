@@ -49,6 +49,8 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass<User>(User);
 
+UserSchema.index({ firstName: 'text', lastName: 'text' });
+
 UserSchema.methods.hasRole = function (role: string) {
   return this.roles.map(({ name }) => name).includes(role);
 };

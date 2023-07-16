@@ -83,6 +83,15 @@ export class UsersService {
       query.populate({ path: 'roles', model: 'Role' });
     }
 
+    if (queryDTO.searchString) {
+      query.where({
+        $or: [
+          { firstName: { $regex: new RegExp(queryDTO.searchString, 'i') } },
+          { lastName: { $regex: new RegExp(queryDTO.searchString, 'i') } },
+        ],
+      });
+    }
+
     if (queryDTO.page && queryDTO.perPage) {
       query
         .skip((queryDTO.page - 1) * queryDTO.perPage)
