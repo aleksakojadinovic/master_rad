@@ -8,6 +8,10 @@ import {
   Param,
   Delete,
   UseGuards,
+  UnauthorizedException,
+  Query,
+  ValidationPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,7 +21,13 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { User } from './schema/user.schema';
 import { UserDTO } from './dto/user.dto';
-
+import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
+import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
+import * as _ from 'lodash';
+import { UsersQueryPipe } from './pipes/user-query.pipe';
+import { UsersQueryDTO } from './dto/users-query.dto';
+import { UsersInterceptor } from './interceptors/users.interceptor';
+@UseInterceptors(UsersInterceptor)
 @Controller('users')
 export class UsersController {
   constructor(
@@ -38,8 +48,23 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  findAll(
+    @Query(new UsersQueryPipe(true), new ValidationPipe({ transform: true }))
+    queryDTO: UsersQueryDTO,
+    @GetUserInfo() user: User,
+  ) {
+    // TODO: Rethink this
+    if (
+      _.intersection(
+        user.roles.map(({ name }) => name),
+        ['agent', 'administrator', 'superadministrator'],
+      ).length <= 0
+    ) {
+      throw new UnauthorizedException();
+    }
+    console.log(queryDTO);
+    return this.usersService.findAll(queryDTO, user);
   }
 
   @Get(':id')

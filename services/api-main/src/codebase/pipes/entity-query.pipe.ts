@@ -15,7 +15,11 @@ export class EntityQueryPipe implements PipeTransform<any, EntityQueryDTO> {
     private enforcePagination: boolean,
   ) {}
   transform(value: any): EntityQueryDTO {
-    const includeKeys = value.includes ? value.includes.split(',') : [];
+    // TODO: This can be done nicely with class-transformer, fix it
+    const includeKeys =
+      !value.includes || Array.isArray(value.includes)
+        ? []
+        : value.includes.split(',');
 
     const sortKey = value.sortBy ?? null;
     const filterKeys = Object.keys(value.filterKeys ?? {});

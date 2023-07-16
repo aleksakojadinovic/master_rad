@@ -25,7 +25,6 @@ import { BaseService } from 'src/codebase/BaseService';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { TicketNotFoundError } from './errors/TicketNotFound';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
-import { AssigneeIdNotValidError } from './errors/AssigneeIdNotValid';
 import { CannotAssignCustomerError } from './errors/CannotAssignCustomer';
 import { TicketTagService } from '../ticket-tag-system/ticket-tag.service';
 import { OverlapInTagIdsError } from './errors/OverlapInTagIds';
@@ -33,6 +32,7 @@ import { NotAllowedToAddThisTagError } from './errors/NotAllowedToAddThisTag';
 import { NotAllowedToRemoveThisTagError } from './errors/NotAllowedToRemoveThisTag';
 import { DuplicateTagError } from './errors/DuplicateTag';
 import { TicketTag } from '../ticket-tag-system/schema/ticket-tag.schema';
+import { AssigneeNotFoundError } from './errors/AssigneeNotFound';
 // import { TooSoonToCreateAnotherTicket } from './errors/TooSoonToCreateAnotherTicket';
 
 @Injectable()
@@ -172,6 +172,10 @@ export class TicketsService extends BaseService {
     populations.forEach((p) => query.populate(p));
     const ticket = await query.exec();
 
+    if (!ticket) {
+      throw new TicketNotFoundError(id);
+    }
+
     ticket.tags = ticket.tags.filter((tag) => {
       const canSee = userRoleIds.some((userRoleId) =>
         tag.group.permissions.canSeeRoles
@@ -181,10 +185,6 @@ export class TicketsService extends BaseService {
 
       return canSee;
     });
-
-    if (!ticket) {
-      throw new TicketNotFoundError(id);
-    }
 
     if (!queryDTO.includes.includes('tags')) {
       ticket.tags = ticket.tags.map(
@@ -296,19 +296,14 @@ export class TicketsService extends BaseService {
     }
 
     if (
-      updateTicketDto.assignees != null &&
-      updateTicketDto.assignees.length > 0
+      updateTicketDto.addAssignees != null &&
+      updateTicketDto.addAssignees.length > 0
     ) {
       const assignees: User[] = [];
-      for (const assigneeId of updateTicketDto.assignees) {
-        // TODO: FFS this is a controller thing
-        if (!isValidObjectId(assigneeId)) {
-          throw new AssigneeIdNotValidError(assigneeId);
-        }
-
+      for (const assigneeId of updateTicketDto.addAssignees) {
         const assigneeUser = await this.usersService.findOne(assigneeId);
         if (!assigneeUser) {
-          throw new AssigneeIdNotValidError(assigneeId);
+          throw new AssigneeNotFoundError();
         }
         if (assigneeUser.hasRole('customer')) {
           throw new CannotAssignCustomerError(assigneeId);
@@ -316,7 +311,7 @@ export class TicketsService extends BaseService {
         assignees.push(assigneeUser);
       }
       const entry = new TicketHistoryEntryAssigneesAdded(
-        updateTicketDto.assignees,
+        updateTicketDto.addAssignees,
       );
       // Shit, how do I add user id here? It's a POJO not a model :(
       ticket.history.push(

@@ -10,8 +10,12 @@ import CommentEditor from './CommentEditor';
 import { useUpdateTicketMutation } from '@/api/tickets';
 import { TicketHistoryEntryType } from '@/enums/tickets';
 import TagForm from './TagForm';
+import { useSelector } from 'react-redux';
+import { selectGetMeQueryResponse } from '@/api/auth';
 
 export default function Ticket({ ticket }) {
+  const user = useSelector(selectGetMeQueryResponse);
+  const isCustomer = user.roles.map(({ name }) => name).includes('customer');
   const [updateTicket, { isLoading, isSuccess }] = useUpdateTicketMutation();
 
   // const { data: tags } = useGetTicketTagsQuery();
@@ -87,6 +91,31 @@ export default function Ticket({ ticket }) {
     });
   };
 
+  const renderAssignForm = () => {
+    return <b>assign form</b>;
+  };
+
+  const renderAssigneeSection = () => {
+    const hasAssignees = ticket.assignees.length > 0;
+    const hasForm = !isCustomer;
+    if (!hasAssignees && !hasForm) {
+      return null;
+    }
+    return (
+      <Box
+        marginLeft="12px"
+        marginTop="4px"
+        marginBottom="4px"
+        marginRight="12px"
+        width="100%"
+      >
+        {hasAssignees &&
+          ticket.assignees.map((_, index) => <div key={index}>someone</div>)}
+        {hasForm && renderAssignForm()}
+      </Box>
+    );
+  };
+
   const renderAddComment = () => {
     if (!canAddComment) {
       return null;
@@ -132,6 +161,8 @@ export default function Ticket({ ticket }) {
         </Grid>
       </CardContent>
       <Divider />
+      {renderAssigneeSection()}
+      <Divider />
       <Box
         marginLeft="12px"
         marginTop="4px"
@@ -145,7 +176,6 @@ export default function Ticket({ ticket }) {
           onDelete={handleDeleteTag}
         />
       </Box>
-
       <Divider />
       <CardContent>
         <Typography variant="body1">{ticket.body}</Typography>

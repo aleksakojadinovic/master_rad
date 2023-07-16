@@ -1,3 +1,4 @@
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -7,6 +8,7 @@ import { CreateUserResponseDto } from './dto/create-user-response.dto';
 import { RolesService } from './roles.service';
 import { Role } from 'src/app/users/schema/role.schema';
 import * as bcrypt from 'bcrypt';
+import { CannotSearchThisRoleError } from './errors/CannotSearchThisRole';
 
 @Injectable()
 export class UsersService {
@@ -42,8 +44,38 @@ export class UsersService {
     );
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+  async findAll(queryDTO: EntityQueryDTO, user: User): Promise<User[]> {
+    const isAdmin = user.roles
+      .map(({ name }) => name)
+      .includes('administrator');
+    const isSuperAdmin = user.roles
+      .map(({ name }) => name)
+      .includes('superadministrator');
+    const isAgent = user.roles.map(({ name }) => name).includes('agent');
+
+    const roleNames: string[] = queryDTO.filters.roles ?? [];
+    roleNames.forEach((role: string) => {
+      if (role === 'superadministrator' && !isSuperAdmin) {
+        throw new CannotSearchThisRoleError('superadministrator');
+      }
+    });
+
+    const roleIds =
+      roleNames.length > 0
+        ? await this.rolesService.findManyByName(roleNames)
+        : [];
+
+    const query = this.userModel.find({});
+
+    if (roleIds.length > 0) {
+      query.where({ roles: { $in: roleIds } });
+    }
+
+    if (queryDTO.includes.includes('roles')) {
+      query.populate({ path: 'roles', model: 'Role' });
+    }
+
+    return query.exec();
   }
 
   // TODO: maybe add repository layer to handle these populate calls
