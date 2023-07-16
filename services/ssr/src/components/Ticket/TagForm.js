@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { selectGetMeQueryResponse } from '@/api/auth';
 import _ from 'lodash';
 
+// TODO: Too much coupling, this should be two components - one for tag list one for picker
 function TagForm({ ticketTags, onSelect }) {
   // We fetch them here and not SSR because they're not SSR-relevant
   const user = useSelector(selectGetMeQueryResponse);
@@ -24,19 +25,26 @@ function TagForm({ ticketTags, onSelect }) {
     }
 
     return ticketTags.reduce((acc, curr) => {
+      const canDelete =
+        _.intersection(
+          tagGroups.find((g) => g.id === curr.group.id).permissions
+            .canRemoveRoles,
+          roleIds,
+        ).length > 0;
+
       if (!acc[curr.group.id]) {
         acc[curr.group.id] = {
           groupId: curr.group.id,
           groupName: tagGroups.find((g) => g.id === curr.group.id).name,
           groupDescription: curr.group.description,
-          tags: [curr],
+          tags: [{ ...curr, canDelete }],
         };
         return acc;
       }
-      acc[curr.group.id].tags.push(curr);
+      acc[curr.group.id].tags.push({ ...curr, canDelete });
       return acc;
     }, {});
-  }, [tags, ticketTags, tagGroups]);
+  }, [tags, ticketTags, tagGroups, roleIds]);
 
   const groupIds = Array.from(Object.keys(groupedTicketTags));
 
@@ -59,6 +67,10 @@ function TagForm({ ticketTags, onSelect }) {
       });
   }, [tags, tagGroups, roleIds]);
 
+  const handleDelete = (id) => {
+    console.log('deleting', id);
+  };
+
   return (
     <Box display="flex" flexWrap="wrap" alignItems="center">
       {groupIds.map((groupId) => (
@@ -70,6 +82,7 @@ function TagForm({ ticketTags, onSelect }) {
           border="1px solid black"
           padding="12px"
           marginRight="12px"
+          marginBottom="6px"
         >
           <Box>
             <Box display="flex" width="100%" justifyContent="center">
@@ -81,7 +94,7 @@ function TagForm({ ticketTags, onSelect }) {
             <Box display="flex" flexWrap="wrap">
               {groupedTicketTags[groupId].tags.map((tag) => (
                 <Box key={tag.id} marginRight="6px">
-                  <TagChip tag={tag} />
+                  <TagChip tag={tag} onDelete={handleDelete} />
                 </Box>
               ))}
             </Box>
