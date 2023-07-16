@@ -6,7 +6,11 @@ import { IntlValue } from 'src/codebase/types/IntlValue';
 
 // TODO: Should this be on the tag level?
 export class TicketTagGroupPermissions {
-  constructor(public canAddRoles: Role[], public canRemoveRoles: Role[]) {}
+  constructor(
+    public canAddRoles: Role[],
+    public canRemoveRoles: Role[],
+    public canSeeRoles: Role[],
+  ) {}
 }
 
 @Schema()
@@ -25,6 +29,9 @@ export class TicketTagGroup {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
       },
       canRemoveRoles: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
+      },
+      canSeeRoles: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
       },
     },

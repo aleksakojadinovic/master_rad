@@ -1,3 +1,4 @@
+import { selectGetMeQueryResponse } from '@/api/auth';
 import { rolesSlice } from '@/api/roles';
 import {
   selectGetTicketTagGroupQueryResponse,
@@ -39,6 +40,21 @@ EditTagGroupRoute.Layout = ManageTagsLayout;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
+    const user = selectGetMeQueryResponse(store.getState());
+    if (user == null) {
+      return {
+        redirect: {
+          destination: '/404',
+        },
+      };
+    }
+    if (!user.roles.map(({ name }) => name).includes('administrator')) {
+      return {
+        redirect: {
+          destination: '/404',
+        },
+      };
+    }
     const {
       params: { tagGroupId: id },
     } = context;

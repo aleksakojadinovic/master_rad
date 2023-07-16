@@ -65,9 +65,20 @@ export class TicketTagGroupProfile extends AutomapperProfile {
                 return mapper.map(role, Role, RoleDTO);
               },
             );
+
+            const mappedCanSeeRoles = source.permissions.canSeeRoles.map(
+              (role) => {
+                if (role instanceof Types.ObjectId) {
+                  return role.toString();
+                }
+                return mapper.map(role, Role, RoleDTO);
+              },
+            );
+
             const mappedPermissiones = new TicketTagGroupPermissionsDTO(
               mappedCanAddRoles,
               mappedCanRemoveRoles,
+              mappedCanSeeRoles,
             );
 
             return mappedPermissiones;

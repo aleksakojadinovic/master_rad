@@ -29,6 +29,10 @@ export const manageTagsMessages = defineMessages({
     id: 'tags.who-can-remove-text',
     defaultMessage: 'Who can remove these tags?',
   },
+  whoCanSeeText: {
+    id: 'tags.who-can-see-text',
+    defaultMessage: 'Who can see these tags?',
+  },
   tagsText: {
     id: 'tags.tag-text',
     defaultMessage: 'Tags',

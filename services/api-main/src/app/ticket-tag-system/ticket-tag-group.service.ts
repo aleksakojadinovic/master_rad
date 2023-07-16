@@ -50,6 +50,10 @@ export class TicketTagGroupService extends BaseService {
           path: 'permissions.canRemoveRoles',
           model: 'Role',
         });
+        populations.push({
+          path: 'permissions.canSeeRoles',
+          model: 'Role',
+        });
       }
       if (includeField === 'tags') {
         populations.push({
@@ -88,6 +92,7 @@ export class TicketTagGroupService extends BaseService {
     ]);
 
     ticketTagGroupObject.permissions = new TicketTagGroupPermissions(
+      defaultRoles,
       defaultRoles,
       defaultRoles,
     );
@@ -135,10 +140,7 @@ export class TicketTagGroupService extends BaseService {
   async findAll(queryDTO: EntityQueryDTO, user: User) {
     const userRoleIds = user.roles.map(({ _id }) => _id);
     const query = this.ticketTagGroupModel.find({
-      $or: [
-        { 'permissions.canAddRoles': { $in: userRoleIds } },
-        { 'permissions.canRemoveRoles': { $in: userRoleIds } },
-      ],
+      'permissions.canSeeRoles': { $in: userRoleIds },
     });
 
     const populations = this.constructPopulate(queryDTO);
@@ -205,22 +207,43 @@ export class TicketTagGroupService extends BaseService {
 
     if (newPermissionsValue.canAddRoles !== null) {
       // TODO handle roles not exists
-      const newCanAddRoles = await Promise.all(
-        newPermissionsValue.canAddRoles.map((roleId) =>
-          this.rolesService.findById(roleId),
-        ),
+      const roles = await this.rolesService.findMany(
+        newPermissionsValue.canAddRoles,
       );
-      document.permissions.canAddRoles = newCanAddRoles;
+      // const newCanAddRoles = await Promise.all(
+      //   newPermissionsValue.canAddRoles.map((roleId) =>
+      //     this.rolesService.findById(roleId),
+      //   ),
+      // );
+      document.permissions.canAddRoles = roles;
     }
 
     if (newPermissionsValue.canRemoveRoles !== null) {
-      const newCanRemoveRoles = await Promise.all(
-        newPermissionsValue.canRemoveRoles.map((roleId) =>
-          this.rolesService.findById(roleId),
-        ),
+      const roles = await this.rolesService.findMany(
+        newPermissionsValue.canRemoveRoles,
       );
-      document.permissions.canRemoveRoles = newCanRemoveRoles;
+      // const newCanRemoveRoles = await Promise.all(
+      //   newPermissionsValue.canRemoveRoles.map((roleId) =>
+      //     this.rolesService.findById(roleId),
+      //   ),
+      // );
+      document.permissions.canRemoveRoles = roles;
     }
+
+    console.log({ newPermissionsValue });
+    if (newPermissionsValue.canSeeRoles !== null) {
+      const roles = await this.rolesService.findMany(
+        newPermissionsValue.canSeeRoles,
+      );
+      // const newCanSeeRole = await Promise.all(
+      //   newPermissionsValue.canRemoveRoles.map((roleId) =>
+      //     this.rolesService.findById(roleId),
+      //   ),
+      // );
+      document.permissions.canSeeRoles = roles;
+    }
+
+    console.log('setting', document.permissions.canSeeRoles);
   }
 
   // So this can either add or remove tags, the question is what the hell I'm sending

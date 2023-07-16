@@ -4,6 +4,7 @@ import { manageTagsMessages } from '@/translations/tags';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import React, {
   Fragment,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -74,19 +75,33 @@ function TicketTagGroupAdmin({ group, isCreate }) {
     originalDescriptionIntl,
   );
   const [tags, setTags] = useState(originalTags);
-  const [permissions, setPermissions] = useState(originalPermissions);
+
+  const constructInitialPermissionsStateValue = useCallback(
+    () => ({
+      ...originalPermissions,
+      canAddRoles: originalPermissions.canAddRoles ?? [],
+      canRemoveRoles: originalPermissions.canRemoveRoles ?? [],
+      canSeeRoles: originalPermissions.canSeeRoles ?? [],
+    }),
+    [originalPermissions],
+  );
+
+  const [permissions, setPermissions] = useState(
+    constructInitialPermissionsStateValue,
+  );
 
   useEffect(() => {
     setNameIntl(originalNameIntl);
     setDescriptionIntl(originalDescriptionIntl);
     setTags(originalTags);
-    setPermissions(originalPermissions);
+    setPermissions(constructInitialPermissionsStateValue);
   }, [
     group,
     originalNameIntl,
     originalDescriptionIntl,
     originalTags,
     originalPermissions,
+    constructInitialPermissionsStateValue,
   ]);
 
   const resolvedGroupName =
@@ -116,15 +131,29 @@ function TicketTagGroupAdmin({ group, isCreate }) {
   );
 
   const roles = useSelector(selectGetRolesQueryResponse);
-  const whoCanAddAvailableRoles = roles.filter(
-    (role) => !permissions.canAddRoles.map(({ id }) => id).includes(role.id),
-  );
-  const whoCanRemoveAvailableRoles = roles.filter(
-    (role) => !permissions.canRemoveRoles.map(({ id }) => id).includes(role.id),
-  );
+
+  const whoCanAddAvailableRoles =
+    roles.filter(
+      (role) =>
+        !permissions.canAddRoles?.map(({ id }) => id).includes(role.id) ?? [],
+    ) ?? [];
+
+  const whoCanRemoveAvailableRoles =
+    roles.filter(
+      (role) =>
+        !permissions.canRemoveRoles?.map(({ id }) => id).includes(role.id) ??
+        [],
+    ) ?? [];
+
+  const whoCanSeeAvailableRoles =
+    roles.filter(
+      (role) =>
+        !permissions.canSeeRoles?.map(({ id }) => id).includes(role.id) ?? [],
+    ) ?? [];
 
   const [whoCanAddKey, setWhoCanAddKey] = useState(0);
   const [whoCanRemoveKey, setWhoCanRemoveKey] = useState(0);
+  const [whoCanSeeKey, setWhoCanSeeKey] = useState(0);
 
   // TODO: adapt to create/update blabla
   const statusMessage = useMemo(() => {
@@ -155,10 +184,13 @@ function TicketTagGroupAdmin({ group, isCreate }) {
   const handleUpdate = () => {
     const tagChangesDTO = constructTagUpdateDTO(originalTags, tags);
 
+    console.log(permissions);
+
     const patchObject = {
       permissions: {
         canAddRoles: permissions.canAddRoles.map(({ id }) => id),
         canRemoveRoles: permissions.canRemoveRoles.map(({ id }) => id),
+        canSeeRoles: permissions.canSeeRoles.map(({ id }) => id),
       },
       nameIntl,
       descriptionIntl,
@@ -167,6 +199,8 @@ function TicketTagGroupAdmin({ group, isCreate }) {
     if (Object.keys(tagChangesDTO).length > 0) {
       patchObject.tags = tagChangesDTO;
     }
+
+    console.log('patching with', patchObject);
 
     update({ id: group.id, ...patchObject });
   };
@@ -341,6 +375,35 @@ function TicketTagGroupAdmin({ group, isCreate }) {
                   ],
                 }));
                 setWhoCanRemoveKey((prev) => (prev + 1) % 10000);
+              }}
+            />
+          </Box>
+        </Box>
+        <Box marginBottom="12px">
+          <Typography variant="body1">
+            {intl.formatMessage(manageTagsMessages.whoCanSeeText)}
+          </Typography>
+          <Box display="flex">
+            <ChipList
+              items={permissions.canSeeRoles}
+              onClose={(closedId) => {
+                setPermissions((currentPermission) => ({
+                  ...currentPermission,
+                  canSeeRoles: currentPermission.canSeeRoles.filter(
+                    ({ id }) => id !== closedId,
+                  ),
+                }));
+              }}
+            />
+            <RolePicker
+              key={whoCanSeeKey}
+              roles={whoCanSeeAvailableRoles}
+              onSelect={(newRole) => {
+                setPermissions((currentPermissions) => ({
+                  ...currentPermissions,
+                  canSeeRoles: [...currentPermissions.canSeeRoles, newRole],
+                }));
+                setWhoCanSeeKey((prev) => (prev + 1) % 10000);
               }}
             />
           </Box>

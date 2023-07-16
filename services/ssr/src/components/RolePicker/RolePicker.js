@@ -9,6 +9,8 @@ function RolePicker({ roles, onSelect }) {
     id,
     label: intl.formatMessage(rolesMessages[name]),
   }));
+  console.log({ options });
+
   return (
     <Autocomplete
       width="100%"

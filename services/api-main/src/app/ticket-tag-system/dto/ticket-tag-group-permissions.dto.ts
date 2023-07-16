@@ -4,5 +4,6 @@ export class TicketTagGroupPermissionsDTO {
   constructor(
     public canAddRoles: (string | RoleDTO)[],
     public canRemoveRoles: (string | RoleDTO)[],
+    public canSeeRoles: (string | RoleDTO)[],
   ) {}
 }

@@ -173,17 +173,13 @@ export class TicketsService extends BaseService {
     const ticket = await query.exec();
 
     ticket.tags = ticket.tags.filter((tag) => {
-      const canAdd = userRoleIds.some((userRoleId) =>
-        tag.group.permissions.canAddRoles
+      const canSee = userRoleIds.some((userRoleId) =>
+        tag.group.permissions.canSeeRoles
           .map(({ _id }) => _id.toString())
           .includes(userRoleId.toString()),
       );
-      const canRemove = userRoleIds.some((userRoleId) =>
-        tag.group.permissions.canRemoveRoles
-          .map(({ _id }) => _id.toString())
-          .includes(userRoleId.toString()),
-      );
-      return canAdd || canRemove;
+
+      return canSee;
     });
 
     if (!ticket) {

@@ -29,6 +29,15 @@ export class UpdateTicketTagGroupPermissionsDTO {
   @Validate(IsValidObjectId, { each: true })
   @Transform(({ value }) => (value !== undefined ? value : null))
   public canRemoveRoles?: string[] | null;
+
+  @Expose()
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  @ArrayUnique()
+  @Validate(IsValidObjectId, { each: true })
+  @Transform(({ value }) => (value !== undefined ? value : null))
+  public canSeeRoles?: string[] | null;
 }
 
 export class UpdateTicketTagGroupTagsDTO {

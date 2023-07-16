@@ -6,9 +6,15 @@ import {
 } from '@/api/ticket-tag-system';
 import { Box, Typography } from '@mui/material';
 import TagChip from '../TagChip/TagChip';
+import { useSelector } from 'react-redux';
+import { selectGetMeQueryResponse } from '@/api/auth';
+import _ from 'lodash';
 
 function TagForm({ ticketTags, onSelect }) {
   // We fetch them here and not SSR because they're not SSR-relevant
+  const user = useSelector(selectGetMeQueryResponse);
+  const roleIds = user.roles.map(({ Id }) => Id);
+
   const { data: tags } = useGetTicketTagsQuery();
   const { data: tagGroups } = useGetTicketTagGroupsQuery();
 
@@ -39,13 +45,19 @@ function TagForm({ ticketTags, onSelect }) {
       return [];
     }
 
-    return tags.map((tag) => {
-      return {
-        ...tag,
-        groupName: tagGroups.find((g) => g.id === tag.group.id).name,
-      };
-    });
-  }, [tags, tagGroups]);
+    return tags
+      .filter((tag) => {
+        return (
+          _.intersection(roleIds, tag.group.permissions.canAddRoles).length > 0
+        );
+      })
+      .map((tag) => {
+        return {
+          ...tag,
+          groupName: tagGroups.find((g) => g.id === tag.group.id).name,
+        };
+      });
+  }, [tags, tagGroups, roleIds]);
 
   return (
     <Box display="flex" flexWrap="wrap" alignItems="center">
