@@ -337,8 +337,9 @@ export class TicketsService extends BaseService {
       }
     }
 
+    console.log(updateTicketDto.removeAssignees);
     if (
-      updateTicketDto.removeAssignees !== null &&
+      updateTicketDto.removeAssignees &&
       updateTicketDto.removeAssignees.length > 0
     ) {
       ticket.assignees = ticket.assignees.filter(
