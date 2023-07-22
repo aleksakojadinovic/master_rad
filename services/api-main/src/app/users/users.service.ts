@@ -1,4 +1,3 @@
-import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -8,7 +7,6 @@ import { CreateUserResponseDto } from './dto/create-user-response.dto';
 import { RolesService } from './roles.service';
 import { Role } from 'src/app/users/schema/role.schema';
 import * as bcrypt from 'bcrypt';
-import { CannotSearchThisRoleError } from './errors/CannotSearchThisRole';
 import { UsersQueryDTO } from './dto/users-query.dto';
 
 @Injectable()
@@ -65,10 +63,7 @@ export class UsersService {
       query.where({ roles: { $in: roleIds } });
     }
 
-    if (
-      !isSuperAdmin &&
-      queryDTO.roles.some((role) => role === 'superadministrator')
-    ) {
+    if (!isSuperAdmin) {
       query.where({ roles: { $nin: [superAdminId] } });
     }
 
