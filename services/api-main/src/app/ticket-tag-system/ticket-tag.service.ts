@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketTag } from './schema/ticket-tag.schema';
 import { CreateTicketTagDTO } from './dto/create-ticket-tag.dto';
-import { EntityQueryDTONew } from 'src/codebase/dto/EntityQueryDTO';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { User } from '../users/schema/user.schema';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class TicketTagService extends BaseService {
     super();
   }
 
-  override constructPopulateNew(queryDTO: EntityQueryDTONew): any[] {
+  override constructPopulateNew(queryDTO: EntityQueryDTO): any[] {
     const populations = [];
     queryDTO.includes.forEach((includeField) => {
       if (includeField === 'group') {
@@ -29,7 +29,7 @@ export class TicketTagService extends BaseService {
     return populations;
   }
 
-  async findAll(queryDTO: EntityQueryDTONew, user: User) {
+  async findAll(queryDTO: EntityQueryDTO, user: User) {
     const userRoleIds = user.roles.map(({ _id }) => _id);
     const tags = await this.ticketTagModel.find({}).populate({
       path: 'group',
@@ -84,7 +84,7 @@ export class TicketTagService extends BaseService {
     return ticketTag;
   }
 
-  async findMany(ids: string[], queryDTO: EntityQueryDTONew) {
+  async findMany(ids: string[], queryDTO: EntityQueryDTO) {
     const query = this.ticketTagModel.find({ _id: { $in: ids } });
     const populations = this.constructPopulateNew(queryDTO);
     populations.forEach((p) => query.populate(p));

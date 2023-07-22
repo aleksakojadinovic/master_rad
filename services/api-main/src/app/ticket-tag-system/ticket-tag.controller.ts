@@ -20,7 +20,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { User } from '../users/schema/user.schema';
-import { EntityQueryDTONew } from 'src/codebase/dto/EntityQueryDTO';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 
 @UseInterceptors(TicketTagInterceptor)
 @Controller('ticket-tag')
@@ -34,7 +34,7 @@ export class TicketTagController {
   @Get()
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findAll(
-    @Query(new ValidationPipe({ transform: true })) queryDTO: EntityQueryDTONew,
+    @Query(new ValidationPipe({ transform: true })) queryDTO: EntityQueryDTO,
     @Req() req: Request,
     @GetUserInfo() user: User,
   ) {

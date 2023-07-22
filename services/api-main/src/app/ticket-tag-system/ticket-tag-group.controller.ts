@@ -23,7 +23,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketTagGroup } from './schema/ticket-tag-group.schema';
 import { TicketTagGroupDTO } from './dto/ticket-tag-group.dto';
-import { EntityQueryDTONew } from 'src/codebase/dto/EntityQueryDTO';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { Request } from 'express';
 import { resolveLanguageCode } from 'src/codebase/utils';
 import { AuthGuard } from '@nestjs/passport';
@@ -57,7 +57,7 @@ export class TicketTagGroupController {
   @Get(':id')
   async findOne(
     @Param('id') id: string,
-    @Query(new ValidationPipe({ transform: true })) queryDTO: EntityQueryDTONew,
+    @Query(new ValidationPipe({ transform: true })) queryDTO: EntityQueryDTO,
     @Req() req: Request,
   ) {
     const languageCode = resolveLanguageCode(req);
@@ -71,7 +71,7 @@ export class TicketTagGroupController {
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findAll(
     @Headers('accept-language') acceptLanguage: any,
-    @Query(new ValidationPipe({ transform: true })) queryDTO: EntityQueryDTONew,
+    @Query(new ValidationPipe({ transform: true })) queryDTO: EntityQueryDTO,
     @Req() req: Request,
     @GetUserInfo() user: User,
   ) {

@@ -7,7 +7,7 @@ import {
   Min,
 } from 'class-validator';
 
-export class EntityQueryDTONew {
+export class EntityQueryDTO {
   @IsString()
   @MaxLength(100)
   @IsOptional()

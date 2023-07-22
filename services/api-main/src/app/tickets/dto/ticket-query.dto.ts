@@ -1,4 +1,4 @@
-import { EntityQueryDTONew } from 'src/codebase/dto/EntityQueryDTO';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { Transform } from 'class-transformer';
 
 // export class TicketQueryDTO extends EntityQueryDTO {
@@ -18,7 +18,7 @@ import { Transform } from 'class-transformer';
 //   status?: TicketStatus;
 // }
 
-export class TicketQueryDTO extends EntityQueryDTONew {
+export class TicketQueryDTO extends EntityQueryDTO {
   @Transform(({ value }) => value || null)
   status: string | null = null;
 }

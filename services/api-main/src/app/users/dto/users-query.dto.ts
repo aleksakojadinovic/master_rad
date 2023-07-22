@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
-import { EntityQueryDTONew } from 'src/codebase/dto/EntityQueryDTO';
+import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 
-export class UsersQueryDTO extends EntityQueryDTONew {
+export class UsersQueryDTO extends EntityQueryDTO {
   @Transform(({ value }) => {
     if (typeof value === 'string') {
       return value.split(',');
