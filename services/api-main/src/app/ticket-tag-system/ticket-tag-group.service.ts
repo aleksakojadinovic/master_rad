@@ -8,7 +8,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { TicketTagGroupNotFoundError } from './errors/TicketTagGroupNotFound';
-import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
+import { EntityQueryDTONew } from 'src/codebase/dto/EntityQueryDTO';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketTagService } from './ticket-tag.service';
 import { InjectMapper } from '@automapper/nestjs';
@@ -38,7 +38,7 @@ export class TicketTagGroupService extends BaseService {
     super();
   }
 
-  override constructPopulate(queryDTO: EntityQueryDTO): any[] {
+  override constructPopulateNew(queryDTO: EntityQueryDTONew): any[] {
     const populations = [];
     queryDTO.includes.forEach((includeField) => {
       if (includeField === 'role') {
@@ -137,21 +137,21 @@ export class TicketTagGroupService extends BaseService {
   //   return group;
   // }
 
-  async findAll(queryDTO: EntityQueryDTO, user: User) {
+  async findAll(queryDTO: EntityQueryDTONew, user: User) {
     const userRoleIds = user.roles.map(({ _id }) => _id);
     const query = this.ticketTagGroupModel.find({
       'permissions.canSeeRoles': { $in: userRoleIds },
     });
 
-    const populations = this.constructPopulate(queryDTO);
+    const populations = this.constructPopulateNew(queryDTO);
     populations.forEach((p) => query.populate(p));
     const groups = await query.exec();
     return groups;
   }
 
-  public async findOne(id: string, queryDTO: EntityQueryDTO) {
+  public async findOne(id: string, queryDTO: EntityQueryDTONew) {
     const query = this.ticketTagGroupModel.findOne({ _id: id });
-    const populations = this.constructPopulate(queryDTO);
+    const populations = this.constructPopulateNew(queryDTO);
 
     populations.forEach((p) => query.populate(p));
     const group = await query.exec();
@@ -322,10 +322,9 @@ export class TicketTagGroupService extends BaseService {
   }
 
   async update(id: string, dto: CreateOrUpdateTicketTagGroupDTO) {
-    const group = await this.findOne(
-      id,
-      new EntityQueryDTO('', ['tags', 'role'], '', 0, null),
-    );
+    const findDTO = new EntityQueryDTONew();
+    findDTO.includes = ['tags', 'role'];
+    const group = await this.findOne(id, findDTO);
 
     if (!group) {
       throw new TicketTagGroupNotFoundError();

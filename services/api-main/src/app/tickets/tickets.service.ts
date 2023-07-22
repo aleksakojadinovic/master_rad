@@ -22,7 +22,7 @@ import { TicketStatus } from './types';
 import { User } from 'src/app/users/schema/user.schema';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
-import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
+import { EntityQueryDTONew } from 'src/codebase/dto/EntityQueryDTO';
 import { TicketNotFoundError } from './errors/TicketNotFound';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
 import { CannotAssignCustomerError } from './errors/CannotAssignCustomer';
@@ -34,6 +34,7 @@ import { DuplicateTagError } from './errors/DuplicateTag';
 import { TicketTag } from '../ticket-tag-system/schema/ticket-tag.schema';
 import { AssigneeNotFoundError } from './errors/AssigneeNotFound';
 import { DuplicateAssigneeError } from './errors/DuplicateAssignee';
+import { TooSoonToCreateAnotherTicketError } from './errors/TooSoonToCreateAnotherTicket';
 // import { TooSoonToCreateAnotherTicket } from './errors/TooSoonToCreateAnotherTicket';
 
 @Injectable()
@@ -47,7 +48,7 @@ export class TicketsService extends BaseService {
     super();
   }
 
-  override constructPopulate(queryDTO: EntityQueryDTO) {
+  override constructPopulateNew(queryDTO: EntityQueryDTONew) {
     const populations = [];
     queryDTO.includes.forEach((includeField) => {
       if (includeField === 'createdBy') {
@@ -105,7 +106,10 @@ export class TicketsService extends BaseService {
       const diffMinutes = now.diff(createdAt, 'minutes');
 
       if (diffMinutes <= 10) {
-        // throw new TooSoonToCreateAnotherTicket(diffMinutes, 10 - diffMinutes);
+        throw new TooSoonToCreateAnotherTicketError(
+          diffMinutes,
+          10 - diffMinutes,
+        );
       }
     }
 
@@ -150,14 +154,14 @@ export class TicketsService extends BaseService {
     return ticketModel;
   }
 
-  async findAll(queryDTO: EntityQueryDTO) {
+  async findAll(queryDTO: TicketQueryDTO) {
     const query = this.ticketModel.find({});
 
-    const populations = this.constructPopulate(queryDTO);
+    const populations = this.constructPopulateNew(queryDTO);
     populations.forEach((p) => query.populate(p));
 
-    if (queryDTO.filters.status) {
-      query.where('status', queryDTO.filters.status);
+    if (queryDTO.status) {
+      query.where('status', queryDTO.status);
     }
 
     query.skip((queryDTO.page - 1) * queryDTO.perPage).limit(queryDTO.perPage);
@@ -179,7 +183,7 @@ export class TicketsService extends BaseService {
       populate: { path: 'group', model: 'TicketTagGroup' },
     });
 
-    const populations = this.constructPopulate(queryDTO);
+    const populations = this.constructPopulateNew(queryDTO);
     populations.forEach((p) => query.populate(p));
     const ticket = await query.exec();
 
@@ -365,9 +369,11 @@ export class TicketsService extends BaseService {
 
     // TODO: Move this check to a util function since it's very repetitive
     if (removeTags.length > 0) {
+      const findDTO = new EntityQueryDTONew();
+      findDTO.includes = ['group'];
       const tagsToRemove = await this.ticketTagService.findMany(
         removeTags,
-        new EntityQueryDTO('', ['group'], '', 0, 0),
+        findDTO,
       );
       tagsToRemove.forEach((tag) => {
         if (
@@ -388,10 +394,9 @@ export class TicketsService extends BaseService {
     }
 
     if (addTags.length > 0) {
-      const tagsToAdd = await this.ticketTagService.findMany(
-        addTags,
-        new EntityQueryDTO('', ['group'], '', 0, 0),
-      );
+      const findDTO = new EntityQueryDTONew();
+      findDTO.includes = ['group'];
+      const tagsToAdd = await this.ticketTagService.findMany(addTags, findDTO);
       tagsToAdd.forEach((tag) => {
         if (
           !userRoleIds.some((userRoleId) => {
