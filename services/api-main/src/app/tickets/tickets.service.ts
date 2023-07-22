@@ -33,6 +33,7 @@ import { NotAllowedToRemoveThisTagError } from './errors/NotAllowedToRemoveThisT
 import { DuplicateTagError } from './errors/DuplicateTag';
 import { TicketTag } from '../ticket-tag-system/schema/ticket-tag.schema';
 import { AssigneeNotFoundError } from './errors/AssigneeNotFound';
+import { DuplicateAssigneeError } from './errors/DuplicateAssignee';
 // import { TooSoonToCreateAnotherTicket } from './errors/TooSoonToCreateAnotherTicket';
 
 @Injectable()
@@ -318,6 +319,13 @@ export class TicketsService extends BaseService {
         if (assigneeUser.hasRole('customer')) {
           throw new CannotAssignCustomerError(assigneeId);
         }
+        if (
+          ticket.assignees
+            .map((user) => user._id.toString())
+            .includes(assigneeId)
+        ) {
+          throw new DuplicateAssigneeError(assigneeId);
+        }
         assignees.push(assigneeUser);
       }
       const entry = new TicketHistoryEntryAssigneesAdded(
@@ -337,7 +345,6 @@ export class TicketsService extends BaseService {
       }
     }
 
-    console.log(updateTicketDto.removeAssignees);
     if (
       updateTicketDto.removeAssignees &&
       updateTicketDto.removeAssignees.length > 0

@@ -17,6 +17,7 @@ import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnot
 import { NotAllowedToAddThisTagError } from '../errors/NotAllowedToAddThisTag';
 import { NotAllowedToRemoveThisTagError } from '../errors/NotAllowedToRemoveThisTag';
 import { DuplicateTagError } from '../errors/DuplicateTag';
+import { DuplicateAssigneeError } from '../errors/DuplicateAssignee';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {
@@ -52,6 +53,10 @@ export class TicketInterceptor implements NestInterceptor {
         }
 
         if (error instanceof DuplicateTagError) {
+          throw new ConflictException(error.getPayload());
+        }
+
+        if (error instanceof DuplicateAssigneeError) {
           throw new ConflictException(error.getPayload());
         }
 
