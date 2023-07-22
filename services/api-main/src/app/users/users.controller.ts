@@ -50,7 +50,7 @@ export class UsersController {
   @Get()
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findAll(
-    @Query(new UsersQueryPipe(true), new ValidationPipe({ transform: true }))
+    @Query(new ValidationPipe({ transform: true }))
     queryDTO: UsersQueryDTO,
     @GetUserInfo() user: User,
   ) {

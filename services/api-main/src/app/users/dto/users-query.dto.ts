@@ -1,21 +1,15 @@
 import { Transform } from 'class-transformer';
-import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
+import { IsArray, IsOptional } from 'class-validator';
+import { EntityQueryDTONew } from 'src/codebase/dto/EntityQueryDTO';
 
-export class UsersQueryDTO extends EntityQueryDTO {
-  constructor(
-    searchString = '',
-    includes: string[] = [],
-    sortBy: string = null,
-    page: number | null = null,
-    perPage: number | null = null,
-    role: string | null = null,
-  ) {
-    super(searchString, includes, sortBy, page, perPage);
-    this.role = role;
-  }
-
+export class UsersQueryDTO extends EntityQueryDTONew {
+  @IsOptional()
+  @IsArray()
   @Transform(({ value }) => {
-    return value ?? null;
+    if (typeof value === 'string') {
+      return value.split(',');
+    }
+    return value || [];
   })
-  role: string | null;
+  roles: string[];
 }

@@ -24,7 +24,7 @@ function UserAssignForm({ onClose, onSelect }) {
   const [search, setSearch] = useState({
     page: 1,
     perPage: 100,
-    includes: ['roles'],
+    includes: ['roles', 'somethingelse'],
   });
   const { data: results } = useGetUsersQuery(search, {
     skip: !open,

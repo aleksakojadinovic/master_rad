@@ -9,6 +9,7 @@ import { RolesService } from './roles.service';
 import { Role } from 'src/app/users/schema/role.schema';
 import * as bcrypt from 'bcrypt';
 import { CannotSearchThisRoleError } from './errors/CannotSearchThisRole';
+import { UsersQueryDTO } from './dto/users-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -44,7 +45,7 @@ export class UsersService {
     );
   }
 
-  async findAll(queryDTO: EntityQueryDTO, user: User): Promise<User[]> {
+  async findAll(queryDTO: UsersQueryDTO, user: User): Promise<User[]> {
     const isAdmin = user.roles
       .map(({ name }) => name)
       .includes('administrator');
@@ -56,22 +57,18 @@ export class UsersService {
     const superAdminId = await this.rolesService.findByName(
       'superadministrator',
     );
-
-    const roleName: string = queryDTO.filters.role ?? null;
-    if (roleName === 'superadministrator' && !isSuperAdmin) {
-      throw new CannotSearchThisRoleError('superadministrator');
-    }
-
-    const roleId =
-      roleName !== null ? await this.rolesService.findByName(roleName) : null;
+    const roleIds = await this.rolesService.findManyByName(queryDTO.roles);
 
     const query = this.userModel.find({});
 
-    if (roleName !== null) {
-      query.where({ roles: { $in: [roleId] } });
+    if (queryDTO.roles.length > 0) {
+      query.where({ roles: { $in: roleIds } });
     }
 
-    if (!isSuperAdmin && roleName !== null) {
+    if (
+      !isSuperAdmin &&
+      queryDTO.roles.some((role) => role === 'superadministrator')
+    ) {
       query.where({ roles: { $nin: [superAdminId] } });
     }
 
