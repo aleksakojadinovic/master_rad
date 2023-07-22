@@ -35,6 +35,8 @@ function UserSearchResult({ users, onSelectUser = () => {} }) {
         );
       }
       if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
         if (currentHoverElement === null) {
           return;
         }
