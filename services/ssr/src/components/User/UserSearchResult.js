@@ -1,10 +1,9 @@
 import { Box } from '@mui/material';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import UserCard from './UserCard';
 import UserChip from './UserChip';
 import { useTheme } from '@mui/material';
 
-function UserSearchResult({ users }) {
+function UserSearchResult({ users, onSelectUser = () => {} }) {
   const theme = useTheme();
   const [currentHoverElement, setCurrentHoverElement] = useState(null);
   const resultsRef = useRef(null);
@@ -35,8 +34,15 @@ function UserSearchResult({ users }) {
           prev === null ? 0 : prev === 0 ? users.length - 1 : prev - 1,
         );
       }
+      if (e.key === 'Enter') {
+        if (currentHoverElement === null) {
+          return;
+        }
+        const selectedUser = users[currentHoverElement];
+        onSelectUser(selectedUser);
+      }
     },
-    [users.length],
+    [currentHoverElement, users, onSelectUser],
   );
 
   useEffect(() => {
@@ -53,6 +59,7 @@ function UserSearchResult({ users }) {
       height="350px"
       sx={{ overflowY: 'scroll' }}
       position="relative"
+      id="users-search-results"
     >
       {users.map((u, index) => (
         <Box

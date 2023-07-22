@@ -15,6 +15,7 @@ import { selectGetMeQueryResponse } from '@/api/auth';
 import { useIntl } from 'react-intl';
 import { assignMessages } from '@/translations/assign';
 import UserAssignForm from '../User/UserAssignForm';
+import UserChip from '../User/UserChip';
 
 export default function Ticket({ ticket }) {
   const intl = useIntl();
@@ -22,9 +23,6 @@ export default function Ticket({ ticket }) {
   const isCustomer = user.roles.map(({ name }) => name).includes('customer');
   const [updateTicket, { isLoading, isSuccess }] = useUpdateTicketMutation();
   const [isAssignModalVisible, setIsAssignModalVisible] = useState(false);
-
-  // const { data: tags } = useGetTicketTagsQuery();
-  // const { data: tagGroups } = useGetTicketTagGroupsQuery();
 
   const canAddComment = true;
 
@@ -38,6 +36,14 @@ export default function Ticket({ ticket }) {
 
   const handleDeleteTag = (tagId) => {
     updateTicket({ id: ticket.id, removeTags: [tagId] });
+  };
+
+  const handleAssignUser = (user) => {
+    updateTicket({ id: ticket.id, addAssignees: [user.id] });
+  };
+
+  const handleUnassignUser = (user) => {
+    updateTicket({ id: ticket.id, removeAssignees: [user.id] });
   };
 
   useEffect(() => {}, [isSuccess]);
@@ -122,8 +128,20 @@ export default function Ticket({ ticket }) {
         marginRight="12px"
         width="100%"
       >
-        {hasAssignees &&
-          ticket.assignees.map((_, index) => <div key={index}>someone</div>)}
+        {hasAssignees && (
+          <Box display="flex" flexWrap="wrap">
+            {ticket.assignees.map((user) => (
+              <Box key={user.id} marginRight="6px">
+                <UserChip
+                  user={user}
+                  onDelete={() => {
+                    handleUnassignUser(user);
+                  }}
+                />
+              </Box>
+            ))}
+          </Box>
+        )}
         {hasForm && renderAssignButton()}
       </Box>
     );
@@ -149,7 +167,13 @@ export default function Ticket({ ticket }) {
   return (
     <Fragment>
       {isAssignModalVisible && (
-        <UserAssignForm onClose={() => setIsAssignModalVisible(false)} />
+        <UserAssignForm
+          onClose={() => setIsAssignModalVisible(false)}
+          onSelect={(user) => {
+            handleAssignUser(user);
+            setIsAssignModalVisible(false);
+          }}
+        />
       )}
       <Card variant="outlined">
         <CardContent>

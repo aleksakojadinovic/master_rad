@@ -1,6 +1,6 @@
 export function getTicketViewQueryParams() {
   return {
-    includes: ['createdBy', 'historyInitiator', 'tags'],
+    includes: ['createdBy', 'historyInitiator', 'tags', 'assignees'],
   };
 }
 

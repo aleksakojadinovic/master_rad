@@ -76,6 +76,16 @@ export class TicketsService extends BaseService {
           },
         });
       }
+      if (includeField === 'assignees') {
+        populations.push({
+          path: 'assignees',
+          model: 'User',
+          populate: {
+            path: 'roles',
+            model: 'Role',
+          },
+        });
+      }
     });
     return populations;
   }
@@ -325,6 +335,17 @@ export class TicketsService extends BaseService {
       for (const a of assignees) {
         ticket.assignees.push(a);
       }
+    }
+
+    if (
+      updateTicketDto.removeAssignees !== null &&
+      updateTicketDto.removeAssignees.length > 0
+    ) {
+      ticket.assignees = ticket.assignees.filter(
+        (user) =>
+          !updateTicketDto.removeAssignees.includes(user._id.toString()),
+      );
+      // TODO: history item
     }
 
     const addTags = updateTicketDto.addTags || [];

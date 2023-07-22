@@ -1,11 +1,10 @@
 import { assignMessages } from '@/translations/assign';
-import { Box, Divider, Modal, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Modal, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import UserSearchForm from './UsersSearchForm';
 import { useGetUsersQuery } from '@/api/users';
 import UserSearchResult from './UserSearchResult';
-import { useTheme } from '@emotion/react';
 
 const style = {
   position: 'absolute',
@@ -19,7 +18,7 @@ const style = {
   p: 4,
 };
 
-function UserAssignForm({ onClose }) {
+function UserAssignForm({ onClose, onSelect }) {
   const intl = useIntl();
 
   const [search, setSearch] = useState({
@@ -45,6 +44,20 @@ function UserAssignForm({ onClose }) {
     setSearch(newSearch);
   };
 
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      document.getElementById('users-search-results').focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
   return (
     <Modal open={true} onClose={onClose}>
       <Box sx={style}>
@@ -60,7 +73,7 @@ function UserAssignForm({ onClose }) {
         </Box>
 
         <Box marginTop="12px">
-          <UserSearchResult users={results ?? []} />
+          <UserSearchResult users={results ?? []} onSelectUser={onSelect} />
         </Box>
       </Box>
     </Modal>
