@@ -37,4 +37,8 @@ export const globalMessages = defineMessages({
     id: 'global.delete',
     defaultMessage: 'Delete',
   },
+  roles: {
+    id: 'global.roles',
+    defaultMessage: 'Roles',
+  },
 });

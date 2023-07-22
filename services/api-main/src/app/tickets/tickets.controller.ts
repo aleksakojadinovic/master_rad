@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   Query,
   Req,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -22,8 +23,6 @@ import { Mapper } from '@automapper/core';
 import { TicketDTO } from './dto/ticket.dto';
 import { BaseController } from 'src/codebase/BaseController';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
-import { TicketQueryPipe } from './pipes/ticket-query.pipe';
-import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { TicketInterceptor } from './interceptors/ticket.interceptor';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
 import { resolveLanguageCode } from 'src/codebase/utils';
@@ -53,7 +52,10 @@ export class TicketsController extends BaseController {
   }
 
   @Get()
-  async findAll(@Query(new TicketQueryPipe(true)) queryDTO: EntityQueryDTO) {
+  @UseGuards(AuthGuard('jwt'))
+  async findAll(
+    @Query(new ValidationPipe({ transform: true })) queryDTO: TicketQueryDTO,
+  ) {
     const tickets = await this.ticketsService.findAll(queryDTO);
     return this.mapper.mapArray(tickets, Ticket, TicketDTO);
   }
@@ -62,7 +64,7 @@ export class TicketsController extends BaseController {
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findOne(
     @Param('id') id: string,
-    @Query(new TicketQueryPipe()) queryDTO: TicketQueryDTO,
+    @Query(new ValidationPipe({ transform: true })) queryDTO: TicketQueryDTO,
     @Req() req: Request,
     @GetUserInfo() user: User,
   ) {

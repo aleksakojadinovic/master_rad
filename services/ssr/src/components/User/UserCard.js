@@ -23,7 +23,7 @@ export default function UserCard({ user: { firstName, lastName, roles } }) {
             key={index}
             size="small"
             variant="contained"
-            label={role}
+            label={role.name ? role.name : role}
             sx={{ width: '50px' }}
           />
         ))}

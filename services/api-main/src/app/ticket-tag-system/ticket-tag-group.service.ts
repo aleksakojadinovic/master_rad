@@ -322,10 +322,9 @@ export class TicketTagGroupService extends BaseService {
   }
 
   async update(id: string, dto: CreateOrUpdateTicketTagGroupDTO) {
-    const group = await this.findOne(
-      id,
-      new EntityQueryDTO('', ['tags', 'role'], '', 0, null),
-    );
+    const findDTO = new EntityQueryDTO();
+    findDTO.includes = ['tags', 'role'];
+    const group = await this.findOne(id, findDTO);
 
     if (!group) {
       throw new TicketTagGroupNotFoundError();

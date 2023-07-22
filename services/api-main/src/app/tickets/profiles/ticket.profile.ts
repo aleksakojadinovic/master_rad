@@ -54,7 +54,14 @@ export class TicketProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.assignees,
-          mapFrom((source) => mapper.mapArray(source.assignees, User, UserDTO)),
+          mapFrom((source) => {
+            return source.assignees.map((user) => {
+              if (user instanceof Types.ObjectId) {
+                return user;
+              }
+              return mapper.map(user, User, UserDTO);
+            });
+          }),
         ),
         forMember(
           (destination) => destination.createdAt,

@@ -7,6 +7,7 @@ import { CreateUserResponseDto } from './dto/create-user-response.dto';
 import { RolesService } from './roles.service';
 import { Role } from 'src/app/users/schema/role.schema';
 import * as bcrypt from 'bcrypt';
+import { UsersQueryDTO } from './dto/users-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -42,8 +43,46 @@ export class UsersService {
     );
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+  async findAll(queryDTO: UsersQueryDTO, user: User): Promise<User[]> {
+    const isSuperAdmin = user.roles
+      .map(({ name }) => name)
+      .includes('superadministrator');
+
+    const superAdminId = await this.rolesService.findByName(
+      'superadministrator',
+    );
+    const roleIds = await this.rolesService.findManyByName(queryDTO.roles);
+
+    const query = this.userModel.find({});
+
+    if (queryDTO.roles.length > 0) {
+      query.where({ roles: { $in: roleIds } });
+    }
+
+    if (!isSuperAdmin) {
+      query.where({ roles: { $nin: [superAdminId] } });
+    }
+
+    if (queryDTO.includes.includes('roles')) {
+      query.populate({ path: 'roles', model: 'Role' });
+    }
+
+    if (queryDTO.searchString) {
+      query.where({
+        $or: [
+          { firstName: { $regex: new RegExp(queryDTO.searchString, 'i') } },
+          { lastName: { $regex: new RegExp(queryDTO.searchString, 'i') } },
+        ],
+      });
+    }
+
+    if (queryDTO.page && queryDTO.perPage) {
+      query
+        .skip((queryDTO.page - 1) * queryDTO.perPage)
+        .limit(queryDTO.perPage);
+    }
+
+    return query.exec();
   }
 
   // TODO: maybe add repository layer to handle these populate calls
