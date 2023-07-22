@@ -38,7 +38,7 @@ export class TicketTagGroupService extends BaseService {
     super();
   }
 
-  override constructPopulateNew(queryDTO: EntityQueryDTO): any[] {
+  override constructPopulate(queryDTO: EntityQueryDTO): any[] {
     const populations = [];
     queryDTO.includes.forEach((includeField) => {
       if (includeField === 'role') {
@@ -143,7 +143,7 @@ export class TicketTagGroupService extends BaseService {
       'permissions.canSeeRoles': { $in: userRoleIds },
     });
 
-    const populations = this.constructPopulateNew(queryDTO);
+    const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
     const groups = await query.exec();
     return groups;
@@ -151,7 +151,7 @@ export class TicketTagGroupService extends BaseService {
 
   public async findOne(id: string, queryDTO: EntityQueryDTO) {
     const query = this.ticketTagGroupModel.findOne({ _id: id });
-    const populations = this.constructPopulateNew(queryDTO);
+    const populations = this.constructPopulate(queryDTO);
 
     populations.forEach((p) => query.populate(p));
     const group = await query.exec();

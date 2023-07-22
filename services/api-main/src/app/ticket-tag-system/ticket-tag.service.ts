@@ -16,7 +16,7 @@ export class TicketTagService extends BaseService {
     super();
   }
 
-  override constructPopulateNew(queryDTO: EntityQueryDTO): any[] {
+  override constructPopulate(queryDTO: EntityQueryDTO): any[] {
     const populations = [];
     queryDTO.includes.forEach((includeField) => {
       if (includeField === 'group') {
@@ -86,7 +86,7 @@ export class TicketTagService extends BaseService {
 
   async findMany(ids: string[], queryDTO: EntityQueryDTO) {
     const query = this.ticketTagModel.find({ _id: { $in: ids } });
-    const populations = this.constructPopulateNew(queryDTO);
+    const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
     const tags = await query.exec();
     return tags;

@@ -48,7 +48,7 @@ export class TicketsService extends BaseService {
     super();
   }
 
-  override constructPopulateNew(queryDTO: EntityQueryDTO) {
+  override constructPopulate(queryDTO: EntityQueryDTO) {
     const populations = [];
     queryDTO.includes.forEach((includeField) => {
       if (includeField === 'createdBy') {
@@ -157,7 +157,7 @@ export class TicketsService extends BaseService {
   async findAll(queryDTO: TicketQueryDTO) {
     const query = this.ticketModel.find({});
 
-    const populations = this.constructPopulateNew(queryDTO);
+    const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
 
     if (queryDTO.status) {
@@ -183,7 +183,7 @@ export class TicketsService extends BaseService {
       populate: { path: 'group', model: 'TicketTagGroup' },
     });
 
-    const populations = this.constructPopulateNew(queryDTO);
+    const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
     const ticket = await query.exec();
 

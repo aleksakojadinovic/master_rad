@@ -6,7 +6,7 @@ export abstract class BaseService {
     return {};
   }
 
-  constructPopulateNew(queryDTO: EntityQueryDTO): any[] {
+  constructPopulate(queryDTO: EntityQueryDTO): any[] {
     return [];
   }
 }
