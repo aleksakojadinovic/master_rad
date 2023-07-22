@@ -24,7 +24,6 @@ import { UserDTO } from './dto/user.dto';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import * as _ from 'lodash';
-import { UsersQueryPipe } from './pipes/user-query.pipe';
 import { UsersQueryDTO } from './dto/users-query.dto';
 import { UsersInterceptor } from './interceptors/users.interceptor';
 @UseInterceptors(UsersInterceptor)
