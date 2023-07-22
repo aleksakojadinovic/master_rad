@@ -8,14 +8,14 @@ export class UsersQueryDTO extends EntityQueryDTO {
     sortBy: string = null,
     page: number | null = null,
     perPage: number | null = null,
-    roles: string[] | null = null,
+    role: string | null = null,
   ) {
     super(searchString, includes, sortBy, page, perPage);
-    this.roles = roles;
+    this.role = role;
   }
 
   @Transform(({ value }) => {
     return value ?? null;
   })
-  roles: string[] | null;
+  role: string | null;
 }

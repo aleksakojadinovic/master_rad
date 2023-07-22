@@ -57,7 +57,7 @@ export class UsersService {
       'superadministrator',
     );
 
-    const roleName: string = queryDTO.filters.roles ?? null;
+    const roleName: string = queryDTO.filters.role ?? null;
     if (roleName === 'superadministrator' && !isSuperAdmin) {
       throw new CannotSearchThisRoleError('superadministrator');
     }
