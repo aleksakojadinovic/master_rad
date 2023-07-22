@@ -44,13 +44,9 @@ export class UsersService {
   }
 
   async findAll(queryDTO: UsersQueryDTO, user: User): Promise<User[]> {
-    const isAdmin = user.roles
-      .map(({ name }) => name)
-      .includes('administrator');
     const isSuperAdmin = user.roles
       .map(({ name }) => name)
       .includes('superadministrator');
-    const isAgent = user.roles.map(({ name }) => name).includes('agent');
 
     const superAdminId = await this.rolesService.findByName(
       'superadministrator',
