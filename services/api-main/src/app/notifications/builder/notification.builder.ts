@@ -111,10 +111,18 @@ const BuilderInstanceMap: {
   assigned: AssignedNotificationPayloadBuilder,
 };
 
+const PayloadTypeMap: {
+  [P in keyof BuilderTypeMap]: string;
+} = {
+  comment_added: 'CommentAddedNotification',
+  assigned: 'AssignedNotification',
+};
+
 export class NotificationBuilder {
   private users: User[] | null;
   private timestamp: Date = new Date();
   private payload: NotificationPayload | null = null;
+  private type: string | null = null;
 
   forUsers(users: User[]) {
     this.users = users;
@@ -135,6 +143,9 @@ export class NotificationBuilder {
     builderCallback(builder);
     const payload = builder.build();
     this.payload = payload;
+
+    this.type = PayloadTypeMap[payloadType];
+
     return this;
   }
 
@@ -156,6 +167,7 @@ export class NotificationBuilder {
     notification.users = this.users;
     notification.createdAt = this.timestamp;
     notification.payload = this.payload;
+    notification.type = this.type;
 
     return notification;
   }
