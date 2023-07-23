@@ -55,4 +55,9 @@ export class NotificationsService {
     const model = new this.notificationModel(notification);
     await model.save();
   }
+
+  async emitNotifications(...notifications: Notification[]) {
+    const models = notifications.map((n) => new this.notificationModel(n));
+    await Promise.all(models.map((model) => model.save()));
+  }
 }
