@@ -7,29 +7,31 @@ import { formatDate } from '@/utils';
 
 export default function Comment({ comment }) {
   return (
-    <Card>
-      <CardContent>
-        <Box
-          display="flex"
-          sx={{
-            flexDirection: { xs: 'column', md: 'row' },
-            alignItems: { xs: 'normal', md: 'center' },
-          }}
-        >
-          <Box>
-            <UserChip user={comment.user} />
+    <div id={comment.commentId ?? ''}>
+      <Card>
+        <CardContent>
+          <Box
+            display="flex"
+            sx={{
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: { xs: 'normal', md: 'center' },
+            }}
+          >
+            <Box>
+              <UserChip user={comment.user} />
+            </Box>
+            <Box sx={{ marginLeft: { xs: 0, md: '12px' } }}>
+              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                {formatDate(comment.timestamp)}
+              </Typography>
+            </Box>
           </Box>
-          <Box sx={{ marginLeft: { xs: 0, md: '12px' } }}>
-            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              {formatDate(comment.timestamp)}
-            </Typography>
-          </Box>
-        </Box>
 
-        <Box marginTop="12px">
-          <Typography variant="body2">{comment.body}</Typography>
-        </Box>
-      </CardContent>
-    </Card>
+          <Box marginTop="12px">
+            <Typography variant="body2">{comment.body}</Typography>
+          </Box>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

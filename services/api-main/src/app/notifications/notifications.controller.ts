@@ -1,9 +1,13 @@
 import { Controller, Get, Post, Patch, Delete } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
+import { UsersService } from '../users/users.service';
 
 @Controller('notifications')
 export class NotificationsController {
-  constructor(private readonly notificationsService: NotificationsService) {}
+  constructor(
+    private readonly notificationsService: NotificationsService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post()
   create() {
@@ -16,7 +20,10 @@ export class NotificationsController {
   }
 
   @Get(':id')
-  findOne() {
+  async findOne() {
+    // notification.users =
+    // const commentAddedTest = new this.commentAddedNotificationModel();
+    // commentAddedTest.createdAt;
     return this.notificationsService.findOne();
   }
 

@@ -3,7 +3,7 @@ import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket } from 'src/app/tickets/schema/ticket.schema';
-import { Model, Types, isValidObjectId } from 'mongoose';
+import mongoose, { Model, Types, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/app/users/users.service';
 import { v4 as uuid } from 'uuid';
 import * as moment from 'moment';
@@ -255,6 +255,8 @@ export class TicketsService extends BaseService {
     const groupId = uuid();
     const timestamp = new Date();
 
+    const notifications = [];
+
     if (updateTicketDto.status != null) {
       // Add status change entry
       const entry = new TicketHistoryEntryStatusChange(updateTicketDto.status);
@@ -286,7 +288,10 @@ export class TicketsService extends BaseService {
     }
 
     if (updateTicketDto.comment != null && updateTicketDto.comment.length > 0) {
-      const entry = new TicketHistoryEntryCommentAdded(updateTicketDto.comment);
+      const entry = new TicketHistoryEntryCommentAdded(
+        updateTicketDto.comment,
+        new mongoose.Types.ObjectId().toString(),
+      );
       ticket.history.push(
         TicketHistoryItem.create({
           groupId,
