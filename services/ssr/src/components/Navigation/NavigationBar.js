@@ -1,35 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
 import { useGetMeQuery } from '@/api/auth';
 import { Box } from '@mui/material';
-import dynamic from 'next/dynamic';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import NotificationsMenu from './NotificationsMenu';
 import NavigationUserMenu from './NavigationUserMenu';
 
 function NavigationBar() {
   useGetMeQuery();
-
-  const renderLogoSection = () => {
-    return (
-      <div>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://dev.sts.com/images/logo-no-background.svg"
-          alt="Logo"
-          style={{ width: '111px', height: '40px', cursor: 'pointer' }}
-          onClick={() => (window.location.href = '/')}
-        />
-      </div>
-    );
-  };
-
-  const renderUserSection = () => {
-    return (
-      <Box display="flex" alignItems="center">
-        <NotificationsMenu />
-        <NavigationUserMenu />
-      </Box>
-    );
-  };
 
   return (
     <Fragment>
@@ -39,8 +16,18 @@ function NavigationBar() {
         alignItems="center"
         height="40px"
       >
-        {renderLogoSection()}
-        {renderUserSection()}
+        <Box>
+          <img
+            src="https://dev.sts.com/images/logo-no-background.svg"
+            alt="Logo"
+            style={{ width: '111px', height: '40px', cursor: 'pointer' }}
+            onClick={() => (window.location.href = '/')}
+          />
+        </Box>
+        <Box display="flex" alignItems="center">
+          <NotificationsMenu />
+          <NavigationUserMenu />
+        </Box>
       </Box>
     </Fragment>
   );
