@@ -14,6 +14,7 @@ import { TicketTagProfile } from './app/ticket-tag-system/profiles/ticket-tag.pr
 import { TicketTagGroupProfile } from './app/ticket-tag-system/profiles/ticket-tag-group.profile';
 import { TicketTagSystemModule } from './app/ticket-tag-system/ticket-tag-system.module';
 import { NotificationsModule } from './app/notifications/notifications.module';
+import { NotificationProfile } from './app/notifications/profiles/notification.profile';
 
 const MAIN_DB_USERNAME = process.env.MAIN_DB_USERNAME;
 const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
@@ -39,6 +40,7 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
     TicketHistoryItemProfile,
     TicketTagProfile,
     TicketTagGroupProfile,
+    NotificationProfile,
   ],
 })
 export class AppModule {}

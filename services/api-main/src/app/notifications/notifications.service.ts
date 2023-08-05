@@ -41,6 +41,8 @@ export class NotificationsService extends BaseService {
     const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
 
+    query.skip((queryDTO.page - 1) * queryDTO.perPage).limit(queryDTO.perPage);
+
     const notifications = await query.exec();
     return notifications;
   }
