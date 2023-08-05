@@ -61,8 +61,8 @@ export class CommentAddedNotificationPayloadBuilder {
 
     const payload = new CommentAddedNotificationPayload();
     payload.commentId = this.commentId;
-    payload.user = this.user;
-    payload.ticket = this.ticket;
+    payload.userId = this.user._id.toString();
+    payload.ticketId = this.ticket._id.toString();
 
     return payload;
   }
@@ -92,8 +92,8 @@ export class AssignedNotificationPayloadBuilder {
     }
 
     const payload = new AssignedNotificationPayload();
-    payload.ticket = this.ticket;
-    payload.user = this.user;
+    payload.ticketId = this.ticket._id.toString();
+    payload.userId = this.user._id.toString();
 
     return payload;
   }

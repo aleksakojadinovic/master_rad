@@ -1,30 +1,19 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
-import { Ticket } from 'src/app/tickets/schema/ticket.schema';
+import mongoose, { Types } from 'mongoose';
 import { User } from 'src/app/users/schema/user.schema';
 
-@Schema()
 export class CommentAddedNotificationPayload {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Ticket' })
-  ticket: Ticket;
+  ticketId: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  user: User;
+  userId: string;
 
-  @Prop()
   commentId: string;
 }
 
-export const CommentAddedNotificationPayloadSchema =
-  SchemaFactory.createForClass(CommentAddedNotificationPayload);
-
-@Schema()
 export class AssignedNotificationPayload {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Ticket' })
-  ticket: Ticket;
+  ticketId: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  user: User;
+  userId: string;
 }
 
 export const AssignedNotificationPayloadSchema = SchemaFactory.createForClass(
@@ -35,11 +24,12 @@ export type NotificationPayload =
   | CommentAddedNotificationPayload
   | AssignedNotificationPayload;
 
+@Schema()
 export class Notification {
   _id: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-  users: User[];
+  users: User[] | Types.ObjectId[];
 
   @Prop()
   createdAt: Date;
@@ -47,7 +37,7 @@ export class Notification {
   @Prop()
   type: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, refPath: 'type' })
+  @Prop({ type: mongoose.Schema.Types.Mixed })
   payload: CommentAddedNotificationPayload | AssignedNotificationPayload;
 }
 
