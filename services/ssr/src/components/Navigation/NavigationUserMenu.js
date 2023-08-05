@@ -2,16 +2,22 @@ import { selectGetMeQueryResponse, useGetMeQuery } from '@/api/auth';
 import { navMessages } from '@/translations/nav';
 import { Button, Menu, MenuItem } from '@mui/material';
 import Cookies from 'js-cookie';
-import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-function NavigationUserMenu({ setIsAuthModalOpen }) {
+const AuthenticationModal = dynamic(() =>
+  import('../AuthenticationModal/AuthenticationModal'),
+);
+
+function NavigationUserMenu() {
   useGetMeQuery();
 
   const intl = useIntl();
   const user = useSelector(selectGetMeQueryResponse);
 
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [menuAnchorRef, setMenuAnchorRef] = useState(null);
   const [shouldRenderMenu, setShouldRenderMenu] = useState(false);
 
@@ -53,26 +59,29 @@ function NavigationUserMenu({ setIsAuthModalOpen }) {
 
   const initials = `${user?.firstName?.[0] ?? ''}.${user?.lastName?.[0] ?? ''}`;
   return (
-    <div>
-      <Button ref={menuAnchorRef} onClick={handleMenuButtonClick}>
-        {user == null
-          ? intl.formatMessage(navMessages.menuButtonText)
-          : initials}
-      </Button>
-      {shouldRenderMenu && (
-        <Menu
-          id="basic-menu"
-          anchorEl={menuAnchorRef}
-          open={!!menuAnchorRef}
-          onClose={() => setMenuAnchorRef(null)}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          {renderMenuItems()}
-        </Menu>
-      )}
-    </div>
+    <Fragment>
+      {isAuthModalOpen && <AuthenticationModal />}
+      <div>
+        <Button ref={menuAnchorRef} onClick={handleMenuButtonClick}>
+          {user == null
+            ? intl.formatMessage(navMessages.menuButtonText)
+            : initials}
+        </Button>
+        {shouldRenderMenu && (
+          <Menu
+            id="basic-menu"
+            anchorEl={menuAnchorRef}
+            open={!!menuAnchorRef}
+            onClose={() => setMenuAnchorRef(null)}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            {renderMenuItems()}
+          </Menu>
+        )}
+      </div>
+    </Fragment>
   );
 }
 

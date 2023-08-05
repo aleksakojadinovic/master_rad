@@ -5,14 +5,8 @@ import React, { Fragment, useState } from 'react';
 import NotificationsMenu from './NotificationsMenu';
 import NavigationUserMenu from './NavigationUserMenu';
 
-const AuthenticationModal = dynamic(() =>
-  import('../AuthenticationModal/AuthenticationModal'),
-);
-
 function NavigationBar() {
   useGetMeQuery();
-
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const renderLogoSection = () => {
     return (
@@ -32,14 +26,13 @@ function NavigationBar() {
     return (
       <Box display="flex" alignItems="center">
         <NotificationsMenu />
-        <NavigationUserMenu setIsAuthModalOpen={setIsAuthModalOpen} />
+        <NavigationUserMenu />
       </Box>
     );
   };
 
   return (
     <Fragment>
-      {isAuthModalOpen && <AuthenticationModal />}
       <Box
         display="flex"
         justifyContent="space-between"
