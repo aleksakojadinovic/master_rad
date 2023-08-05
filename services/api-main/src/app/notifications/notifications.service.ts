@@ -84,21 +84,14 @@ export class NotificationsService extends BaseService {
 
   async emitNotifications(...notifications: Notification[]) {
     try {
-      console.log('--------> ORIGINAL PAYLOAD <-------------');
-      console.log(typeof notifications[0].payload);
       const models = notifications.map((n) => {
         const obj = Object.assign({}, n);
         const payload = Object.assign({}, obj.payload);
         return new this.notificationModel({ ...obj, payload });
       });
-      console.log('--------> PAYLOAD <-------------');
-      console.log(typeof models[0].payload);
-      // console.log(JSON.stringify(models[0], null, 4));
-      // console.log(JSON.stringify(models[0].payload, null, 4));
       const result = await Promise.all(models.map((model) => model.save()));
       return result;
     } catch (e) {
-      // console.log(e);
       return null;
     }
   }
