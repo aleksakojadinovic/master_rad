@@ -17,3 +17,10 @@ export const notificationTypePayloadMessages = defineMessages({
     defaultMessage: '{ticketTitle}',
   },
 });
+
+export const notificationsMessages = defineMessages({
+  previewNotAvailable: {
+    id: 'notifications.preview-not-available',
+    defaultMessage: 'Preview not available',
+  },
+});
