@@ -27,17 +27,16 @@ function CommentPreviewAtom({ ticket, commentId }) {
     : intl.formatMessage(notificationsMessages.previewNotAvailable);
 
   return (
-    <Tooltip title={commentContent} placement="top" arrow>
-      <Box display="flex" alignItems="center">
-        <Box display="inline-flex" marginRight="8px">
-          <CommentIcon />
-        </Box>
-
+    <Box display="flex" alignItems="center">
+      <Box display="inline-flex" marginRight="8px">
+        <CommentIcon />
+      </Box>
+      <Tooltip title={commentContent} placement="top" arrow>
         <Typography sx={{ fontSize: 16 }} color="text.primary" gutterBottom>
           <i>{commentPreview}</i>
         </Typography>
-      </Box>
-    </Tooltip>
+      </Tooltip>
+    </Box>
   );
 }
 
