@@ -4,6 +4,7 @@ import React from 'react';
 import UserChip from '@/components/User/UserChip';
 import TicketTitlePreviewAtom from '../atoms/TicketTitlePreviewAtom';
 import CommentPreviewAtom from '../atoms/CommentPreviewAtom';
+import UserPreviewAtom from '../atoms/UserPreviewAtom';
 
 function CommentAddedNotificationPayload({ notification }) {
   const { payload } = notification;
@@ -14,10 +15,7 @@ function CommentAddedNotificationPayload({ notification }) {
     <Box>
       <TicketTitlePreviewAtom ticket={ticket} />
       <CommentPreviewAtom ticket={ticket} commentId={commentId} />
-
-      <Box display="flex" alignItems="center">
-        <UserChip user={user} />
-      </Box>
+      <UserPreviewAtom user={user} />
     </Box>
   );
 }
