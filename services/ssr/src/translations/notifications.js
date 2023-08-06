@@ -1,12 +1,19 @@
 import { defineMessages } from 'react-intl';
 
-export const notificationTypeMessages = defineMessages({
+export const notificationTypeTitlesMessages = defineMessages({
   CommentAddedNotification: {
-    id: 'notifications.comment-added-notification',
+    id: 'notifications-titles.comment-added-notification',
     defaultMessage: 'New comment',
   },
   defaultNotification: {
-    id: 'notifications.default',
+    id: 'notifications-titles.default',
     defaultMessage: 'A notification',
+  },
+});
+
+export const notificationTypePayloadMessages = defineMessages({
+  CommentAddedNotification: {
+    id: 'notifications-payloads.comment-added-notification.ticket',
+    defaultMessage: '{ticketTitle}',
   },
 });

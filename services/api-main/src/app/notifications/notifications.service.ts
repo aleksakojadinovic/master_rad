@@ -20,10 +20,23 @@ export class NotificationsService extends BaseService {
 
   override constructPopulate(queryDTO: EntityQueryDTO): any[] {
     const populations = [];
+
     queryDTO.includes.forEach((includeField) => {
       if (includeField === 'users') {
         populations.push({
           path: 'users',
+          model: 'User',
+        });
+      }
+      if (includeField === 'ticket') {
+        populations.push({
+          path: 'payload.ticket',
+          model: 'Ticket',
+        });
+      }
+      if (includeField === 'user') {
+        populations.push({
+          path: 'payload.user',
           model: 'User',
         });
       }
@@ -41,6 +54,7 @@ export class NotificationsService extends BaseService {
     const populations = this.constructPopulate(queryDTO);
     populations.forEach((p) => query.populate(p));
 
+    query.sort({ createdAt: -1 });
     query.skip((queryDTO.page - 1) * queryDTO.perPage).limit(queryDTO.perPage);
 
     const notifications = await query.exec();

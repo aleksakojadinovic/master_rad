@@ -12,6 +12,7 @@ import { isServer } from '@/utils';
 import Cookies from 'js-cookie';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { notificationsSlice } from '@/api/notifications';
+import { getNotificationsParams } from '@/utils/params';
 
 function MyApp({ Component, pageProps, languageCode }) {
   const store = wrapper.useStore();
@@ -49,11 +50,11 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
     }
 
     store.dispatch(authSlice.endpoints.getMe.initiate());
+
     store.dispatch(
-      notificationsSlice.endpoints.getNotifications.initiate({
-        page: 1,
-        perPage: 5,
-      }),
+      notificationsSlice.endpoints.getNotifications.initiate(
+        getNotificationsParams(),
+      ),
     );
 
     await Promise.all(store.dispatch(authSlice.util.getRunningQueriesThunk()));

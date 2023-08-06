@@ -4,12 +4,12 @@ import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { useGetNotificationsQuery } from '@/api/notifications';
 import Notification from '@/features/notifications/Notification';
+import { getNotificationsParams } from '@/utils/params';
 
 function NotificationsMenu() {
-  const { data: notifications, isSuccess } = useGetNotificationsQuery({
-    page: 1,
-    perPage: 5,
-  });
+  const { data: notifications, isSuccess } = useGetNotificationsQuery(
+    getNotificationsParams(),
+  );
 
   const [menuAnchorRef, setMenuAnchorRef] = useState(null);
   const [shouldRenderMenu, setShouldRenderMenu] = useState(false);

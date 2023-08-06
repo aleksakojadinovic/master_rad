@@ -1,24 +1,21 @@
+import { Ticket } from './../../tickets/schema/ticket.schema';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Types } from 'mongoose';
 import { User } from 'src/app/users/schema/user.schema';
 
 export class CommentAddedNotificationPayload {
-  ticketId: string;
+  ticket: Ticket | string;
 
-  userId: string;
+  user: User | string;
 
-  commentId: string;
+  comment: string;
 }
 
 export class AssignedNotificationPayload {
-  ticketId: string;
+  ticket: Ticket | string;
 
-  userId: string;
+  user: User | string;
 }
-
-export const AssignedNotificationPayloadSchema = SchemaFactory.createForClass(
-  AssignedNotificationPayload,
-);
 
 export type NotificationPayload =
   | CommentAddedNotificationPayload
@@ -33,6 +30,9 @@ export class Notification {
 
   @Prop()
   createdAt: Date;
+
+  @Prop()
+  readAt: Date | null;
 
   @Prop()
   type: string;
