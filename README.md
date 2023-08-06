@@ -1,4 +1,8 @@
-# master_rad
+# STS
+
+A multi-service web application for managing user complaints.
+
+# Useful commands
 
 Generating a self-signed certificate for local development:
 
