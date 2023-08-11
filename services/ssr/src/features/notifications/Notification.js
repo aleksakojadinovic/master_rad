@@ -1,8 +1,9 @@
 import React from 'react';
 import useNotificationTitle from './hooks/useNotificationTitle';
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import { Box, Card, CardActions, CardContent, Typography } from '@mui/material';
 import NotificationPayload from './NotificationPayload';
 import { formatDate } from '@/utils';
+import NotificationsActions from './NotificationsActions';
 
 function Notification({ notification }) {
   const title = useNotificationTitle(notification);
@@ -19,6 +20,9 @@ function Notification({ notification }) {
           </Typography>
           <NotificationPayload notification={notification} />
         </CardContent>
+        <CardActions>
+          <NotificationsActions notification={notification} />
+        </CardActions>
       </Card>
     </Box>
   );

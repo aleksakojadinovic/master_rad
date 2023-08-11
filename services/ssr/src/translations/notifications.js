@@ -32,3 +32,10 @@ export const notificationsMessages = defineMessages({
     defaultMessage: 'Preview not available',
   },
 });
+
+export const notificationActions = defineMessages({
+  openTicket: {
+    id: 'notifications.action-open-ticket',
+    defaultMessage: 'Open ticket',
+  },
+});
