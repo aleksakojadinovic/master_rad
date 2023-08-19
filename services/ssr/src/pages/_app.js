@@ -3,7 +3,7 @@ import AppWrapper from '@/components/AppWrapper';
 import PageContainer from '@/components/PageContainer/PageContainer';
 import { wrapper } from '@/redux/store';
 import App from 'next/app';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import English from '../../content/compiled-locales/en.json';
@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { notificationsSlice } from '@/api/notifications';
 import { getNotificationsParams } from '@/utils/params';
+import { FirebaseWrapper } from '@/context/FirebaseWrapper';
 
 function MyApp({ Component, pageProps, languageCode }) {
   const store = wrapper.useStore();
@@ -26,24 +27,22 @@ function MyApp({ Component, pageProps, languageCode }) {
     }
   }, [languageCode]);
 
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sts-service-worker.js')
-        .then((registration) => console.log('scope is: ', registration.scope));
-    }
-  }, []);
-
   return (
-    <IntlProvider messages={messages} locale={languageCode} onError={() => {}}>
-      <LanguageProvider value={languageCode}>
-        <Provider store={store}>
-          <PageContainer>
-            <AppWrapper Component={Component} pageProps={pageProps} />
-          </PageContainer>
-        </Provider>
-      </LanguageProvider>
-    </IntlProvider>
+    <FirebaseWrapper>
+      <IntlProvider
+        messages={messages}
+        locale={languageCode}
+        onError={() => {}}
+      >
+        <LanguageProvider value={languageCode}>
+          <Provider store={store}>
+            <PageContainer>
+              <AppWrapper Component={Component} pageProps={pageProps} />
+            </PageContainer>
+          </Provider>
+        </LanguageProvider>
+      </IntlProvider>
+    </FirebaseWrapper>
   );
 }
 
