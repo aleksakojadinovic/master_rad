@@ -3,7 +3,7 @@ import AppWrapper from '@/components/AppWrapper';
 import PageContainer from '@/components/PageContainer/PageContainer';
 import { wrapper } from '@/redux/store';
 import App from 'next/app';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import English from '../../content/compiled-locales/en.json';
@@ -25,6 +25,14 @@ function MyApp({ Component, pageProps, languageCode }) {
         return Serbian;
     }
   }, [languageCode]);
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sts-service-worker.js')
+        .then((registration) => console.log('scope is: ', registration.scope));
+    }
+  }, []);
 
   return (
     <IntlProvider messages={messages} locale={languageCode} onError={() => {}}>
