@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import * as firebase from 'firebase-admin';
+import { User } from '../users/schema/user.schema';
 
 @Injectable()
 export class FirebaseService {
@@ -22,5 +23,24 @@ export class FirebaseService {
     } catch (e) {
       console.log(`Error initializing firebase`, { e });
     }
+  }
+
+  async notifyTokens(...tokens: string[]) {
+    if (!this.isInitialized) {
+      return;
+    }
+    await firebase.messaging().sendEachForMulticast({
+      tokens,
+      data: {},
+      notification: { title: 'Testing' },
+    });
+  }
+
+  notifyUsers(users: User[]) {
+    if (!this.isInitialized) {
+      return;
+    }
+    const tokens = users.map((user) => user.firebaseTokens).flat();
+    return this.notifyTokens(...tokens);
   }
 }

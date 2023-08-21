@@ -6,7 +6,7 @@ const FirebaseProvider = FirebaseContext.Provider;
 import { selectGetMeQueryResponse } from '@/api/auth';
 import { useRegsterFirebaseTokenMutation } from '@/api/users';
 import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken } from 'firebase/messaging';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { useSelector } from 'react-redux';
 
 // Initialize Firebase Cloud Messaging and get a reference to the service
@@ -25,7 +25,6 @@ const FIREBASE_PUBLIC_VAPID_KEY =
 
 export function FirebaseWrapper({ children }) {
   const user = useSelector(selectGetMeQueryResponse);
-  console.log({ user });
 
   const [triggerRegisterFirebaseTokenMutation] =
     useRegsterFirebaseTokenMutation();
@@ -33,7 +32,7 @@ export function FirebaseWrapper({ children }) {
   const firebaseRef = useRef(null);
   const firebaseMessagingRef = useRef(null);
 
-  useEffect(() => {
+  const registerFirebase = () => {
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(app);
 
@@ -43,9 +42,36 @@ export function FirebaseWrapper({ children }) {
       },
     );
 
+    onMessage(messaging, (...stuff) => {
+      console.log('msgsgmsgmsgms');
+      console.log(stuff);
+    });
+
     firebaseRef.current = app;
     firebaseMessagingRef.current = messaging;
-  }, [triggerRegisterFirebaseTokenMutation, user]);
+  };
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+    if (!('Notification' in window)) {
+      // Check if the browser supports notifications
+      return;
+    }
+
+    if (Notification.permission === 'granted') {
+      registerFirebase();
+      return;
+    }
+
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        registerFirebase();
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <FirebaseProvider value={{ firebaseRef, firebaseMessagingRef }}>

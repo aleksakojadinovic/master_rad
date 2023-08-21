@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Notification } from './schema/notification.schema';
 import { NotificationFactory } from './factory/notification.factory';
 import { User } from '../users/schema/user.schema';
@@ -108,6 +108,25 @@ export class NotificationsService extends BaseService {
         return new this.notificationModel({ ...obj, payload });
       });
       const result = await Promise.all(models.map((model) => model.save()));
+
+      const resolvedUsers = (await Promise.all(
+        notifications
+          .map((notification) => notification.users)
+          .flat()
+          .map((user) => {
+            return new Promise(async (resolve) => {
+              if (user instanceof Types.ObjectId) {
+                const u = (await this.usersService.findOne(
+                  (user as Types.ObjectId).toString(),
+                )) as User;
+                return resolve(u);
+              }
+
+              resolve(user);
+            });
+          }),
+      )) as User[];
+      await this.firebaseService.notifyUsers(resolvedUsers);
 
       // Now we notify through firebase
 

@@ -41,7 +41,7 @@ export class User {
   roles: Role[];
 
   @Prop({ type: [{ type: String }] })
-  firebaseTokens: [];
+  firebaseTokens: string[];
 
   hasRole!: (role: string) => boolean;
   isAdministrator!: () => boolean;
