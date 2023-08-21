@@ -12,6 +12,7 @@ import {
   Query,
   ValidationPipe,
   UseInterceptors,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -73,8 +74,31 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.usersService.update(+id);
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async update(
+    @Param('string') id: string,
+    @Body('action') action: string,
+    @Body('token') token: string,
+    @GetUserInfo() user: User,
+  ) {
+    if (!(user.hasRole('superadministrator') || user._id.toString() !== id)) {
+      throw new UnauthorizedException();
+    }
+
+    if (!action) {
+      throw new BadRequestException('No action');
+    }
+
+    switch (action) {
+      case 'register_firebase_token':
+        if (!token) {
+          throw new BadRequestException('No token');
+        }
+        await this.usersService.registerFirebaseToken(user, token);
+        return;
+      default:
+        throw new BadRequestException('Unknown action');
+    }
   }
 
   @Delete(':id')

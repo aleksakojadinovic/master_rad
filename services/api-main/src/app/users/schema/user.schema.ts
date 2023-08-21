@@ -40,6 +40,9 @@ export class User {
   @AutoMap(() => Role)
   roles: Role[];
 
+  @Prop({ type: [{ type: String }] })
+  firebaseTokens: [];
+
   hasRole!: (role: string) => boolean;
   isAdministrator!: () => boolean;
   isSuperAdministrator!: () => boolean;
