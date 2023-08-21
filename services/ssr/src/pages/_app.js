@@ -13,7 +13,7 @@ import Cookies from 'js-cookie';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { notificationsSlice } from '@/api/notifications';
 import { getNotificationsParams } from '@/utils/params';
-import { FirebaseWrapper } from '@/context/FirebaseWrapper';
+import api from '@/services/api';
 
 function MyApp({ Component, pageProps, languageCode }) {
   const store = wrapper.useStore();
@@ -28,21 +28,15 @@ function MyApp({ Component, pageProps, languageCode }) {
   }, [languageCode]);
 
   return (
-    <FirebaseWrapper>
-      <IntlProvider
-        messages={messages}
-        locale={languageCode}
-        onError={() => {}}
-      >
-        <LanguageProvider value={languageCode}>
-          <Provider store={store}>
-            <PageContainer>
-              <AppWrapper Component={Component} pageProps={pageProps} />
-            </PageContainer>
-          </Provider>
-        </LanguageProvider>
-      </IntlProvider>
-    </FirebaseWrapper>
+    <IntlProvider messages={messages} locale={languageCode} onError={() => {}}>
+      <LanguageProvider value={languageCode}>
+        <Provider store={store}>
+          <PageContainer>
+            <AppWrapper Component={Component} pageProps={pageProps} />
+          </PageContainer>
+        </Provider>
+      </LanguageProvider>
+    </IntlProvider>
   );
 }
 
@@ -64,7 +58,7 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
       ),
     );
 
-    await Promise.all(store.dispatch(authSlice.util.getRunningQueriesThunk()));
+    await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
 
     const appProps = await App.getInitialProps(context);
     return { ...appProps, languageCode };

@@ -8,12 +8,16 @@ import { Ticket } from '../tickets/schema/ticket.schema';
 import { NotificationQueryDTO } from './dto/notification-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
+import { UsersService } from '../users/users.service';
+import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable()
 export class NotificationsService extends BaseService {
   constructor(
     @InjectModel(Notification.name)
     private readonly notificationModel: Model<Notification>,
+    private readonly usersService: UsersService,
+    private readonly firebaseService: FirebaseService,
   ) {
     super();
   }
@@ -104,6 +108,9 @@ export class NotificationsService extends BaseService {
         return new this.notificationModel({ ...obj, payload });
       });
       const result = await Promise.all(models.map((model) => model.save()));
+
+      // Now we notify through firebase
+
       return result;
     } catch (e) {
       return null;

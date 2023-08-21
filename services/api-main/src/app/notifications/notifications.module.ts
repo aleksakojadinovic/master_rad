@@ -4,6 +4,7 @@ import { NotificationsController } from './notifications.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Notification, NotificationSchema } from './schema/notification.schema';
 import { UsersModule } from '../users/users.module';
+import { FirebaseModule } from '../firebase/firebase.module';
 
 @Module({
   controllers: [NotificationsController],
@@ -16,6 +17,7 @@ import { UsersModule } from '../users/users.module';
       },
     ]),
     UsersModule,
+    FirebaseModule,
   ],
   exports: [NotificationsService],
 })

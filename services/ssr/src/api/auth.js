@@ -39,5 +39,8 @@ export const selecGetMeQueryIndicators = createSelector(
 
 export const selectGetMeQueryResponse = createSelector(
   [selectGetMeQueryResult],
-  (queryResult) => queryResult.data ?? null,
+  (queryResult) => {
+    console.log({ queryResult });
+    return queryResult.data ?? null;
+  },
 );

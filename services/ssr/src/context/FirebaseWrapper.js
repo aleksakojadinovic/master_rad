@@ -3,8 +3,11 @@ const { createContext, useEffect, useRef, useContext } = require('react');
 const FirebaseContext = createContext();
 const FirebaseProvider = FirebaseContext.Provider;
 
+import { selectGetMeQueryResponse } from '@/api/auth';
+import { useRegsterFirebaseTokenMutation } from '@/api/users';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
+import { useSelector } from 'react-redux';
 
 // Initialize Firebase Cloud Messaging and get a reference to the service
 
@@ -21,6 +24,12 @@ const FIREBASE_PUBLIC_VAPID_KEY =
   'BIvJSahmqHBUvGlpTGNxES68my7IOd_bqPk2z6H6jaVHtDRKuWglrhqEmCXDK70TZ3wpi_sv5n-QmApFZohqsI8';
 
 export function FirebaseWrapper({ children }) {
+  const user = useSelector(selectGetMeQueryResponse);
+  console.log({ user });
+
+  const [triggerRegisterFirebaseTokenMutation] =
+    useRegsterFirebaseTokenMutation();
+
   const firebaseRef = useRef(null);
   const firebaseMessagingRef = useRef(null);
 
@@ -30,13 +39,13 @@ export function FirebaseWrapper({ children }) {
 
     getToken(messaging, { vapidKey: FIREBASE_PUBLIC_VAPID_KEY }).then(
       (token) => {
-        console.log({ token });
+        triggerRegisterFirebaseTokenMutation({ userId: user.Id, token });
       },
     );
 
     firebaseRef.current = app;
     firebaseMessagingRef.current = messaging;
-  }, []);
+  }, [triggerRegisterFirebaseTokenMutation, user]);
 
   return (
     <FirebaseProvider value={{ firebaseRef, firebaseMessagingRef }}>

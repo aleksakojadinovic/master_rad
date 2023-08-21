@@ -9,11 +9,21 @@ export const usersSlice = api.injectEndpoints({
         params,
       }),
     }),
+    regsterFirebaseToken: builder.mutation({
+      query: ({ userId, token }) => ({
+        method: 'PATCH',
+        url: `/users/${userId}`,
+        body: {
+          action: 'register_firebase_token',
+          token,
+        },
+      }),
+    }),
   }),
   overrideExisting: true,
 });
 
-export const { useGetUsersQuery } = usersSlice;
+export const { useGetUsersQuery, useRegsterFirebaseTokenMutation } = usersSlice;
 
 const selectGetUsersQueryResult = createSelector(
   [(state) => state, (_, params) => params],

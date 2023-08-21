@@ -1,15 +1,16 @@
 import { wrapper } from '@/redux/store';
-import React, { Fragment } from 'react';
+import React from 'react';
 import NavigationBar from './Navigation/NavigationBar';
 import { Box } from '@mui/material';
 import Footer from './Footer/Footer';
+import { FirebaseWrapper } from '@/context/FirebaseWrapper';
 
 function AppWrapper({ Component, pageProps }) {
   wrapper.useHydration(pageProps);
   const PageLayoutComponent = Component.Layout || (({ children }) => children);
 
   return (
-    <Fragment>
+    <FirebaseWrapper>
       <NavigationBar />
       <Box sx={{ marginTop: '24px', minHeight: '800px' }}>
         <PageLayoutComponent {...pageProps}>
@@ -19,7 +20,7 @@ function AppWrapper({ Component, pageProps }) {
       <Box sx={{ marginTop: '36px' }}>
         <Footer />
       </Box>
-    </Fragment>
+    </FirebaseWrapper>
   );
 }
 
