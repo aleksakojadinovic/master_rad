@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Notification } from './schema/notification.schema';
 import { NotificationFactory } from './factory/notification.factory';
 import { User } from '../users/schema/user.schema';
