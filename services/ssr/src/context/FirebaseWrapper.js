@@ -46,7 +46,6 @@ export function FirebaseWrapper({ children }) {
     const messaging = getMessaging(app);
     registerSw()
       .then(() => {
-        console.log('sw reigstered');
         getToken(messaging, { vapidKey: FIREBASE_PUBLIC_VAPID_KEY }).then(
           (token) => {
             triggerRegisterFirebaseTokenMutation({ userId: user.Id, token });
@@ -60,9 +59,7 @@ export function FirebaseWrapper({ children }) {
         firebaseRef.current = app;
         firebaseMessagingRef.current = messaging;
       })
-      .catch((e) => {
-        console.log('not registered', { e });
-      });
+      .catch(() => {});
   };
 
   useEffect(() => {

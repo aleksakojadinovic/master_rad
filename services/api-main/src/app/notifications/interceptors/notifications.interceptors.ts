@@ -16,7 +16,6 @@ export class NotificationsInterceptor implements NestInterceptor {
         if (error instanceof NotificationNotFoundError) {
           throw new NotFoundException(error.getPayload());
         }
-        console.log({ error });
         throw error;
       }),
     );

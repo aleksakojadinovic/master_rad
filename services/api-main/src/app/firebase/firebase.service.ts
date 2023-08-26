@@ -55,12 +55,9 @@ export class FirebaseService {
 
   async sendNotification(notification: Notification) {
     const users = notification.users;
-    console.log(typeof this);
     const title = this.parseNotificationType(notification.type);
     const promises = users.map((user) => {
       const tokens = (user as User).firebaseTokens;
-
-      console.log('sending to tokens', tokens);
 
       if (!tokens || tokens.length === 0) {
         return Promise.resolve();
@@ -82,7 +79,6 @@ export class FirebaseService {
   }
 
   async sendNotifications(...notifications: Notification[]) {
-    console.log('sending', notifications.length, 'notifictions');
     if (!this.isInitialized) {
       return;
     }

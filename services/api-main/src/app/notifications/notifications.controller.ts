@@ -65,7 +65,6 @@ export class NotificationsController {
     @Body('action') action: string,
     @GetUserInfo() user: User,
   ) {
-    console.log(user);
     if (!action) {
       throw new BadRequestException('No action');
     }
