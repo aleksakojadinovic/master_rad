@@ -12,6 +12,7 @@ function NotificationsActions({ notification }) {
           <OpenTicketAtom
             id={notification.payload.ticket.Id}
             anchor={notification.payload.comment ?? null}
+            notification={notification}
           />,
         );
         break;

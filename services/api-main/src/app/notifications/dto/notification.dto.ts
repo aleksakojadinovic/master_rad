@@ -3,6 +3,8 @@ export class NotificationDTO {
 
   createdAt: Date;
 
+  readAt: Date;
+
   type: string;
 
   payload: any;

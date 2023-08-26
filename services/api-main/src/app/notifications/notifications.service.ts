@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Notification } from './schema/notification.schema';
 import { NotificationFactory } from './factory/notification.factory';
 import { User } from '../users/schema/user.schema';
@@ -10,6 +10,7 @@ import { BaseService } from 'src/codebase/BaseService';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { UsersService } from '../users/users.service';
 import { FirebaseService } from '../firebase/firebase.service';
+import { NotificationNotFoundError } from './errors/NotificationNotFound';
 
 @Injectable()
 export class NotificationsService extends BaseService {
@@ -65,8 +66,8 @@ export class NotificationsService extends BaseService {
     return notifications;
   }
 
-  findOne() {
-    return `This action returns a notification`;
+  findOne(id: string) {
+    return this.notificationModel.findById(id);
   }
 
   update() {
@@ -125,5 +126,28 @@ export class NotificationsService extends BaseService {
     } catch (e) {
       return null;
     }
+  }
+
+  async markRead(id: string, user: User) {
+    const notification = await this.findOne(id);
+
+    if (!notification) {
+      throw new NotificationNotFoundError();
+    }
+
+    if (
+      !notification.users
+        .map((user) => (user as Types.ObjectId).toString())
+        .includes(user._id.toString())
+    ) {
+      throw new NotificationNotFoundError();
+    }
+
+    if (notification.readAt) {
+      return Promise.resolve(notification);
+    }
+
+    notification.readAt = new Date();
+    return notification.save();
   }
 }

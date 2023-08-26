@@ -31,6 +31,10 @@ export class NotificationProfile extends AutomapperProfile {
           mapFrom((source) => source.createdAt),
         ),
         forMember(
+          (destination) => destination.readAt,
+          mapFrom((source) => source.readAt ?? null),
+        ),
+        forMember(
           (destination) => destination.type,
           mapFrom((source) => source.type),
         ),

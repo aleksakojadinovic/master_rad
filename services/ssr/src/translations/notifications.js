@@ -38,4 +38,8 @@ export const notificationActions = defineMessages({
     id: 'notifications.action-open-ticket',
     defaultMessage: 'Open ticket',
   },
+  markAsRead: {
+    id: 'notifications.actions-mark-read',
+    defaultMessage: 'Mark as read',
+  },
 });

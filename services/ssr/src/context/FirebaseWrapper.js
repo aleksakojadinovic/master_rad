@@ -5,9 +5,10 @@ const FirebaseProvider = FirebaseContext.Provider;
 
 import { selectGetMeQueryResponse } from '@/api/auth';
 import { useRegsterFirebaseTokenMutation } from '@/api/users';
+import api from '@/services/api';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Initialize Firebase Cloud Messaging and get a reference to the service
 
@@ -31,6 +32,7 @@ const registerSw = () => {
 };
 
 export function FirebaseWrapper({ children }) {
+  const dispatch = useDispatch();
   const user = useSelector(selectGetMeQueryResponse);
 
   const [triggerRegisterFirebaseTokenMutation] =
@@ -51,9 +53,8 @@ export function FirebaseWrapper({ children }) {
           },
         );
 
-        onMessage(messaging, (...stuff) => {
-          console.log('msgsgmsgmsgms');
-          console.log(stuff);
+        onMessage(messaging, () => {
+          dispatch(api.util.invalidateTags(['notifications']));
         });
 
         firebaseRef.current = app;

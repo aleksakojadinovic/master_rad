@@ -7,6 +7,10 @@ import {
   Query,
   ValidationPipe,
   UseGuards,
+  Param,
+  Body,
+  BadRequestException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { UsersService } from '../users/users.service';
@@ -19,7 +23,9 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { Notification } from './schema/notification.schema';
 import { NotificationDTO } from './dto/notification.dto';
+import { NotificationsInterceptor } from './interceptors/notifications.interceptors';
 
+@UseInterceptors(NotificationsInterceptor)
 @Controller('notifications')
 export class NotificationsController {
   constructor(
@@ -49,15 +55,28 @@ export class NotificationsController {
 
   @Get(':id')
   async findOne() {
-    // notification.users =
-    // const commentAddedTest = new this.commentAddedNotificationModel();
-    // commentAddedTest.createdAt;
-    return this.notificationsService.findOne();
+    return null;
   }
 
   @Patch(':id')
-  update() {
-    return this.notificationsService.update();
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async update(
+    @Param('id') id: string,
+    @Body('action') action: string,
+    @GetUserInfo() user: User,
+  ) {
+    console.log(user);
+    if (!action) {
+      throw new BadRequestException('No action');
+    }
+
+    switch (action) {
+      case 'mark_read':
+        await this.notificationsService.markRead(id, user);
+        return;
+      default:
+        throw new BadRequestException('Unknown action');
+    }
   }
 
   @Delete(':id')
