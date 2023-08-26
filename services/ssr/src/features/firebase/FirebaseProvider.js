@@ -1,7 +1,6 @@
 const { createContext, useEffect, useRef, useContext } = require('react');
 
 const FirebaseContext = createContext();
-const FirebaseProvider = FirebaseContext.Provider;
 
 import { selectGetMeQueryResponse } from '@/api/auth';
 import { useRegsterFirebaseTokenMutation } from '@/api/users';
@@ -31,7 +30,7 @@ const registerSw = () => {
   return Promise.reject();
 };
 
-export function FirebaseWrapper({ children }) {
+export function FirebaseProvider({ children }) {
   const dispatch = useDispatch();
   const user = useSelector(selectGetMeQueryResponse);
 
@@ -85,9 +84,9 @@ export function FirebaseWrapper({ children }) {
   }, []);
 
   return (
-    <FirebaseProvider value={{ firebaseRef, firebaseMessagingRef }}>
+    <FirebaseContext.Provider value={{ firebaseRef, firebaseMessagingRef }}>
       {children}
-    </FirebaseProvider>
+    </FirebaseContext.Provider>
   );
 }
 

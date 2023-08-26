@@ -1,16 +1,19 @@
-import { wrapper } from '@/redux/store';
 import React from 'react';
 import NavigationBar from './Navigation/NavigationBar';
 import { Box } from '@mui/material';
 import Footer from './Footer/Footer';
-import { FirebaseWrapper } from '@/context/FirebaseWrapper';
+import { FirebaseProvider } from '@/features/firebase/FirebaseProvider';
+import { wrapper } from '@/redux/store';
 
 function AppWrapper({ Component, pageProps }) {
-  wrapper.useHydration(pageProps);
+  const hydrationProps = {
+    reduxWrapperActionsGIAP: pageProps.reduxWrapperActionsGIAP,
+  };
+  wrapper.useHydration(hydrationProps);
   const PageLayoutComponent = Component.Layout || (({ children }) => children);
 
   return (
-    <FirebaseWrapper>
+    <FirebaseProvider>
       <NavigationBar />
       <Box sx={{ marginTop: '24px', minHeight: '800px' }}>
         <PageLayoutComponent {...pageProps}>
@@ -20,7 +23,7 @@ function AppWrapper({ Component, pageProps }) {
       <Box sx={{ marginTop: '36px' }}>
         <Footer />
       </Box>
-    </FirebaseWrapper>
+    </FirebaseProvider>
   );
 }
 

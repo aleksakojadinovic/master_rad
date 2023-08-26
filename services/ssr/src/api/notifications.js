@@ -7,6 +7,14 @@ export const notificationsSlice = api.injectEndpoints({
         url: '/notifications',
         params,
       }),
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentNotifications, newNotifications) => {
+        console.log('merging');
+        currentNotifications.push(...newNotifications);
+      },
+      forceRefetch({ currentArg: curr, previousArg: prev }) {
+        return prev === undefined || curr.page !== prev.page;
+      },
       providesTags: ['notifications'],
     }),
     markNotificationAsRead: builder.mutation({

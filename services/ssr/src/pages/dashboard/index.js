@@ -2,6 +2,7 @@ import { selectGetMeQueryResponse } from '@/api/auth';
 import { ticketsSlice, useGetTicketsQuery } from '@/api/tickets';
 import AgentDashboard from '@/features/agent-dashboard/AgentDashboard';
 import { wrapper } from '@/redux/store';
+import useHydrateStore from '@/redux/useHydrateStore';
 import { agentDashboardMessages } from '@/translations/agent-dashboard';
 import { getAgentDashboardTicketsParams } from '@/utils/params';
 import { Box, Typography } from '@mui/material';
@@ -10,7 +11,7 @@ import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
 
 function DashboardPage({ page, perPage, filters, ...rest }) {
-  wrapper.useHydration(rest);
+  useHydrateStore(rest);
 
   const intl = useIntl();
 
