@@ -31,6 +31,10 @@ export const notificationsMessages = defineMessages({
     id: 'notifications.preview-not-available',
     defaultMessage: 'Preview not available',
   },
+  noNotifications: {
+    id: 'notifications.no-notifications',
+    defaultMessage: 'No notifications found.',
+  },
 });
 
 export const notificationActions = defineMessages({

@@ -17,9 +17,9 @@ export function getAgentDashboardTicketsParams(
   };
 }
 
-export function getNotificationsParams() {
+export function getNotificationsParams(page = 1) {
   return {
-    page: 1,
+    page,
     perPage: 5,
     includes: ['ticket', 'user'],
   };
