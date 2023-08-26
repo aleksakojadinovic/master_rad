@@ -304,6 +304,12 @@ export class TicketsService extends BaseService {
                 userId.toString(),
             ),
           )
+          .forUsers(
+            user._id.toString() !==
+              (ticket.createdBy as unknown as Types.ObjectId).toString()
+              ? [ticket.createdBy]
+              : [],
+          )
           .hasPayload('comment_added', (commentBuilder) =>
             commentBuilder
               .atTicket(ticket)
@@ -311,6 +317,7 @@ export class TicketsService extends BaseService {
               .hasCommentId(entry.commentId),
           ),
       );
+
       notifications.push(notification);
     }
 

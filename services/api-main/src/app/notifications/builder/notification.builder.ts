@@ -119,13 +119,13 @@ const PayloadTypeMap: {
 };
 
 export class NotificationBuilder {
-  private users: User[] | null;
+  private users: User[];
   private timestamp: Date = new Date();
   private payload: NotificationPayload | null = null;
   private type: string | null = null;
 
   forUsers(users: User[]) {
-    this.users = users;
+    this.users = [...(this.users ?? []), ...users];
     return this;
   }
 
