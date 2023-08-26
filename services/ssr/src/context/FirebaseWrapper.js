@@ -23,6 +23,13 @@ const firebaseConfig = {
 const FIREBASE_PUBLIC_VAPID_KEY =
   'BIvJSahmqHBUvGlpTGNxES68my7IOd_bqPk2z6H6jaVHtDRKuWglrhqEmCXDK70TZ3wpi_sv5n-QmApFZohqsI8';
 
+const registerSw = () => {
+  if ('serviceWorker' in navigator) {
+    return navigator.serviceWorker.register('/firebase-messaging-sw.js');
+  }
+  return Promise.reject();
+};
+
 export function FirebaseWrapper({ children }) {
   const user = useSelector(selectGetMeQueryResponse);
 
@@ -35,20 +42,26 @@ export function FirebaseWrapper({ children }) {
   const registerFirebase = () => {
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(app);
+    registerSw()
+      .then(() => {
+        console.log('sw reigstered');
+        getToken(messaging, { vapidKey: FIREBASE_PUBLIC_VAPID_KEY }).then(
+          (token) => {
+            triggerRegisterFirebaseTokenMutation({ userId: user.Id, token });
+          },
+        );
 
-    getToken(messaging, { vapidKey: FIREBASE_PUBLIC_VAPID_KEY }).then(
-      (token) => {
-        triggerRegisterFirebaseTokenMutation({ userId: user.Id, token });
-      },
-    );
+        onMessage(messaging, (...stuff) => {
+          console.log('msgsgmsgmsgms');
+          console.log(stuff);
+        });
 
-    onMessage(messaging, (...stuff) => {
-      console.log('msgsgmsgmsgms');
-      console.log(stuff);
-    });
-
-    firebaseRef.current = app;
-    firebaseMessagingRef.current = messaging;
+        firebaseRef.current = app;
+        firebaseMessagingRef.current = messaging;
+      })
+      .catch((e) => {
+        console.log('not registered', { e });
+      });
   };
 
   useEffect(() => {

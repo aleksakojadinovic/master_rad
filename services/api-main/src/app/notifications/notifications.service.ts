@@ -107,30 +107,21 @@ export class NotificationsService extends BaseService {
         const payload = Object.assign({}, obj.payload);
         return new this.notificationModel({ ...obj, payload });
       });
-      const result = await Promise.all(models.map((model) => model.save()));
 
-      const resolvedUsers = (await Promise.all(
-        notifications
-          .map((notification) => notification.users)
-          .flat()
-          .map((user) => {
-            return new Promise(async (resolve) => {
-              if (user instanceof Types.ObjectId) {
-                const u = (await this.usersService.findOne(
-                  (user as Types.ObjectId).toString(),
-                )) as User;
-                return resolve(u);
-              }
+      // Save notifications to the database first and populate fields
+      const savedNotifications = await Promise.all(
+        models.map((model) =>
+          model.save().then((model) =>
+            model.populate({
+              path: 'users',
+              model: 'User',
+            }),
+          ),
+        ),
+      );
 
-              resolve(user);
-            });
-          }),
-      )) as User[];
-      await this.firebaseService.notifyUsers(resolvedUsers);
-
-      // Now we notify through firebase
-
-      return result;
+      await this.firebaseService.sendNotifications(...savedNotifications);
+      return savedNotifications;
     } catch (e) {
       return null;
     }
