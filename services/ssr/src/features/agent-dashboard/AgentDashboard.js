@@ -46,7 +46,10 @@ export default function AgentDashboard({ page, perPage, filters }) {
         <TicketFilters filters={filters} onChange={handleFiltersChange} />
       </Box>
 
-      <TicketTable tickets={tickets} />
+      <Box marginTop="24px">
+        <TicketTable tickets={tickets} />
+      </Box>
+
       <Box width="100%" display="flex" justifyContent="center" marginTop="12px">
         <Grid container>
           <Grid item xs={6}>

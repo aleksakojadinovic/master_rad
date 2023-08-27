@@ -3,7 +3,7 @@ import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket } from 'src/app/tickets/schema/ticket.schema';
-import { Model, Types, isValidObjectId } from 'mongoose';
+import mongoose, { Model, ObjectId, Types, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/app/users/users.service';
 import { v4 as uuid } from 'uuid';
 import * as moment from 'moment';
@@ -35,7 +35,9 @@ import { TicketTag } from '../ticket-tag-system/schema/ticket-tag.schema';
 import { AssigneeNotFoundError } from './errors/AssigneeNotFound';
 import { DuplicateAssigneeError } from './errors/DuplicateAssignee';
 import { TooSoonToCreateAnotherTicketError } from './errors/TooSoonToCreateAnotherTicket';
-// import { TooSoonToCreateAnotherTicket } from './errors/TooSoonToCreateAnotherTicket';
+import { NotificationFactory } from '../notifications/factory/notification.factory';
+import { Notification } from '../notifications/schema/notification.schema';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class TicketsService extends BaseService {
@@ -44,6 +46,7 @@ export class TicketsService extends BaseService {
     @InjectMapper() private readonly mapper: Mapper,
     private ticketTagService: TicketTagService,
     private usersService: UsersService,
+    private notificationsService: NotificationsService,
   ) {
     super();
   }
@@ -244,14 +247,6 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    // TODO
-    // if (!user) {
-    //   return err({
-    //     type: ServiceErrors.ENTITY_NOT_FOUND,
-    //     message: 'User not found',
-    //   });
-    // }
-
     const groupId = uuid();
     const timestamp = new Date();
 
@@ -285,8 +280,13 @@ export class TicketsService extends BaseService {
       ticket.body = updateTicketDto.body;
     }
 
+    const notifications: Notification[] = [];
+
     if (updateTicketDto.comment != null && updateTicketDto.comment.length > 0) {
-      const entry = new TicketHistoryEntryCommentAdded(updateTicketDto.comment);
+      const entry = new TicketHistoryEntryCommentAdded(
+        updateTicketDto.comment,
+        new mongoose.Types.ObjectId().toString(),
+      );
       ticket.history.push(
         TicketHistoryItem.create({
           groupId,
@@ -295,6 +295,30 @@ export class TicketsService extends BaseService {
           entry,
         }),
       );
+      const notification = NotificationFactory.create((builder) =>
+        builder
+          .forUsers(
+            ticket.assignees.filter(
+              (assignee) =>
+                (assignee as unknown as ObjectId).toString() !==
+                userId.toString(),
+            ),
+          )
+          .forUsers(
+            user._id.toString() !==
+              (ticket.createdBy as unknown as Types.ObjectId).toString()
+              ? [ticket.createdBy]
+              : [],
+          )
+          .hasPayload('comment_added', (commentBuilder) =>
+            commentBuilder
+              .atTicket(ticket)
+              .byUser(user)
+              .hasCommentId(entry.commentId),
+          ),
+      );
+
+      notifications.push(notification);
     }
 
     if (updateTicketDto.title != null) {
@@ -347,6 +371,14 @@ export class TicketsService extends BaseService {
       for (const a of assignees) {
         ticket.assignees.push(a);
       }
+      const notification = NotificationFactory.create((builder) =>
+        builder
+          .forUsers(assignees)
+          .hasPayload('assigned', (assignBuilder) =>
+            assignBuilder.atTicket(ticket).byUser(user),
+          ),
+      );
+      notifications.push(notification);
     }
 
     if (
@@ -422,6 +454,8 @@ export class TicketsService extends BaseService {
     }
 
     await ticket.save();
+
+    await this.notificationsService.emitNotifications(...notifications);
 
     return ticket;
   }

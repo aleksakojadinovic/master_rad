@@ -6,6 +6,7 @@ import {
 } from '@/api/tickets';
 import Ticket from '@/components/Ticket/Ticket';
 import { wrapper } from '@/redux/store';
+import useHydrateStore from '@/redux/useHydrateStore';
 import { getTicketViewQueryParams } from '@/utils/params';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -13,7 +14,7 @@ import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
 function TicketViewPage(props) {
-  wrapper.useHydration(props);
+  useHydrateStore(props);
   const router = useRouter();
   const id = router.query.ticketId;
 
@@ -59,10 +60,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
     );
 
     // store.dispatch(
-    //   ticketTagSystemSlice.endpoints.getTicketTags.initiate({
-    //     includes: 'group',
-    //   }),
+    //   ticketTagSystemSlice.endpoints.getTicketTagGroups.initiate(),
     // );
+    // store.dispatch(ticketTagSystemSlice.endpoints.getTicketTags.initiate());
 
     await Promise.all(
       store.dispatch(ticketsSlice.util.getRunningQueriesThunk()),

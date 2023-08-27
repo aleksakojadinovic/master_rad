@@ -19,3 +19,7 @@ export const formatDate = (date) => {
     "dd/MM/yyyy 'at' hh:mm a",
   );
 };
+
+export const getStringPreview = (str, maxLen = 20) => {
+  return str.length <= maxLen ? str : str.substring(0, maxLen) + '...';
+};

@@ -4,10 +4,13 @@ import camelize from 'camelize';
 import Cookies from 'js-cookie';
 
 const parseCookie = (str) =>
-  str
+  (str ?? '')
     .split(';')
     .map((v) => v.split('='))
     .reduce((acc, v) => {
+      if (!v || !v[0]) {
+        return acc;
+      }
       acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
       return acc;
     }, {});
@@ -45,5 +48,10 @@ export default createApi({
   },
   keepUnusedFor: 1000,
   endpoints: () => ({}),
-  tagTypes: ['getTicket', 'ticket-tag-groups', 'ticket-tag-group'],
+  tagTypes: [
+    'getTicket',
+    'ticket-tag-groups',
+    'ticket-tag-group',
+    'notifications',
+  ],
 });

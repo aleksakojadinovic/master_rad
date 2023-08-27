@@ -108,4 +108,20 @@ export class UsersService {
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
+
+  registerFirebaseToken(user: User, token: string) {
+    return this.userModel.updateOne(
+      { _id: user._id }, // replace "userIdHere" with the actual user's ObjectId
+      {
+        $addToSet: { firebaseTokens: token },
+      },
+    );
+  }
+
+  async removeFirebaseToken(user: User, token: string) {
+    return this.userModel.updateOne(
+      { _id: user._id },
+      { $pull: { firebaseTokens: token } },
+    );
+  }
 }

@@ -16,3 +16,11 @@ export function getAgentDashboardTicketsParams(
     ...filters,
   };
 }
+
+export function getNotificationsParams(page = 1) {
+  return {
+    page,
+    perPage: 5,
+    includes: ['ticket', 'user'],
+  };
+}

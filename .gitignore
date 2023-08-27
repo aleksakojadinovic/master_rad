@@ -109,3 +109,5 @@ dist
 *.key
 
 .vscode/
+
+sts-firebase-key.json

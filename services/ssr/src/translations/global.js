@@ -41,4 +41,8 @@ export const globalMessages = defineMessages({
     id: 'global.roles',
     defaultMessage: 'Roles',
   },
+  loadMore: {
+    id: 'global.loadMore',
+    defaultMessage: 'Load More',
+  },
 });

@@ -11,6 +11,9 @@ import Serbian from '../../content/compiled-locales/sr.json';
 import { isServer } from '@/utils';
 import Cookies from 'js-cookie';
 import { LanguageProvider } from '@/context/LanguageContext';
+import { notificationsSlice } from '@/api/notifications';
+import { getNotificationsParams } from '@/utils/params';
+import api from '@/services/api';
 
 function MyApp({ Component, pageProps, languageCode }) {
   const store = wrapper.useStore();
@@ -49,7 +52,13 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
 
     store.dispatch(authSlice.endpoints.getMe.initiate());
 
-    await Promise.all(store.dispatch(authSlice.util.getRunningQueriesThunk()));
+    store.dispatch(
+      notificationsSlice.endpoints.getNotifications.initiate(
+        getNotificationsParams(),
+      ),
+    );
+
+    await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
 
     const appProps = await App.getInitialProps(context);
     return { ...appProps, languageCode };
