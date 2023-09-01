@@ -5,7 +5,6 @@ import { Notification } from './schema/notification.schema';
 import { User } from '../users/schema/user.schema';
 import { NotificationQueryDTO } from './dto/notification-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
-import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { FirebaseService } from '../firebase/firebase.service';
 import { NotificationNotFoundError } from './errors/NotificationNotFound';
 import { NotificationsRepository } from './notifications.repository';
@@ -18,32 +17,6 @@ export class NotificationsService extends BaseService {
     private readonly notificationsRepository: NotificationsRepository,
   ) {
     super();
-  }
-
-  constructPopulate(queryDTO: EntityQueryDTO): any[] {
-    const populations = [];
-
-    queryDTO.includes.forEach((includeField) => {
-      if (includeField === 'users') {
-        populations.push({
-          path: 'users',
-          model: 'User',
-        });
-      }
-      if (includeField === 'ticket') {
-        populations.push({
-          path: 'payload.ticket',
-          model: 'Ticket',
-        });
-      }
-      if (includeField === 'user') {
-        populations.push({
-          path: 'payload.user',
-          model: 'User',
-        });
-      }
-    });
-    return populations;
   }
 
   create() {

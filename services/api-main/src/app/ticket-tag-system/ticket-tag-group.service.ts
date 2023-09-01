@@ -36,33 +36,6 @@ export class TicketTagGroupService extends BaseService {
     super();
   }
 
-  constructPopulate(queryDTO: EntityQueryDTO): any[] {
-    const populations = [];
-    queryDTO.includes.forEach((includeField) => {
-      if (includeField === 'role') {
-        populations.push({
-          path: 'permissions.canAddRoles',
-          model: 'Role',
-        });
-        populations.push({
-          path: 'permissions.canRemoveRoles',
-          model: 'Role',
-        });
-        populations.push({
-          path: 'permissions.canSeeRoles',
-          model: 'Role',
-        });
-      }
-      if (includeField === 'tags') {
-        populations.push({
-          path: 'tags',
-          model: 'TicketTag',
-        });
-      }
-    });
-    return populations;
-  }
-
   async create(dto: CreateTicketTagGroupDTO) {
     const isDuplicate = await this.ticketTagGroupRepository.doesAlreadyExist(
       dto.nameIntl,
