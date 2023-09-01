@@ -16,13 +16,16 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
   const user = useSelector(selectGetMeQueryResponse);
   const roleIds = user.roles.map(({ Id }) => Id);
 
-  const { data: tags } = useGetTicketTagsQuery();
+  const { data: tags } = useGetTicketTagsQuery({ includes: 'group' });
   const { data: tagGroups } = useGetTicketTagGroupsQuery();
 
   const groupedTicketTags = useMemo(() => {
     if (!tags || !tagGroups) {
       return [];
     }
+
+    console.log({ tags });
+
     return ticketTags.reduce((acc, curr) => {
       const canDelete =
         _.intersection(

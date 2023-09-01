@@ -42,16 +42,6 @@ export class TicketTagService extends BaseService {
           .map(({ _id }) => _id.toString())
           .includes(userRoleId.toString()),
       );
-      // const canAdd = userRoleIds.some((userRoleId) =>
-      //   tag.group.permissions.canAddRoles
-      //     .map(({ _id }) => _id.toString())
-      //     .includes(userRoleId.toString()),
-      // );
-      // const canRemove = userRoleIds.some((userRoleId) =>
-      //   tag.group.permissions.canRemoveRoles
-      //     .map(({ _id }) => _id.toString())
-      //     .includes(userRoleId.toString()),
-      // );
 
       return canSee;
     });

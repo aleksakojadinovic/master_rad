@@ -76,6 +76,9 @@ export class TicketsController extends BaseController {
     }
 
     const ticket = await this.ticketsService.findOne(id, user);
+
+    console.log({ tagsbeforemap: ticket.tags });
+
     return this.mapper.map(ticket, Ticket, TicketDTO, {
       extraArgs: () => ({ languageCode, include: queryDTO.includes }),
     });

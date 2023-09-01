@@ -91,9 +91,21 @@ export class TicketProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.tags,
           mapWithArguments((source, extra) => {
-            if (extra.include && (extra.include as string[]).includes('tags')) {
+            const includeArray = extra.include
+              ? (extra.include as string[])
+              : [];
+
+            if (includeArray.includes('tags')) {
+              const includeGroupIndex = includeArray.indexOf('tags.group');
+
+              if (includeGroupIndex !== -1) {
+                includeArray[includeGroupIndex] = 'group';
+              }
+
+              console.log('I will map these tags', source.tags);
+
               return mapper.mapArray(source.tags, TicketTag, TicketTagDTO, {
-                extraArgs: () => extra,
+                extraArgs: () => ({ ...extra, include: includeArray }),
               });
             }
             return source.tags.map((tag) => tag._id.toString());

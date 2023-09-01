@@ -32,7 +32,7 @@ import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { User } from '../users/schema/user.schema';
 
 @UseInterceptors(TicketTagInterceptor)
-@Controller('ticket-tag-group')
+@Controller('ticket-tag-groups')
 export class TicketTagGroupController {
   constructor(
     private readonly ticketTagGroupService: TicketTagGroupService,

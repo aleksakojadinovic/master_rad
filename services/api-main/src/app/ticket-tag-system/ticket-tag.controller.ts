@@ -23,7 +23,7 @@ import { User } from '../users/schema/user.schema';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 
 @UseInterceptors(TicketTagInterceptor)
-@Controller('ticket-tag')
+@Controller('ticket-tags')
 export class TicketTagController {
   constructor(
     private readonly ticketTagGroupService: TicketTagGroupService,
@@ -45,6 +45,7 @@ export class TicketTagController {
     return this.mapper.mapArray(tags, TicketTag, TicketTagDTO, {
       extraArgs: () => ({
         languageCode,
+        include: queryDTO.includes,
       }),
     });
     // const ticketTagGroups = await this.ticketTagGroupService.findAll(queryDTO);

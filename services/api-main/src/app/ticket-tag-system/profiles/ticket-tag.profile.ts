@@ -30,9 +30,9 @@ export class TicketTagProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.name,
-          mapWithArguments(
-            (source, extra) => source.nameIntl[extra['languageCode'] as string],
-          ),
+          mapWithArguments((source, extra) => {
+            return source.nameIntl[extra['languageCode'] as string];
+          }),
         ),
         forMember(
           (destination) => destination.description,
@@ -52,16 +52,19 @@ export class TicketTagProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.group,
           mapWithArguments((source, extra) => {
-            if (
-              extra.include &&
-              (extra.include as string[]).includes('group')
-            ) {
+            const includeArray = extra.include
+              ? (extra.include as string[])
+              : [];
+            if (includeArray.includes('group')) {
               return mapper.map(
                 source.group,
                 TicketTagGroup,
                 TicketTagGroupDTO,
                 {
-                  extraArgs: () => extra,
+                  extraArgs: () => ({
+                    ...extra,
+                    include: includeArray.filter((key) => key !== 'tags'),
+                  }),
                 },
               );
             }
