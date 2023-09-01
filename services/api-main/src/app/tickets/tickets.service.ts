@@ -107,11 +107,10 @@ export class TicketsService extends BaseService {
     ticketObject.createdBy = user;
     ticketObject.createdAt = timestamp;
 
-    const ticketModel = new this.ticketModel(ticketObject);
+    const ticketModelInstance = new this.ticketModel(ticketObject);
+    await ticketModelInstance.save();
 
-    await ticketModel.save();
-
-    return ticketModel;
+    return ticketModelInstance;
   }
 
   async findAll(user: User, queryDTO: TicketQueryDTO) {
@@ -141,9 +140,6 @@ export class TicketsService extends BaseService {
 
       return canSee;
     });
-
-    console.log(typeof ticket);
-    ticket.save();
 
     return ticket;
   }
