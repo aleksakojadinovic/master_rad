@@ -57,7 +57,9 @@ export class TicketsController extends BaseController {
     @Query(new ValidationPipe({ transform: true })) queryDTO: TicketQueryDTO,
   ) {
     const tickets = await this.ticketsService.findAll(queryDTO);
-    return this.mapper.mapArray(tickets, Ticket, TicketDTO);
+    return this.mapper.mapArray(tickets, Ticket, TicketDTO, {
+      extraArgs: () => ({ include: queryDTO.includes }),
+    });
   }
 
   @Get(':id')
@@ -72,9 +74,12 @@ export class TicketsController extends BaseController {
     if (!isValidObjectId(id)) {
       throw new TicketIdNotValidError(id);
     }
-    const ticket = await this.ticketsService.findOne(id, user, queryDTO);
+
+    console.log(typeof user);
+
+    const ticket = await this.ticketsService.findOne(id, user);
     return this.mapper.map(ticket, Ticket, TicketDTO, {
-      extraArgs: () => ({ languageCode }),
+      extraArgs: () => ({ languageCode, include: queryDTO.includes }),
     });
   }
 

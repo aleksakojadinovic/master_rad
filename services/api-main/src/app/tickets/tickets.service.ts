@@ -31,13 +31,13 @@ import { OverlapInTagIdsError } from './errors/OverlapInTagIds';
 import { NotAllowedToAddThisTagError } from './errors/NotAllowedToAddThisTag';
 import { NotAllowedToRemoveThisTagError } from './errors/NotAllowedToRemoveThisTag';
 import { DuplicateTagError } from './errors/DuplicateTag';
-import { TicketTag } from '../ticket-tag-system/schema/ticket-tag.schema';
 import { AssigneeNotFoundError } from './errors/AssigneeNotFound';
 import { DuplicateAssigneeError } from './errors/DuplicateAssignee';
 import { TooSoonToCreateAnotherTicketError } from './errors/TooSoonToCreateAnotherTicket';
 import { NotificationFactory } from '../notifications/factory/notification.factory';
 import { Notification } from '../notifications/schema/notification.schema';
 import { NotificationsService } from '../notifications/notifications.service';
+import { TicketsRepository } from './tickets.repository';
 
 @Injectable()
 export class TicketsService extends BaseService {
@@ -47,54 +47,12 @@ export class TicketsService extends BaseService {
     private ticketTagService: TicketTagService,
     private usersService: UsersService,
     private notificationsService: NotificationsService,
+    private ticketsRepository: TicketsRepository,
   ) {
     super();
   }
 
-  override constructPopulate(queryDTO: EntityQueryDTO) {
-    const populations = [];
-    queryDTO.includes.forEach((includeField) => {
-      if (includeField === 'createdBy') {
-        populations.push({
-          path: 'createdBy',
-          model: 'User',
-          populate: { path: 'roles', model: 'Role' },
-        });
-      }
-      if (includeField === 'historyInitiator') {
-        populations.push({
-          path: 'history.initiator',
-          model: 'User',
-          populate: {
-            path: 'roles',
-            model: 'Role',
-          },
-        });
-      }
-      if (includeField === 'tags') {
-        populations.push({
-          path: 'tags',
-          model: 'TicketTag',
-          populate: {
-            path: 'group',
-            model: 'TicketTagGroup',
-          },
-        });
-      }
-      if (includeField === 'assignees') {
-        populations.push({
-          path: 'assignees',
-          model: 'User',
-          populate: {
-            path: 'roles',
-            model: 'Role',
-          },
-        });
-      }
-    });
-    return populations;
-  }
-
+  // TODO: receive user and not id
   async create(userId: string, createTicketDto: CreateTicketDto) {
     const user = await this.usersService.findOne(userId);
     const mostRecentTicket = await this.ticketModel.findOne(
@@ -157,38 +115,18 @@ export class TicketsService extends BaseService {
     return ticketModel;
   }
 
-  async findAll(queryDTO: TicketQueryDTO) {
-    const query = this.ticketModel.find({});
-
-    const populations = this.constructPopulate(queryDTO);
-    populations.forEach((p) => query.populate(p));
-
-    if (queryDTO.status) {
-      query.where('status', queryDTO.status);
-    }
-
-    query.skip((queryDTO.page - 1) * queryDTO.perPage).limit(queryDTO.perPage);
-
-    const tickets = await query.exec();
-    return tickets;
+  findAll(queryDTO: TicketQueryDTO) {
+    return this.ticketsRepository.findAll(
+      queryDTO.page,
+      queryDTO.perPage,
+      queryDTO.status,
+    );
   }
 
-  async findOne(
-    id: string,
-    user: User,
-    queryDTO: TicketQueryDTO = new TicketQueryDTO(),
-  ) {
-    // Don't like it but I don't think there is another way
+  async findOne(id: string, user: User) {
     const userRoleIds = user.roles.map(({ _id }) => _id);
-    const query = this.ticketModel.findOne({ _id: id }).populate({
-      path: 'tags',
-      model: 'TicketTag',
-      populate: { path: 'group', model: 'TicketTagGroup' },
-    });
 
-    const populations = this.constructPopulate(queryDTO);
-    populations.forEach((p) => query.populate(p));
-    const ticket = await query.exec();
+    const ticket = await this.ticketsRepository.findOne(id);
 
     if (!ticket) {
       throw new TicketNotFoundError(id);
@@ -203,12 +141,6 @@ export class TicketsService extends BaseService {
 
       return canSee;
     });
-
-    if (!queryDTO.includes.includes('tags')) {
-      ticket.tags = ticket.tags.map(
-        ({ _id }) => _id as unknown as Types.ObjectId as unknown as TicketTag,
-      );
-    }
 
     return ticket;
   }

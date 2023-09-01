@@ -5,13 +5,13 @@ import {
   createMap,
   forMember,
   mapFrom,
+  mapWithArguments,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { User } from '../schema/user.schema';
 import { UserDTO } from '../dto/user.dto';
 import { Role } from '../schema/role.schema';
 import { RoleDTO } from '../dto/role.dto';
-import { Types } from 'mongoose';
 
 @Injectable()
 export class UserProfile extends AutomapperProfile {
@@ -45,14 +45,17 @@ export class UserProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.roles,
-          mapFrom((source) =>
-            source.roles.map((role) => {
-              if (role instanceof Types.ObjectId) {
-                return role.toString();
-              }
-              return mapper.map(role, Role, RoleDTO);
-            }),
-          ),
+          mapWithArguments((source, extra) => {
+            if (
+              extra.include &&
+              (extra.include as string[]).includes('roles')
+            ) {
+              return mapper.mapArray(source.roles, Role, RoleDTO, {
+                extraArgs: () => extra,
+              });
+            }
+            return source.roles.map((role) => role._id.toString());
+          }),
         ),
       );
     };

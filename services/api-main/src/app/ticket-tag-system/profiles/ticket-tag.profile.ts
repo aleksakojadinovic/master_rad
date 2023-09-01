@@ -8,11 +8,7 @@ import {
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { TicketTag } from '../schema/ticket-tag.schema';
-import {
-  TicketTagDTO,
-  TicketTagTicketTagGroupDTO,
-} from '../dto/ticket-tag.dto';
-import { Types } from 'mongoose';
+import { TicketTagDTO } from '../dto/ticket-tag.dto';
 import { TicketTagGroup } from '../schema/ticket-tag-group.schema';
 import { TicketTagGroupDTO } from '../dto/ticket-tag-group.dto';
 
@@ -35,15 +31,14 @@ export class TicketTagProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.name,
           mapWithArguments(
-            (source, extraArgs) =>
-              source.nameIntl[extraArgs['languageCode'] as string],
+            (source, extra) => source.nameIntl[extra['languageCode'] as string],
           ),
         ),
         forMember(
           (destination) => destination.description,
           mapWithArguments(
-            (source, extraArgs) =>
-              source.descriptionIntl[extraArgs['languageCode'] as string],
+            (source, extra) =>
+              source.descriptionIntl[extra['languageCode'] as string],
           ),
         ),
         forMember(
@@ -57,17 +52,20 @@ export class TicketTagProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.group,
           mapWithArguments((source, extra) => {
-            if (source.group instanceof Types.ObjectId) {
-              return new TicketTagTicketTagGroupDTO(
-                source.group.toString(),
-                '',
-                '',
+            if (
+              extra.include &&
+              (extra.include as string[]).includes('group')
+            ) {
+              return mapper.map(
+                source.group,
+                TicketTagGroup,
+                TicketTagGroupDTO,
+                {
+                  extraArgs: () => extra,
+                },
               );
             }
-
-            return mapper.map(source.group, TicketTagGroup, TicketTagGroupDTO, {
-              extraArgs: () => ({ languageCode: extra['languageCode'] }),
-            });
+            return source.group._id.toString();
           }),
         ),
       );

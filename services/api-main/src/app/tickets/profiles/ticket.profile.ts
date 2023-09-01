@@ -14,7 +14,6 @@ import { TicketHistoryItem } from '../schema/ticket-history.schema';
 import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 import { User } from 'src/app/users/schema/user.schema';
 import { UserDTO } from 'src/app/users/dto/user.dto';
-import { Types } from 'mongoose';
 import { TicketTag } from 'src/app/ticket-tag-system/schema/ticket-tag.schema';
 import { TicketTagDTO } from 'src/app/ticket-tag-system/dto/ticket-tag.dto';
 
@@ -36,31 +35,41 @@ export class TicketProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.history,
-          mapFrom((source) =>
+          mapWithArguments((source, extra) =>
             source.history.map((item) =>
-              mapper.map(item, TicketHistoryItem, TicketHistoryItemDTO),
+              mapper.map(item, TicketHistoryItem, TicketHistoryItemDTO, {
+                extraArgs: () => extra,
+              }),
             ),
           ),
         ),
         forMember(
           (destination) => destination.createdBy,
-          mapFrom((source) => {
-            if (source.createdBy instanceof Types.ObjectId) {
-              return source.createdBy.toString();
+          mapWithArguments((source, extra) => {
+            if (
+              extra.include &&
+              (extra.include as string[]).includes('createdBy')
+            ) {
+              return mapper.map(source.createdBy, User, UserDTO, {
+                extraArgs: () => extra,
+              });
             }
 
-            return mapper.map(source.createdBy, User, UserDTO);
+            return source.createdBy._id.toString();
           }),
         ),
         forMember(
           (destination) => destination.assignees,
-          mapFrom((source) => {
-            return source.assignees.map((user) => {
-              if (user instanceof Types.ObjectId) {
-                return user;
-              }
-              return mapper.map(user, User, UserDTO);
-            });
+          mapWithArguments((source, extra) => {
+            if (
+              extra.include &&
+              (extra.include as string[]).includes('assignees')
+            ) {
+              return mapper.mapArray(source.assignees, User, UserDTO, {
+                extraArgs: () => extra,
+              });
+            }
+            return source.assignees.map((user) => user._id.toString());
           }),
         ),
         forMember(
@@ -82,14 +91,12 @@ export class TicketProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.tags,
           mapWithArguments((source, extra) => {
-            return source.tags.map((tag) => {
-              if (tag instanceof Types.ObjectId) {
-                return tag;
-              }
-              return mapper.map(tag, TicketTag, TicketTagDTO, {
-                extraArgs: () => ({ languageCode: extra['languageCode'] }),
+            if (extra.include && (extra.include as string[]).includes('tags')) {
+              return mapper.mapArray(source.tags, TicketTag, TicketTagDTO, {
+                extraArgs: () => extra,
               });
-            });
+            }
+            return source.tags.map((tag) => tag._id.toString());
           }),
         ),
       );

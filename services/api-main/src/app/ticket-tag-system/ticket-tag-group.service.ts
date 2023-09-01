@@ -1,3 +1,4 @@
+import { TicketTagGroupRepository } from './ticket-tag-group.repository';
 import { RolesService } from '../users/roles.service';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
@@ -34,11 +35,12 @@ export class TicketTagGroupService extends BaseService {
     @InjectMapper() private readonly mapper: Mapper,
     private rolesService: RolesService,
     private ticketTagService: TicketTagService,
+    private ticketTagGroupRepository: TicketTagGroupRepository,
   ) {
     super();
   }
 
-  override constructPopulate(queryDTO: EntityQueryDTO): any[] {
+  constructPopulate(queryDTO: EntityQueryDTO): any[] {
     const populations = [];
     queryDTO.includes.forEach((includeField) => {
       if (includeField === 'role') {
@@ -149,12 +151,9 @@ export class TicketTagGroupService extends BaseService {
     return groups;
   }
 
-  public async findOne(id: string, queryDTO: EntityQueryDTO) {
-    const query = this.ticketTagGroupModel.findOne({ _id: id });
-    const populations = this.constructPopulate(queryDTO);
+  public async findOne(id: string) {
+    const group = await this.ticketTagGroupRepository.findOne(id);
 
-    populations.forEach((p) => query.populate(p));
-    const group = await query.exec();
     if (!group) {
       throw new TicketTagGroupNotFoundError();
     }
@@ -322,9 +321,7 @@ export class TicketTagGroupService extends BaseService {
   }
 
   async update(id: string, dto: CreateOrUpdateTicketTagGroupDTO) {
-    const findDTO = new EntityQueryDTO();
-    findDTO.includes = ['tags', 'role'];
-    const group = await this.findOne(id, findDTO);
+    const group = await this.findOne(id);
 
     if (!group) {
       throw new TicketTagGroupNotFoundError();

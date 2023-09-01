@@ -23,7 +23,6 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
     if (!tags || !tagGroups) {
       return [];
     }
-
     return ticketTags.reduce((acc, curr) => {
       const canDelete =
         _.intersection(

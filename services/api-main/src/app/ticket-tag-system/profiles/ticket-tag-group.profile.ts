@@ -14,7 +14,6 @@ import { TicketTagGroupDTO } from '../dto/ticket-tag-group.dto';
 import { TicketTagGroupPermissionsDTO } from '../dto/ticket-tag-group-permissions.dto';
 import { Role } from 'src/app/users/schema/role.schema';
 import { RoleDTO } from 'src/app/users/dto/role.dto';
-import { Types } from 'mongoose';
 
 @Injectable()
 export class TicketTagGroupProfile extends AutomapperProfile {
@@ -35,45 +34,43 @@ export class TicketTagGroupProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.tags,
           mapWithArguments((source, extra) => {
-            const mappedTags = source.tags.map((tag) => {
-              if (tag instanceof Types.ObjectId) {
-                return tag.toString();
-              }
-              return mapper.map(tag, TicketTag, TicketTagDTO, {
-                extraArgs: () => ({ languageCode: extra['languageCode'] }),
+            if (extra.include && (extra.include as string[]).includes('tags')) {
+              return mapper.mapArray(source.tags, TicketTag, TicketTagDTO, {
+                extraArgs: () => extra,
               });
-            });
-            return mappedTags;
+            }
+            return source.tags.map((tag) => tag._id.toString());
           }),
         ),
         forMember(
           (destination) => destination.permissions,
-          mapFrom((source) => {
-            const mappedCanAddRoles = source.permissions.canAddRoles.map(
-              (role) => {
-                if (role instanceof Types.ObjectId) {
-                  return role.toString();
-                }
-                return mapper.map(role, Role, RoleDTO);
-              },
-            );
-            const mappedCanRemoveRoles = source.permissions.canRemoveRoles.map(
-              (role) => {
-                if (role instanceof Types.ObjectId) {
-                  return role.toString();
-                }
-                return mapper.map(role, Role, RoleDTO);
-              },
+          mapWithArguments((source, extra) => {
+            const shouldIncludeRoles =
+              extra.include && (extra.include as string[]).includes('roles');
+            console.log({ extra });
+
+            const mapRoleList = (roleList: Role[]) =>
+              shouldIncludeRoles
+                ? mapper.mapArray(roleList, Role, RoleDTO, {
+                    extraArgs: () => extra,
+                  })
+                : roleList.map((role) => role._id.toString());
+
+            console.log(source.permissions.canAddRoles);
+
+            const mappedCanAddRoles = mapRoleList(
+              source.permissions.canAddRoles,
             );
 
-            const mappedCanSeeRoles = source.permissions.canSeeRoles.map(
-              (role) => {
-                if (role instanceof Types.ObjectId) {
-                  return role.toString();
-                }
-                return mapper.map(role, Role, RoleDTO);
-              },
+            const mappedCanRemoveRoles = mapRoleList(
+              source.permissions.canRemoveRoles,
             );
+
+            const mappedCanSeeRoles = mapRoleList(
+              source.permissions.canSeeRoles,
+            );
+
+            console.log({ mappedCanAddRoles });
 
             const mappedPermissiones = new TicketTagGroupPermissionsDTO(
               mappedCanAddRoles,

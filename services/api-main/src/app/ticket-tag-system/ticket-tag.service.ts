@@ -16,7 +16,7 @@ export class TicketTagService extends BaseService {
     super();
   }
 
-  override constructPopulate(queryDTO: EntityQueryDTO): any[] {
+  constructPopulate(queryDTO: EntityQueryDTO): any[] {
     const populations = [];
     queryDTO.includes.forEach((includeField) => {
       if (includeField === 'group') {

@@ -9,7 +9,6 @@ export const notificationsSlice = api.injectEndpoints({
       }),
       serializeQueryArgs: ({ endpointName }) => endpointName,
       merge: (currentNotifications, newNotifications) => {
-        console.log('merging');
         currentNotifications.push(...newNotifications);
       },
       forceRefetch({ currentArg: curr, previousArg: prev }) {

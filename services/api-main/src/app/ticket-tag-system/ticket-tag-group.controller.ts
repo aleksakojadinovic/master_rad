@@ -54,6 +54,7 @@ export class TicketTagGroupController {
     });
   }
 
+  // TODO: proteccc
   @Get(':id')
   async findOne(
     @Param('id') id: string,
@@ -61,9 +62,9 @@ export class TicketTagGroupController {
     @Req() req: Request,
   ) {
     const languageCode = resolveLanguageCode(req);
-    const group = await this.ticketTagGroupService.findOne(id, queryDTO);
+    const group = await this.ticketTagGroupService.findOne(id);
     return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
-      extraArgs: () => ({ languageCode }),
+      extraArgs: () => ({ languageCode, include: queryDTO.includes }),
     });
   }
 
