@@ -68,16 +68,11 @@ export class TicketTagGroupService extends BaseService {
   }
 
   async create(dto: CreateTicketTagGroupDTO) {
-    const intlKeys = Object.keys(dto.nameIntl);
-    const nameClashCondition = intlKeys.map((key) => ({
-      [`nameIntl.${key}`]: dto.nameIntl[key],
-    }));
+    const isDuplicate = await this.ticketTagGroupRepository.doesAlreadyExist(
+      dto.nameIntl,
+    );
 
-    const duplicate = await this.ticketTagGroupModel.findOne({
-      $or: nameClashCondition,
-    });
-
-    if (duplicate) {
+    if (isDuplicate) {
       throw new TicketTagGroupDuplicateNameError();
     }
 

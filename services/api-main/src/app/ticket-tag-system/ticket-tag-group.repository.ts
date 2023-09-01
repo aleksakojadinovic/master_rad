@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketTagGroup } from './schema/ticket-tag-group.schema';
+import { IntlValue } from 'src/codebase/types/IntlValue';
 
 @Injectable()
 export class TicketTagGroupRepository {
@@ -36,6 +37,17 @@ export class TicketTagGroupRepository {
     return this.ticketTagGroupModel
       .findOne({ _id: id })
       .populate(TicketTagGroupRepository.POPULATE);
+  }
+
+  async doesAlreadyExist(nameIntl: IntlValue): Promise<boolean> {
+    const intlKeys = Object.keys(nameIntl);
+    const nameClashCondition = intlKeys.map((key) => ({
+      [`nameIntl.${key}`]: nameIntl[key],
+    }));
+    const result = await this.ticketTagGroupModel.findOne({
+      $or: nameClashCondition,
+    });
+    return !!result;
   }
 
   //   findAll(page = 1, perPage = 10, status: string | null = null) {
