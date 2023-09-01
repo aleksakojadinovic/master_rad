@@ -111,7 +111,7 @@ export class UsersService {
 
   registerFirebaseToken(user: User, token: string) {
     return this.userModel.updateOne(
-      { _id: user._id }, // replace "userIdHere" with the actual user's ObjectId
+      { _id: user._id },
       {
         $addToSet: { firebaseTokens: token },
       },
