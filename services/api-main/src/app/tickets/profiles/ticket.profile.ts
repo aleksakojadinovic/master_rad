@@ -102,8 +102,6 @@ export class TicketProfile extends AutomapperProfile {
                 includeArray[includeGroupIndex] = 'group';
               }
 
-              console.log('I will map these tags', source.tags);
-
               return mapper.mapArray(source.tags, TicketTag, TicketTagDTO, {
                 extraArgs: () => ({ ...extra, include: includeArray }),
               });

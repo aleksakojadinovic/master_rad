@@ -42,21 +42,22 @@ export class TicketsController extends BaseController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
-  async create(@Req() req, @Body() createTicketDto: CreateTicketDto) {
-    const ticket = await this.ticketsService.create(
-      req.user._id,
-      createTicketDto,
-    );
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async create(
+    @Body() createTicketDto: CreateTicketDto,
+    @GetUserInfo() user: User,
+  ) {
+    const ticket = await this.ticketsService.create(user, createTicketDto);
     return ticket;
   }
 
   @Get()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findAll(
     @Query(new ValidationPipe({ transform: true })) queryDTO: TicketQueryDTO,
+    @GetUserInfo() user: User,
   ) {
-    const tickets = await this.ticketsService.findAll(queryDTO);
+    const tickets = await this.ticketsService.findAll(user, queryDTO);
     return this.mapper.mapArray(tickets, Ticket, TicketDTO, {
       extraArgs: () => ({ include: queryDTO.includes }),
     });
@@ -76,8 +77,6 @@ export class TicketsController extends BaseController {
     }
 
     const ticket = await this.ticketsService.findOne(id, user);
-
-    console.log({ tagsbeforemap: ticket.tags });
 
     return this.mapper.map(ticket, Ticket, TicketDTO, {
       extraArgs: () => ({ languageCode, include: queryDTO.includes }),

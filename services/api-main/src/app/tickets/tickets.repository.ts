@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Ticket } from 'src/app/tickets/schema/ticket.schema';
+import { Ticket, TicketDocument } from 'src/app/tickets/schema/ticket.schema';
 import { Model } from 'mongoose';
 import { UsersService } from 'src/app/users/users.service';
 import { InjectMapper } from '@automapper/nestjs';
@@ -46,13 +46,17 @@ export class TicketsRepository {
     },
   ];
 
-  findOne(id: string) {
+  findById(id: string): Promise<TicketDocument> {
     return this.ticketModel
       .findOne({ _id: id })
       .populate(TicketsRepository.POPULATE);
   }
 
-  findAll(page = 1, perPage = 10, status: string | null = null) {
+  findAll(
+    page = 1,
+    perPage = 10,
+    status: string | null = null,
+  ): Promise<TicketDocument[]> {
     const query = this.ticketModel.find({});
 
     if (status !== null) {
@@ -63,5 +67,13 @@ export class TicketsRepository {
     query.populate(TicketsRepository.POPULATE);
 
     return query.exec();
+  }
+
+  async findMostRecentTicketByUserId(userId: string): Promise<TicketDocument> {
+    return this.ticketModel.findOne(
+      { createdBy: userId },
+      {},
+      { sort: { createdAt: -1 } },
+    );
   }
 }

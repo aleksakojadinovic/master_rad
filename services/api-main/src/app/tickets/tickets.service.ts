@@ -52,14 +52,12 @@ export class TicketsService extends BaseService {
     super();
   }
 
-  // TODO: receive user and not id
-  async create(userId: string, createTicketDto: CreateTicketDto) {
-    const user = await this.usersService.findOne(userId);
-    const mostRecentTicket = await this.ticketModel.findOne(
-      { createdBy: userId },
-      {},
-      { sort: { createdAt: -1 } },
-    );
+  async create(user: User, createTicketDto: CreateTicketDto) {
+    const mostRecentTicket =
+      await this.ticketsRepository.findMostRecentTicketByUserId(
+        user._id.toString(),
+      );
+
     if (mostRecentTicket) {
       const createdAt = moment(mostRecentTicket.createdAt);
       const now = moment();
@@ -74,6 +72,7 @@ export class TicketsService extends BaseService {
       }
     }
 
+    // TODO apply builder pattern here.
     const ticketObject = new Ticket();
 
     const groupId = uuid();
@@ -115,18 +114,19 @@ export class TicketsService extends BaseService {
     return ticketModel;
   }
 
-  findAll(queryDTO: TicketQueryDTO) {
-    return this.ticketsRepository.findAll(
+  async findAll(user: User, queryDTO: TicketQueryDTO) {
+    const tickets = await this.ticketsRepository.findAll(
       queryDTO.page,
       queryDTO.perPage,
       queryDTO.status,
     );
+    return tickets.map((ticket) => this.stripTags(ticket, user));
   }
 
   async findOne(id: string, user: User) {
     const userRoleIds = user.roles.map(({ _id }) => _id);
 
-    const ticket = await this.ticketsRepository.findOne(id);
+    const ticket = await this.ticketsRepository.findById(id);
 
     if (!ticket) {
       throw new TicketNotFoundError(id);
@@ -141,6 +141,9 @@ export class TicketsService extends BaseService {
 
       return canSee;
     });
+
+    console.log(typeof ticket);
+    ticket.save();
 
     return ticket;
   }
@@ -194,8 +197,7 @@ export class TicketsService extends BaseService {
           entry,
         }),
       );
-      // TODO: maybe we should consider having a utility method that resolves this from history
-      // and then we call it once at the end
+
       ticket.status = updateTicketDto.status;
     }
 
@@ -394,5 +396,19 @@ export class TicketsService extends BaseService {
 
   remove(id: number) {
     return `This action removes a #${id} ticket`;
+  }
+
+  private stripTags(ticket: Ticket, user: User) {
+    const userRoleIds = user.roles.map((role) => role._id.toString());
+    ticket.tags = ticket.tags.filter((tag) => {
+      const canSee = userRoleIds.some((userRoleId) =>
+        tag.group.permissions.canSeeRoles
+          .map(({ _id }) => _id.toString())
+          .includes(userRoleId.toString()),
+      );
+
+      return canSee;
+    });
+    return ticket;
   }
 }
