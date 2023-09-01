@@ -76,7 +76,7 @@ function ServerActionDialog({
     if (isError) {
       return (
         <Alert severity="error">
-          <ErrorMessage error={error.data} />
+          <ErrorMessage error={error?.data} />
         </Alert>
       );
     }

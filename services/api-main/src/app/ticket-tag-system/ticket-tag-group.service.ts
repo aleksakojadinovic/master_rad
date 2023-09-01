@@ -1,12 +1,9 @@
+import { TicketTagGroupRepository } from './ticket-tag-group.repository';
 import { RolesService } from '../users/roles.service';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
-import {
-  TicketTagGroup,
-  TicketTagGroupPermissions,
-} from './schema/ticket-tag-group.schema';
+import { TicketTagGroup } from './schema/ticket-tag-group.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { TicketTagGroupNotFoundError } from './errors/TicketTagGroupNotFound';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { BaseService } from 'src/codebase/BaseService';
@@ -30,131 +27,51 @@ import { User } from '../users/schema/user.schema';
 export class TicketTagGroupService extends BaseService {
   constructor(
     @InjectModel(TicketTagGroup.name)
-    private ticketTagGroupModel: Model<TicketTagGroup>,
-    @InjectMapper() private readonly mapper: Mapper,
+    @InjectMapper()
+    private readonly mapper: Mapper,
     private rolesService: RolesService,
     private ticketTagService: TicketTagService,
+    private ticketTagGroupRepository: TicketTagGroupRepository,
   ) {
     super();
   }
 
-  override constructPopulate(queryDTO: EntityQueryDTO): any[] {
-    const populations = [];
-    queryDTO.includes.forEach((includeField) => {
-      if (includeField === 'role') {
-        populations.push({
-          path: 'permissions.canAddRoles',
-          model: 'Role',
-        });
-        populations.push({
-          path: 'permissions.canRemoveRoles',
-          model: 'Role',
-        });
-        populations.push({
-          path: 'permissions.canSeeRoles',
-          model: 'Role',
-        });
-      }
-      if (includeField === 'tags') {
-        populations.push({
-          path: 'tags',
-          model: 'TicketTag',
-        });
-      }
-    });
-    return populations;
-  }
-
   async create(dto: CreateTicketTagGroupDTO) {
-    const intlKeys = Object.keys(dto.nameIntl);
-    const nameClashCondition = intlKeys.map((key) => ({
-      [`nameIntl.${key}`]: dto.nameIntl[key],
-    }));
+    const isDuplicate = await this.ticketTagGroupRepository.doesAlreadyExist(
+      dto.nameIntl,
+    );
 
-    const duplicate = await this.ticketTagGroupModel.findOne({
-      $or: nameClashCondition,
-    });
-
-    if (duplicate) {
+    if (isDuplicate) {
       throw new TicketTagGroupDuplicateNameError();
     }
 
-    const ticketTagGroupObject = new TicketTagGroup();
+    const defaultRoles = (
+      await this.rolesService.findManyByName([
+        'administrator',
+        'superadministrator',
+      ])
+    ).map((role) => role._id.toString());
 
-    // TODO prevent name duplicates (should also be done on update, but too lazy now)
-    ticketTagGroupObject.nameIntl = dto.nameIntl;
-    ticketTagGroupObject.descriptionIntl = dto.descriptionIntl;
-    ticketTagGroupObject.tags = [];
+    const group = await this.ticketTagGroupRepository.create({
+      nameIntl: dto.nameIntl,
+      descriptionIntl: dto.descriptionIntl,
+      roles: defaultRoles,
+    });
 
-    const defaultRoles = await this.rolesService.findManyByName([
-      'administrator',
-      'superadministrator',
-    ]);
-
-    ticketTagGroupObject.permissions = new TicketTagGroupPermissions(
-      defaultRoles,
-      defaultRoles,
-      defaultRoles,
-    );
-
-    const model = new this.ticketTagGroupModel(ticketTagGroupObject);
-    await model.save();
-
-    return model;
+    return group;
   }
-
-  // async addTagsToGroup(id: string, tags: CreateTicketTagDto[]) {
-  //   const group = await this.ticketTagGroupModel
-  //     .findById(id)
-  //     .populate({ path: 'tags', model: 'TicketTag' });
-
-  //   if (!group) {
-  //     throw new TicketTagGroupNotFoundError();
-  //   }
-
-  //   // TODO: Prevent duplicates
-
-  //   // const currentTagIntlKeys = group.tags.map(({ nameIntlKey }) => nameIntlKey);
-  //   // const requestedTagIntlKeys = tags.map(({ name }) => name);
-  //   // if (
-  //   //   currentTagIntlKeys.some((name) => requestedTagIntlKeys.includes(name))
-  //   // ) {
-  //   //   throw new TicketTagNameAlreadyExistsError();
-  //   // }
-
-  //   const tagModels = await Promise.all(
-  //     tags.map(async (tag) => {
-  //       const model = this.ticketTagService.create(
-  //         new CreateTicketTagDto(tag.nameIntl, tag.descriptionIntl, id),
-  //       );
-  //       return model;
-  //     }),
-  //   );
-
-  //   tagModels.forEach((model) => group.tags.push(model));
-
-  //   await group.save();
-  //   return group;
-  // }
 
   async findAll(queryDTO: EntityQueryDTO, user: User) {
     const userRoleIds = user.roles.map(({ _id }) => _id);
-    const query = this.ticketTagGroupModel.find({
-      'permissions.canSeeRoles': { $in: userRoleIds },
-    });
-
-    const populations = this.constructPopulate(queryDTO);
-    populations.forEach((p) => query.populate(p));
-    const groups = await query.exec();
+    const groups = await this.ticketTagGroupRepository.findAllByRoles(
+      userRoleIds,
+    );
     return groups;
   }
 
-  public async findOne(id: string, queryDTO: EntityQueryDTO) {
-    const query = this.ticketTagGroupModel.findOne({ _id: id });
-    const populations = this.constructPopulate(queryDTO);
+  public async findOne(id: string) {
+    const group = await this.ticketTagGroupRepository.findOne(id);
 
-    populations.forEach((p) => query.populate(p));
-    const group = await query.exec();
     if (!group) {
       throw new TicketTagGroupNotFoundError();
     }
@@ -322,9 +239,7 @@ export class TicketTagGroupService extends BaseService {
   }
 
   async update(id: string, dto: CreateOrUpdateTicketTagGroupDTO) {
-    const findDTO = new EntityQueryDTO();
-    findDTO.includes = ['tags', 'role'];
-    const group = await this.findOne(id, findDTO);
+    const group = await this.findOne(id);
 
     if (!group) {
       throw new TicketTagGroupNotFoundError();

@@ -6,17 +6,19 @@ import { TicketTag } from './schema/ticket-tag.schema';
 import { CreateTicketTagDTO } from './dto/create-ticket-tag.dto';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { User } from '../users/schema/user.schema';
+import { TicketTagRepository } from './ticket-tag.repository';
 
 @Injectable()
 export class TicketTagService extends BaseService {
   constructor(
     @InjectModel(TicketTag.name)
     private ticketTagModel: Model<TicketTag>,
+    private ticketTagRepository: TicketTagRepository,
   ) {
     super();
   }
 
-  override constructPopulate(queryDTO: EntityQueryDTO): any[] {
+  constructPopulate(queryDTO: EntityQueryDTO): any[] {
     const populations = [];
     queryDTO.includes.forEach((includeField) => {
       if (includeField === 'group') {
@@ -29,29 +31,15 @@ export class TicketTagService extends BaseService {
     return populations;
   }
 
-  async findAll(queryDTO: EntityQueryDTO, user: User) {
+  async findAll(user: User) {
     const userRoleIds = user.roles.map(({ _id }) => _id);
-    const tags = await this.ticketTagModel.find({}).populate({
-      path: 'group',
-      model: 'TicketTagGroup',
-    });
-
+    const tags = await this.ticketTagRepository.findAll();
     const allowedTags = tags.filter((tag) => {
       const canSee = userRoleIds.some((userRoleId) =>
         tag.group.permissions.canSeeRoles
           .map(({ _id }) => _id.toString())
           .includes(userRoleId.toString()),
       );
-      // const canAdd = userRoleIds.some((userRoleId) =>
-      //   tag.group.permissions.canAddRoles
-      //     .map(({ _id }) => _id.toString())
-      //     .includes(userRoleId.toString()),
-      // );
-      // const canRemove = userRoleIds.some((userRoleId) =>
-      //   tag.group.permissions.canRemoveRoles
-      //     .map(({ _id }) => _id.toString())
-      //     .includes(userRoleId.toString()),
-      // );
 
       return canSee;
     });

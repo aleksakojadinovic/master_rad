@@ -50,3 +50,5 @@ export class TicketTagGroup {
 
 export const TicketTagGroupSchema =
   SchemaFactory.createForClass(TicketTagGroup);
+
+export type TicketTagGroupDocument = TicketTagGroup & Document;

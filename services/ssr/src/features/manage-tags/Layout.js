@@ -9,7 +9,7 @@ function ManageTagsLayout({
   isHomePage,
   isCreatePage,
   isEditPage,
-  tag,
+  tagGroup,
   id: editId,
 }) {
   const intl = useIntl();
@@ -35,7 +35,7 @@ function ManageTagsLayout({
     return {
       id: 'edit',
       title: intl.formatMessage(manageTagsMessages.editTagBreadcrumbText, {
-        tagName: tag.name,
+        tagName: tagGroup.name,
       }),
       link: `/manage/tags/edit/${editId}`,
       disabled: isEditPage,

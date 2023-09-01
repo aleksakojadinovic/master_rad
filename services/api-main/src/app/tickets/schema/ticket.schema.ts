@@ -46,3 +46,5 @@ export class Ticket extends Document {
 }
 
 export const TicketSchema = SchemaFactory.createForClass(Ticket);
+
+export type TicketDocument = Ticket & Document;

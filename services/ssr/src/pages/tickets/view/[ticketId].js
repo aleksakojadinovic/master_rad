@@ -59,11 +59,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       }),
     );
 
-    // store.dispatch(
-    //   ticketTagSystemSlice.endpoints.getTicketTagGroups.initiate(),
-    // );
-    // store.dispatch(ticketTagSystemSlice.endpoints.getTicketTags.initiate());
-
     await Promise.all(
       store.dispatch(ticketsSlice.util.getRunningQueriesThunk()),
     );

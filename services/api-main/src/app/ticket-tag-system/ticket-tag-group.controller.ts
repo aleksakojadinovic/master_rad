@@ -32,7 +32,7 @@ import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { User } from '../users/schema/user.schema';
 
 @UseInterceptors(TicketTagInterceptor)
-@Controller('ticket-tag-group')
+@Controller('ticket-tag-groups')
 export class TicketTagGroupController {
   constructor(
     private readonly ticketTagGroupService: TicketTagGroupService,
@@ -49,11 +49,13 @@ export class TicketTagGroupController {
     const group = await this.ticketTagGroupService.create(
       createTicketTagGroupDTO,
     );
+
     return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
       extraArgs: () => ({ languageCode }),
     });
   }
 
+  // TODO: proteccc
   @Get(':id')
   async findOne(
     @Param('id') id: string,
@@ -61,9 +63,9 @@ export class TicketTagGroupController {
     @Req() req: Request,
   ) {
     const languageCode = resolveLanguageCode(req);
-    const group = await this.ticketTagGroupService.findOne(id, queryDTO);
+    const group = await this.ticketTagGroupService.findOne(id);
     return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
-      extraArgs: () => ({ languageCode }),
+      extraArgs: () => ({ languageCode, include: queryDTO.includes }),
     });
   }
 

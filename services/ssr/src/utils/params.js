@@ -1,6 +1,12 @@
 export function getTicketViewQueryParams() {
   return {
-    includes: ['createdBy', 'historyInitiator', 'tags', 'assignees'],
+    includes: [
+      'createdBy',
+      'historyInitiator',
+      'tags',
+      'assignees',
+      'tags.group',
+    ],
   };
 }
 
@@ -21,6 +27,6 @@ export function getNotificationsParams(page = 1) {
   return {
     page,
     perPage: 5,
-    includes: ['ticket', 'user'],
+    includes: ['ticket', 'user', 'tags'],
   };
 }

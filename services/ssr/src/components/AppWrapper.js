@@ -6,10 +6,7 @@ import { FirebaseProvider } from '@/features/firebase/FirebaseProvider';
 import { wrapper } from '@/redux/store';
 
 function AppWrapper({ Component, pageProps }) {
-  const hydrationProps = {
-    reduxWrapperActionsGIAP: pageProps.reduxWrapperActionsGIAP,
-  };
-  wrapper.useHydration(hydrationProps);
+  wrapper.useHydration(pageProps);
   const PageLayoutComponent = Component.Layout || (({ children }) => children);
 
   return (
