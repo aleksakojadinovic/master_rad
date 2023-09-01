@@ -2,7 +2,6 @@ import { selectGetMeQueryResponse } from '@/api/auth';
 import { ticketsSlice, useGetTicketsQuery } from '@/api/tickets';
 import AgentDashboard from '@/features/agent-dashboard/AgentDashboard';
 import { wrapper } from '@/redux/store';
-import useHydrateStore from '@/redux/useHydrateStore';
 import { agentDashboardMessages } from '@/translations/agent-dashboard';
 import { getAgentDashboardTicketsParams } from '@/utils/params';
 import { Box, Typography } from '@mui/material';
@@ -10,9 +9,7 @@ import Head from 'next/head';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
 
-function DashboardPage({ page, perPage, filters, ...rest }) {
-  useHydrateStore(rest);
-
+function DashboardPage({ page, perPage, filters }) {
   const intl = useIntl();
 
   const { isLoading, isFetching } = useGetTicketsQuery(
