@@ -19,8 +19,6 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
       return [];
     }
 
-    console.log({ tags });
-
     return ticketTags.reduce((acc, curr) => {
       const canDelete =
         _.intersection(curr.group.permissions.canRemoveRoles, roleIds).length >
