@@ -7,6 +7,7 @@ import {
   Injectable,
   NestInterceptor,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
@@ -18,6 +19,7 @@ import { NotAllowedToAddThisTagError } from '../errors/NotAllowedToAddThisTag';
 import { NotAllowedToRemoveThisTagError } from '../errors/NotAllowedToRemoveThisTag';
 import { DuplicateTagError } from '../errors/DuplicateTag';
 import { DuplicateAssigneeError } from '../errors/DuplicateAssignee';
+import { NotAllowedToChangeToThisStatusError } from '../errors/NotAllowedToChangeToThisStatus';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {
@@ -58,6 +60,10 @@ export class TicketInterceptor implements NestInterceptor {
 
         if (error instanceof DuplicateAssigneeError) {
           throw new ConflictException(error.getPayload());
+        }
+
+        if (error instanceof NotAllowedToChangeToThisStatusError) {
+          throw new UnauthorizedException(error.getPayload());
         }
 
         throw error;
