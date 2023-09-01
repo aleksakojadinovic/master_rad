@@ -84,17 +84,13 @@ export class TicketsController extends BaseController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async update(
-    @Req() req,
     @Param('id') id: string,
     @Body() updateTicketDto: UpdateTicketDto,
+    @GetUserInfo() user: User,
   ) {
-    const ticket = await this.ticketsService.update(
-      id,
-      req.user._id,
-      updateTicketDto,
-    );
+    const ticket = await this.ticketsService.update(id, user, updateTicketDto);
 
     return this.mapper.map(ticket, Ticket, TicketDTO);
   }

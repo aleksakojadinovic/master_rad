@@ -161,12 +161,10 @@ export class TicketsService extends BaseService {
     return user._id.toString() === creatorId.toString();
   }
 
-  async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
+  async update(id: string, user: User, updateTicketDto: UpdateTicketDto) {
     if (!isValidObjectId(id)) {
       throw new TicketIdNotValidError(id);
     }
-
-    const user = await this.usersService.findOne(userId);
 
     const userRoleIds = user.roles.map((role) => role._id);
     const isCustomer = user.roles.map(({ name }) => name).includes('customer');
@@ -235,7 +233,7 @@ export class TicketsService extends BaseService {
             ticket.assignees.filter(
               (assignee) =>
                 (assignee as unknown as ObjectId).toString() !==
-                userId.toString(),
+                user._id.toString(),
             ),
           )
           .forUsers(
