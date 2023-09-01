@@ -123,23 +123,13 @@ export class TicketsService extends BaseService {
   }
 
   async findOne(id: string, user: User) {
-    const userRoleIds = user.roles.map(({ _id }) => _id);
-
     const ticket = await this.ticketsRepository.findById(id);
 
     if (!ticket) {
       throw new TicketNotFoundError(id);
     }
 
-    ticket.tags = ticket.tags.filter((tag) => {
-      const canSee = userRoleIds.some((userRoleId) =>
-        tag.group.permissions.canSeeRoles
-          .map(({ _id }) => _id.toString())
-          .includes(userRoleId.toString()),
-      );
-
-      return canSee;
-    });
+    this.stripTags(ticket, user);
 
     return ticket;
   }
