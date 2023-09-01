@@ -20,11 +20,7 @@ export class TicketTagRepository {
     },
   ];
 
-  async findAllByRoles(roles: string[]): Promise<TicketTagDocument[]> {
-    return this.ticketTagModel
-      .find({
-        'group.permissions.canSeeRoles': { $in: roles },
-      })
-      .populate(TicketTagRepository.POPULATE);
+  async findAll(): Promise<TicketTagDocument[]> {
+    return this.ticketTagModel.find({}).populate(TicketTagRepository.POPULATE);
   }
 }

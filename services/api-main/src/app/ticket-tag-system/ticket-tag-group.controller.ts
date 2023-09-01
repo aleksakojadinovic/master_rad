@@ -50,8 +50,6 @@ export class TicketTagGroupController {
       createTicketTagGroupDTO,
     );
 
-    console.log({ group });
-
     return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
       extraArgs: () => ({ languageCode }),
     });

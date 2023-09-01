@@ -38,11 +38,10 @@ export class TicketTagController {
     @Req() req: Request,
     @GetUserInfo() user: User,
   ) {
-    // TODO: protect
     const languageCode = resolveLanguageCode(req);
-    const tags = await this.ticketTagService.findAll(queryDTO, user);
+    const tags = await this.ticketTagService.findAll(user);
 
-    return this.mapper.mapArray(tags, TicketTag, TicketTagDTO, {
+    return this.mapper.mapArray(tags as TicketTag[], TicketTag, TicketTagDTO, {
       extraArgs: () => ({
         languageCode,
         include: queryDTO.includes,
