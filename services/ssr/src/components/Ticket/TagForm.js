@@ -1,9 +1,6 @@
 import React, { useMemo } from 'react';
 import TagPicker from '../TagPicker/TagPicker';
-import {
-  useGetTicketTagGroupsQuery,
-  useGetTicketTagsQuery,
-} from '@/api/ticket-tag-system';
+import { useGetTicketTagsQuery } from '@/api/ticket-tag-system';
 import { Box, Typography } from '@mui/material';
 import TagChip from '../TagChip/TagChip';
 import { useSelector } from 'react-redux';
@@ -12,15 +9,13 @@ import _ from 'lodash';
 
 // TODO: Too much coupling, this should be two components - one for tag list one for picker
 function TagForm({ ticketTags, onSelect, onDelete }) {
-  // We fetch them here and not SSR because they're not SSR-relevant
   const user = useSelector(selectGetMeQueryResponse);
   const roleIds = user.roles.map(({ Id }) => Id);
 
   const { data: tags } = useGetTicketTagsQuery({ includes: 'group' });
-  const { data: tagGroups } = useGetTicketTagGroupsQuery();
 
   const groupedTicketTags = useMemo(() => {
-    if (!tags || !tagGroups) {
+    if (!tags) {
       return [];
     }
 
@@ -28,16 +23,13 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
 
     return ticketTags.reduce((acc, curr) => {
       const canDelete =
-        _.intersection(
-          tagGroups.find((g) => g.id === curr.group.id).permissions
-            .canRemoveRoles,
-          roleIds,
-        ).length > 0;
+        _.intersection(curr.group.permissions.canRemoveRoles, roleIds).length >
+        0;
 
       if (!acc[curr.group.id]) {
         acc[curr.group.id] = {
           groupId: curr.group.id,
-          groupName: tagGroups.find((g) => g.id === curr.group.id).name,
+          groupName: curr.group.name,
           groupDescription: curr.group.description,
           tags: [{ ...curr, canDelete }],
         };
@@ -46,12 +38,12 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
       acc[curr.group.id].tags.push({ ...curr, canDelete });
       return acc;
     }, {});
-  }, [tags, ticketTags, tagGroups, roleIds]);
+  }, [tags, ticketTags, roleIds]);
 
   const groupIds = Array.from(Object.keys(groupedTicketTags));
 
   const resolvedTags = useMemo(() => {
-    if (!tags || !tagGroups || !ticketTags) {
+    if (!tags || !ticketTags) {
       return [];
     }
 
@@ -65,10 +57,10 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
       .map((tag) => {
         return {
           ...tag,
-          groupName: tagGroups.find((g) => g.id === tag.group.id).name,
+          groupName: tag.group.name,
         };
       });
-  }, [tags, tagGroups, roleIds, ticketTags]);
+  }, [tags, roleIds, ticketTags]);
 
   const handleDelete = (id) => {
     onDelete(id);
