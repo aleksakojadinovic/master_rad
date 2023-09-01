@@ -14,14 +14,12 @@ import { useIntl } from 'react-intl';
 
 function IntlTable({ value, onChange }) {
   const intl = useIntl();
-  const values = useMemo(
-    () =>
-      Object.entries(value).map(([key, v]) => ({
-        languageCode: key,
-        value: v,
-      })),
-    [value],
-  );
+  const values = useMemo(() => {
+    return Object.entries(value).map(([key, v]) => ({
+      languageCode: key,
+      value: v,
+    }));
+  }, [value]);
 
   const handleChange = ({ languageCode, value: newValue }) => {
     onChange({ ...value, [languageCode]: newValue });
@@ -47,9 +45,9 @@ function IntlTable({ value, onChange }) {
                   fullWidth
                   value={val}
                   size="small"
-                  onChange={(e) =>
-                    handleChange({ languageCode, value: e.target.value })
-                  }
+                  onChange={(e) => {
+                    handleChange({ languageCode, value: e.target.value });
+                  }}
                 />
               </TableCell>
             </TableRow>

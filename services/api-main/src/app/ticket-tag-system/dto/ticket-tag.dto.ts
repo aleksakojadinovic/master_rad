@@ -14,6 +14,6 @@ export class TicketTagDTO {
     public description: string,
     public nameIntl: IntlValue,
     public descriptionIntl: IntlValue,
-    public group: TicketTagTicketTagGroupDTO,
+    public group: TicketTagTicketTagGroupDTO | string,
   ) {}
 }

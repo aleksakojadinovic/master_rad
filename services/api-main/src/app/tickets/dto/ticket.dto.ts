@@ -6,13 +6,13 @@ import { TicketTagDTO } from 'src/app/ticket-tag-system/dto/ticket-tag.dto';
 export class TicketDTO {
   constructor(
     public id: string,
-    public createdBy: UserDTO,
-    public assignees: UserDTO[],
+    public createdBy: UserDTO | string,
+    public assignees: UserDTO[] | string[],
     public createdAt: Date,
     public title: string,
     public body: string,
     public status: TicketStatus,
     public history: TicketHistoryItemDTO[],
-    public tags: TicketTagDTO[],
+    public tags: TicketTagDTO[] | string[],
   ) {}
 }

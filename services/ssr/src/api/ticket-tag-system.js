@@ -6,14 +6,14 @@ export const ticketTagSystemSlice = api.injectEndpoints({
   endpoints: (builder) => ({
     getTicketTagGroups: builder.query({
       query: (params) => ({
-        url: '/ticket-tag-group',
+        url: '/ticket-tag-groups',
         params,
       }),
       providesTags: ['ticket-tag-groups'],
     }),
     getTicketTagGroup: builder.query({
       query: ({ id, ...params }) => ({
-        url: `/ticket-tag-group/${id}`,
+        url: `/ticket-tag-groups/${id}`,
         params,
       }),
       providesTags: (_result, error, args) => {
@@ -22,7 +22,7 @@ export const ticketTagSystemSlice = api.injectEndpoints({
     }),
     updateTicketTagGroup: builder.mutation({
       query: ({ id, ...patch }) => ({
-        url: `/ticket-tag-group/${id}`,
+        url: `/ticket-tag-groups/${id}`,
         method: 'PATCH',
         body: patch,
       }),
@@ -34,7 +34,7 @@ export const ticketTagSystemSlice = api.injectEndpoints({
     }),
     createTicketTagGroup: builder.mutation({
       query: ({ ...body }) => ({
-        url: '/ticket-tag-group/',
+        url: '/ticket-tag-groups/',
         method: 'POST',
         body,
       }),
@@ -46,7 +46,7 @@ export const ticketTagSystemSlice = api.injectEndpoints({
     }),
     getTicketTags: builder.query({
       query: (params) => ({
-        url: '/ticket-tag/',
+        url: '/ticket-tags/',
         params,
       }),
     }),

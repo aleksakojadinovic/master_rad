@@ -31,7 +31,6 @@ import { OverlapInTagIdsError } from './errors/OverlapInTagIds';
 import { NotAllowedToAddThisTagError } from './errors/NotAllowedToAddThisTag';
 import { NotAllowedToRemoveThisTagError } from './errors/NotAllowedToRemoveThisTag';
 import { DuplicateTagError } from './errors/DuplicateTag';
-import { TicketTag } from '../ticket-tag-system/schema/ticket-tag.schema';
 import { AssigneeNotFoundError } from './errors/AssigneeNotFound';
 import { DuplicateAssigneeError } from './errors/DuplicateAssignee';
 import { TooSoonToCreateAnotherTicketError } from './errors/TooSoonToCreateAnotherTicket';
@@ -40,6 +39,7 @@ import { Notification } from '../notifications/schema/notification.schema';
 import { NotificationsService } from '../notifications/notifications.service';
 import { TICKET_STATUS_GRAPH } from './schema/ticket-status.map';
 import { NotAllowedToChangeToThisStatusError } from './errors/NotAllowedToChangeToThisStatus';
+import { TicketsRepository } from './tickets.repository';
 
 @Injectable()
 export class TicketsService extends BaseService {
@@ -49,61 +49,17 @@ export class TicketsService extends BaseService {
     private ticketTagService: TicketTagService,
     private usersService: UsersService,
     private notificationsService: NotificationsService,
+    private ticketsRepository: TicketsRepository,
   ) {
     super();
   }
 
-  override constructPopulate(queryDTO: EntityQueryDTO) {
-    const populations = [];
-    queryDTO.includes.forEach((includeField) => {
-      if (includeField === 'createdBy') {
-        populations.push({
-          path: 'createdBy',
-          model: 'User',
-          populate: { path: 'roles', model: 'Role' },
-        });
-      }
-      if (includeField === 'historyInitiator') {
-        populations.push({
-          path: 'history.initiator',
-          model: 'User',
-          populate: {
-            path: 'roles',
-            model: 'Role',
-          },
-        });
-      }
-      if (includeField === 'tags') {
-        populations.push({
-          path: 'tags',
-          model: 'TicketTag',
-          populate: {
-            path: 'group',
-            model: 'TicketTagGroup',
-          },
-        });
-      }
-      if (includeField === 'assignees') {
-        populations.push({
-          path: 'assignees',
-          model: 'User',
-          populate: {
-            path: 'roles',
-            model: 'Role',
-          },
-        });
-      }
-    });
-    return populations;
-  }
+  async create(user: User, createTicketDto: CreateTicketDto) {
+    const mostRecentTicket =
+      await this.ticketsRepository.findMostRecentTicketByUserId(
+        user._id.toString(),
+      );
 
-  async create(userId: string, createTicketDto: CreateTicketDto) {
-    const user = await this.usersService.findOne(userId);
-    const mostRecentTicket = await this.ticketModel.findOne(
-      { createdBy: userId },
-      {},
-      { sort: { createdAt: -1 } },
-    );
     if (mostRecentTicket) {
       const createdAt = moment(mostRecentTicket.createdAt);
       const now = moment();
@@ -118,6 +74,7 @@ export class TicketsService extends BaseService {
       }
     }
 
+    // TODO apply builder pattern here.
     const ticketObject = new Ticket();
 
     const groupId = uuid();
@@ -152,65 +109,29 @@ export class TicketsService extends BaseService {
     ticketObject.createdBy = user;
     ticketObject.createdAt = timestamp;
 
-    const ticketModel = new this.ticketModel(ticketObject);
+    const ticketModelInstance = new this.ticketModel(ticketObject);
+    await ticketModelInstance.save();
 
-    await ticketModel.save();
-
-    return ticketModel;
+    return ticketModelInstance;
   }
 
-  async findAll(queryDTO: TicketQueryDTO) {
-    const query = this.ticketModel.find({});
-
-    const populations = this.constructPopulate(queryDTO);
-    populations.forEach((p) => query.populate(p));
-
-    if (queryDTO.status) {
-      query.where('status', queryDTO.status);
-    }
-
-    query.skip((queryDTO.page - 1) * queryDTO.perPage).limit(queryDTO.perPage);
-
-    const tickets = await query.exec();
-    return tickets;
+  async findAll(user: User, queryDTO: TicketQueryDTO) {
+    const tickets = await this.ticketsRepository.findAll(
+      queryDTO.page,
+      queryDTO.perPage,
+      queryDTO.status,
+    );
+    return tickets.map((ticket) => this.stripTags(ticket, user));
   }
 
-  async findOne(
-    id: string,
-    user: User,
-    queryDTO: TicketQueryDTO = new TicketQueryDTO(),
-  ) {
-    // Don't like it but I don't think there is another way
-    const userRoleIds = user.roles.map(({ _id }) => _id);
-    const query = this.ticketModel.findOne({ _id: id }).populate({
-      path: 'tags',
-      model: 'TicketTag',
-      populate: { path: 'group', model: 'TicketTagGroup' },
-    });
-
-    const populations = this.constructPopulate(queryDTO);
-    populations.forEach((p) => query.populate(p));
-    const ticket = await query.exec();
+  async findOne(id: string, user: User) {
+    const ticket = await this.ticketsRepository.findById(id);
 
     if (!ticket) {
       throw new TicketNotFoundError(id);
     }
 
-    ticket.tags = ticket.tags.filter((tag) => {
-      const canSee = userRoleIds.some((userRoleId) =>
-        tag.group.permissions.canSeeRoles
-          .map(({ _id }) => _id.toString())
-          .includes(userRoleId.toString()),
-      );
-
-      return canSee;
-    });
-
-    if (!queryDTO.includes.includes('tags')) {
-      ticket.tags = ticket.tags.map(
-        ({ _id }) => _id as unknown as Types.ObjectId as unknown as TicketTag,
-      );
-    }
+    this.stripTags(ticket, user);
 
     return ticket;
   }
@@ -270,22 +191,26 @@ export class TicketsService extends BaseService {
     ticket.status = targetStatus;
   }
 
-  async update(id: string, userId: string, updateTicketDto: UpdateTicketDto) {
+  async update(id: string, user: User, updateTicketDto: UpdateTicketDto) {
     if (!isValidObjectId(id)) {
       throw new TicketIdNotValidError(id);
     }
 
-    const user = await this.usersService.findOne(userId);
-
     const userRoleIds = user.roles.map((role) => role._id);
     const isCustomer = user.roles.map(({ name }) => name).includes('customer');
-    const isTicketOwner = await this.isTicketOwner(user, id);
+
+    const ticket = await this.findOne(id, user);
+
+    if (!ticket) {
+      throw new TicketNotFoundError(id);
+    }
+
+    const isTicketOwner =
+      ticket.createdBy._id.toString() === user._id.toString();
 
     if (isCustomer && !isTicketOwner) {
       throw new TicketNotFoundError(id);
     }
-
-    const ticket = await this.findOne(id, user);
 
     if (!ticket) {
       throw new TicketNotFoundError(id);
@@ -294,7 +219,20 @@ export class TicketsService extends BaseService {
     const groupId = uuid();
     const timestamp = new Date();
 
-    this.updateTicketStatus(ticket, user, updateTicketDto, groupId, timestamp);
+    if (updateTicketDto.status != null) {
+      const entry = new TicketHistoryEntryStatusChange(updateTicketDto.status);
+
+      ticket.history.push(
+        TicketHistoryItem.create({
+          groupId,
+          timestamp,
+          initiator: user,
+          entry,
+        }),
+      );
+
+      ticket.status = updateTicketDto.status;
+    }
 
     if (updateTicketDto.body != null) {
       const entry = new TicketHistoryEntryBodyChanged(updateTicketDto.body);
@@ -330,7 +268,7 @@ export class TicketsService extends BaseService {
             ticket.assignees.filter(
               (assignee) =>
                 (assignee as unknown as ObjectId).toString() !==
-                userId.toString(),
+                user._id.toString(),
             ),
           )
           .forUsers(
@@ -491,5 +429,19 @@ export class TicketsService extends BaseService {
 
   remove(id: number) {
     return `This action removes a #${id} ticket`;
+  }
+
+  private stripTags(ticket: Ticket, user: User) {
+    const userRoleIds = user.roles.map((role) => role._id.toString());
+    ticket.tags = ticket.tags.filter((tag) => {
+      const canSee = userRoleIds.some((userRoleId) =>
+        tag.group.permissions.canSeeRoles
+          .map(({ _id }) => _id.toString())
+          .includes(userRoleId.toString()),
+      );
+
+      return canSee;
+    });
+    return ticket;
   }
 }

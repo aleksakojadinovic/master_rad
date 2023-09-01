@@ -14,18 +14,20 @@ import Head from 'next/head';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
 
-function EditTagGroupRoute({ id, tag }) {
+function EditTagGroupRoute({ id, tagGroup }) {
   const intl = useIntl();
-  const { data: tagGroup } = useGetTicketTagGroupQuery({
+
+  useGetTicketTagGroupQuery({
     id,
-    includes: ['tags', 'role'],
+    includes: ['tags', 'roles'],
   });
+
   return (
     <Fragment>
       <Head>
         <title>
           {intl.formatMessage(manageTagsMessages.editSingleTitle, {
-            tagName: tag.name,
+            tagName: tagGroup.name,
           })}
         </title>
       </Head>
@@ -61,20 +63,20 @@ export const getServerSideProps = wrapper.getServerSideProps(
     store.dispatch(
       ticketTagSystemSlice.endpoints.getTicketTagGroup.initiate({
         id,
-        includes: ['tags', 'role'],
+        includes: ['tags', 'roles'],
       }),
     );
 
     store.dispatch(rolesSlice.endpoints.getRoles.initiate());
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
 
-    const tag = selectGetTicketTagGroupQueryResponse(store.getState(), {
+    const tagGroup = selectGetTicketTagGroupQueryResponse(store.getState(), {
       id,
-      includes: ['tags', 'role'],
+      includes: ['tags', 'roles'],
     });
 
     return {
-      props: { id, isEditPage: true, tag },
+      props: { id, isEditPage: true, tagGroup },
     };
   },
 );

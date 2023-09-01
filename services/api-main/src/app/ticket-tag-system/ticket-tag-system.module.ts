@@ -10,10 +10,17 @@ import { TicketTag, TicketTagSchema } from './schema/ticket-tag.schema';
 import { UsersModule } from '../users/users.module';
 import { TicketTagService } from './ticket-tag.service';
 import { TicketTagController } from './ticket-tag.controller';
+import { TicketTagGroupRepository } from './ticket-tag-group.repository';
+import { TicketTagRepository } from './ticket-tag.repository';
 
 @Module({
   controllers: [TicketTagGroupController, TicketTagController],
-  providers: [TicketTagGroupService, TicketTagService],
+  providers: [
+    TicketTagGroupService,
+    TicketTagService,
+    TicketTagGroupRepository,
+    TicketTagRepository,
+  ],
   exports: [TicketTagService],
   imports: [
     UsersModule,

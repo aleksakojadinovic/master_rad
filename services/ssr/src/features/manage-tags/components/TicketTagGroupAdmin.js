@@ -170,7 +170,12 @@ function TicketTagGroupAdmin({ group, isCreate }) {
         manageTagsMessages.loadingUpdatingTicketTagGroup,
       );
     }
-  }, [isUpdateLoading, isUpdateSuccess, isUpdateError, intl]);
+    if (isCreateSuccess) {
+      return intl.formatMessage(
+        manageTagsMessages.successCreatingTicketTagGroup,
+      );
+    }
+  }, [isUpdateLoading, isUpdateSuccess, isUpdateError, isCreateSuccess, intl]);
 
   const handleCreate = () => {
     const dto = {

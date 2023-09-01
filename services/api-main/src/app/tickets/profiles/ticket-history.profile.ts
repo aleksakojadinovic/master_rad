@@ -5,13 +5,13 @@ import {
   createMap,
   forMember,
   mapFrom,
+  mapWithArguments,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { TicketHistoryItem } from '../schema/ticket-history.schema';
 import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 import { User } from 'src/app/users/schema/user.schema';
 import { UserDTO } from 'src/app/users/dto/user.dto';
-import { Types } from 'mongoose';
 
 @Injectable()
 export class TicketHistoryItemProfile extends AutomapperProfile {
@@ -35,11 +35,16 @@ export class TicketHistoryItemProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.user,
-          mapFrom((source) => {
-            if (source.initiator instanceof Types.ObjectId) {
-              return source.initiator.toString();
+          mapWithArguments((source, extra) => {
+            if (
+              extra.include &&
+              (extra.include as string[]).includes('historyInitiator')
+            ) {
+              return mapper.map(source.initiator, User, UserDTO, {
+                extraArgs: () => extra,
+              });
             }
-            return mapper.map(source.initiator, User, UserDTO);
+            return source.initiator._id.toString();
           }),
         ),
         forMember(

@@ -2,8 +2,8 @@ import { RoleDTO } from 'src/app/users/dto/role.dto';
 
 export class TicketTagGroupPermissionsDTO {
   constructor(
-    public canAddRoles: (string | RoleDTO)[],
-    public canRemoveRoles: (string | RoleDTO)[],
-    public canSeeRoles: (string | RoleDTO)[],
+    public canAddRoles: RoleDTO[] | string[],
+    public canRemoveRoles: RoleDTO[] | string[],
+    public canSeeRoles: RoleDTO[] | string[],
   ) {}
 }
