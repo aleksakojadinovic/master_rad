@@ -48,16 +48,5 @@ export class TicketTagController {
         include: queryDTO.includes,
       }),
     });
-    // const ticketTagGroups = await this.ticketTagGroupService.findAll(queryDTO);
-    // return this.mapper.mapArray(
-    //   ticketTagGroups,
-    //   TicketTagGroup,
-    //   TicketTagGroupDTO,
-    //   {
-    //     extraArgs: () => ({
-    //       languageCode,
-    //     }),
-    //   },
-    // );
   }
 }

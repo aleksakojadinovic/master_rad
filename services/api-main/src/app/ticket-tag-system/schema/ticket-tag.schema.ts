@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { TicketTagGroup } from './ticket-tag-group.schema';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 
@@ -23,3 +23,5 @@ export class TicketTag {
 }
 
 export const TicketTagSchema = SchemaFactory.createForClass(TicketTag);
+
+export type TicketTagDocument = TicketTag & Document;

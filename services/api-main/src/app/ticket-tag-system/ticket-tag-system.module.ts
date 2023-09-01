@@ -11,6 +11,7 @@ import { UsersModule } from '../users/users.module';
 import { TicketTagService } from './ticket-tag.service';
 import { TicketTagController } from './ticket-tag.controller';
 import { TicketTagGroupRepository } from './ticket-tag-group.repository';
+import { TicketTagRepository } from './ticket-tag.repository';
 
 @Module({
   controllers: [TicketTagGroupController, TicketTagController],
@@ -18,6 +19,7 @@ import { TicketTagGroupRepository } from './ticket-tag-group.repository';
     TicketTagGroupService,
     TicketTagService,
     TicketTagGroupRepository,
+    TicketTagRepository,
   ],
   exports: [TicketTagService],
   imports: [
