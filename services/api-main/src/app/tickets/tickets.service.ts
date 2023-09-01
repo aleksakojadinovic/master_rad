@@ -154,13 +154,19 @@ export class TicketsService extends BaseService {
 
     const userRoleIds = user.roles.map((role) => role._id);
     const isCustomer = user.roles.map(({ name }) => name).includes('customer');
-    const isTicketOwner = await this.isTicketOwner(user, id);
+
+    const ticket = await this.findOne(id, user);
+
+    if (!ticket) {
+      throw new TicketNotFoundError(id);
+    }
+
+    const isTicketOwner =
+      ticket.createdBy._id.toString() === user._id.toString();
 
     if (isCustomer && !isTicketOwner) {
       throw new TicketNotFoundError(id);
     }
-
-    const ticket = await this.findOne(id, user);
 
     if (!ticket) {
       throw new TicketNotFoundError(id);
@@ -170,7 +176,6 @@ export class TicketsService extends BaseService {
     const timestamp = new Date();
 
     if (updateTicketDto.status != null) {
-      // Add status change entry
       const entry = new TicketHistoryEntryStatusChange(updateTicketDto.status);
 
       ticket.history.push(
