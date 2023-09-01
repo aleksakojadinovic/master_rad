@@ -47,7 +47,6 @@ export class TicketTagGroupProfile extends AutomapperProfile {
           mapWithArguments((source, extra) => {
             const shouldIncludeRoles =
               extra.include && (extra.include as string[]).includes('roles');
-            console.log({ extra });
 
             const mapRoleList = (roleList: Role[]) =>
               shouldIncludeRoles
@@ -55,8 +54,6 @@ export class TicketTagGroupProfile extends AutomapperProfile {
                     extraArgs: () => extra,
                   })
                 : roleList.map((role) => role._id.toString());
-
-            console.log(source.permissions.canAddRoles);
 
             const mappedCanAddRoles = mapRoleList(
               source.permissions.canAddRoles,
@@ -69,8 +66,6 @@ export class TicketTagGroupProfile extends AutomapperProfile {
             const mappedCanSeeRoles = mapRoleList(
               source.permissions.canSeeRoles,
             );
-
-            console.log({ mappedCanAddRoles });
 
             const mappedPermissiones = new TicketTagGroupPermissionsDTO(
               mappedCanAddRoles,
