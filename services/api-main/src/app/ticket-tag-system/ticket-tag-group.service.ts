@@ -4,7 +4,6 @@ import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
 import { TicketTagGroup } from './schema/ticket-tag-group.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { TicketTagGroupNotFoundError } from './errors/TicketTagGroupNotFound';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { BaseService } from 'src/codebase/BaseService';
@@ -28,8 +27,8 @@ import { User } from '../users/schema/user.schema';
 export class TicketTagGroupService extends BaseService {
   constructor(
     @InjectModel(TicketTagGroup.name)
-    private ticketTagGroupModel: Model<TicketTagGroup>,
-    @InjectMapper() private readonly mapper: Mapper,
+    @InjectMapper()
+    private readonly mapper: Mapper,
     private rolesService: RolesService,
     private ticketTagService: TicketTagService,
     private ticketTagGroupRepository: TicketTagGroupRepository,
@@ -91,13 +90,9 @@ export class TicketTagGroupService extends BaseService {
 
   async findAll(queryDTO: EntityQueryDTO, user: User) {
     const userRoleIds = user.roles.map(({ _id }) => _id);
-    const query = this.ticketTagGroupModel.find({
-      'permissions.canSeeRoles': { $in: userRoleIds },
-    });
-
-    const populations = this.constructPopulate(queryDTO);
-    populations.forEach((p) => query.populate(p));
-    const groups = await query.exec();
+    const groups = await this.ticketTagGroupRepository.findAllByRoles(
+      userRoleIds,
+    );
     return groups;
   }
 
