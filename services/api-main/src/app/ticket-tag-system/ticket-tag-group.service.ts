@@ -100,40 +100,6 @@ export class TicketTagGroupService extends BaseService {
     return model;
   }
 
-  // async addTagsToGroup(id: string, tags: CreateTicketTagDto[]) {
-  //   const group = await this.ticketTagGroupModel
-  //     .findById(id)
-  //     .populate({ path: 'tags', model: 'TicketTag' });
-
-  //   if (!group) {
-  //     throw new TicketTagGroupNotFoundError();
-  //   }
-
-  //   // TODO: Prevent duplicates
-
-  //   // const currentTagIntlKeys = group.tags.map(({ nameIntlKey }) => nameIntlKey);
-  //   // const requestedTagIntlKeys = tags.map(({ name }) => name);
-  //   // if (
-  //   //   currentTagIntlKeys.some((name) => requestedTagIntlKeys.includes(name))
-  //   // ) {
-  //   //   throw new TicketTagNameAlreadyExistsError();
-  //   // }
-
-  //   const tagModels = await Promise.all(
-  //     tags.map(async (tag) => {
-  //       const model = this.ticketTagService.create(
-  //         new CreateTicketTagDto(tag.nameIntl, tag.descriptionIntl, id),
-  //       );
-  //       return model;
-  //     }),
-  //   );
-
-  //   tagModels.forEach((model) => group.tags.push(model));
-
-  //   await group.save();
-  //   return group;
-  // }
-
   async findAll(queryDTO: EntityQueryDTO, user: User) {
     const userRoleIds = user.roles.map(({ _id }) => _id);
     const query = this.ticketTagGroupModel.find({
