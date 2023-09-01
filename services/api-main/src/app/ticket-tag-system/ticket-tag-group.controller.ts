@@ -49,6 +49,9 @@ export class TicketTagGroupController {
     const group = await this.ticketTagGroupService.create(
       createTicketTagGroupDTO,
     );
+
+    console.log({ group });
+
     return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
       extraArgs: () => ({ languageCode }),
     });

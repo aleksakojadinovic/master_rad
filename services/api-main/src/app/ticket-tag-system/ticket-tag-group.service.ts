@@ -2,10 +2,7 @@ import { TicketTagGroupRepository } from './ticket-tag-group.repository';
 import { RolesService } from '../users/roles.service';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
-import {
-  TicketTagGroup,
-  TicketTagGroupPermissions,
-} from './schema/ticket-tag-group.schema';
+import { TicketTagGroup } from './schema/ticket-tag-group.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { TicketTagGroupNotFoundError } from './errors/TicketTagGroupNotFound';
@@ -76,28 +73,20 @@ export class TicketTagGroupService extends BaseService {
       throw new TicketTagGroupDuplicateNameError();
     }
 
-    const ticketTagGroupObject = new TicketTagGroup();
+    const defaultRoles = (
+      await this.rolesService.findManyByName([
+        'administrator',
+        'superadministrator',
+      ])
+    ).map((role) => role._id.toString());
 
-    // TODO prevent name duplicates (should also be done on update, but too lazy now)
-    ticketTagGroupObject.nameIntl = dto.nameIntl;
-    ticketTagGroupObject.descriptionIntl = dto.descriptionIntl;
-    ticketTagGroupObject.tags = [];
+    const group = await this.ticketTagGroupRepository.create({
+      nameIntl: dto.nameIntl,
+      descriptionIntl: dto.descriptionIntl,
+      roles: defaultRoles,
+    });
 
-    const defaultRoles = await this.rolesService.findManyByName([
-      'administrator',
-      'superadministrator',
-    ]);
-
-    ticketTagGroupObject.permissions = new TicketTagGroupPermissions(
-      defaultRoles,
-      defaultRoles,
-      defaultRoles,
-    );
-
-    const model = new this.ticketTagGroupModel(ticketTagGroupObject);
-    await model.save();
-
-    return model;
+    return group;
   }
 
   async findAll(queryDTO: EntityQueryDTO, user: User) {

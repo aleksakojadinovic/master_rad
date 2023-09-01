@@ -3,7 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketTagGroup } from './schema/ticket-tag-group.schema';
+import {
+  TicketTagGroup,
+  TicketTagGroupPermissions,
+} from './schema/ticket-tag-group.schema';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 
 @Injectable()
@@ -50,16 +53,32 @@ export class TicketTagGroupRepository {
     return !!result;
   }
 
-  //   findAll(page = 1, perPage = 10, status: string | null = null) {
-  //     const query = this.ticketTagGroupModel.find({});
+  async findAllByRoles(roles: string[]): Promise<TicketTagGroup[]> {
+    return this.ticketTagGroupModel
+      .find({
+        'permissions.canSeeRoles': { $in: roles },
+      })
+      .populate(TicketTagGroupRepository.POPULATE);
+  }
 
-  //     if (status !== null) {
-  //       query.where('status', status);
-  //     }
+  create({
+    nameIntl,
+    descriptionIntl,
+    roles,
+  }: {
+    nameIntl: IntlValue;
+    descriptionIntl: IntlValue;
+    roles: string[];
+  }) {
+    const newGroup = new this.ticketTagGroupModel();
+    newGroup.nameIntl = nameIntl;
+    newGroup.descriptionIntl = descriptionIntl;
+    newGroup.permissions = new TicketTagGroupPermissions(
+      roles as any,
+      roles as any,
+      roles as any,
+    );
 
-  //     query.skip((page - 1) * perPage).limit(perPage);
-  //     query.populate(TicketTagGroupRepository.POPULATE);
-
-  //     return query.exec();
-  //   }
+    return newGroup.save();
+  }
 }
