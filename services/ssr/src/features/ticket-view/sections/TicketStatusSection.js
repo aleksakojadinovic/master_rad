@@ -24,7 +24,9 @@ function TicketStatusSection({ ticket }) {
   });
 
   const handleUpdateStatus = (targetStatus) => {
-    updateTicket({ id: ticket.id, status: targetStatus });
+    updateTicket({ id: ticket.id, status: targetStatus }).then(() =>
+      setIsStatusListVisible(false),
+    );
   };
 
   return (
