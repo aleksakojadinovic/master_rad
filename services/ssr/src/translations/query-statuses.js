@@ -9,4 +9,8 @@ export const queryStatusMessages = defineMessages({
     id: 'query-status.error',
     defaultMessage: 'An error has occurred',
   },
+  updateSuccessfulX: {
+    id: 'query-status.update-successful-x',
+    defaultMessage: 'Successfuly updated {x}',
+  },
 });

@@ -49,4 +49,8 @@ export const globalMessages = defineMessages({
     id: 'global.cancel',
     defaultMessage: 'Cancel',
   },
+  ticket: {
+    id: 'global.ticket',
+    defaultMessage: 'ticket',
+  },
 });
