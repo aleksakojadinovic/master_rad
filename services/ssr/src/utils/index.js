@@ -23,3 +23,53 @@ export const formatDate = (date) => {
 export const getStringPreview = (str, maxLen = 20) => {
   return str.length <= maxLen ? str : str.substring(0, maxLen) + '...';
 };
+
+export const wrapUser = (user) => {
+  const { id, email, firstName, lastName, roles } = user ?? {
+    id: null,
+    username: '',
+    firstName: '',
+    lastName: '',
+    roles: [],
+  };
+
+  const roleNames = roles.map(({ name }) => name);
+  const roleIds = roles.map(({ id }) => id);
+
+  const isLoggedIn = !!user;
+
+  const hasRole = (...conditionRoles) => {
+    let conditionRoleIdentifiers = [];
+    if (typeof conditionRoles[0] === 'object') {
+      conditionRoleIdentifiers = conditionRoles.map(({ id }) => id);
+    } else {
+      conditionRoleIdentifiers = conditionRoles;
+    }
+
+    return conditionRoleIdentifiers.some(
+      (roleIdentifier) =>
+        roleIds.includes(roleIdentifier) || roleNames.includes(roleIdentifier),
+    );
+  };
+
+  const isAgent = hasRole('agent');
+  const isCustomer = hasRole('customer');
+  const isAdministator = hasRole('administrator');
+  const isSuperAdministrator = hasRole('superadministrator');
+
+  return {
+    id,
+    email,
+    firstName,
+    lastName,
+    roles,
+    roleNames,
+    roleIds,
+    isLoggedIn,
+    isAdministator,
+    isSuperAdministrator,
+    isAgent,
+    isCustomer,
+    hasRole,
+  };
+};

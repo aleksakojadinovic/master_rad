@@ -8,9 +8,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
+import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
+import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
+import { User } from '../users/schema/user.schema';
+import { UserDTO } from '../users/dto/user.dto';
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    @InjectMapper() private readonly mapper: Mapper,
+  ) {}
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
@@ -20,8 +29,10 @@ export class AuthController {
 
   @Get('me')
   @Header('content-type', 'application/json')
-  @UseGuards(AuthGuard('jwt'))
-  async me(@Request() req) {
-    return req.user;
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async me(@GetUserInfo() user: User) {
+    return this.mapper.map(user, User, UserDTO, {
+      extraArgs: () => ({ include: ['roles'] }),
+    });
   }
 }

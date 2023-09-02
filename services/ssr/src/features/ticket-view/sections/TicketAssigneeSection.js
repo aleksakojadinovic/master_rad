@@ -10,8 +10,7 @@ import UserAssignForm from '../components/UserAssignForm';
 
 function TicketAssigneeSection({ ticket }) {
   const intl = useIntl();
-  const user = useSelector(selectGetMeQueryResponse);
-  const isCustomer = user.roles.map(({ name }) => name).includes('customer');
+  const { isCustomer } = useSelector(selectGetMeQueryResponse);
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -19,12 +18,12 @@ function TicketAssigneeSection({ ticket }) {
     fixedCacheKey: 'ticket-view-page',
   });
 
-  const handleUnassignUser = (user) => {
-    updateTicket({ id: ticket.id, removeAssignees: [user.id] });
+  const handleUnassignUser = (assignedUser) => {
+    updateTicket({ id: ticket.id, removeAssignees: [assignedUser.id] });
   };
 
-  const handleAssignUser = (user) => {
-    updateTicket({ id: ticket.id, addAssignees: [user.id] });
+  const handleAssignUser = (newUser) => {
+    updateTicket({ id: ticket.id, addAssignees: [newUser.id] });
   };
 
   if (isCustomer) {
@@ -36,8 +35,8 @@ function TicketAssigneeSection({ ticket }) {
       {isVisible && (
         <UserAssignForm
           onClose={() => setIsVisible(false)}
-          onSelect={(user) => {
-            handleAssignUser(user);
+          onSelect={(selectedUser) => {
+            handleAssignUser(selectedUser);
             setIsVisible(false);
           }}
         />
