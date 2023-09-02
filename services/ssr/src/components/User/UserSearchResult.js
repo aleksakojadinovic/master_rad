@@ -76,6 +76,7 @@ function UserSearchResult({ users, onSelectUser = () => {} }) {
             '&:hover': { backgroundColor: theme.palette.grey[200] },
             cursor: 'pointer',
           }}
+          onClick={() => onSelectUser(u)}
         >
           <UserChip user={u} onClick={() => {}} />
         </Box>
