@@ -5,22 +5,46 @@
       "value": "Dashboard"
     }
   ],
+  "api-errors.cannot-assign-customer": [
+    {
+      "type": 0,
+      "value": "You cannot assign a customer to a ticket."
+    }
+  ],
+  "api-errors.duplicate-assignee": [
+    {
+      "type": 0,
+      "value": "This person is already assigned to this ticket."
+    }
+  ],
   "api-errors.generic-error": [
     {
       "type": 0,
-      "value": "Something went wrong. Please contact support"
+      "value": "Something went wrong. Please contact support."
     }
   ],
   "api-errors.ticket-tag-group-name-duplicate-error": [
     {
       "type": 0,
-      "value": "A tag group with this name already exists"
+      "value": "A tag group with this name already exists."
+    }
+  ],
+  "assign.form-title": [
+    {
+      "type": 0,
+      "value": "Assign someone"
     }
   ],
   "click-here": [
     {
       "type": 0,
       "value": "here"
+    }
+  ],
+  "comments.add-comment-placeholder": [
+    {
+      "type": 0,
+      "value": "Add a comment."
     }
   ],
   "create-ticket.success": [
@@ -97,6 +121,12 @@
       "value": "Submit"
     }
   ],
+  "global.cancel": [
+    {
+      "type": 0,
+      "value": "Cancel"
+    }
+  ],
   "global.delete": [
     {
       "type": 0,
@@ -113,6 +143,12 @@
     {
       "type": 0,
       "value": "Language"
+    }
+  ],
+  "global.loadMore": [
+    {
+      "type": 0,
+      "value": "Load More"
     }
   ],
   "global.name": [
@@ -133,10 +169,28 @@
       "value": "Page not found | STS"
     }
   ],
+  "global.roles": [
+    {
+      "type": 0,
+      "value": "Roles"
+    }
+  ],
   "global.save": [
     {
       "type": 0,
       "value": "Save"
+    }
+  ],
+  "global.ticket": [
+    {
+      "type": 0,
+      "value": "ticket"
+    }
+  ],
+  "global.title": [
+    {
+      "type": 0,
+      "value": "Title"
     }
   ],
   "global.yes": [
@@ -245,6 +299,84 @@
       "value": "Successfully updated tags!"
     }
   ],
+  "nav.login-button-text": [
+    {
+      "type": 0,
+      "value": "Log in"
+    }
+  ],
+  "nav.logout-button-text": [
+    {
+      "type": 0,
+      "value": "Log out"
+    }
+  ],
+  "nav.menu-button-text": [
+    {
+      "type": 0,
+      "value": "Menu"
+    }
+  ],
+  "nav.profile-button-text": [
+    {
+      "type": 0,
+      "value": "Profile"
+    }
+  ],
+  "notification-payloads.assigned-notification": [
+    {
+      "type": 0,
+      "value": "You have been assigned to"
+    }
+  ],
+  "notifications-payloads.comment-added-notification.ticket": [
+    {
+      "type": 1,
+      "value": "ticketTitle"
+    }
+  ],
+  "notifications-titles.assigned-notification": [
+    {
+      "type": 0,
+      "value": "Assigned to you"
+    }
+  ],
+  "notifications-titles.comment-added-notification": [
+    {
+      "type": 0,
+      "value": "New comment"
+    }
+  ],
+  "notifications-titles.default": [
+    {
+      "type": 0,
+      "value": "A notification"
+    }
+  ],
+  "notifications.action-open-ticket": [
+    {
+      "type": 0,
+      "value": "Open ticket"
+    }
+  ],
+  "notifications.actions-mark-read": [
+    {
+      "type": 0,
+      "value": "Mark as read"
+    }
+  ],
+  "notifications.no-notifications": [
+    {
+      "type": 0,
+      "value": "No notifications found."
+    }
+  ],
+  "notifications.preview-not-available": [
+    {
+      "type": 0,
+      "value": "Preview not available"
+    }
+  ],
   "query-status.error": [
     {
       "type": 0,
@@ -255,6 +387,16 @@
     {
       "type": 0,
       "value": "Success"
+    }
+  ],
+  "query-status.update-successful-x": [
+    {
+      "type": 0,
+      "value": "Successfuly updated "
+    },
+    {
+      "type": 1,
+      "value": "x"
     }
   ],
   "roles.administrator": [
@@ -347,10 +489,28 @@
       "value": "Who can remove these tags?"
     }
   ],
+  "tags.who-can-see-text": [
+    {
+      "type": 0,
+      "value": "Who can see these tags?"
+    }
+  ],
   "ticket-status.closed": [
     {
       "type": 0,
       "value": "Closed"
+    }
+  ],
+  "ticket-status.in-progress": [
+    {
+      "type": 0,
+      "value": "In progress"
+    }
+  ],
+  "ticket-status.in-resolved": [
+    {
+      "type": 0,
+      "value": "Resolved"
     }
   ],
   "ticket-status.new": [
@@ -359,10 +519,36 @@
       "value": "New"
     }
   ],
+  "ticket-status.not-allowed-note": [
+    {
+      "type": 0,
+      "value": "This is only allowed to "
+    },
+    {
+      "type": 1,
+      "value": "roles"
+    }
+  ],
   "ticket-status.open": [
     {
       "type": 0,
       "value": "Open"
+    }
+  ],
+  "ticket-staus.change-status": [
+    {
+      "type": 0,
+      "value": "Change status"
+    }
+  ],
+  "ticket-stauts.move-to-status": [
+    {
+      "type": 0,
+      "value": "Move to "
+    },
+    {
+      "type": 1,
+      "value": "status"
     }
   ]
 }

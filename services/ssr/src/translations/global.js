@@ -53,4 +53,8 @@ export const globalMessages = defineMessages({
     id: 'global.ticket',
     defaultMessage: 'ticket',
   },
+  title: {
+    id: 'global.title',
+    defaultMessage: 'Title',
+  },
 });

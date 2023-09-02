@@ -77,7 +77,7 @@ function CreateTicket() {
       </Typography>
       <TextField
         fullWidth
-        placeholder="Title"
+        placeholder={createTicketMessages.ticketTitleText}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
