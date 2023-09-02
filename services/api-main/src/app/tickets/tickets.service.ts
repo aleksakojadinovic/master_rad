@@ -210,8 +210,13 @@ export class TicketsService extends BaseService {
 
     await ticket.save();
 
-    notifications.push(commentNotification);
-    notifications.push(addAssigneeNotification);
+    if (commentNotification) {
+      notifications.push(commentNotification);
+    }
+
+    if (addAssigneeNotification) {
+      notifications.push(addAssigneeNotification);
+    }
 
     await this.notificationsService.emitNotifications(...notifications);
 
@@ -327,45 +332,46 @@ export class TicketsService extends BaseService {
     groupId: string,
     timestamp: Date,
   ): Notification | null {
-    if (dto.comment != null && dto.comment.length > 0) {
-      const entry = new TicketHistoryEntryCommentAdded(
-        dto.comment,
-        new mongoose.Types.ObjectId().toString(),
-      );
-      ticket.history.push(
-        TicketHistoryItem.create({
-          groupId,
-          timestamp,
-          initiator: user,
-          entry,
-        }),
-      );
-      const notification = NotificationFactory.create((builder) =>
-        builder
-          .forUsers(
-            ticket.assignees.filter(
-              (assignee) =>
-                (assignee as unknown as ObjectId).toString() !==
-                user._id.toString(),
-            ),
-          )
-          .forUsers(
-            user._id.toString() !==
-              (ticket.createdBy as unknown as Types.ObjectId).toString()
-              ? [ticket.createdBy]
-              : [],
-          )
-          .hasPayload('comment_added', (commentBuilder) =>
-            commentBuilder
-              .atTicket(ticket)
-              .byUser(user)
-              .hasCommentId(entry.commentId),
-          ),
-      );
-
-      return notification;
+    if (dto.comment == null || dto.comment.length === 0) {
+      return null;
     }
-    return null;
+    const entry = new TicketHistoryEntryCommentAdded(
+      dto.comment,
+      new mongoose.Types.ObjectId().toString(),
+    );
+    ticket.history.push(
+      TicketHistoryItem.create({
+        groupId,
+        timestamp,
+        initiator: user,
+        entry,
+      }),
+    );
+
+    const notification = NotificationFactory.create((builder) =>
+      builder
+        .forUsers(
+          ticket.assignees.filter(
+            (assignee) =>
+              (assignee as unknown as ObjectId).toString() !==
+              user._id.toString(),
+          ),
+        )
+        .forUsers(
+          user._id.toString() !==
+            (ticket.createdBy as unknown as Types.ObjectId).toString()
+            ? [ticket.createdBy]
+            : [],
+        )
+        .hasPayload('comment_added', (commentBuilder) =>
+          commentBuilder
+            .atTicket(ticket)
+            .byUser(user)
+            .hasCommentId(entry.commentId),
+        ),
+    );
+
+    return notification;
   }
 
   private async updateTicketAddAssignees(
@@ -375,48 +381,59 @@ export class TicketsService extends BaseService {
     groupId: string,
     timestamp: Date,
   ): Promise<Notification | null> {
-    if (dto.addAssignees != null && dto.addAssignees.length > 0) {
-      const assignees: User[] = [];
-      for (const assigneeId of dto.addAssignees) {
-        const assigneeUser = await this.usersService.findOne(assigneeId);
-        if (!assigneeUser) {
-          throw new AssigneeNotFoundError();
-        }
-        if (assigneeUser.hasRole('customer')) {
-          throw new CannotAssignCustomerError(assigneeId);
-        }
-        if (
-          ticket.assignees
-            .map((user) => user._id.toString())
-            .includes(assigneeId)
-        ) {
-          throw new DuplicateAssigneeError(assigneeId);
-        }
-        assignees.push(assigneeUser);
-      }
-      const entry = new TicketHistoryEntryAssigneesAdded(dto.addAssignees);
-
-      ticket.history.push(
-        TicketHistoryItem.create({
-          groupId,
-          timestamp,
-          initiator: user,
-          entry,
-        }),
-      );
-      for (const a of assignees) {
-        ticket.assignees.push(a);
-      }
-      const notification = NotificationFactory.create((builder) =>
-        builder
-          .forUsers(assignees)
-          .hasPayload('assigned', (assignBuilder) =>
-            assignBuilder.atTicket(ticket).byUser(user),
-          ),
-      );
-      return notification;
+    if (dto.addAssignees == null || dto.addAssignees.length == 0) {
+      return null;
     }
-    return null;
+    const assignees: User[] = [];
+    for (const assigneeId of dto.addAssignees) {
+      const assigneeUser = await this.usersService.findOne(assigneeId);
+      if (!assigneeUser) {
+        throw new AssigneeNotFoundError();
+      }
+      if (assigneeUser.hasRole('customer')) {
+        throw new CannotAssignCustomerError(assigneeId);
+      }
+      if (
+        ticket.assignees.map((user) => user._id.toString()).includes(assigneeId)
+      ) {
+        throw new DuplicateAssigneeError(assigneeId);
+      }
+      assignees.push(assigneeUser);
+    }
+    const entry = new TicketHistoryEntryAssigneesAdded(dto.addAssignees);
+
+    ticket.history.push(
+      TicketHistoryItem.create({
+        groupId,
+        timestamp,
+        initiator: user,
+        entry,
+      }),
+    );
+    for (const a of assignees) {
+      ticket.assignees.push(a);
+    }
+
+    const usersToNotify = assignees.filter(
+      (assignee) => assignee._id.toString() !== user._id.toString(),
+    );
+
+    if (usersToNotify.length == 0) {
+      return null;
+    }
+
+    const notification = NotificationFactory.create((builder) =>
+      builder
+        .forUsers(
+          assignees.filter(
+            (assignee) => assignee._id.toString() !== user._id.toString(),
+          ),
+        )
+        .hasPayload('assigned', (assignBuilder) =>
+          assignBuilder.atTicket(ticket).byUser(user),
+        ),
+    );
+    return notification;
   }
 
   private async updateTicketRemoveAssignees(
