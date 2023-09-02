@@ -1,7 +1,7 @@
 import { TicketStatus } from '@/enums/tickets';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React from 'react';
-import TicketStatusBadge from '../Ticket/TicketStatusBadge';
+import TicketStatusBadge from '../../features/ticket-view/components/TicketStatusBadge';
 
 const TICKET_STATUS_VALUES = [
   TicketStatus.NEW,

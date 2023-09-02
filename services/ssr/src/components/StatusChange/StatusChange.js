@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import React from 'react';
 import UserChip from '../User/UserChip';
 import { formatDate } from '@/utils';
-import TicketStatusBadge from '../Ticket/TicketStatusBadge';
+import TicketStatusBadge from '../../features/ticket-view/components/TicketStatusBadge';
 import { TicketStatus } from '@/enums/tickets';
 
 export default function StatusChange({

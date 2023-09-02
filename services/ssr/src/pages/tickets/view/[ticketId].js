@@ -4,7 +4,7 @@ import {
   ticketsSlice,
   useGetTicketQuery,
 } from '@/api/tickets';
-import Ticket from '@/components/Ticket/Ticket';
+import Ticket from '@/features/ticket-view/Ticket';
 import { wrapper } from '@/redux/store';
 import { getTicketViewQueryParams } from '@/utils/params';
 import Head from 'next/head';

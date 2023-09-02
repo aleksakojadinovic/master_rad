@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
 import UserChip from '../User/UserChip';
-import TicketStatusBadge from '../Ticket/TicketStatusBadge';
+import TicketStatusBadge from '../../features/ticket-view/components/TicketStatusBadge';
 import Link from 'next/link';
 
 export default function TicketCard({ ticket }) {
