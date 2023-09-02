@@ -5,16 +5,34 @@
       "value": "Kontrolna tabla"
     }
   ],
+  "api-errors.cannot-assign-customer": [
+    {
+      "type": 0,
+      "value": "Ne možete dodeliti korisnika tiketu."
+    }
+  ],
+  "api-errors.duplicate-assignee": [
+    {
+      "type": 0,
+      "value": "Ova osoba je već dodeljena ovom tiketu."
+    }
+  ],
   "api-errors.generic-error": [
     {
       "type": 0,
-      "value": "Došlo je do greške. Molimo vas da kontaktirate podršku"
+      "value": "Došlo je do greške. Molimo kontaktirajte podršku."
     }
   ],
   "api-errors.ticket-tag-group-name-duplicate-error": [
     {
       "type": 0,
-      "value": "Grupa oznaka sa ovim imenom već postoji"
+      "value": "Grupa oznaka sa ovim imenom već postoji."
+    }
+  ],
+  "assign.form-title": [
+    {
+      "type": 0,
+      "value": "Dodeli nekoga"
     }
   ],
   "click-here": [
@@ -23,10 +41,16 @@
       "value": "ovde"
     }
   ],
+  "comments.add-comment-placeholder": [
+    {
+      "type": 0,
+      "value": "Dodajte komentar."
+    }
+  ],
   "create-ticket.success": [
     {
       "type": 0,
-      "value": "Tiket je uspešno kreiran, možete ga videti "
+      "value": "Tiket uspešno kreiran, možete ga videti "
     },
     {
       "type": 1,
@@ -70,7 +94,7 @@
   "dialogs.success": [
     {
       "type": 0,
-      "value": "Operacija je uspešna"
+      "value": "Operacija uspešna"
     }
   ],
   "forms.page": [
@@ -94,7 +118,13 @@
   "forms.submit": [
     {
       "type": 0,
-      "value": "Podnesi"
+      "value": "Potvrdi"
+    }
+  ],
+  "global.cancel": [
+    {
+      "type": 0,
+      "value": "Otkaži"
     }
   ],
   "global.delete": [
@@ -115,6 +145,12 @@
       "value": "Jezik"
     }
   ],
+  "global.loadMore": [
+    {
+      "type": 0,
+      "value": "Učitaj više"
+    }
+  ],
   "global.name": [
     {
       "type": 0,
@@ -133,10 +169,28 @@
       "value": "Stranica nije pronađena | STS"
     }
   ],
+  "global.roles": [
+    {
+      "type": 0,
+      "value": "Uloge"
+    }
+  ],
   "global.save": [
     {
       "type": 0,
       "value": "Sačuvaj"
+    }
+  ],
+  "global.ticket": [
+    {
+      "type": 0,
+      "value": "tiket"
+    }
+  ],
+  "global.title": [
+    {
+      "type": 0,
+      "value": "Naslov"
     }
   ],
   "global.yes": [
@@ -160,13 +214,13 @@
   "manage-tags.create-error": [
     {
       "type": 0,
-      "value": "Greška pri kreiranju oznaka!"
+      "value": "Greška prilikom kreiranja oznaka!"
     }
   ],
   "manage-tags.create-success": [
     {
       "type": 0,
-      "value": "Oznake su uspešno kreirane!"
+      "value": "Oznake uspešno kreirane!"
     }
   ],
   "manage-tags.creating-loading": [
@@ -178,7 +232,7 @@
   "manage-tags.edit-breadcrumb": [
     {
       "type": 0,
-      "value": "Izmena oznake \""
+      "value": "Uređivanje oznake „"
     },
     {
       "type": 1,
@@ -186,13 +240,13 @@
     },
     {
       "type": 0,
-      "value": "\""
+      "value": "“"
     }
   ],
   "manage-tags.edit-single": [
     {
       "type": 0,
-      "value": "Izmena oznake \""
+      "value": "Uredi oznaku „"
     },
     {
       "type": 1,
@@ -200,13 +254,13 @@
     },
     {
       "type": 0,
-      "value": "\"| STS"
+      "value": "“ | STS"
     }
   ],
   "manage-tags.home-breadcrumb": [
     {
       "type": 0,
-      "value": "Upravljanje oznakama"
+      "value": "Upravljaj oznakama"
     }
   ],
   "manage-tags.new-tag-group-placeholder": [
@@ -230,7 +284,7 @@
   "manage-tags.update-error": [
     {
       "type": 0,
-      "value": "Greška pri ažuriranju oznaka!"
+      "value": "Greška prilikom ažuriranja oznaka!"
     }
   ],
   "manage-tags.update-loading": [
@@ -242,7 +296,85 @@
   "manage-tags.update-success": [
     {
       "type": 0,
-      "value": "Oznake su uspešno ažurirane!"
+      "value": "Oznake uspešno ažurirane!"
+    }
+  ],
+  "nav.login-button-text": [
+    {
+      "type": 0,
+      "value": "Prijavi se"
+    }
+  ],
+  "nav.logout-button-text": [
+    {
+      "type": 0,
+      "value": "Odjavi se"
+    }
+  ],
+  "nav.menu-button-text": [
+    {
+      "type": 0,
+      "value": "Meni"
+    }
+  ],
+  "nav.profile-button-text": [
+    {
+      "type": 0,
+      "value": "Profil"
+    }
+  ],
+  "notification-payloads.assigned-notification": [
+    {
+      "type": 0,
+      "value": "Dodeljeni ste za"
+    }
+  ],
+  "notifications-payloads.comment-added-notification.ticket": [
+    {
+      "type": 1,
+      "value": "ticketTitle"
+    }
+  ],
+  "notifications-titles.assigned-notification": [
+    {
+      "type": 0,
+      "value": "Dodeljeno vama"
+    }
+  ],
+  "notifications-titles.comment-added-notification": [
+    {
+      "type": 0,
+      "value": "Novi komentar"
+    }
+  ],
+  "notifications-titles.default": [
+    {
+      "type": 0,
+      "value": "Obaveštenje"
+    }
+  ],
+  "notifications.action-open-ticket": [
+    {
+      "type": 0,
+      "value": "Otvori tiket"
+    }
+  ],
+  "notifications.actions-mark-read": [
+    {
+      "type": 0,
+      "value": "Označi kao pročitano"
+    }
+  ],
+  "notifications.no-notifications": [
+    {
+      "type": 0,
+      "value": "Nema pronađenih obaveštenja."
+    }
+  ],
+  "notifications.preview-not-available": [
+    {
+      "type": 0,
+      "value": "Pregled nije dostupan"
     }
   ],
   "query-status.error": [
@@ -255,6 +387,16 @@
     {
       "type": 0,
       "value": "Uspeh"
+    }
+  ],
+  "query-status.update-successful-x": [
+    {
+      "type": 0,
+      "value": "Uspešno ažurirano "
+    },
+    {
+      "type": 1,
+      "value": "x"
     }
   ],
   "roles.administrator": [
@@ -338,13 +480,19 @@
   "tags.who-can-add-text": [
     {
       "type": 0,
-      "value": "Ko može da dodaje ove oznake?"
+      "value": "Ko može dodavati ove oznake?"
     }
   ],
   "tags.who-can-remove-text": [
     {
       "type": 0,
-      "value": "Ko može da ukloni ove oznake?"
+      "value": "Ko može uklanjati ove oznake?"
+    }
+  ],
+  "tags.who-can-see-text": [
+    {
+      "type": 0,
+      "value": "Ko može videti ove oznake?"
     }
   ],
   "ticket-status.closed": [
@@ -353,16 +501,54 @@
       "value": "Zatvoreno"
     }
   ],
+  "ticket-status.in-progress": [
+    {
+      "type": 0,
+      "value": "U toku"
+    }
+  ],
+  "ticket-status.in-resolved": [
+    {
+      "type": 0,
+      "value": "Rešeno"
+    }
+  ],
   "ticket-status.new": [
     {
       "type": 0,
       "value": "Novo"
     }
   ],
+  "ticket-status.not-allowed-note": [
+    {
+      "type": 0,
+      "value": "Ovo je dozvoljeno samo "
+    },
+    {
+      "type": 1,
+      "value": "roles"
+    }
+  ],
   "ticket-status.open": [
     {
       "type": 0,
       "value": "Otvoreno"
+    }
+  ],
+  "ticket-staus.change-status": [
+    {
+      "type": 0,
+      "value": "Promeni status"
+    }
+  ],
+  "ticket-stauts.move-to-status": [
+    {
+      "type": 0,
+      "value": "Premesti u "
+    },
+    {
+      "type": 1,
+      "value": "status"
     }
   ]
 }
