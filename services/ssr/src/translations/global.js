@@ -45,4 +45,8 @@ export const globalMessages = defineMessages({
     id: 'global.loadMore',
     defaultMessage: 'Load More',
   },
+  cancel: {
+    id: 'global.cancel',
+    defaultMessage: 'Cancel',
+  },
 });
