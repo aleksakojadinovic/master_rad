@@ -56,6 +56,8 @@ export class NotificationsRepository {
   }
 
   findNotificationById(id: string): Promise<NotificationDocument> {
-    return this.notificationModel.findById(id);
+    return this.notificationModel
+      .findById(id)
+      .populate(NotificationsRepository.POPULATE);
   }
 }

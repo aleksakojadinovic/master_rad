@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
 import { Notification } from './schema/notification.schema';
 import { User } from '../users/schema/user.schema';
 import { NotificationQueryDTO } from './dto/notification-query.dto';
@@ -66,7 +65,7 @@ export class NotificationsService extends BaseService {
 
     if (
       !notification.users
-        .map((user) => (user as Types.ObjectId).toString())
+        .map((user) => user._id.toString())
         .includes(user._id.toString())
     ) {
       throw new NotificationNotFoundError();
