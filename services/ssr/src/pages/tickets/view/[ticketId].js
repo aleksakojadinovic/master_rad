@@ -61,13 +61,15 @@ export const getServerSideProps = wrapper.getServerSideProps(
       store.dispatch(ticketsSlice.util.getRunningQueriesThunk()),
     );
 
-    const { isError } = selectGetTicketQueryIndicators(
-      store.getState(),
-      ticketId,
-    );
+    const indicators = selectGetTicketQueryIndicators(store.getState(), {
+      id: ticketId,
+      ...getTicketViewQueryParams(),
+    });
+
+    console.log({ indicators });
 
     // TOOD: This doesnt work for some reason
-    if (isError) {
+    if (indicators.isError) {
       return {
         redirect: {
           destination: '/404',

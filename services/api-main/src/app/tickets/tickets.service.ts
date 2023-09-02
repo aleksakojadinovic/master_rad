@@ -131,6 +131,14 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
+    const isCustomer = user.roles.map(({ name }) => name).includes('customer');
+    const isTicketOwner =
+      ticket.createdBy._id.toString() === user._id.toString();
+
+    if (isCustomer && !isTicketOwner) {
+      throw new TicketNotFoundError(id);
+    }
+
     this.stripTags(ticket, user);
 
     return ticket;

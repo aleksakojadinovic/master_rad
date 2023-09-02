@@ -38,7 +38,8 @@ export const wrapUser = (user) => {
 
   const isLoggedIn = !!user;
 
-  const hasRole = (...conditionRoles) => {
+  const hasRole = (conditionRoles) => {
+    // debugger;
     let conditionRoleIdentifiers = [];
     if (typeof conditionRoles[0] === 'object') {
       conditionRoleIdentifiers = conditionRoles.map(({ id }) => id);
@@ -52,10 +53,10 @@ export const wrapUser = (user) => {
     );
   };
 
-  const isAgent = hasRole('agent');
-  const isCustomer = hasRole('customer');
-  const isAdministator = hasRole('administrator');
-  const isSuperAdministrator = hasRole('superadministrator');
+  const isAgent = hasRole(['agent']);
+  const isCustomer = hasRole(['customer']);
+  const isAdministator = hasRole(['administrator']);
+  const isSuperAdministrator = hasRole(['superadministrator']);
 
   return {
     id,

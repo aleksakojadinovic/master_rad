@@ -41,7 +41,6 @@ export default createApi({
     const resolvedArgs = { ...args };
 
     const result = await baseQuery(resolvedArgs, api, extraOptions);
-    console.log({ result });
     if (result.data) {
       return { ...result, data: camelize(result.data) };
     }
