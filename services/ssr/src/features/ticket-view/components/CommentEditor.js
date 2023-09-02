@@ -1,7 +1,10 @@
+import { commentMessages } from '@/translations/comment';
 import { Box, Button, TextareaAutosize } from '@mui/material';
 import React, { Fragment, useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 
 function CommentEditor({ onSubmit, isSubmitDisabled, isSuccess }) {
+  const intl = useIntl();
   const [comment, setComment] = useState('');
 
   const handleChange = (e) => setComment(e.target.value);
@@ -18,7 +21,7 @@ function CommentEditor({ onSubmit, isSubmitDisabled, isSuccess }) {
     <Fragment>
       <TextareaAutosize
         minRows={10}
-        placeholder="Add a comment..."
+        placeholder={intl.formatMessage(commentMessages.addCommentPlaceholder)}
         style={{ width: '100%' }}
         value={comment}
         onChange={handleChange}

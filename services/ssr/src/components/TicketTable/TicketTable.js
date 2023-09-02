@@ -5,7 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import TicketStatusBadge from '../Ticket/TicketStatusBadge';
+import TicketStatusBadge from '../../features/ticket-view/components/TicketStatusBadge';
 import { Typography, useTheme } from '@mui/material';
 import UserChip from '../User/UserChip';
 import Link from 'next/link';

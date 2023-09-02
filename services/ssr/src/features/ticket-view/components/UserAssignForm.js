@@ -2,9 +2,9 @@ import { assignMessages } from '@/translations/assign';
 import { Box, Modal, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import UserSearchForm from './UsersSearchForm';
+import UserSearchForm from '../../../components/User/UsersSearchForm';
 import { useGetUsersQuery } from '@/api/users';
-import UserSearchResult from './UserSearchResult';
+import UserSearchResult from '../../../components/User/UserSearchResult';
 
 const style = {
   position: 'absolute',

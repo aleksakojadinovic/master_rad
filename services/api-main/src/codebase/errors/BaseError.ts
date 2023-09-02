@@ -5,7 +5,7 @@ export class BaseError {
     return this.constructor.name;
   }
 
-  public getPayload() {
+  public getPayload(): any {
     return {
       message: this.message,
       errorType: this.getName(),

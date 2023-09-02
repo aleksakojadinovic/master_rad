@@ -2,6 +2,8 @@ export const TicketStatus = {
   NEW: 'NEW',
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
+  RESOLVED: 'RESOLVED',
+  IN_PROGRESS: 'IN_PROGRESS',
 };
 
 export const TicketStatusText = {

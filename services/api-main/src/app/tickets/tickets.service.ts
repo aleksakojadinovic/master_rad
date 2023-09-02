@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Ticket } from 'src/app/tickets/schema/ticket.schema';
+import { Ticket, TicketDocument } from 'src/app/tickets/schema/ticket.schema';
 import mongoose, { Model, ObjectId, Types, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/app/users/users.service';
 import { v4 as uuid } from 'uuid';
@@ -37,6 +37,8 @@ import { TooSoonToCreateAnotherTicketError } from './errors/TooSoonToCreateAnoth
 import { NotificationFactory } from '../notifications/factory/notification.factory';
 import { Notification } from '../notifications/schema/notification.schema';
 import { NotificationsService } from '../notifications/notifications.service';
+import { TICKET_STATUS_GRAPH } from './schema/ticket-status.map';
+import { NotAllowedToChangeToThisStatusError } from './errors/NotAllowedToChangeToThisStatus';
 import { TicketsRepository } from './tickets.repository';
 
 @Injectable()
@@ -129,6 +131,14 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
+    const isCustomer = user.roles.map(({ name }) => name).includes('customer');
+    const isTicketOwner =
+      ticket.createdBy._id.toString() === user._id.toString();
+
+    if (isCustomer && !isTicketOwner) {
+      throw new TicketNotFoundError(id);
+    }
+
     this.stripTags(ticket, user);
 
     return ticket;
@@ -145,6 +155,48 @@ export class TicketsService extends BaseService {
     const creatorId = ticket.createdBy._id.toString();
 
     return user._id.toString() === creatorId.toString();
+  }
+
+  updateTicketStatus(
+    ticket: TicketDocument,
+    user: User,
+    dto: UpdateTicketDto,
+    groupId: any,
+    timestamp: any,
+  ) {
+    if (!dto.status) {
+      return;
+    }
+
+    const currentStatus = ticket.status;
+    const targetStatus = dto.status;
+
+    // TODO: Imma refactor so that you can only have one role
+    const role = user.roles[0].name;
+
+    const canChange = TICKET_STATUS_GRAPH[currentStatus].find((entry) => {
+      return entry.status === targetStatus && entry.roles.includes(role);
+    });
+
+    if (!canChange) {
+      throw new NotAllowedToChangeToThisStatusError(
+        currentStatus.toString(),
+        targetStatus.toString(),
+      );
+    }
+
+    const entry = new TicketHistoryEntryStatusChange(targetStatus);
+
+    ticket.history.push(
+      TicketHistoryItem.create({
+        groupId,
+        timestamp,
+        initiator: user,
+        entry,
+      }),
+    );
+
+    ticket.status = targetStatus;
   }
 
   async update(id: string, user: User, updateTicketDto: UpdateTicketDto) {

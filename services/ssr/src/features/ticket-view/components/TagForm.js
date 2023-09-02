@@ -1,16 +1,15 @@
 import React, { useMemo } from 'react';
-import TagPicker from '../TagPicker/TagPicker';
+import TagPicker from '../../../components/TagPicker/TagPicker';
 import { useGetTicketTagsQuery } from '@/api/ticket-tag-system';
 import { Box, Typography } from '@mui/material';
-import TagChip from '../TagChip/TagChip';
+import TagChip from '../../../components/TagChip/TagChip';
 import { useSelector } from 'react-redux';
 import { selectGetMeQueryResponse } from '@/api/auth';
 import _ from 'lodash';
 
-// TODO: Too much coupling, this should be two components - one for tag list one for picker
 function TagForm({ ticketTags, onSelect, onDelete }) {
   const user = useSelector(selectGetMeQueryResponse);
-  const roleIds = user.roles.map(({ Id }) => Id);
+  const roleIds = user.roles.map(({ id }) => id);
 
   const { data: tags } = useGetTicketTagsQuery({ includes: 'group' });
 

@@ -1,9 +1,12 @@
-import { TicketStatus, TicketStatusText } from '@/enums/tickets';
+import { TicketStatus } from '@/enums/tickets';
+import { ticketStatusMessages } from '@/translations/statuses';
 import { Box, Chip } from '@mui/material';
 import React from 'react';
+import { useIntl } from 'react-intl';
 
 export default function TicketStatusBadge({ status }) {
-  const displayText = TicketStatusText[status];
+  const intl = useIntl();
+  const displayText = intl.formatMessage(ticketStatusMessages[status]);
 
   const resolveChip = () => {
     switch (status.toString()) {
@@ -26,6 +29,24 @@ export default function TicketStatusBadge({ status }) {
           />
         );
       case TicketStatus.CLOSED:
+        return (
+          <Chip
+            label={displayText}
+            size="small"
+            color="error"
+            variant="outlined"
+          />
+        );
+      case TicketStatus.IN_PROGRESS:
+        return (
+          <Chip
+            label={displayText}
+            size="small"
+            color="info"
+            variant="outlined"
+          />
+        );
+      case TicketStatus.RESOLVED:
         return (
           <Chip
             label={displayText}
