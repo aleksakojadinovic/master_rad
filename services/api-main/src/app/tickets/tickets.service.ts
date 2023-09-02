@@ -227,20 +227,7 @@ export class TicketsService extends BaseService {
     const groupId = uuid();
     const timestamp = new Date();
 
-    if (updateTicketDto.status != null) {
-      const entry = new TicketHistoryEntryStatusChange(updateTicketDto.status);
-
-      ticket.history.push(
-        TicketHistoryItem.create({
-          groupId,
-          timestamp,
-          initiator: user,
-          entry,
-        }),
-      );
-
-      ticket.status = updateTicketDto.status;
-    }
+    this.updateTicketStatus(ticket, user, updateTicketDto, groupId, timestamp);
 
     if (updateTicketDto.body != null) {
       const entry = new TicketHistoryEntryBodyChanged(updateTicketDto.body);
