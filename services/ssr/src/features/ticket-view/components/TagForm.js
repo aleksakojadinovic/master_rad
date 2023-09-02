@@ -7,10 +7,9 @@ import { useSelector } from 'react-redux';
 import { selectGetMeQueryResponse } from '@/api/auth';
 import _ from 'lodash';
 
-// TODO: Too much coupling, this should be two components - one for tag list one for picker
 function TagForm({ ticketTags, onSelect, onDelete }) {
   const user = useSelector(selectGetMeQueryResponse);
-  const roleIds = user.roles.map(({ Id }) => Id);
+  const roleIds = user.roles.map(({ id }) => id);
 
   const { data: tags } = useGetTicketTagsQuery({ includes: 'group' });
 
