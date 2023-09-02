@@ -22,7 +22,6 @@ import { TicketStatus } from './types';
 import { User } from 'src/app/users/schema/user.schema';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
-import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { TicketNotFoundError } from './errors/TicketNotFound';
 import { TicketIdNotValidError } from './errors/TicketIdNotValid';
 import { CannotAssignCustomerError } from './errors/CannotAssignCustomer';
@@ -157,7 +156,87 @@ export class TicketsService extends BaseService {
     return user._id.toString() === creatorId.toString();
   }
 
-  updateTicketStatus(
+  async update(id: string, user: User, dto: UpdateTicketDto) {
+    if (!isValidObjectId(id)) {
+      throw new TicketIdNotValidError(id);
+    }
+
+    const isCustomer = user.roles.map(({ name }) => name).includes('customer');
+
+    const ticket = await this.findOne(id, user);
+
+    if (!ticket) {
+      throw new TicketNotFoundError(id);
+    }
+
+    const isTicketOwner =
+      ticket.createdBy._id.toString() === user._id.toString();
+
+    if (isCustomer && !isTicketOwner) {
+      throw new TicketNotFoundError(id);
+    }
+
+    if (!ticket) {
+      throw new TicketNotFoundError(id);
+    }
+
+    const groupId = uuid();
+    const timestamp = new Date();
+
+    const notifications: Notification[] = [];
+
+    this.updateTicketStatus(ticket, user, dto, groupId, timestamp);
+    this.updateTicketBody(ticket, user, dto, groupId, timestamp);
+    const commentNotification = this.updateTicketAddComment(
+      ticket,
+      user,
+      dto,
+      groupId,
+      timestamp,
+    );
+
+    this.updateTicketTitle(ticket, user, dto, groupId, timestamp);
+
+    const addAssigneeNotification = await this.updateTicketAddAssignees(
+      ticket,
+      user,
+      dto,
+      groupId,
+      timestamp,
+    );
+
+    this.updateTicketRemoveAssignees(ticket, dto);
+    await this.updateTicketTags(ticket, user, dto);
+
+    await ticket.save();
+
+    notifications.push(commentNotification);
+    notifications.push(addAssigneeNotification);
+
+    await this.notificationsService.emitNotifications(...notifications);
+
+    return ticket;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} ticket`;
+  }
+
+  private stripTags(ticket: Ticket, user: User) {
+    const userRoleIds = user.roles.map((role) => role._id.toString());
+    ticket.tags = ticket.tags.filter((tag) => {
+      const canSee = userRoleIds.some((userRoleId) =>
+        tag.group.permissions.canSeeRoles
+          .map(({ _id }) => _id.toString())
+          .includes(userRoleId.toString()),
+      );
+
+      return canSee;
+    });
+    return ticket;
+  }
+
+  private updateTicketStatus(
     ticket: TicketDocument,
     user: User,
     dto: UpdateTicketDto,
@@ -199,38 +278,15 @@ export class TicketsService extends BaseService {
     ticket.status = targetStatus;
   }
 
-  async update(id: string, user: User, updateTicketDto: UpdateTicketDto) {
-    if (!isValidObjectId(id)) {
-      throw new TicketIdNotValidError(id);
-    }
-
-    const userRoleIds = user.roles.map((role) => role._id);
-    const isCustomer = user.roles.map(({ name }) => name).includes('customer');
-
-    const ticket = await this.findOne(id, user);
-
-    if (!ticket) {
-      throw new TicketNotFoundError(id);
-    }
-
-    const isTicketOwner =
-      ticket.createdBy._id.toString() === user._id.toString();
-
-    if (isCustomer && !isTicketOwner) {
-      throw new TicketNotFoundError(id);
-    }
-
-    if (!ticket) {
-      throw new TicketNotFoundError(id);
-    }
-
-    const groupId = uuid();
-    const timestamp = new Date();
-
-    this.updateTicketStatus(ticket, user, updateTicketDto, groupId, timestamp);
-
-    if (updateTicketDto.body != null) {
-      const entry = new TicketHistoryEntryBodyChanged(updateTicketDto.body);
+  private updateTicketBody(
+    ticket: TicketDocument,
+    user: User,
+    dto: UpdateTicketDto,
+    groupId: string,
+    timestamp: Date,
+  ) {
+    if (dto.body != null) {
+      const entry = new TicketHistoryEntryBodyChanged(dto.body);
       ticket.history.push(
         TicketHistoryItem.create({
           groupId,
@@ -239,14 +295,41 @@ export class TicketsService extends BaseService {
           entry,
         }),
       );
-      ticket.body = updateTicketDto.body;
+      ticket.body = dto.body;
     }
+  }
 
-    const notifications: Notification[] = [];
+  private updateTicketTitle(
+    ticket: TicketDocument,
+    user: User,
+    dto: UpdateTicketDto,
+    groupId: string,
+    timestamp: Date,
+  ) {
+    if (dto.title != null) {
+      const entry = new TicketHistoryEntryTitleChanged(dto.title);
+      ticket.history.push(
+        TicketHistoryItem.create({
+          groupId,
+          timestamp,
+          initiator: user,
+          entry,
+        }),
+      );
+      ticket.title = dto.title;
+    }
+  }
 
-    if (updateTicketDto.comment != null && updateTicketDto.comment.length > 0) {
+  private updateTicketAddComment(
+    ticket: TicketDocument,
+    user: User,
+    dto: UpdateTicketDto,
+    groupId: string,
+    timestamp: Date,
+  ): Notification | null {
+    if (dto.comment != null && dto.comment.length > 0) {
       const entry = new TicketHistoryEntryCommentAdded(
-        updateTicketDto.comment,
+        dto.comment,
         new mongoose.Types.ObjectId().toString(),
       );
       ticket.history.push(
@@ -280,28 +363,21 @@ export class TicketsService extends BaseService {
           ),
       );
 
-      notifications.push(notification);
+      return notification;
     }
+    return null;
+  }
 
-    if (updateTicketDto.title != null) {
-      const entry = new TicketHistoryEntryTitleChanged(updateTicketDto.title);
-      ticket.history.push(
-        TicketHistoryItem.create({
-          groupId,
-          timestamp,
-          initiator: user,
-          entry,
-        }),
-      );
-      ticket.title = updateTicketDto.title;
-    }
-
-    if (
-      updateTicketDto.addAssignees != null &&
-      updateTicketDto.addAssignees.length > 0
-    ) {
+  private async updateTicketAddAssignees(
+    ticket: TicketDocument,
+    user: User,
+    dto: UpdateTicketDto,
+    groupId: string,
+    timestamp: Date,
+  ): Promise<Notification | null> {
+    if (dto.addAssignees != null && dto.addAssignees.length > 0) {
       const assignees: User[] = [];
-      for (const assigneeId of updateTicketDto.addAssignees) {
+      for (const assigneeId of dto.addAssignees) {
         const assigneeUser = await this.usersService.findOne(assigneeId);
         if (!assigneeUser) {
           throw new AssigneeNotFoundError();
@@ -318,10 +394,8 @@ export class TicketsService extends BaseService {
         }
         assignees.push(assigneeUser);
       }
-      const entry = new TicketHistoryEntryAssigneesAdded(
-        updateTicketDto.addAssignees,
-      );
-      // Shit, how do I add user id here? It's a POJO not a model :(
+      const entry = new TicketHistoryEntryAssigneesAdded(dto.addAssignees);
+
       ticket.history.push(
         TicketHistoryItem.create({
           groupId,
@@ -340,35 +414,37 @@ export class TicketsService extends BaseService {
             assignBuilder.atTicket(ticket).byUser(user),
           ),
       );
-      notifications.push(notification);
+      return notification;
     }
+    return null;
+  }
 
-    if (
-      updateTicketDto.removeAssignees &&
-      updateTicketDto.removeAssignees.length > 0
-    ) {
+  private async updateTicketRemoveAssignees(
+    ticket: TicketDocument,
+    dto: UpdateTicketDto,
+  ) {
+    if (dto.removeAssignees && dto.removeAssignees.length > 0) {
       ticket.assignees = ticket.assignees.filter(
-        (user) =>
-          !updateTicketDto.removeAssignees.includes(user._id.toString()),
+        (user) => !dto.removeAssignees.includes(user._id.toString()),
       );
-      // TODO: history item
     }
+  }
 
-    const addTags = updateTicketDto.addTags || [];
-    const removeTags = updateTicketDto.removeTags || [];
+  private async updateTicketTags(
+    ticket: TicketDocument,
+    user: User,
+    dto: UpdateTicketDto,
+  ) {
+    const addTags = dto.addTags || [];
+    const removeTags = dto.removeTags || [];
+    const userRoleIds = user.roles.map((role) => role._id.toString());
 
     if (addTags.some((addId) => removeTags.includes(addId))) {
       throw new OverlapInTagIdsError();
     }
 
-    // TODO: Move this check to a util function since it's very repetitive
     if (removeTags.length > 0) {
-      const findDTO = new EntityQueryDTO();
-      findDTO.includes = ['group'];
-      const tagsToRemove = await this.ticketTagService.findMany(
-        removeTags,
-        findDTO,
-      );
+      const tagsToRemove = await this.ticketTagService.findMany(removeTags);
       tagsToRemove.forEach((tag) => {
         if (
           !userRoleIds.some((userRoleId) => {
@@ -388,9 +464,7 @@ export class TicketsService extends BaseService {
     }
 
     if (addTags.length > 0) {
-      const findDTO = new EntityQueryDTO();
-      findDTO.includes = ['group'];
-      const tagsToAdd = await this.ticketTagService.findMany(addTags, findDTO);
+      const tagsToAdd = await this.ticketTagService.findMany(addTags);
       tagsToAdd.forEach((tag) => {
         if (
           !userRoleIds.some((userRoleId) => {
@@ -414,29 +488,5 @@ export class TicketsService extends BaseService {
         ticket.tags.push(tag);
       });
     }
-
-    await ticket.save();
-
-    await this.notificationsService.emitNotifications(...notifications);
-
-    return ticket;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} ticket`;
-  }
-
-  private stripTags(ticket: Ticket, user: User) {
-    const userRoleIds = user.roles.map((role) => role._id.toString());
-    ticket.tags = ticket.tags.filter((tag) => {
-      const canSee = userRoleIds.some((userRoleId) =>
-        tag.group.permissions.canSeeRoles
-          .map(({ _id }) => _id.toString())
-          .includes(userRoleId.toString()),
-      );
-
-      return canSee;
-    });
-    return ticket;
   }
 }

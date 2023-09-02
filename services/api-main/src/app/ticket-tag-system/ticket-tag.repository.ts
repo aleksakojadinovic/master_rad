@@ -23,4 +23,10 @@ export class TicketTagRepository {
   async findAll(): Promise<TicketTagDocument[]> {
     return this.ticketTagModel.find({}).populate(TicketTagRepository.POPULATE);
   }
+
+  async findManyByIds(ids: string[]): Promise<TicketTagDocument[]> {
+    return this.ticketTagModel
+      .find({ _id: { $in: ids } })
+      .populate(TicketTagRepository.POPULATE);
+  }
 }
