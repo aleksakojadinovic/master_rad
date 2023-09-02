@@ -1,6 +1,6 @@
 import { Ticket } from './../../tickets/schema/ticket.schema';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document, Types } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { User } from 'src/app/users/schema/user.schema';
 
 export class CommentAddedNotificationPayload {
