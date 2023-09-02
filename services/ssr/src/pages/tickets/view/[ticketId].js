@@ -4,7 +4,7 @@ import {
   ticketsSlice,
   useGetTicketQuery,
 } from '@/api/tickets';
-import Ticket from '@/features/ticket-view/Ticket';
+import TicketView from '@/features/ticket-view/TicketView';
 import { wrapper } from '@/redux/store';
 import { getTicketViewQueryParams } from '@/utils/params';
 import Head from 'next/head';
@@ -40,7 +40,7 @@ function TicketViewPage() {
       <Head>
         <title>{title}</title>
       </Head>
-      <Ticket ticket={ticket} />
+      <TicketView ticket={ticket} />
     </Fragment>
   );
 }

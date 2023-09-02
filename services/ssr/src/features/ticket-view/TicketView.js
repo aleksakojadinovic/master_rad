@@ -8,7 +8,7 @@ import TicketTagSection from './sections/TicketTagSection';
 import TicketTimelineSection from './sections/TicketTimelineSection';
 import TicketCommentSection from './sections/TicketCommentSection';
 
-export default function Ticket({ ticket }) {
+export default function TicketView({ ticket }) {
   return (
     <Fragment>
       <Card variant="outlined">
