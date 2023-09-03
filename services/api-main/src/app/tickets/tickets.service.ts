@@ -18,7 +18,7 @@ import {
 } from './schema/ticket-history.schema';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketStatus } from './types';
+import { TicketHistoryEntryType, TicketStatus } from './types';
 import { User } from 'src/app/users/schema/user.schema';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
@@ -130,16 +130,15 @@ export class TicketsService extends BaseService {
     if (!ticket) {
       throw new TicketNotFoundError(id);
     }
-
-    const isCustomer = user.roles.map(({ name }) => name).includes('customer');
     const isTicketOwner =
       ticket.createdBy._id.toString() === user._id.toString();
 
-    if (isCustomer && !isTicketOwner) {
+    if (user.isCustomer() && !isTicketOwner) {
       throw new TicketNotFoundError(id);
     }
 
     this.stripTags(ticket, user);
+    this.stripInternalComments(ticket, user);
 
     return ticket;
   }
@@ -518,5 +517,23 @@ export class TicketsService extends BaseService {
         ticket.tags.push(tag);
       });
     }
+  }
+
+  private stripInternalComments(ticket: TicketDocument, user: User) {
+    if (!user.isCustomer()) {
+      return;
+    }
+    console.log(ticket.history.length);
+    ticket.history = ticket.history.filter((item) => {
+      if (item.entryType !== TicketHistoryEntryType.COMMEND_ADDED) {
+        return true;
+      }
+      // console.log(item.entry as TicketHistoryEntryCommentAdded);
+      if ((item.entry as TicketHistoryEntryCommentAdded).isInternal) {
+        return false;
+      }
+      return true;
+    });
+    console.log(ticket.history.length);
   }
 }
