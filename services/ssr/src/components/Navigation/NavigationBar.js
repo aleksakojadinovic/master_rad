@@ -27,8 +27,8 @@ function NavigationBar() {
           />
         </Box>
         <Box display="flex" alignItems="center">
-          <NotificationsMenu />
-          {isLoggedIn && <NavigationUserMenu />}
+          {isLoggedIn && <NotificationsMenu />}
+          <NavigationUserMenu />
         </Box>
       </Box>
     </Fragment>
