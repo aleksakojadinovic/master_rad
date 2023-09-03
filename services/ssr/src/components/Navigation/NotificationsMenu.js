@@ -44,7 +44,6 @@ function NotificationsMenu() {
       <Box>
         {notifications.map((notification) => (
           <MenuItem key={notification.id}>
-            <p>{notification.id}</p>
             <Notification notification={notification} />
           </MenuItem>
         ))}
