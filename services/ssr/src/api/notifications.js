@@ -28,6 +28,23 @@ export const notificationsSlice = api.injectEndpoints({
           action: 'mark_read',
         },
       }),
+      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          api.util.updateQueryData('getNotifications', undefined, (draft) => {
+            draft.notifications = draft.notifications.map((notification) =>
+              notification.id !== id
+                ? notification
+                : { ...notification, readAt: new Date().toString() },
+            );
+            draft.unreadCount--;
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
   }),
   overrideExisting: true,
