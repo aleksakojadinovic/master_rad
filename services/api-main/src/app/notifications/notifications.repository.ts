@@ -17,7 +17,7 @@ export class NotificationsRepository {
   ) {}
 
   private static POPULATE = [
-    { path: 'users', model: 'User' },
+    { path: 'user', model: 'User' },
     { path: 'payload.ticket', model: 'Ticket' },
     { path: 'payload.user', model: 'User' },
   ];

@@ -350,9 +350,11 @@ export class TicketsService extends BaseService {
 
     const usersToNotify: User[] = [];
     usersToNotify.push(
-      ...ticket.assignees.filter((assignee) => assignee._id !== user._id),
+      ...ticket.assignees.filter(
+        (assignee) => assignee._id.toString() !== user._id.toString(),
+      ),
     );
-    if (user._id !== ticket.createdBy._id) {
+    if (user._id.toString() !== ticket.createdBy._id.toString()) {
       usersToNotify.push(ticket.createdBy);
     }
 
@@ -415,7 +417,7 @@ export class TicketsService extends BaseService {
     }
 
     const usersToNotify = assignees.filter(
-      (assignee) => assignee._id !== user._id,
+      (assignee) => assignee._id.toString() !== user._id.toString(),
     );
 
     if (usersToNotify.length == 0) {
