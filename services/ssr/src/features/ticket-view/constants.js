@@ -1,0 +1,1 @@
+export const INTERNAL_TICKET_COLOR = '#FFD1DC';

@@ -14,11 +14,19 @@ export const ticketViewMessages = defineMessages({
     defaultMessage: 'Internal',
   },
   addPublicCommentPlaceholder: {
-    id: 'comments.add-comment-placeholder',
+    id: 'ticket-view.add-comment-placeholder',
     defaultMessage: 'Add a comment.',
   },
   addInternalCommentPlaceholder: {
-    id: 'comments.add-internal-placeholder',
+    id: 'ticket-view.add-internal-placeholder',
     defaultMessage: 'Add an internal comment.',
+  },
+  internalCommentNote: {
+    id: 'ticket-view.internal-comment-note',
+    defaultMessage: 'This is an internal comment, not visible to customer',
+  },
+  internalLabel: {
+    id: 'ticket-view.internal-label',
+    defaultMessage: 'INTERNAL',
   },
 });

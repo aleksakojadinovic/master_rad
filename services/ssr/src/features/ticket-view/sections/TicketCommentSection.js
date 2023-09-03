@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { useIntl } from 'react-intl';
 import { ticketViewMessages } from '@/translations/ticket-view';
+import { INTERNAL_TICKET_COLOR } from '../constants';
 
 function TicketCommentSection({ ticket }) {
   const { isCustomer } = useUser();
@@ -38,7 +39,7 @@ function TicketCommentSection({ ticket }) {
     if (isCustomer) {
       return {};
     }
-    return isInternal ? { backgroundColor: '#FFD1DC' } : {};
+    return isInternal ? { backgroundColor: INTERNAL_TICKET_COLOR } : {};
   }, [isInternal, isCustomer]);
 
   const renderInternalPicker = () => {
