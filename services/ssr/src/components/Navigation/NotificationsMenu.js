@@ -1,22 +1,25 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
-import { Badge, IconButton, Menu, MenuItem } from '@mui/material';
+import { Badge, Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { useGetNotificationsQuery } from '@/api/notifications';
 import Notification from '@/features/notifications/Notification';
 import { getNotificationsParams } from '@/utils/params';
+import { useIntl } from 'react-intl';
+import { globalMessages } from '@/translations/global';
 
 function NotificationsMenu() {
-  const { data: notifications, isSuccess } = useGetNotificationsQuery(
-    getNotificationsParams(),
+  const intl = useIntl();
+  const [page, setPage] = useState(1);
+
+  const { data, isSuccess } = useGetNotificationsQuery(
+    getNotificationsParams(page),
   );
 
-  const unreadCount = useMemo(() => {
-    if (!isSuccess) {
-      return 0;
-    }
-    return notifications.filter(({ readAt }) => readAt === null).length;
-  }, [isSuccess, notifications]);
+  const { notifications, unreadCount } = data ?? {
+    notification: [],
+    unreadCount: 0,
+  };
 
   const [menuAnchorRef, setMenuAnchorRef] = useState(null);
   const [shouldRenderMenu, setShouldRenderMenu] = useState(false);
@@ -37,11 +40,21 @@ function NotificationsMenu() {
     if (!isSuccess) {
       return null;
     }
-    return notifications.map((notification) => (
-      <MenuItem key={notification.id}>
-        <Notification notification={notification} />
-      </MenuItem>
-    ));
+    return (
+      <Box>
+        {notifications.map((notification) => (
+          <MenuItem key={notification.id}>
+            <p>{notification.id}</p>
+            <Notification notification={notification} />
+          </MenuItem>
+        ))}
+        <Box marginTop="12px" marginLeft="12px">
+          <Button onClick={() => setPage((p) => p + 1)}>
+            {intl.formatMessage(globalMessages.loadMore)}
+          </Button>
+        </Box>
+      </Box>
+    );
   };
 
   return (
@@ -49,8 +62,8 @@ function NotificationsMenu() {
       <IconButton onClick={handleMenuButtonClick}>
         <Badge
           badgeContent={unreadCount}
-          color="error" // You can choose another color
-          invisible={unreadCount === 0} // Hides the badge when count is zero
+          color="error"
+          invisible={unreadCount === 0}
         >
           <CircleNotificationsIcon />
         </Badge>

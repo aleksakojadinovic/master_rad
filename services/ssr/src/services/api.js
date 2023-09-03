@@ -46,7 +46,7 @@ export default createApi({
     }
     return result;
   },
-  keepUnusedFor: 1000,
+  keepUnusedFor: 100000,
   endpoints: () => ({}),
   tagTypes: [
     'getTicket',

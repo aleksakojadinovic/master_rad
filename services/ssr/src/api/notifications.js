@@ -7,7 +7,18 @@ export const notificationsSlice = api.injectEndpoints({
         url: '/notifications',
         params,
       }),
-      providesTags: ['notifications'],
+      serializeQueryArgs: ({ endpointName }) => endpointName,
+      merge: (currentCache, newCache) => {
+        return {
+          notifications: [
+            ...currentCache.notifications,
+            ...newCache.notifications,
+          ],
+          unreadCount: newCache.unreadCount,
+        };
+      },
+      forceRefetch: ({ currentArg, previousArg }) =>
+        previousArg === undefined || previousArg.page !== currentArg.page,
     }),
     markNotificationAsRead: builder.mutation({
       query: ({ id }) => ({
@@ -17,7 +28,6 @@ export const notificationsSlice = api.injectEndpoints({
           action: 'mark_read',
         },
       }),
-      invalidatesTags: ['notifications'],
     }),
   }),
   overrideExisting: true,

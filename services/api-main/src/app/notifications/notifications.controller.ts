@@ -50,7 +50,19 @@ export class NotificationsController {
       queryDTO,
       user,
     );
-    return this.mapper.mapArray(notifications, Notification, NotificationDTO);
+
+    const unreadCount = await this.notificationsService.countNewNotifications(
+      user,
+    );
+
+    return {
+      notifications: this.mapper.mapArray(
+        notifications,
+        Notification,
+        NotificationDTO,
+      ),
+      unreadCount,
+    };
   }
 
   @Get(':id')

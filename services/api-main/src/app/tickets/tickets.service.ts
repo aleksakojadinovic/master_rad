@@ -358,8 +358,6 @@ export class TicketsService extends BaseService {
       usersToNotify.push(ticket.createdBy);
     }
 
-    console.log(usersToNotify.map((user) => user.username).join(', '));
-
     const notifications = usersToNotify.map((userToNotify) => {
       return NotificationFactory.create((builder) =>
         builder
