@@ -1,24 +1,30 @@
 import api from '@/services/api';
+import { createSelector } from '@reduxjs/toolkit';
 
 export const notificationsSlice = api.injectEndpoints({
   endpoints: (builder) => ({
     getNotifications: builder.query({
-      query: (params) => ({
+      query: ({ page }) => ({
         url: '/notifications',
-        params,
+        params: {
+          page,
+          perPage: 5,
+          includes: ['ticket', 'user', 'tags'],
+        },
       }),
-      serializeQueryArgs: ({ endpointName }) => endpointName,
-      merge: (currentCache, newCache) => {
-        return {
-          notifications: [
-            ...currentCache.notifications,
-            ...newCache.notifications,
-          ],
-          unreadCount: newCache.unreadCount,
-        };
-      },
-      forceRefetch: ({ currentArg, previousArg }) =>
-        previousArg === undefined || previousArg.page !== currentArg.page,
+      // serializeQueryArgs: ({ endpointName }) => endpointName,
+      // merge: (currentCache, newCache) => {
+      //   return {
+      //     notifications: [
+      //       ...currentCache.notifications,
+      //       ...newCache.notifications,
+      //     ],
+      //     unreadCount: newCache.unreadCount,
+      //   };
+      // },
+      // forceRefetch: ({ currentArg, previousArg }) =>
+      //   previousArg === undefined || previousArg.page !== currentArg.page,
+      providesTags: ['notifications'],
     }),
     markNotificationAsRead: builder.mutation({
       query: ({ id }) => ({
@@ -52,3 +58,10 @@ export const notificationsSlice = api.injectEndpoints({
 
 export const { useGetNotificationsQuery, useMarkNotificationAsReadMutation } =
   notificationsSlice;
+
+export const selectNotificationsByPage = createSelector(
+  [(state) => state, (_, page) => page],
+  (state, page) => {
+    return notificationsSlice.endpoints.getNotifications.select({ page });
+  },
+);

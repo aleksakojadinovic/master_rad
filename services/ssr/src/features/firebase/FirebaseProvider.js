@@ -53,14 +53,7 @@ export function FirebaseProvider({ children }) {
         );
 
         onMessage(messaging, () => {
-          console.log('received message');
-          dispatch(
-            api.util.updateQueryData('getNotifications', undefined, () => {
-              return { notifications: [], unreadCount: 0 };
-            }),
-          );
-          const event = new Event('resetNotificationsPagination');
-          document.dispatchEvent(event);
+          dispatch(api.util.invalidateTags(['notifications']));
         });
 
         firebaseRef.current = app;
