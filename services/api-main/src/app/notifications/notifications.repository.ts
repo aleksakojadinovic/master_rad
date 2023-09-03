@@ -30,7 +30,7 @@ export class NotificationsRepository {
 
   findNotificationsForUserId(userId: string, page = 1, perPage = 10) {
     const query = this.notificationModel
-      .find({ users: { $in: userId } })
+      .find({ user: userId })
       .populate(NotificationsRepository.POPULATE)
       .sort({ createdAt: -1 })
       .skip((page - 1) * perPage)

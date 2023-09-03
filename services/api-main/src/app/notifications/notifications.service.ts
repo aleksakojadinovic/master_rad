@@ -63,11 +63,7 @@ export class NotificationsService extends BaseService {
       throw new NotificationNotFoundError();
     }
 
-    if (
-      !notification.users
-        .map((user) => user._id.toString())
-        .includes(user._id.toString())
-    ) {
+    if (notification.user._id !== user._id) {
       throw new NotificationNotFoundError();
     }
 

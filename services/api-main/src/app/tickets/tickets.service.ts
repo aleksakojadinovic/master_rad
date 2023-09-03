@@ -3,7 +3,7 @@ import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket, TicketDocument } from 'src/app/tickets/schema/ticket.schema';
-import mongoose, { Model, ObjectId, Types, isValidObjectId } from 'mongoose';
+import mongoose, { Model, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/app/users/users.service';
 import { v4 as uuid } from 'uuid';
 import * as moment from 'moment';
@@ -187,7 +187,7 @@ export class TicketsService extends BaseService {
 
     this.updateTicketStatus(ticket, user, dto, groupId, timestamp);
     this.updateTicketBody(ticket, user, dto, groupId, timestamp);
-    const commentNotification = this.updateTicketAddComment(
+    const commentNotifications = this.updateTicketAddComment(
       ticket,
       user,
       dto,
@@ -197,7 +197,7 @@ export class TicketsService extends BaseService {
 
     this.updateTicketTitle(ticket, user, dto, groupId, timestamp);
 
-    const addAssigneeNotification = await this.updateTicketAddAssignees(
+    const addAssigneeNotifications = await this.updateTicketAddAssignees(
       ticket,
       user,
       dto,
@@ -210,12 +210,12 @@ export class TicketsService extends BaseService {
 
     await ticket.save();
 
-    if (commentNotification) {
-      notifications.push(commentNotification);
+    if (commentNotifications) {
+      notifications.push(...commentNotifications);
     }
 
-    if (addAssigneeNotification) {
-      notifications.push(addAssigneeNotification);
+    if (addAssigneeNotifications) {
+      notifications.push(...addAssigneeNotifications);
     }
 
     await this.notificationsService.emitNotifications(...notifications);
@@ -331,7 +331,7 @@ export class TicketsService extends BaseService {
     dto: UpdateTicketDto,
     groupId: string,
     timestamp: Date,
-  ): Notification | null {
+  ): Notification[] | null {
     if (dto.comment == null || dto.comment.length === 0) {
       return null;
     }
@@ -348,30 +348,30 @@ export class TicketsService extends BaseService {
       }),
     );
 
-    const notification = NotificationFactory.create((builder) =>
-      builder
-        .forUsers(
-          ticket.assignees.filter(
-            (assignee) =>
-              (assignee as unknown as ObjectId).toString() !==
-              user._id.toString(),
-          ),
-        )
-        .forUsers(
-          user._id.toString() !==
-            (ticket.createdBy as unknown as Types.ObjectId).toString()
-            ? [ticket.createdBy]
-            : [],
-        )
-        .hasPayload('comment_added', (commentBuilder) =>
-          commentBuilder
-            .atTicket(ticket)
-            .byUser(user)
-            .hasCommentId(entry.commentId),
-        ),
+    const usersToNotify: User[] = [];
+    usersToNotify.push(
+      ...ticket.assignees.filter((assignee) => assignee._id !== user._id),
     );
+    if (user._id !== ticket.createdBy._id) {
+      usersToNotify.push(ticket.createdBy);
+    }
 
-    return notification;
+    console.log(usersToNotify.map((user) => user.username).join(', '));
+
+    const notifications = usersToNotify.map((userToNotify) => {
+      return NotificationFactory.create((builder) =>
+        builder
+          .forUser(userToNotify)
+          .hasPayload('comment_added', (commentBuilder) =>
+            commentBuilder
+              .atTicket(ticket)
+              .byUser(user)
+              .hasCommentId(entry.commentId),
+          ),
+      );
+    });
+
+    return notifications;
   }
 
   private async updateTicketAddAssignees(
@@ -380,7 +380,7 @@ export class TicketsService extends BaseService {
     dto: UpdateTicketDto,
     groupId: string,
     timestamp: Date,
-  ): Promise<Notification | null> {
+  ): Promise<Notification[] | null> {
     if (dto.addAssignees == null || dto.addAssignees.length == 0) {
       return null;
     }
@@ -415,25 +415,24 @@ export class TicketsService extends BaseService {
     }
 
     const usersToNotify = assignees.filter(
-      (assignee) => assignee._id.toString() !== user._id.toString(),
+      (assignee) => assignee._id !== user._id,
     );
 
     if (usersToNotify.length == 0) {
       return null;
     }
 
-    const notification = NotificationFactory.create((builder) =>
-      builder
-        .forUsers(
-          assignees.filter(
-            (assignee) => assignee._id.toString() !== user._id.toString(),
+    const notifications = usersToNotify.map((userToNotify) =>
+      NotificationFactory.create((builder) =>
+        builder
+          .forUser(userToNotify)
+          .hasPayload('assigned', (assignBuilder) =>
+            assignBuilder.atTicket(ticket).byUser(user),
           ),
-        )
-        .hasPayload('assigned', (assignBuilder) =>
-          assignBuilder.atTicket(ticket).byUser(user),
-        ),
+      ),
     );
-    return notification;
+
+    return notifications;
   }
 
   private async updateTicketRemoveAssignees(

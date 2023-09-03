@@ -119,13 +119,13 @@ const PayloadTypeMap: {
 };
 
 export class NotificationBuilder {
-  private users: User[];
+  private user: User;
   private timestamp: Date = new Date();
   private payload: NotificationPayload | null = null;
   private type: string | null = null;
 
-  forUsers(users: User[]) {
-    this.users = [...(this.users ?? []), ...users];
+  forUser(user: User) {
+    this.user = user;
     return this;
   }
 
@@ -150,12 +150,8 @@ export class NotificationBuilder {
   }
 
   build(): Notification {
-    if (this.users === null) {
+    if (this.user === null) {
       throw new Error(`Notification requires target users.`);
-    }
-
-    if (this.users.length === 0) {
-      throw new Error(`Notification target users cannot be empty.`);
     }
 
     if (this.payload === null) {
@@ -164,7 +160,7 @@ export class NotificationBuilder {
 
     const notification = new Notification();
 
-    notification.users = this.users;
+    notification.user = this.user;
     notification.createdAt = this.timestamp;
     notification.payload = this.payload;
     notification.type = this.type;
