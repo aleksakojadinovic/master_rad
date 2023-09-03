@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { Notification } from './schema/notification.schema';
 import { User } from '../users/schema/user.schema';
 import { NotificationQueryDTO } from './dto/notification-query.dto';
@@ -11,7 +10,6 @@ import { NotificationsRepository } from './notifications.repository';
 @Injectable()
 export class NotificationsService extends BaseService {
   constructor(
-    @InjectModel(Notification.name)
     private readonly firebaseService: FirebaseService,
     private readonly notificationsRepository: NotificationsRepository,
   ) {
