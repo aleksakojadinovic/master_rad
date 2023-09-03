@@ -7,13 +7,16 @@ import Notification from '@/features/notifications/Notification';
 import { getNotificationsParams } from '@/utils/params';
 import { useIntl } from 'react-intl';
 import { globalMessages } from '@/translations/global';
+import useUser from '@/hooks/useUser';
 
 function NotificationsMenu() {
+  const { isLoggedIn } = useUser();
   const intl = useIntl();
   const [page, setPage] = useState(1);
 
   const { data, isSuccess } = useGetNotificationsQuery(
     getNotificationsParams(page),
+    { skip: !isLoggedIn },
   );
 
   const { notifications, unreadCount } = data ?? {

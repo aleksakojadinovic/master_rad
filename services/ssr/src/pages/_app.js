@@ -11,8 +11,6 @@ import Serbian from '../../content/compiled-locales/sr.json';
 import { isServer } from '@/utils';
 import Cookies from 'js-cookie';
 import { LanguageProvider } from '@/context/LanguageContext';
-import { notificationsSlice } from '@/api/notifications';
-import { getNotificationsParams } from '@/utils/params';
 import api from '@/services/api';
 
 function MyApp({ Component, pageProps, languageCode }) {
@@ -52,11 +50,11 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
 
     store.dispatch(authSlice.endpoints.getMe.initiate());
 
-    store.dispatch(
-      notificationsSlice.endpoints.getNotifications.initiate(
-        getNotificationsParams(),
-      ),
-    );
+    // store.dispatch(
+    //   notificationsSlice.endpoints.getNotifications.initiate(
+    //     getNotificationsParams(),
+    //   ),
+    // );
 
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
 
