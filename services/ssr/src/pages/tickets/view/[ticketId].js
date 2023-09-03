@@ -66,8 +66,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       ...getTicketViewQueryParams(),
     });
 
-    console.log({ indicators });
-
     // TOOD: This doesnt work for some reason
     if (indicators.isError) {
       return {

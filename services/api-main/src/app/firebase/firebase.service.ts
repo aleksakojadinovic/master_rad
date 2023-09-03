@@ -54,28 +54,15 @@ export class FirebaseService {
   }
 
   async sendNotification(notification: Notification) {
-    const users = notification.users;
     const title = this.parseNotificationType(notification.type);
-    const promises = users.map((user) => {
-      const tokens = (user as User).firebaseTokens;
 
-      if (!tokens || tokens.length === 0) {
-        return Promise.resolve();
-      }
-
-      return firebase.messaging().sendEachForMulticast({
-        tokens,
-        data: {},
-        notification: {
-          title,
-        },
-      });
+    return firebase.messaging().sendEachForMulticast({
+      tokens: notification.user.firebaseTokens,
+      data: {},
+      notification: {
+        title,
+      },
     });
-
-    await Promise.all(promises);
-
-    return [];
-    // return Promise.all(promises);
   }
 
   async sendNotifications(...notifications: Notification[]) {

@@ -8,6 +8,14 @@ import {
   NotificationDocument,
 } from './schema/notification.schema';
 
+export type NotificationFilterType = {
+  userId?: string | null;
+  unread?: boolean | null;
+  createdFrom?: Date | null;
+  createdTo?: Date | null;
+  type?: string | null;
+};
+
 @Injectable()
 export class NotificationsRepository {
   constructor(
@@ -17,7 +25,7 @@ export class NotificationsRepository {
   ) {}
 
   private static POPULATE = [
-    { path: 'users', model: 'User' },
+    { path: 'user', model: 'User' },
     { path: 'payload.ticket', model: 'Ticket' },
     { path: 'payload.user', model: 'User' },
   ];
@@ -28,13 +36,39 @@ export class NotificationsRepository {
       .populate(NotificationsRepository.POPULATE);
   }
 
-  findNotificationsForUserId(userId: string, page = 1, perPage = 10) {
+  findNotifications(
+    filters: NotificationFilterType,
+    sort: any = null,
+    page: number | null = null,
+    perPage: number | null = null,
+  ) {
+    const queryObject: any = {};
+    if (filters.userId) {
+      queryObject.user = filters.userId;
+    }
+    if (filters.type) {
+      queryObject.type = filters.type;
+    }
+
+    if (filters.unread != null) {
+      if (!filters.unread) {
+        queryObject.readAt = { $ne: null };
+      } else {
+        queryObject.readAt = null;
+      }
+    }
+
     const query = this.notificationModel
-      .find({ users: { $in: userId } })
-      .populate(NotificationsRepository.POPULATE)
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * perPage)
-      .limit(perPage);
+      .find(queryObject)
+      .populate(NotificationsRepository.POPULATE);
+
+    if (sort) {
+      query.sort(sort);
+    }
+
+    if (page && perPage) {
+      query.skip((page - 1) * perPage).limit(perPage);
+    }
 
     return query.exec();
   }

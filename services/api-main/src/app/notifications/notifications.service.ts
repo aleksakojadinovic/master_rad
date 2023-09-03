@@ -23,13 +23,21 @@ export class NotificationsService extends BaseService {
   }
 
   async findAll(queryDTO: NotificationQueryDTO, user: User) {
-    const notifications =
-      await this.notificationsRepository.findNotificationsForUserId(
-        user._id.toString(),
-        queryDTO.page,
-        queryDTO.perPage,
-      );
+    const notifications = await this.notificationsRepository.findNotifications(
+      { userId: user._id.toString() },
+      { createdAt: -1 },
+      queryDTO.page,
+      queryDTO.perPage,
+    );
     return notifications;
+  }
+
+  async countNewNotifications(user: User) {
+    const notifications = await this.notificationsRepository.findNotifications({
+      userId: user._id,
+      unread: true,
+    });
+    return notifications.length;
   }
 
   findOne(id: string) {
@@ -63,11 +71,7 @@ export class NotificationsService extends BaseService {
       throw new NotificationNotFoundError();
     }
 
-    if (
-      !notification.users
-        .map((user) => user._id.toString())
-        .includes(user._id.toString())
-    ) {
+    if (notification.user._id.toString() !== user._id.toString()) {
       throw new NotificationNotFoundError();
     }
 

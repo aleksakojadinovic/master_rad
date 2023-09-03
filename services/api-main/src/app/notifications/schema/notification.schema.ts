@@ -25,8 +25,8 @@ export type NotificationPayload =
 export class Notification {
   _id: string;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-  users: User[];
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  user: User;
 
   @Prop()
   createdAt: Date;
