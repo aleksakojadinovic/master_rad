@@ -16,7 +16,11 @@ export class TicketHistoryEntryStatusChange {
 
 // The initiator field can be used for the user who commented
 export class TicketHistoryEntryCommentAdded {
-  constructor(public body: string, public commentId: string) {}
+  constructor(
+    public body: string,
+    public commentId: string,
+    public isInternal: boolean = false,
+  ) {}
 }
 
 export class TicketHistoryEntryDeleted {

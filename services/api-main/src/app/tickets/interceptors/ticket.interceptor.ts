@@ -20,6 +20,7 @@ import { NotAllowedToRemoveThisTagError } from '../errors/NotAllowedToRemoveThis
 import { DuplicateTagError } from '../errors/DuplicateTag';
 import { DuplicateAssigneeError } from '../errors/DuplicateAssignee';
 import { NotAllowedToChangeToThisStatusError } from '../errors/NotAllowedToChangeToThisStatus';
+import { CustomerCannotAddInternalCommmentError } from '../errors/CustomerCannotAddInternalComment';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {
@@ -63,7 +64,11 @@ export class TicketInterceptor implements NestInterceptor {
         }
 
         if (error instanceof NotAllowedToChangeToThisStatusError) {
-          throw new UnauthorizedException(error.getPayload());
+          throw new ForbiddenException(error.getPayload());
+        }
+
+        if (error instanceof CustomerCannotAddInternalCommmentError) {
+          throw new ForbiddenException(error.getPayload());
         }
 
         throw error;

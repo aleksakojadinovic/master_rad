@@ -39,6 +39,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { TICKET_STATUS_GRAPH } from './schema/ticket-status.map';
 import { NotAllowedToChangeToThisStatusError } from './errors/NotAllowedToChangeToThisStatus';
 import { TicketsRepository } from './tickets.repository';
+import { CustomerCannotAddInternalCommmentError } from './errors/CustomerCannotAddInternalComment';
 
 @Injectable()
 export class TicketsService extends BaseService {
@@ -335,10 +336,17 @@ export class TicketsService extends BaseService {
     if (dto.comment == null || dto.comment.length === 0) {
       return null;
     }
+
+    if (user.isCustomer() && dto.isCommentInternal) {
+      throw new CustomerCannotAddInternalCommmentError();
+    }
+
     const entry = new TicketHistoryEntryCommentAdded(
       dto.comment,
       new mongoose.Types.ObjectId().toString(),
+      dto.isCommentInternal,
     );
+
     ticket.history.push(
       TicketHistoryItem.create({
         groupId,
@@ -354,7 +362,13 @@ export class TicketsService extends BaseService {
         (assignee) => assignee._id.toString() !== user._id.toString(),
       ),
     );
-    if (user._id.toString() !== ticket.createdBy._id.toString()) {
+
+    // First condition prevents self-notifications
+    // Second condition prevents notifying customers of internal comments
+    if (
+      user._id.toString() !== ticket.createdBy._id.toString() &&
+      !dto.isCommentInternal
+    ) {
       usersToNotify.push(ticket.createdBy);
     }
 

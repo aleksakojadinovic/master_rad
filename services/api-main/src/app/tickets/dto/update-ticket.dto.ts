@@ -6,6 +6,7 @@ export class UpdateTicketDto {
   status?: TicketStatus;
   body?: string;
   comment?: string;
+  isCommentInternal?: boolean;
   title?: string;
 
   @Validate(isValidObjectId, { each: true })
