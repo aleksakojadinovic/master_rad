@@ -32,7 +32,7 @@ const registerSw = () => {
 
 export function FirebaseProvider({ children }) {
   const dispatch = useDispatch();
-  const user = useSelector(selectGetMeQueryResponse);
+  const { id, isLoggedIn } = useSelector(selectGetMeQueryResponse);
 
   const [triggerRegisterFirebaseTokenMutation] =
     useRegsterFirebaseTokenMutation();
@@ -47,7 +47,8 @@ export function FirebaseProvider({ children }) {
       .then(() => {
         getToken(messaging, { vapidKey: FIREBASE_PUBLIC_VAPID_KEY }).then(
           (token) => {
-            triggerRegisterFirebaseTokenMutation({ userId: user.Id, token });
+            console.log({ registeringToken: token });
+            triggerRegisterFirebaseTokenMutation({ userId: id, token });
           },
         );
 
@@ -62,7 +63,7 @@ export function FirebaseProvider({ children }) {
   };
 
   useEffect(() => {
-    if (!user) {
+    if (!isLoggedIn) {
       return;
     }
     if (!('Notification' in window)) {
