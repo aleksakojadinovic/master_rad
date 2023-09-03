@@ -59,7 +59,6 @@ export class TicketsService extends BaseService {
       await this.ticketsRepository.findMostRecentTicketByUserId(
         user._id.toString(),
       );
-
     if (mostRecentTicket) {
       const createdAt = moment(mostRecentTicket.createdAt);
       const now = moment();
@@ -73,10 +72,8 @@ export class TicketsService extends BaseService {
         );
       }
     }
-
     // TODO apply builder pattern here.
-    const ticketObject = new Ticket();
-
+    const ticketObject = new this.ticketModel();
     const groupId = uuid();
     const timestamp = new Date();
 
@@ -109,10 +106,9 @@ export class TicketsService extends BaseService {
     ticketObject.createdBy = user;
     ticketObject.createdAt = timestamp;
 
-    const ticketModelInstance = new this.ticketModel(ticketObject);
-    await ticketModelInstance.save();
+    await ticketObject.save();
 
-    return ticketModelInstance;
+    return ticketObject;
   }
 
   async findAll(user: User, queryDTO: TicketQueryDTO) {
@@ -137,10 +133,9 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    this.stripTags(ticket, user);
-    this.stripInternalComments(ticket, user);
+    return this.prepareTicketResponse(ticket, user);
 
-    return ticket;
+    // return this.prepareTicketResponse(ticket, user);
   }
 
   async isTicketOwner(user: User, ticketId: string) {
@@ -156,6 +151,16 @@ export class TicketsService extends BaseService {
     return user._id.toString() === creatorId.toString();
   }
 
+  private prepareTicketResponse(
+    ticket: TicketDocument,
+    user: User,
+  ): TicketDocument {
+    this.stripInternalComments(ticket, user);
+    this.stripTags(ticket, user);
+
+    return ticket;
+  }
+
   async update(id: string, user: User, dto: UpdateTicketDto) {
     if (!isValidObjectId(id)) {
       throw new TicketIdNotValidError(id);
@@ -163,7 +168,7 @@ export class TicketsService extends BaseService {
 
     const isCustomer = user.roles.map(({ name }) => name).includes('customer');
 
-    const ticket = await this.findOne(id, user);
+    const ticket = await this.ticketsRepository.findById(id);
 
     if (!ticket) {
       throw new TicketNotFoundError(id);
@@ -220,7 +225,7 @@ export class TicketsService extends BaseService {
 
     await this.notificationsService.emitNotifications(...notifications);
 
-    return ticket;
+    return this.prepareTicketResponse(ticket, user);
   }
 
   remove(id: number) {
@@ -523,17 +528,15 @@ export class TicketsService extends BaseService {
     if (!user.isCustomer()) {
       return;
     }
-    console.log(ticket.history.length);
     ticket.history = ticket.history.filter((item) => {
       if (item.entryType !== TicketHistoryEntryType.COMMEND_ADDED) {
         return true;
       }
-      // console.log(item.entry as TicketHistoryEntryCommentAdded);
+
       if ((item.entry as TicketHistoryEntryCommentAdded).isInternal) {
         return false;
       }
       return true;
     });
-    console.log(ticket.history.length);
   }
 }
