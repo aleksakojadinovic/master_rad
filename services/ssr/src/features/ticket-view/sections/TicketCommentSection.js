@@ -13,6 +13,7 @@ import { useIntl } from 'react-intl';
 import { ticketViewMessages } from '@/translations/ticket-view';
 
 function TicketCommentSection({ ticket }) {
+  const { isCustomer } = useUser();
   const intl = useIntl();
   const { isSuperAdministrator } = useUser();
 
@@ -33,24 +34,34 @@ function TicketCommentSection({ ticket }) {
     updateTicket({ id: ticket.id, comment, isCommentInternal: isInternal });
   };
 
-  const sectionStyle = isInternal ? { backgroundColor: '#FFD1DC' } : {};
+  const sectionStyle = useMemo(() => {
+    if (isCustomer) {
+      return {};
+    }
+    return isInternal ? { backgroundColor: '#FFD1DC' } : {};
+  }, [isInternal, isCustomer]);
+
+  const renderInternalPicker = () => {
+    if (isCustomer) {
+      return null;
+    }
+    return (
+      <ToggleButtonGroup value={isInternal} exclusive onChange={toggleInternal}>
+        <ToggleButton value={false} color="primary">
+          {intl.formatMessage(ticketViewMessages.publicCommentButtonText)}
+        </ToggleButton>
+        <ToggleButton value={true} color="primary">
+          {intl.formatMessage(ticketViewMessages.internalCommentButtonText)}
+        </ToggleButton>
+      </ToggleButtonGroup>
+    );
+  };
 
   return (
     <Box sx={sectionStyle}>
       {canAddComment && (
         <Fragment>
-          <ToggleButtonGroup
-            value={isInternal}
-            exclusive
-            onChange={toggleInternal}
-          >
-            <ToggleButton value={false} color="primary">
-              {intl.formatMessage(ticketViewMessages.publicCommentButtonText)}
-            </ToggleButton>
-            <ToggleButton value={true} color="primary">
-              {intl.formatMessage(ticketViewMessages.internalCommentButtonText)}
-            </ToggleButton>
-          </ToggleButtonGroup>
+          {renderInternalPicker()}
           <CommentEditor
             onSubmit={handleSubmitComment}
             isSubmitDisabled={isLoading}
