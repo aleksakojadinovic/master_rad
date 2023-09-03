@@ -2,12 +2,12 @@ const { createContext, useEffect, useRef, useContext } = require('react');
 
 const FirebaseContext = createContext();
 
-import { selectGetMeQueryResponse } from '@/api/auth';
 import { useRegsterFirebaseTokenMutation } from '@/api/users';
+import useUser from '@/hooks/useUser';
 import api from '@/services/api';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // Initialize Firebase Cloud Messaging and get a reference to the service
 
@@ -32,7 +32,7 @@ const registerSw = () => {
 
 export function FirebaseProvider({ children }) {
   const dispatch = useDispatch();
-  const { id, isLoggedIn } = useSelector(selectGetMeQueryResponse);
+  const { id, isLoggedIn } = useUser();
 
   const [triggerRegisterFirebaseTokenMutation] =
     useRegsterFirebaseTokenMutation();
@@ -53,13 +53,22 @@ export function FirebaseProvider({ children }) {
         );
 
         onMessage(messaging, () => {
-          dispatch(api.util.invalidateTags(['notifications']));
+          console.log('received message');
+          dispatch(
+            api.util.updateQueryData('getNotifications', undefined, () => {
+              return { notifications: [], unreadCount: 0 };
+            }),
+          );
+          const event = new Event('resetNotificationsPagination');
+          document.dispatchEvent(event);
         });
 
         firebaseRef.current = app;
         firebaseMessagingRef.current = messaging;
       })
-      .catch(() => {});
+      .catch((e) => {
+        console.log('error', { e });
+      });
   };
 
   useEffect(() => {

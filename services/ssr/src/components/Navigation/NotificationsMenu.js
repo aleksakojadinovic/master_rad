@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import { Badge, Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
@@ -30,6 +30,24 @@ function NotificationsMenu() {
   useEffect(() => {
     setShouldRenderMenu(true);
   }, []);
+
+  const handleResetPagination = useCallback(() => {
+    setPage(1);
+  }, [setPage]);
+
+  useEffect(() => {
+    document.addEventListener(
+      'resetNotificationsPagination',
+      handleResetPagination,
+    );
+
+    return () => {
+      document.removeEventListener(
+        'resetNotificationsPagination',
+        handleResetPagination,
+      );
+    };
+  }, [handleResetPagination]);
 
   const handleMenuButtonClick = (e) => {
     setMenuAnchorRef(e.currentTarget);
