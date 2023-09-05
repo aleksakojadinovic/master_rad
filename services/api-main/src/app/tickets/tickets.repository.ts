@@ -56,11 +56,16 @@ export class TicketsRepository {
     page = 1,
     perPage = 10,
     status: string | null = null,
+    assignee: string | null = null,
   ): Promise<TicketDocument[]> {
     const query = this.ticketModel.find({});
 
     if (status !== null) {
       query.where('status', status);
+    }
+
+    if (assignee !== null) {
+      query.where('assignees', { $in: [assignee] });
     }
 
     query.skip((page - 1) * perPage).limit(perPage);

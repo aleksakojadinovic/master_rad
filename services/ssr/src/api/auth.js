@@ -1,4 +1,5 @@
 import api from '@/services/api';
+import { wrapUser } from '@/utils';
 import { createSelector } from '@reduxjs/toolkit';
 
 export const authSlice = api.injectEndpoints({
@@ -43,3 +44,6 @@ export const selectGetMeQueryResponse = createSelector(
     return queryResult.data ?? null;
   },
 );
+
+export const useStoreUser = (store) =>
+  wrapUser(selectGetMeQueryResponse(store.getState()));

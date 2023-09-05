@@ -1,14 +1,14 @@
 import { selectGetTicketsQueryResponse } from '@/api/tickets';
 import SelectPerPage from '@/components/SelectPerPage/SelectPerPage';
-import TicketFilters from '@/components/TicketFilters/TicketFilters';
-import { TicketPagination } from '@/components/TicketTable/TicketPagination';
-import { TicketTable } from '@/components/TicketTable/TicketTable';
-import { getAgentDashboardTicketsParams } from '@/utils/params';
+import TicketFilters from '@/features/ticket-search/components/TicketFilters/TicketFilters';
+import { TicketPagination } from '@/features/ticket-search/components/TicketTable/TicketPagination';
+import { TicketTable } from '@/features/ticket-search/components/TicketTable/TicketTable';
+import { getTicketSearchTicketsParams } from '@/utils/params';
 import { Box, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
-export default function AgentDashboard({ page, perPage, filters }) {
+export default function TicketSearch({ page, perPage, filters }) {
   const router = useRouter();
 
   const resolveNewQueryParams = (newPage, newPerPage, newFilters) => {
@@ -24,7 +24,7 @@ export default function AgentDashboard({ page, perPage, filters }) {
   const tickets = useSelector((state) =>
     selectGetTicketsQueryResponse(
       state,
-      getAgentDashboardTicketsParams(page, perPage, filters),
+      getTicketSearchTicketsParams(page, perPage, filters),
     ),
   );
 

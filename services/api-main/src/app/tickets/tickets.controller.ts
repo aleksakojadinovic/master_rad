@@ -53,7 +53,6 @@ export class TicketsController extends BaseController {
 
   @Get()
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
-  // TODO: better protection
   async findAll(
     @Query(new ValidationPipe({ transform: true })) queryDTO: TicketQueryDTO,
     @GetUserInfo() user: User,
