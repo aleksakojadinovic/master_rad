@@ -116,6 +116,7 @@ export class TicketsService extends BaseService {
       queryDTO.page,
       queryDTO.perPage,
       queryDTO.status,
+      queryDTO.assignee,
     );
     return tickets.map((ticket) => this.stripTags(ticket, user));
   }
