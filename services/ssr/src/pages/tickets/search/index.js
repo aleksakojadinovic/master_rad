@@ -53,7 +53,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (!isLoggedIn) {
       return {
         redirect: {
-          destination: '/',
+          destination: '/404',
         },
       };
     }
