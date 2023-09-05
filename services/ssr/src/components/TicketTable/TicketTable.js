@@ -9,8 +9,11 @@ import TicketStatusBadge from '../../features/ticket-view/components/TicketStatu
 import { Typography, useTheme } from '@mui/material';
 import UserChip from '../User/UserChip';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
+import { globalMessages } from '@/translations/global';
 
 export function TicketTable({ tickets }) {
+  const intl = useIntl();
   const theme = useTheme();
   const renderRowHeaderTitle = (title) => (
     <Typography variant="body1">{title}</Typography>
@@ -50,7 +53,7 @@ export function TicketTable({ tickets }) {
               </TableCell>
               <TableCell align="center">
                 <Link href={`/tickets/view/${ticket.id}`} target="_blank">
-                  Open
+                  {intl.formatMessage(globalMessages.open)}
                 </Link>
               </TableCell>
             </TableRow>

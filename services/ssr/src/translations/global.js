@@ -57,4 +57,8 @@ export const globalMessages = defineMessages({
     id: 'global.title',
     defaultMessage: 'Title',
   },
+  open: {
+    id: 'global.open',
+    defaultMessage: 'Open',
+  },
 });
