@@ -40,6 +40,10 @@ export class UserProfile extends AutomapperProfile {
           mapFrom((source) => source.lastName),
         ),
         forMember(
+          (destination) => destination.fullName,
+          mapFrom((source) => `${source.firstName} ${source.lastName}`),
+        ),
+        forMember(
           (destination) => destination.username,
           mapFrom((source) => source.username),
         ),

@@ -30,6 +30,7 @@ import { Request } from 'express';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { User } from '../users/schema/user.schema';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
+import { NotAllowedToSearchOthersTicketsAsACustomerError } from './errors/NotAllowedToSearchOthersTicketsAsACustomer';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
@@ -53,12 +54,18 @@ export class TicketsController extends BaseController {
 
   @Get()
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
-  // TODO: better protection
   async findAll(
     @Query(new ValidationPipe({ transform: true })) queryDTO: TicketQueryDTO,
     @GetUserInfo() user: User,
   ) {
+    if (user.isCustomer()) {
+      if (!queryDTO.createdBy || queryDTO.createdBy !== user._id.toString()) {
+        throw new NotAllowedToSearchOthersTicketsAsACustomerError();
+      }
+    }
+
     const tickets = await this.ticketsService.findAll(user, queryDTO);
+
     return this.mapper.mapArray(tickets, Ticket, TicketDTO, {
       extraArgs: () => ({ include: queryDTO.includes }),
     });

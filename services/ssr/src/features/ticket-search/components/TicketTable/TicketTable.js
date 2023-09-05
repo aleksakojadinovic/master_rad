@@ -5,12 +5,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import TicketStatusBadge from '../../features/ticket-view/components/TicketStatusBadge';
-import { Typography, useTheme } from '@mui/material';
-import UserChip from '../User/UserChip';
-import Link from 'next/link';
+import TicketStatusBadge from '../../../ticket-view/components/TicketStatusBadge';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import UserChip from '../../../../components/User/UserChip';
 import { useIntl } from 'react-intl';
-import { globalMessages } from '@/translations/global';
+import { ticketSearchMessages } from '@/translations/ticket-search';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 export function TicketTable({ tickets }) {
   const intl = useIntl();
@@ -24,13 +24,30 @@ export function TicketTable({ tickets }) {
       <Table sx={{ width: '100%' }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>{renderRowHeaderTitle('User')}</TableCell>
-            <TableCell>{renderRowHeaderTitle('Title')}</TableCell>
-            <TableCell align="center">
-              {renderRowHeaderTitle('Status')}
+            <TableCell>
+              {renderRowHeaderTitle(
+                intl.formatMessage(ticketSearchMessages.titleCreatedBy),
+              )}
+            </TableCell>
+            <TableCell>
+              {renderRowHeaderTitle(
+                intl.formatMessage(ticketSearchMessages.titleTicketTitle),
+              )}
             </TableCell>
             <TableCell align="center">
-              {renderRowHeaderTitle('Actions')}
+              {renderRowHeaderTitle(
+                intl.formatMessage(ticketSearchMessages.titleStatus),
+              )}
+            </TableCell>
+            <TableCell align="center">
+              {renderRowHeaderTitle(
+                intl.formatMessage(ticketSearchMessages.titleActions),
+              )}
+            </TableCell>
+            <TableCell align="center">
+              {renderRowHeaderTitle(
+                intl.formatMessage(ticketSearchMessages.titleAssignees),
+              )}
             </TableCell>
           </TableRow>
         </TableHead>
@@ -52,9 +69,16 @@ export function TicketTable({ tickets }) {
                 <TicketStatusBadge status={ticket.status} />
               </TableCell>
               <TableCell align="center">
-                <Link href={`/tickets/view/${ticket.id}`} target="_blank">
-                  {intl.formatMessage(globalMessages.open)}
-                </Link>
+                <IconButton href={`/tickets/view/${ticket.id}`} target="_blank">
+                  <OpenInNewIcon color="primary" />
+                </IconButton>
+              </TableCell>
+              <TableCell align="center">
+                {ticket.assignees.map((user) => (
+                  <Box key={user.id} marginBottom="3px">
+                    <UserChip user={user} />
+                  </Box>
+                ))}
               </TableCell>
             </TableRow>
           ))}

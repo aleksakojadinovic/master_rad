@@ -15,6 +15,8 @@ const UserSearchForm = ({ availableRoles, onChange }) => {
   const [roles, setRoles] = useState();
   const [debouncedSearchString] = useDebounce(searchString, 200);
 
+  const searchRef = useRef();
+
   useEffect(() => {
     if (initialRender.current) {
       initialRender.current = false;
@@ -25,11 +27,16 @@ const UserSearchForm = ({ availableRoles, onChange }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchString, roles]);
 
+  useEffect(() => {
+    searchRef.current.focus();
+  });
+
   return (
     <form>
       <Grid container>
         <Grid item xs={12} sm={6}>
           <TextField
+            ref={searchRef}
             size="small"
             label={intl.formatMessage(formsMessages.search)}
             variant="outlined"

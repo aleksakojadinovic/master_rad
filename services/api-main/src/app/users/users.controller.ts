@@ -67,6 +67,7 @@ export class UsersController {
     return this.mapper.mapArray(users, User, UserDTO);
   }
 
+  // TODO: protect
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);

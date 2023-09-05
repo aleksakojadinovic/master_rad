@@ -10,7 +10,7 @@ export function getTicketViewQueryParams() {
   };
 }
 
-export function getAgentDashboardTicketsParams(
+export function getTicketSearchTicketsParams(
   page = 1,
   perPage = 10,
   filters = {},
@@ -18,7 +18,7 @@ export function getAgentDashboardTicketsParams(
   return {
     page,
     perPage,
-    includes: ['createdBy'],
+    includes: ['createdBy', 'assignees'],
     ...filters,
   };
 }
