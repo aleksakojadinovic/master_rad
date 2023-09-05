@@ -1,9 +1,9 @@
-import { commentMessages } from '@/translations/comment';
+import { ticketViewMessages } from '@/translations/ticket-view';
 import { Box, Button, TextareaAutosize } from '@mui/material';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-function CommentEditor({ onSubmit, isSubmitDisabled, isSuccess }) {
+function CommentEditor({ onSubmit, isSubmitDisabled, isSuccess, isInternal }) {
   const intl = useIntl();
   const [comment, setComment] = useState('');
 
@@ -21,7 +21,11 @@ function CommentEditor({ onSubmit, isSubmitDisabled, isSuccess }) {
     <Fragment>
       <TextareaAutosize
         minRows={10}
-        placeholder={intl.formatMessage(commentMessages.addCommentPlaceholder)}
+        placeholder={intl.formatMessage(
+          isInternal
+            ? ticketViewMessages.addInternalCommentPlaceholder
+            : ticketViewMessages.addPublicCommentPlaceholder,
+        )}
         style={{ width: '100%' }}
         value={comment}
         onChange={handleChange}

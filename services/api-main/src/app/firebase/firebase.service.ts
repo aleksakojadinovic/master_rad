@@ -56,6 +56,10 @@ export class FirebaseService {
   async sendNotification(notification: Notification) {
     const title = this.parseNotificationType(notification.type);
 
+    if (notification.user.firebaseTokens.length == 0) {
+      return Promise.resolve();
+    }
+
     return firebase.messaging().sendEachForMulticast({
       tokens: notification.user.firebaseTokens,
       data: {},

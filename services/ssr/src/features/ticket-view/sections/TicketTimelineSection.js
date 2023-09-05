@@ -1,5 +1,5 @@
 import Comment from '@/components/Comment/Comment';
-import StatusChange from '@/components/StatusChange/StatusChange';
+import StatusChange from '@/features/ticket-view/components/StatusChange';
 import { TicketHistoryEntryType } from '@/enums/tickets';
 import { Box, Card, CardContent } from '@mui/material';
 import React from 'react';

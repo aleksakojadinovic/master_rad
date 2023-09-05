@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import UserChip from '../User/UserChip';
+import UserChip from '../../../components/User/UserChip';
 import { formatDate } from '@/utils';
-import TicketStatusBadge from '../../features/ticket-view/components/TicketStatusBadge';
+import TicketStatusBadge from './TicketStatusBadge';
 import { TicketStatus } from '@/enums/tickets';
 
 export default function StatusChange({

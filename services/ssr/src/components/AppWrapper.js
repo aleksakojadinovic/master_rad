@@ -12,12 +12,12 @@ function AppWrapper({ Component, pageProps }) {
   return (
     <FirebaseProvider>
       <NavigationBar />
-      <Box sx={{ marginTop: '24px', minHeight: '800px' }}>
+      <Box marginTop="24px" minHeight="800px">
         <PageLayoutComponent {...pageProps}>
           <Component {...pageProps} />
         </PageLayoutComponent>
       </Box>
-      <Box sx={{ marginTop: '36px' }}>
+      <Box marginTop="36px">
         <Footer />
       </Box>
     </FirebaseProvider>

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Box, Divider, Typography } from '@mui/material';
@@ -13,6 +13,7 @@ import { useUpdateTicketMutation } from '@/api/tickets';
 import { useIntl } from 'react-intl';
 import { queryStatusMessages } from '@/translations/query-statuses';
 import { globalMessages } from '@/translations/global';
+import StickyPanel from './components/StickyPanel/StickyPanel';
 
 export default function TicketView({ ticket }) {
   const intl = useIntl();
@@ -20,7 +21,8 @@ export default function TicketView({ ticket }) {
     fixedCacheKey: 'ticket-view-page',
   });
   return (
-    <Fragment>
+    <Box id="ticket-view">
+      <StickyPanel />
       <ServerActionSnackbar
         error={error}
         isLoading={isLoading}
@@ -57,6 +59,6 @@ export default function TicketView({ ticket }) {
           </Card>
         </Box>
       </Card>
-    </Fragment>
+    </Box>
   );
 }

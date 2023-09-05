@@ -2,12 +2,12 @@ const { createContext, useEffect, useRef, useContext } = require('react');
 
 const FirebaseContext = createContext();
 
-import { selectGetMeQueryResponse } from '@/api/auth';
 import { useRegsterFirebaseTokenMutation } from '@/api/users';
+import useUser from '@/hooks/useUser';
 import api from '@/services/api';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // Initialize Firebase Cloud Messaging and get a reference to the service
 
@@ -32,7 +32,7 @@ const registerSw = () => {
 
 export function FirebaseProvider({ children }) {
   const dispatch = useDispatch();
-  const user = useSelector(selectGetMeQueryResponse);
+  const { id, isLoggedIn } = useUser();
 
   const [triggerRegisterFirebaseTokenMutation] =
     useRegsterFirebaseTokenMutation();
@@ -47,7 +47,8 @@ export function FirebaseProvider({ children }) {
       .then(() => {
         getToken(messaging, { vapidKey: FIREBASE_PUBLIC_VAPID_KEY }).then(
           (token) => {
-            triggerRegisterFirebaseTokenMutation({ userId: user.Id, token });
+            console.log({ registeringToken: token });
+            triggerRegisterFirebaseTokenMutation({ userId: id, token });
           },
         );
 
@@ -58,11 +59,13 @@ export function FirebaseProvider({ children }) {
         firebaseRef.current = app;
         firebaseMessagingRef.current = messaging;
       })
-      .catch(() => {});
+      .catch((e) => {
+        console.log('error', { e });
+      });
   };
 
   useEffect(() => {
-    if (!user) {
+    if (!isLoggedIn) {
       return;
     }
     if (!('Notification' in window)) {
