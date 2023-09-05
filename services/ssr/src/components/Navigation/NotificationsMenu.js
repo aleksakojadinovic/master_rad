@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import { Badge, Box, Button, IconButton, Menu } from '@mui/material';
