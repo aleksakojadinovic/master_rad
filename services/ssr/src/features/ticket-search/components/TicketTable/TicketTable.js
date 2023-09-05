@@ -6,12 +6,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TicketStatusBadge from '../../../ticket-view/components/TicketStatusBadge';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import UserChip from '../../../../components/User/UserChip';
-import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { globalMessages } from '@/translations/global';
 import { ticketSearchMessages } from '@/translations/ticket-search';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 export function TicketTable({ tickets }) {
   const intl = useIntl();
@@ -70,14 +69,14 @@ export function TicketTable({ tickets }) {
                 <TicketStatusBadge status={ticket.status} />
               </TableCell>
               <TableCell align="center">
-                <Link href={`/tickets/view/${ticket.id}`} target="_blank">
-                  {intl.formatMessage(globalMessages.open)}
-                </Link>
+                <IconButton href={`/tickets/view/${ticket.id}`} target="_blank">
+                  <OpenInNewIcon color="primary" />
+                </IconButton>
               </TableCell>
               <TableCell align="center">
                 {ticket.assignees.map((user) => (
-                  <Box key={user.id}>
-                    <Typography variant="caption">{user.fullName}</Typography>
+                  <Box key={user.id} marginBottom="3px">
+                    <UserChip user={user} />
                   </Box>
                 ))}
               </TableCell>
