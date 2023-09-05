@@ -9,6 +9,12 @@ export const usersSlice = api.injectEndpoints({
         params,
       }),
     }),
+    getUser: builder.query({
+      query: ({ id }) => ({
+        url: `/users/${id}`,
+        params: { includes: ['roles'] },
+      }),
+    }),
     regsterFirebaseToken: builder.mutation({
       query: ({ userId, token }) => ({
         method: 'PATCH',
@@ -23,14 +29,28 @@ export const usersSlice = api.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useGetUsersQuery, useRegsterFirebaseTokenMutation } = usersSlice;
+export const {
+  useGetUsersQuery,
+  useGetUserQuery,
+  useRegsterFirebaseTokenMutation,
+} = usersSlice;
 
 const selectGetUsersQueryResult = createSelector(
   [(state) => state, (_, params) => params],
   (state, params) => usersSlice.endpoints.getUsers.select(params)(state),
 );
 
-export const selectGetTicketsQueryResponse = createSelector(
+export const selectGetUsersQueryResponse = createSelector(
   [selectGetUsersQueryResult],
   (queryResult) => queryResult.data ?? [],
+);
+
+export const selectUserById = createSelector(
+  [(state) => state, (_, params) => params],
+  (state, params) => {
+    const { id, ...rest } = params;
+    const users = selectGetUsersQueryResponse(state, rest);
+
+    return users?.find((user) => user.id === id) ?? null;
+  },
 );

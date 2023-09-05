@@ -17,4 +17,8 @@ export const ticketSearchMessages = defineMessages({
     id: 'ticket-search.ticket-status-filter-title',
     defaultMessage: 'Status',
   },
+  ticketSearchAssignedToFilterTitle: {
+    id: 'ticket-search.assigned-to-filter-title',
+    defaultMessage: 'Assigned to {user}',
+  },
 });

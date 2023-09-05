@@ -7,5 +7,6 @@ export class UserDTO {
     public firstName: string,
     public lastName: string,
     public roles: RoleDTO[] | string[],
+    public fullName: string,
   ) {}
 }

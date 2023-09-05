@@ -26,7 +26,7 @@ function TicketStatusFilter({ value, onChange }) {
         {intl.formatMessage(ticketSearchMessages.ticketStatusFilterTitle)}
       </InputLabel>
       <Select
-        sx={{ height: '40px' }}
+        sx={{ height: '40px', minWidth: '120px' }}
         value={resolvedValue}
         onChange={handleChange}
         label="Status"

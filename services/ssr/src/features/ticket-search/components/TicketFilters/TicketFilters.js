@@ -4,6 +4,7 @@ import TicketStatusFilter from './TicketStatusFilter';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { formsMessages } from '@/translations/forms';
+import TicketAssignFilter from './TicketAssignFilter';
 
 function TicketFilters({ filters, onChange }) {
   const intl = useIntl();
@@ -32,6 +33,12 @@ function TicketFilters({ filters, onChange }) {
           onChange={(status) => {
             handleChange('status', status);
           }}
+        />
+      </Box>
+      <Box marginBottom="12px" marginLeft="6px">
+        <TicketAssignFilter
+          value={filters.assignee ?? null}
+          onChange={(userId) => handleChange('assignee', userId)}
         />
       </Box>
     </Box>
