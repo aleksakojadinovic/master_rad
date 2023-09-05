@@ -48,6 +48,7 @@ export default createApi({
   },
   keepUnusedFor: 100000,
   endpoints: () => ({}),
+  refetchOnFocus: true,
   tagTypes: [
     'getTicket',
     'ticket-tag-groups',

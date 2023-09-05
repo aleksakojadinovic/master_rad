@@ -1,12 +1,15 @@
 import { useGetUserQuery } from '@/api/users';
 import UserAssignForm from '@/features/ticket-view/components/UserAssignForm';
-import { ticketSearchMessages } from '@/translations/ticket-search';
 import { Button, IconButton } from '@mui/material';
 import React, { Fragment, useState } from 'react';
 import { useIntl } from 'react-intl';
 import ClearIcon from '@mui/icons-material/Clear';
 
-const TicketAssignFilter = ({ value: selectedUserId, onChange }) => {
+const TicketUserFilter = ({
+  value: selectedUserId,
+  onChange,
+  buttonTranslation,
+}) => {
   const intl = useIntl();
   const [open, setOpen] = useState(false);
 
@@ -17,12 +20,9 @@ const TicketAssignFilter = ({ value: selectedUserId, onChange }) => {
 
   const selectedUserName = isSuccess ? data.fullName : '...';
 
-  const buttonTitle = intl.formatMessage(
-    ticketSearchMessages.ticketSearchAssignedToFilterTitle,
-    {
-      user: selectedUserName ?? '',
-    },
-  );
+  const buttonTitle = intl.formatMessage(buttonTranslation, {
+    user: selectedUserName ?? '',
+  });
 
   const handleSelectUser = (user) => {
     setOpen(false);
@@ -51,4 +51,4 @@ const TicketAssignFilter = ({ value: selectedUserId, onChange }) => {
   );
 };
 
-export default TicketAssignFilter;
+export default TicketUserFilter;

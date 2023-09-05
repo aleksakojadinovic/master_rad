@@ -4,7 +4,8 @@ import TicketStatusFilter from './TicketStatusFilter';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { formsMessages } from '@/translations/forms';
-import TicketAssignFilter from './TicketAssignFilter';
+import TicketUserFilter from './TicketUserFilter';
+import { ticketSearchMessages } from '@/translations/ticket-search';
 
 function TicketFilters({ filters, onChange }) {
   const intl = useIntl();
@@ -36,9 +37,21 @@ function TicketFilters({ filters, onChange }) {
         />
       </Box>
       <Box marginBottom="12px" marginLeft="6px">
-        <TicketAssignFilter
+        <TicketUserFilter
+          buttonTranslation={
+            ticketSearchMessages.ticketSearchAssignedToFilterTitle
+          }
           value={filters.assignee ?? null}
           onChange={(userId) => handleChange('assignee', userId)}
+        />
+      </Box>
+      <Box marginBottom="12px" marginLeft="6px">
+        <TicketUserFilter
+          buttonTranslation={
+            ticketSearchMessages.ticketSearchCreatedByFilterTitle
+          }
+          value={filters.createdBy ?? null}
+          onChange={(userId) => handleChange('createdBy', userId)}
         />
       </Box>
     </Box>

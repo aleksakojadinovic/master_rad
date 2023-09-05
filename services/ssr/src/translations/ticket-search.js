@@ -21,6 +21,10 @@ export const ticketSearchMessages = defineMessages({
     id: 'ticket-search.assigned-to-filter-title',
     defaultMessage: 'Assigned to {user}',
   },
+  ticketSearchCreatedByFilterTitle: {
+    id: 'ticket-search.created-by-filter-title',
+    defaultMessage: 'Created by {user}',
+  },
   titleCreatedBy: {
     id: 'ticket-search.title-creadted-by',
     defaultMessage: 'Created by',
