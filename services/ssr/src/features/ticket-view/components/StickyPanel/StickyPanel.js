@@ -1,10 +1,9 @@
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { ticketViewMessages } from '@/translations/ticket-view';
-
+import ArrowCircleUpTwoToneIcon from '@mui/icons-material/ArrowCircleUpTwoTone';
+import ArrowCircleDownTwoToneIcon from '@mui/icons-material/ArrowCircleDownTwoTone';
 function StickyPanel() {
   const intl = useIntl();
   const ref = useRef();
@@ -45,14 +44,14 @@ function StickyPanel() {
           placement="top-start"
         >
           <IconButton onClick={handleGoToTop}>
-            <ArrowDropUpIcon color="primary" />
+            <ArrowCircleUpTwoToneIcon color="primary" />
           </IconButton>
         </Tooltip>
       </Box>
       <Tooltip title={intl.formatMessage(ticketViewMessages.goToBottom)}>
         <Box marginBottom="6px">
           <IconButton onClick={handleGoToEnd}>
-            <ArrowDropDownIcon color="primary" />
+            <ArrowCircleDownTwoToneIcon color="primary" />
           </IconButton>
         </Box>
       </Tooltip>
