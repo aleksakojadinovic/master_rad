@@ -263,11 +263,11 @@ export class TicketsService extends BaseService {
     const currentStatus = ticket.status;
     const targetStatus = dto.status;
 
-    // TODO: Imma refactor so that you can only have one role
-    const role = user.roles[0].name;
-
     const canChange = TICKET_STATUS_GRAPH[currentStatus].find((entry) => {
-      return entry.status === targetStatus && entry.roles.includes(role);
+      return (
+        entry.status === targetStatus &&
+        user.roles.some((role) => entry.roles.includes(role.name))
+      );
     });
 
     if (!canChange) {
