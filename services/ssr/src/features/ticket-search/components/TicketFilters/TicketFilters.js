@@ -1,7 +1,7 @@
-import { Box, TextField } from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import TicketStatusFilter from './TicketStatusFilter';
 
-import React from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { formsMessages } from '@/translations/forms';
 import TicketUserFilter from './TicketUserFilter';
@@ -20,41 +20,62 @@ function TicketFilters({ filters, onChange }) {
     onChange({ ...filters, [key]: value });
   };
 
+  const handleReset = () => {
+    onChange({});
+  };
+
+  const hasAnyFilters = useMemo(
+    () => Object.keys(filters).length > 0,
+    [filters],
+  );
+
   return (
-    <Box display="flex" flexWrap="wrap">
-      <Box marginBottom="12px">
-        <TextField
+    <Fragment>
+      <Box display="flex" flexWrap="wrap">
+        <Box marginBottom="12px">
+          <TextField
+            size="small"
+            placeholder={intl.formatMessage(formsMessages.search)}
+          />
+        </Box>
+        <Box marginBottom="12px" marginLeft="6px">
+          <TicketStatusFilter
+            value={filters.status ?? ''}
+            onChange={(status) => {
+              handleChange('status', status);
+            }}
+          />
+        </Box>
+        <Box marginBottom="12px" marginLeft="6px">
+          <TicketUserFilter
+            buttonTranslation={
+              ticketSearchMessages.ticketSearchAssignedToFilterTitle
+            }
+            value={filters.assignee ?? null}
+            onChange={(userId) => handleChange('assignee', userId)}
+          />
+        </Box>
+        <Box marginBottom="12px" marginLeft="6px">
+          <TicketUserFilter
+            buttonTranslation={
+              ticketSearchMessages.ticketSearchCreatedByFilterTitle
+            }
+            value={filters.createdBy ?? null}
+            onChange={(userId) => handleChange('createdBy', userId)}
+          />
+        </Box>
+      </Box>
+      <Box marginBottom="12px" marginLeft="6px" alignItems="center">
+        <Button
+          variant="contained"
           size="small"
-          placeholder={intl.formatMessage(formsMessages.search)}
-        />
+          onClick={handleReset}
+          disabled={!hasAnyFilters}
+        >
+          {intl.formatMessage(formsMessages.resetFilters)}
+        </Button>
       </Box>
-      <Box marginBottom="12px" marginLeft="6px">
-        <TicketStatusFilter
-          value={filters.status ?? ''}
-          onChange={(status) => {
-            handleChange('status', status);
-          }}
-        />
-      </Box>
-      <Box marginBottom="12px" marginLeft="6px">
-        <TicketUserFilter
-          buttonTranslation={
-            ticketSearchMessages.ticketSearchAssignedToFilterTitle
-          }
-          value={filters.assignee ?? null}
-          onChange={(userId) => handleChange('assignee', userId)}
-        />
-      </Box>
-      <Box marginBottom="12px" marginLeft="6px">
-        <TicketUserFilter
-          buttonTranslation={
-            ticketSearchMessages.ticketSearchCreatedByFilterTitle
-          }
-          value={filters.createdBy ?? null}
-          onChange={(userId) => handleChange('createdBy', userId)}
-        />
-      </Box>
-    </Box>
+    </Fragment>
   );
 }
 

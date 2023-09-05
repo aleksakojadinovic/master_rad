@@ -17,4 +17,8 @@ export const formsMessages = defineMessages({
     id: 'forms.perPage',
     defaultMessage: 'Per page',
   },
+  resetFilters: {
+    id: 'forms.reset',
+    defaultMessage: 'Reset all filters',
+  },
 });
