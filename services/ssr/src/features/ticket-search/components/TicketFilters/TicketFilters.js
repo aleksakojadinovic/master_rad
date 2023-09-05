@@ -1,4 +1,4 @@
-import { Box, Grid, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import TicketStatusFilter from './TicketStatusFilter';
 
 import React from 'react';
@@ -19,23 +19,21 @@ function TicketFilters({ filters, onChange }) {
   };
 
   return (
-    <Box height="40px">
-      <Grid container>
-        <Grid item xs={12} sm={3}>
-          <TextField
-            size="small"
-            placeholder={intl.formatMessage(formsMessages.search)}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TicketStatusFilter
-            value={filters.status ?? ''}
-            onChange={(status) => {
-              handleChange('status', status);
-            }}
-          />
-        </Grid>
-      </Grid>
+    <Box display="flex" flexWrap="wrap">
+      <Box marginBottom="12px">
+        <TextField
+          size="small"
+          placeholder={intl.formatMessage(formsMessages.search)}
+        />
+      </Box>
+      <Box marginBottom="12px" marginLeft="6px">
+        <TicketStatusFilter
+          value={filters.status ?? ''}
+          onChange={(status) => {
+            handleChange('status', status);
+          }}
+        />
+      </Box>
     </Box>
   );
 }

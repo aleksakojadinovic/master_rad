@@ -6,11 +6,13 @@ export const TicketStatus = {
   IN_PROGRESS: 'IN_PROGRESS',
 };
 
-export const TicketStatusText = {
-  [TicketStatus.NEW]: 'New',
-  [TicketStatus.OPEN]: 'Open',
-  [TicketStatus.CLOSED]: 'Closed',
-};
+export const TICKET_STATUSES = [
+  TicketStatus.NEW,
+  TicketStatus.OPEN,
+  TicketStatus.CLOSED,
+  TicketStatus.RESOLVED,
+  TicketStatus.IN_PROGRESS,
+];
 
 export const TicketHistoryEntryType = {
   CREATED: 0,

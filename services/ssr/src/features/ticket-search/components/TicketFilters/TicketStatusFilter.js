@@ -1,17 +1,15 @@
-import { TicketStatus } from '@/enums/tickets';
+import { TICKET_STATUSES } from '@/enums/tickets';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React from 'react';
 import TicketStatusBadge from '../../../ticket-view/components/TicketStatusBadge';
-
-const TICKET_STATUS_VALUES = [
-  TicketStatus.NEW,
-  TicketStatus.CLOSED,
-  TicketStatus.OPEN,
-];
+import { useIntl } from 'react-intl';
+import { ticketSearchMessages } from '@/translations/ticket-search';
 
 const ANY_TICKET = '__ANY_TICKET__';
 
 function TicketStatusFilter({ value, onChange }) {
+  const intl = useIntl();
+
   const handleChange = (e) => {
     if (e.target.value === ANY_TICKET) {
       onChange('');
@@ -23,18 +21,20 @@ function TicketStatusFilter({ value, onChange }) {
   const resolvedValue = value || ANY_TICKET;
 
   return (
-    <FormControl fullWidth>
-      <InputLabel>Status</InputLabel>
+    <FormControl>
+      <InputLabel>
+        {intl.formatMessage(ticketSearchMessages.ticketStatusFilterTitle)}
+      </InputLabel>
       <Select
         sx={{ height: '40px' }}
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
         value={resolvedValue}
-        label="Age"
         onChange={handleChange}
+        label="Status"
       >
-        <MenuItem value={ANY_TICKET}>Any</MenuItem>
-        {TICKET_STATUS_VALUES.map((ticketStatus) => (
+        <MenuItem value={ANY_TICKET}>
+          {intl.formatMessage(ticketSearchMessages.any)}
+        </MenuItem>
+        {TICKET_STATUSES.map((ticketStatus) => (
           <MenuItem key={ticketStatus} value={ticketStatus}>
             <TicketStatusBadge status={ticketStatus} />
           </MenuItem>

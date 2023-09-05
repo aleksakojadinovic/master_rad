@@ -18,7 +18,7 @@ export default function TicketSearch({ page, perPage, filters }) {
     sp.set('page', newPage);
     sp.set('perPage', newPerPage);
 
-    router.push(`/dashboard?${sp.toString()}`);
+    router.push(`/tickets/search?${sp.toString()}`);
   };
 
   const tickets = useSelector((state) =>
@@ -37,7 +37,7 @@ export default function TicketSearch({ page, perPage, filters }) {
   };
 
   const handleFiltersChange = (newFilters) => {
-    resolveNewQueryParams(page, perPage, newFilters);
+    resolveNewQueryParams(1, perPage, newFilters);
   };
 
   return (

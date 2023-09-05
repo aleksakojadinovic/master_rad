@@ -9,4 +9,12 @@ export const ticketSearchMessages = defineMessages({
     id: 'ticket-search.page-title',
     defaultMessage: 'Search tickets',
   },
+  any: {
+    id: 'ticket-search.any',
+    defaultMessage: 'Any',
+  },
+  ticketStatusFilterTitle: {
+    id: 'ticket-search.ticket-status-filter-title',
+    defaultMessage: 'Status',
+  },
 });
