@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import { useGetTicketsQuery } from '@/api/tickets';
-import { getTicketSearchTicketsParams } from '@/utils/params';
 import { TicketTable } from '../ticket-search/components/TicketTable/TicketTable';
 import { TicketPagination } from '../ticket-search/components/TicketTable/TicketPagination';
 
@@ -15,11 +14,7 @@ function TicketPredefinedSearch({ initialFilters }) {
     setFilters((prev) => ({ ...prev, page: newPage }));
   };
 
-  const { page, perPage, ...rest } = filters;
-
-  const { data: tickets } = useGetTicketsQuery(
-    getTicketSearchTicketsParams(page, perPage, rest),
-  );
+  const { data: tickets } = useGetTicketsQuery(filters);
 
   return (
     <Box>
@@ -29,7 +24,7 @@ function TicketPredefinedSearch({ initialFilters }) {
 
       <Box width="100%" display="flex" justifyContent="center" marginTop="12px">
         <TicketPagination
-          page={page}
+          page={filters.page}
           onPageChange={handlePageChange}
           hasData={tickets?.length > 0}
         />

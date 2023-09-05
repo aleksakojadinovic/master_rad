@@ -50,12 +50,6 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
 
     store.dispatch(authSlice.endpoints.getMe.initiate());
 
-    // store.dispatch(
-    //   notificationsSlice.endpoints.getNotifications.initiate(
-    //     getNotificationsParams(),
-    //   ),
-    // );
-
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
 
     const appProps = await App.getInitialProps(context);

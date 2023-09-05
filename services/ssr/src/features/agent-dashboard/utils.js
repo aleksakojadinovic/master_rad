@@ -5,6 +5,7 @@ export const getMyOpenParams = (userId) => ({
   perPage: 5,
   assignee: userId,
   status: TicketStatus.OPEN,
+  includes: ['createdBy', 'assignees'],
 });
 
 export const getMyInProgressParams = (userId) => ({
@@ -12,6 +13,7 @@ export const getMyInProgressParams = (userId) => ({
   perPage: 5,
   assignee: userId,
   status: TicketStatus.IN_PROGRESS,
+  includes: ['createdBy', 'assignees'],
 });
 
 export const getNewTodayParams = () => ({ page: 1, perPage: 5 });
@@ -19,7 +21,7 @@ export const getNewTodayParams = () => ({ page: 1, perPage: 5 });
 export const getPredefinedParams = (userId) => {
   return [
     getMyOpenParams(userId),
-    getMyInProgressParams(open),
+    getMyInProgressParams(userId),
     getNewTodayParams(),
   ];
 };
