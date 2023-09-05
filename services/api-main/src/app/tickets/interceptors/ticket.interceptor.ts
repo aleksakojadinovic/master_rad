@@ -7,7 +7,6 @@ import {
   Injectable,
   NestInterceptor,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
