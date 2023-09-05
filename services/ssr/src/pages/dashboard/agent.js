@@ -5,7 +5,6 @@ import { getPredefinedParams } from '@/features/agent-dashboard/utils';
 import { wrapper } from '@/redux/store';
 import api from '@/services/api';
 import { agentDashboardMessages } from '@/translations/agent-dashboard';
-import { getTicketSearchTicketsParams } from '@/utils/params';
 import Head from 'next/head';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
