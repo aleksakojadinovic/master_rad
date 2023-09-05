@@ -20,7 +20,7 @@ export function TicketTable({ tickets }) {
   );
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ minHeight: '450px' }}>
       <Table sx={{ width: '100%' }} aria-label="simple table">
         <TableHead>
           <TableRow>

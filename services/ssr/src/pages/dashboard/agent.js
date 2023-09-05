@@ -1,9 +1,21 @@
 import { useStoreUser } from '@/api/auth';
+import AgentDashboard from '@/features/agent-dashboard/AgentDashboard';
 import { wrapper } from '@/redux/store';
-import React from 'react';
+import { agentDashboardMessages } from '@/translations/agent-dashboard';
+import Head from 'next/head';
+import React, { Fragment } from 'react';
+import { useIntl } from 'react-intl';
 
 function AgentDashboardPage() {
-  return <div>AgentDashboardPage</div>;
+  const intl = useIntl();
+  return (
+    <Fragment>
+      <Head>
+        <title>{intl.formatMessage(agentDashboardMessages.title)}</title>
+      </Head>
+      <AgentDashboard />
+    </Fragment>
+  );
 }
 
 export default AgentDashboardPage;

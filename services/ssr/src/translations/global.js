@@ -61,4 +61,8 @@ export const globalMessages = defineMessages({
     id: 'global.open',
     defaultMessage: 'Open',
   },
+  welcomeBack: {
+    id: 'global.welcome-back',
+    defaultMessage: 'Welcome back, {user}',
+  },
 });

@@ -53,7 +53,11 @@ export default function TicketSearch({ page, perPage, filters }) {
       <Box width="100%" display="flex" justifyContent="center" marginTop="12px">
         <Grid container>
           <Grid item xs={6}>
-            <TicketPagination page={page} onPageChange={handlePageChange} />
+            <TicketPagination
+              page={page}
+              onPageChange={handlePageChange}
+              hasData={tickets.length > 0}
+            />
           </Grid>
           <Grid item xs={6}>
             <SelectPerPage value={perPage} onChange={handlePerPageChange} />
