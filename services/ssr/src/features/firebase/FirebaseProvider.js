@@ -47,7 +47,6 @@ export function FirebaseProvider({ children }) {
       .then(() => {
         getToken(messaging, { vapidKey: FIREBASE_PUBLIC_VAPID_KEY }).then(
           (token) => {
-            console.log({ registeringToken: token });
             triggerRegisterFirebaseTokenMutation({ userId: id, token });
           },
         );
