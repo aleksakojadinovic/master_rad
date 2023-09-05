@@ -29,4 +29,12 @@ export const ticketViewMessages = defineMessages({
     id: 'ticket-view.internal-label',
     defaultMessage: 'INTERNAL',
   },
+  goToTop: {
+    id: 'ticket-view.go-to-top',
+    defaultMessage: 'Go to top',
+  },
+  goToBottom: {
+    id: 'ticket-view.go-to-bottom',
+    defaultMessage: 'Go to bottom',
+  },
 });
