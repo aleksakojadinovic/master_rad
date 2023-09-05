@@ -56,7 +56,7 @@ export default function TicketSearch({ page, perPage, filters }) {
             <TicketPagination
               page={page}
               onPageChange={handlePageChange}
-              hasData={tickets.length > 0}
+              hasData={tickets?.length > 0}
             />
           </Grid>
           <Grid item xs={6}>

@@ -31,7 +31,7 @@ function TicketPredefinedSearch({ initialFilters }) {
         <TicketPagination
           page={page}
           onPageChange={handlePageChange}
-          hasData={tickets.length > 0}
+          hasData={tickets?.length > 0}
         />
       </Box>
     </Box>
