@@ -18,7 +18,7 @@ export function getTicketSearchTicketsParams(
   return {
     page,
     perPage,
-    includes: ['createdBy'],
+    includes: ['createdBy', 'assignees'],
     ...filters,
   };
 }

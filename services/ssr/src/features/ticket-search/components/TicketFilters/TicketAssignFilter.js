@@ -1,9 +1,10 @@
 import { useGetUserQuery } from '@/api/users';
 import UserAssignForm from '@/features/ticket-view/components/UserAssignForm';
 import { ticketSearchMessages } from '@/translations/ticket-search';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import React, { Fragment, useState } from 'react';
 import { useIntl } from 'react-intl';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const TicketAssignFilter = ({ value: selectedUserId, onChange }) => {
   const intl = useIntl();
@@ -43,6 +44,9 @@ const TicketAssignFilter = ({ value: selectedUserId, onChange }) => {
       >
         {buttonTitle}
       </Button>
+      <IconButton onClick={() => onChange('')}>
+        <ClearIcon />
+      </IconButton>
     </Fragment>
   );
 };

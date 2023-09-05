@@ -11,6 +11,7 @@ import UserChip from '../../../../components/User/UserChip';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { globalMessages } from '@/translations/global';
+import { ticketSearchMessages } from '@/translations/ticket-search';
 
 export function TicketTable({ tickets }) {
   const intl = useIntl();
@@ -24,13 +25,25 @@ export function TicketTable({ tickets }) {
       <Table sx={{ width: '100%' }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>{renderRowHeaderTitle('User')}</TableCell>
-            <TableCell>{renderRowHeaderTitle('Title')}</TableCell>
-            <TableCell align="center">
-              {renderRowHeaderTitle('Status')}
+            <TableCell>
+              {renderRowHeaderTitle(
+                intl.formatMessage(ticketSearchMessages.titleCreatedBy),
+              )}
+            </TableCell>
+            <TableCell>
+              {renderRowHeaderTitle(
+                intl.formatMessage(ticketSearchMessages.titleTicketTitle),
+              )}
             </TableCell>
             <TableCell align="center">
-              {renderRowHeaderTitle('Actions')}
+              {renderRowHeaderTitle(
+                intl.formatMessage(ticketSearchMessages.titleStatus),
+              )}
+            </TableCell>
+            <TableCell align="center">
+              {renderRowHeaderTitle(
+                intl.formatMessage(ticketSearchMessages.titleActions),
+              )}
             </TableCell>
           </TableRow>
         </TableHead>
