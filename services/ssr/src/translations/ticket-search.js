@@ -37,4 +37,8 @@ export const ticketSearchMessages = defineMessages({
     id: 'ticket-search.title-actions',
     defaultMessage: 'Actions',
   },
+  titleAssignees: {
+    id: 'ticket-search.title-assignees',
+    defaultMessage: 'Assigned to',
+  },
 });

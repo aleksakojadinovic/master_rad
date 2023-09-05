@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TicketStatusBadge from '../../../ticket-view/components/TicketStatusBadge';
-import { Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import UserChip from '../../../../components/User/UserChip';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
@@ -45,6 +45,11 @@ export function TicketTable({ tickets }) {
                 intl.formatMessage(ticketSearchMessages.titleActions),
               )}
             </TableCell>
+            <TableCell align="center">
+              {renderRowHeaderTitle(
+                intl.formatMessage(ticketSearchMessages.titleAssignees),
+              )}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -68,6 +73,13 @@ export function TicketTable({ tickets }) {
                 <Link href={`/tickets/view/${ticket.id}`} target="_blank">
                   {intl.formatMessage(globalMessages.open)}
                 </Link>
+              </TableCell>
+              <TableCell align="center">
+                {ticket.assignees.map((user) => (
+                  <Box key={user.id}>
+                    <Typography variant="caption">{user.fullName}</Typography>
+                  </Box>
+                ))}
               </TableCell>
             </TableRow>
           ))}
