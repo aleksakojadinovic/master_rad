@@ -46,7 +46,10 @@ function TicketAssigneeSection({ ticket }) {
       >
         {isCustomer && (
           <Typography variant="body1">
-            {intl.formatMessage(ticketViewMessages.ticketAssigneesCustomerNote)}
+            {intl.formatMessage(
+              ticketViewMessages.ticketAssigneesCustomerNote,
+              { count: ticket.assignees.length },
+            )}
           </Typography>
         )}
         <TicketAssignees
