@@ -1,13 +1,20 @@
+import { rolesMessages } from '@/translations/roles';
 import { Avatar, Chip } from '@mui/material';
 import React from 'react';
+import { useIntl } from 'react-intl';
 
 export default function UserChip({
   user: { firstName, lastName, fullName, role },
+  includeRole = false,
   onClick,
   onDelete,
 }) {
-  console.log(firstName, lastName);
+  const intl = useIntl();
   const initials = `${firstName?.[0] ?? '/'}${lastName?.[0] ?? '/'}`;
+  const roleName = intl.formatMessage(rolesMessages[role]);
+
+  const roleText = includeRole ? ` (${roleName.toLowerCase()})` : '';
+  const label = `${fullName}${roleText}`;
 
   const color =
     role === 'customer'
@@ -22,7 +29,7 @@ export default function UserChip({
       color={color}
       variant="contained"
       avatar={<Avatar>{initials}</Avatar>}
-      label={fullName}
+      label={label}
       onClick={onClick ?? undefined}
       onDelete={onDelete ?? undefined}
     />
