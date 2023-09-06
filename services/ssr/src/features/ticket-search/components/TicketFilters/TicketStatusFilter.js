@@ -15,7 +15,6 @@ function TicketStatusFilter({ value, onChange }) {
       onChange('');
       return;
     }
-    console.log('changing', e.target.value);
     onChange(e.target.value);
   };
   const resolvedValue = value[0] || ANY_TICKET;

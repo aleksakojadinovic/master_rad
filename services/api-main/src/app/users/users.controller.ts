@@ -52,7 +52,6 @@ export class UsersController {
     @GetUserInfo() user: User,
   ) {
     if (!user.isAdministrator() && !user.isAgent()) {
-      console.log(user.role);
       throw new UnauthorizedException();
     }
     const users = await this.usersService.findAll(queryDTO);

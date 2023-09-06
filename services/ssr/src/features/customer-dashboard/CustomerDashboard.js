@@ -1,18 +1,34 @@
-import { Box, Card, CardActions, CardContent, Typography } from '@mui/material';
+import useUser from '@/hooks/useUser';
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  Divider,
+  Typography,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { myActiveParams } from './utils';
+import { useGetTicketsQuery } from '@/api/tickets';
+import TicketPredefinedSearch from '../ticket-predefined-search/TicketPredefinedSearch';
 
 function CustomerDashboard() {
   const router = useRouter();
   const handleCreateNewTicket = () => {
     router.push('/tickets/create');
   };
+
+  const { id } = useUser();
+  const params = myActiveParams(id);
+
   return (
     <Box>
       <Box
         display="flex"
         width="100%"
         sx={{ cursor: 'pointer', overflowX: 'scroll' }}
+        marginBottom="12px"
         onClick={handleCreateNewTicket}
       >
         <Card>
@@ -30,6 +46,15 @@ function CustomerDashboard() {
             </Box>
           </CardActions>
         </Card>
+      </Box>
+
+      <Divider />
+
+      <Box marginTop="12px">
+        <Typography variant="body1" fontSize="24px">
+          Your active tickets
+        </Typography>
+        <TicketPredefinedSearch initialFilters={params} />
       </Box>
     </Box>
   );

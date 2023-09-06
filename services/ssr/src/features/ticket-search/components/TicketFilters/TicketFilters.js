@@ -11,7 +11,6 @@ function TicketFilters({ filters, onChange }) {
   const intl = useIntl();
 
   const handleChange = (key, value) => {
-    console.log(value);
     if (value === '') {
       const newFilters = { ...filters };
       delete newFilters[key];

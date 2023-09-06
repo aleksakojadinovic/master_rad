@@ -131,8 +131,6 @@ export class TicketsService extends BaseService {
       sortField,
     } = queryDTO;
 
-    console.log(statuses);
-
     const tickets = await this.ticketsRepository.findAll({
       page,
       perPage,
