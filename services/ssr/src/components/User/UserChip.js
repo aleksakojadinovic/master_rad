@@ -17,11 +17,11 @@ export default function UserChip({
   const label = `${fullName}${roleText}`;
 
   const color =
-    role === 'customer'
-      ? 'default'
-      : role === 'administrator'
+    role === 'administrator'
       ? 'warning'
-      : 'primary';
+      : role === 'agent'
+      ? 'primary'
+      : 'default';
 
   return (
     <Chip
