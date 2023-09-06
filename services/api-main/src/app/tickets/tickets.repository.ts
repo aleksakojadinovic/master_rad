@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket, TicketDocument } from 'src/app/tickets/schema/ticket.schema';
-import { Model } from 'mongoose';
+import { Model, SortOrder } from 'mongoose';
 import { UsersService } from 'src/app/users/users.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
@@ -58,6 +58,9 @@ export class TicketsRepository {
     status: string | null = null,
     assignee: string | null = null,
     createdBy: string | null = null,
+    unassigned: boolean | null = null,
+    sortOrder: SortOrder = 1,
+    sortField: string | null = null,
   ): Promise<TicketDocument[]> {
     const query = this.ticketModel.find({});
 
@@ -71,6 +74,22 @@ export class TicketsRepository {
 
     if (createdBy !== null) {
       query.where('createdBy', createdBy);
+    }
+
+    if (unassigned !== null) {
+      if (unassigned) {
+        query.or([
+          { assignees: { $size: 0 } },
+          { assignees: { $exists: false } },
+        ]);
+      }
+      if (!unassigned) {
+        query.where('assignees', { $ne: [] });
+      }
+    }
+
+    if (sortField !== null) {
+      query.sort([[sortField, sortOrder as SortOrder]]);
     }
 
     query.skip((page - 1) * perPage).limit(perPage);

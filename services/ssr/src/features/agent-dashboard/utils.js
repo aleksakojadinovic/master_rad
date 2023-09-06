@@ -20,6 +20,7 @@ export const getNewTodayParams = () => ({
   page: 1,
   perPage: 5,
   status: TicketStatus.NEW,
+  unassigned: true,
   includes: ['createdBy', 'assignees'],
 });
 
