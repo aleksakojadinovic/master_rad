@@ -1,12 +1,15 @@
 import CreateTicket from '@/features/create-ticket/CreateTicket';
+import { createTicketMessages } from '@/translations/create-ticket';
 import Head from 'next/head';
 import React, { Fragment } from 'react';
+import { useIntl } from 'react-intl';
 
 function TicketsCreatePage() {
+  const intl = useIntl();
   return (
     <Fragment>
       <Head>
-        <title>Create a ticket | STS</title>
+        <title>{intl.formatMessage(createTicketMessages.pageHeadTitle)}</title>
       </Head>
       <CreateTicket />
     </Fragment>

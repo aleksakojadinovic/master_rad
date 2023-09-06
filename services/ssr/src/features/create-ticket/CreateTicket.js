@@ -1,40 +1,84 @@
-/* eslint-disable no-unused-vars */
 import { useCreateTicketMutation } from '@/api/tickets';
-import { clickHere, globalMessages } from '@/translations/global';
-import {
-  queryStatusMessages,
-  statusError,
-  statusSuccess,
-} from '@/translations/query-statuses';
+import { globalMessages } from '@/translations/global';
+import { queryStatusMessages } from '@/translations/query-statuses';
 import { createTicketMessages } from '@/translations/create-ticket';
 import {
   Alert,
   AlertTitle,
   Box,
   Button,
-  Radio,
-  RadioGroup,
   TextField,
   TextareaAutosize,
   Typography,
 } from '@mui/material';
-import Link from 'next/link';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { formsMessages } from '@/translations/forms';
+import { formsMessages, validationMessages } from '@/translations/forms';
+import { Field, Form, Formik } from 'formik';
+import * as Yup from 'yup';
+import {
+  TICKET_BODY_MAX_LENGTH,
+  TICKET_BODY_MIN_LENGTH,
+  TICKET_TITLE_MAX_LENGTH,
+  TICKET_TITLE_MIN_LENGTH,
+} from '@/constants/forms';
+import FormErrorMessage from './components/FormErrorMessage';
+
+const FormTextField = (props) => <TextField fullWidth {...props} />;
+const FormTextArea = (props) => (
+  <TextareaAutosize minRows={10} style={{ width: '100%' }} {...props} />
+);
 
 function CreateTicket() {
   const intl = useIntl();
+  const formResetRef = useRef();
+
+  const validationSchema = useMemo(() => {
+    return Yup.object({
+      title: Yup.string()
+        .min(
+          TICKET_TITLE_MIN_LENGTH,
+          intl.formatMessage(validationMessages.errorMinXCharacters, {
+            x: TICKET_TITLE_MIN_LENGTH,
+          }),
+        )
+        .max(
+          TICKET_TITLE_MAX_LENGTH,
+          intl.formatMessage(validationMessages.errorMaxXCharacters, {
+            x: TICKET_TITLE_MAX_LENGTH,
+          }),
+        )
+        .required(intl.formatMessage(validationMessages.errorFieldRequired)),
+      body: Yup.string()
+        .min(
+          TICKET_BODY_MIN_LENGTH,
+          intl.formatMessage(validationMessages.errorMinXCharacters, {
+            x: TICKET_BODY_MIN_LENGTH,
+          }),
+        )
+        .max(
+          TICKET_BODY_MAX_LENGTH,
+          intl.formatMessage(validationMessages.errorMaxXCharacters, {
+            x: TICKET_BODY_MAX_LENGTH,
+          }),
+        )
+        .required(intl.formatMessage(validationMessages.errorFieldRequired)),
+    });
+  }, [intl]);
 
   const [triggerCreateTicket, { data, error, isSuccess, isError }] =
     useCreateTicketMutation();
 
-  const handleSubmit = () => {
-    triggerCreateTicket({ title, body });
-  };
+  useEffect(() => {
+    if (isSuccess && formResetRef.current) {
+      formResetRef.current();
+    }
+  }, [isSuccess]);
 
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+  const handleSubmit = ({ title, body }, { resetForm }) => {
+    triggerCreateTicket({ title, body });
+    formResetRef.current = resetForm;
+  };
 
   const renderAlert = () => {
     if (isSuccess) {
@@ -70,51 +114,45 @@ function CreateTicket() {
   };
 
   return (
-    <Fragment>
-      {renderAlert()}
-      <Typography variant="caption">
-        {intl.formatMessage(createTicketMessages.ticketTitleText)}
-      </Typography>
-      <TextField
-        fullWidth
-        placeholder={intl.formatMessage(createTicketMessages.ticketTitleText)}
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      {/* <Box marginTop="12px">
-        <Typography variant="caption">
-          How urgent would you say this issue is?
-        </Typography>
-        <RadioGroup
-          defaultValue="medium"
-          name="radio-buttons-group"
-          value="medium"
-          row
-        >
-          <FormControlLabel value="low" control={<Radio />} label="Low" />
-          <FormControlLabel value="medium" control={<Radio />} label="Medium" />
-          <FormControlLabel value="high" control={<Radio />} label="High" />
-        </RadioGroup>
-      </Box> */}
+    <Formik
+      initialValues={{ title: '', body: '' }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ errors, touched }) => (
+        <Form>
+          {renderAlert()}
+          <label htmlFor="title">
+            <Typography variant="caption">
+              {intl.formatMessage(createTicketMessages.ticketTitleText)}
+            </Typography>
+          </label>
+          <Field name="title" type="text" as={FormTextField} />
+          {touched.title && errors.title && (
+            <FormErrorMessage text={errors.title} />
+          )}
 
-      <Box marginTop="12px">
-        <Typography variant="caption">
-          {intl.formatMessage(createTicketMessages.ticketDescriptionText)}
-        </Typography>
-        <Box marginTop="12px">
-          <TextareaAutosize
-            minRows={10}
-            style={{ width: '100%' }}
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-          />
-        </Box>
-      </Box>
+          <Box marginTop="12px">
+            <label htmlFor="body">
+              <Typography variant="caption">
+                {intl.formatMessage(createTicketMessages.ticketDescriptionText)}
+              </Typography>
+            </label>
 
-      <Button onClick={handleSubmit}>
-        {intl.formatMessage(formsMessages.submit)}
-      </Button>
-    </Fragment>
+            <Box marginTop="12px">
+              <Field name="body" as={FormTextArea} />
+            </Box>
+            {touched.body && errors.body && (
+              <FormErrorMessage text={errors.body} />
+            )}
+          </Box>
+
+          <Button type="submit">
+            {intl.formatMessage(formsMessages.submit)}
+          </Button>
+        </Form>
+      )}
+    </Formik>
   );
 }
 

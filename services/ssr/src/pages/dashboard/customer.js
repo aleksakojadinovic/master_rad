@@ -1,9 +1,23 @@
 import { useStoreUser } from '@/api/auth';
+import CustomerDashboard from '@/features/customer-dashboard/CustomerLandingPage';
 import { wrapper } from '@/redux/store';
-import React from 'react';
+import { customerDashboardMessages } from '@/translations/customer-dashboard';
+import Head from 'next/head';
+import React, { Fragment } from 'react';
+import { useIntl } from 'react-intl';
 
 function CustomerDashboardPage() {
-  return <div>DashboardPage</div>;
+  const intl = useIntl();
+  return (
+    <Fragment>
+      <Head>
+        <title>
+          {intl.formatMessage(customerDashboardMessages.pageHeadTitle)}
+        </title>
+      </Head>
+      <CustomerDashboard />
+    </Fragment>
+  );
 }
 
 export default CustomerDashboardPage;
