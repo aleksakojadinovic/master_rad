@@ -27,6 +27,7 @@ function NavigationBar() {
           />
         </Box>
         <Box display="flex" alignItems="center">
+          {isLoggedIn && null}
           {isLoggedIn && <NotificationsMenu />}
           <NavigationUserMenu />
         </Box>

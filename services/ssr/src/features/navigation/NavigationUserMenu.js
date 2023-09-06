@@ -8,7 +8,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 const AuthenticationModal = dynamic(() =>
-  import('../AuthenticationModal/AuthenticationModal'),
+  import('../auth/AuthenticationModal/AuthenticationModal.js'),
 );
 
 function NavigationUserMenu() {
