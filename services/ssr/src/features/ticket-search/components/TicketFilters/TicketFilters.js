@@ -42,7 +42,7 @@ function TicketFilters({ filters, onChange }) {
           <TicketStatusFilter
             value={filters.status ?? ''}
             onChange={(status) => {
-              handleChange('status', status);
+              handleChange('statuses', [status]);
             }}
           />
         </Box>

@@ -6,6 +6,17 @@ import { UsersService } from 'src/app/users/users.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 
+export type TicketsQuery = {
+  page: number | null;
+  perPage: number | null;
+  statuses: string[] | null;
+  assignee: string | null;
+  createdBy: string | null;
+  unassigned: boolean | null;
+  sortOrder: SortOrder;
+  sortField: string | null;
+};
+
 @Injectable()
 export class TicketsRepository {
   constructor(
@@ -43,25 +54,27 @@ export class TicketsRepository {
       .populate(TicketsRepository.POPULATE);
   }
 
-  findAll(
+  findAll({
     page = 1,
     perPage = 10,
-    status: string | null = null,
-    assignee: string | null = null,
-    createdBy: string | null = null,
-    unassigned: boolean | null = null,
-    sortOrder: SortOrder = 1,
-    sortField: string | null = null,
-  ): Promise<TicketDocument[]> {
+    statuses = null,
+    assignee = null,
+    createdBy = null,
+    unassigned = null,
+    sortOrder = 1,
+    sortField = null,
+  }: TicketsQuery): Promise<TicketDocument[]> {
     const query = this.ticketModel.find({});
 
-    if (status !== null) {
-      query.where('status', status);
+    if (statuses !== null) {
+      query.where('status', { $in: statuses });
     }
 
     if (assignee !== null) {
       query.where('assignees', { $in: [assignee] });
     }
+
+    console.log({ type: typeof createdBy, value: createdBy });
 
     if (createdBy !== null) {
       query.where('createdBy', createdBy);
