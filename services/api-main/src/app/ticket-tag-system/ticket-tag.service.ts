@@ -18,14 +18,9 @@ export class TicketTagService extends BaseService {
   }
 
   async findAll(user: User) {
-    const userRoleIds = user.roles.map(({ _id }) => _id);
     const tags = await this.ticketTagRepository.findAll();
     const allowedTags = tags.filter((tag) => {
-      const canSee = userRoleIds.some((userRoleId) =>
-        tag.group.permissions.canSeeRoles
-          .map(({ _id }) => _id.toString())
-          .includes(userRoleId.toString()),
-      );
+      const canSee = tag.group.permissions.canSeeRoles.includes(user.role);
 
       return canSee;
     });

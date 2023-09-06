@@ -31,8 +31,6 @@ export class AuthController {
   @Header('content-type', 'application/json')
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async me(@GetUserInfo() user: User) {
-    return this.mapper.map(user, User, UserDTO, {
-      extraArgs: () => ({ include: ['roles'] }),
-    });
+    return this.mapper.map(user, User, UserDTO);
   }
 }

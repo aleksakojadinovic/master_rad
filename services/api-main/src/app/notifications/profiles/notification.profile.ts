@@ -9,6 +9,8 @@ import {
 import { Injectable } from '@nestjs/common';
 import { Notification } from '../schema/notification.schema';
 import { NotificationDTO } from '../dto/notification.dto';
+import { User } from 'src/app/users/schema/user.schema';
+import { UserDTO } from 'src/app/users/dto/user.dto';
 
 @Injectable()
 export class NotificationProfile extends AutomapperProfile {
@@ -40,7 +42,16 @@ export class NotificationProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.payload,
-          mapFrom((source) => source.payload),
+          mapFrom((source) => {
+            const payloadUser = source.payload.user;
+            if (!payloadUser) {
+              return source.payload;
+            }
+            return {
+              ...source.payload,
+              user: mapper.map(source.payload.user as User, User, UserDTO),
+            };
+          }),
         ),
       );
     };

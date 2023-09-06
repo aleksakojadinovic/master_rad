@@ -37,4 +37,8 @@ export const ticketViewMessages = defineMessages({
     id: 'ticket-view.go-to-bottom',
     defaultMessage: 'Go to bottom',
   },
+  ticketAssigneesCustomerNote: {
+    id: 'ticket-view.ticket-assignees-customer-note:',
+    defaultMessage: 'Your ticket is assigned to',
+  },
 });

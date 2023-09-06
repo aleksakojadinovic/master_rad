@@ -16,15 +16,12 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { HasRoles } from 'src/app/auth/has-roles.decorator';
-import { RolesGuard } from 'src/app/auth/roles.guard';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { User } from './schema/user.schema';
 import { UserDTO } from './dto/user.dto';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
-import * as _ from 'lodash';
 import { UsersQueryDTO } from './dto/users-query.dto';
 import { UsersInterceptor } from './interceptors/users.interceptor';
 @UseInterceptors(UsersInterceptor)
@@ -36,12 +33,12 @@ export class UsersController {
   ) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() dto: CreateUserDto) {
+    const result = await this.usersService.create(dto);
+    return this.mapper.map(result, User, UserDTO);
   }
 
-  @HasRoles('agent')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get('profile')
   getProfile() {
     return 'Hello!';
@@ -54,16 +51,11 @@ export class UsersController {
     queryDTO: UsersQueryDTO,
     @GetUserInfo() user: User,
   ) {
-    // TODO: Rethink this
-    if (
-      _.intersection(
-        user.roles.map(({ name }) => name),
-        ['agent', 'administrator', 'superadministrator'],
-      ).length <= 0
-    ) {
+    if (!user.isAdministrator() && !user.isAgent()) {
+      console.log(user.role);
       throw new UnauthorizedException();
     }
-    const users = await this.usersService.findAll(queryDTO, user);
+    const users = await this.usersService.findAll(queryDTO);
     return this.mapper.mapArray(users, User, UserDTO);
   }
 

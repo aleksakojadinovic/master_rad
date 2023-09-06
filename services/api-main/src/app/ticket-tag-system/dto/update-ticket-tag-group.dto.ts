@@ -2,6 +2,7 @@ import { Expose, Transform, Type } from 'class-transformer';
 import {
   ArrayUnique,
   IsArray,
+  IsIn,
   IsOptional,
   IsString,
   Validate,
@@ -10,32 +11,35 @@ import {
 import { IsValidObjectId } from 'src/codebase/pipes/objectid-pipe';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 import { CreateTicketTagDTO } from './create-ticket-tag.dto';
+import { ROLES } from 'src/app/users/schema/role.schema';
+
+const ROLES_STRING = ROLES.map((role) => role.toString());
 
 export class UpdateTicketTagGroupPermissionsDTO {
   @Expose()
   @IsArray()
   @IsString({ each: true })
+  @IsIn(ROLES_STRING, { each: true })
   @IsOptional()
-  @ArrayUnique()
-  @Validate(IsValidObjectId, { each: true })
+  // @ArrayUnique()
   @Transform(({ value }) => (value !== undefined ? value : null))
   public canAddRoles?: string[] | null;
 
   @Expose()
   @IsArray()
   @IsString({ each: true })
+  @IsIn(ROLES_STRING, { each: true })
   @IsOptional()
-  @ArrayUnique()
-  @Validate(IsValidObjectId, { each: true })
+  // @ArrayUnique()
   @Transform(({ value }) => (value !== undefined ? value : null))
   public canRemoveRoles?: string[] | null;
 
   @Expose()
   @IsArray()
   @IsString({ each: true })
+  @IsIn(ROLES_STRING, { each: true })
   @IsOptional()
   @ArrayUnique()
-  @Validate(IsValidObjectId, { each: true })
   @Transform(({ value }) => (value !== undefined ? value : null))
   public canSeeRoles?: string[] | null;
 }

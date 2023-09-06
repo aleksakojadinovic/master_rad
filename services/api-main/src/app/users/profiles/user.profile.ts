@@ -5,13 +5,10 @@ import {
   createMap,
   forMember,
   mapFrom,
-  mapWithArguments,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { User } from '../schema/user.schema';
 import { UserDTO } from '../dto/user.dto';
-import { Role } from '../schema/role.schema';
-import { RoleDTO } from '../dto/role.dto';
 
 @Injectable()
 export class UserProfile extends AutomapperProfile {
@@ -48,18 +45,8 @@ export class UserProfile extends AutomapperProfile {
           mapFrom((source) => source.username),
         ),
         forMember(
-          (destination) => destination.roles,
-          mapWithArguments((source, extra) => {
-            if (
-              extra.include &&
-              (extra.include as string[]).includes('roles')
-            ) {
-              return mapper.mapArray(source.roles, Role, RoleDTO, {
-                extraArgs: () => extra,
-              });
-            }
-            return source.roles.map((role) => role._id.toString());
-          }),
+          (destination) => destination.role,
+          mapFrom((source) => source.role),
         ),
       );
     };

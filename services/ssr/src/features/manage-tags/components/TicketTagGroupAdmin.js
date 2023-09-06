@@ -14,8 +14,6 @@ import { useIntl } from 'react-intl';
 import TagAdmin from './TagAdmin';
 
 import _ from 'lodash';
-import { useSelector } from 'react-redux';
-import { selectGetRolesQueryResponse } from '@/api/roles';
 import RolePicker from '@/components/RolePicker/RolePicker';
 import IntlTable from '@/components/IntlTable/IntlTable';
 import { LanguageContext } from '@/context/LanguageContext';
@@ -25,6 +23,7 @@ import {
 } from '@/api/ticket-tag-system';
 import ServerActionDialog from '@/components/ServerActionDialog/ServerActionDialog';
 import { constructTagUpdateDTO } from '../utils/params';
+import { ROLES } from '@/constants/roles';
 
 function TicketTagGroupAdmin({ group, isCreate }) {
   const languageCode = useContext(LanguageContext);
@@ -76,15 +75,14 @@ function TicketTagGroupAdmin({ group, isCreate }) {
   );
   const [tags, setTags] = useState(originalTags);
 
-  const constructInitialPermissionsStateValue = useCallback(
-    () => ({
+  const constructInitialPermissionsStateValue = useCallback(() => {
+    return {
       ...originalPermissions,
-      canAddRoles: originalPermissions.canAddRoles ?? [],
-      canRemoveRoles: originalPermissions.canRemoveRoles ?? [],
-      canSeeRoles: originalPermissions.canSeeRoles ?? [],
-    }),
-    [originalPermissions],
-  );
+      canAddRoles: originalPermissions?.canAddRoles ?? [],
+      canRemoveRoles: originalPermissions?.canRemoveRoles ?? [],
+      canSeeRoles: originalPermissions?.canSeeRoles ?? [],
+    };
+  }, [originalPermissions]);
 
   const [permissions, setPermissions] = useState(
     constructInitialPermissionsStateValue,
@@ -130,26 +128,19 @@ function TicketTagGroupAdmin({ group, isCreate }) {
     ],
   );
 
-  const roles = useSelector(selectGetRolesQueryResponse);
+  const whoCanAddAvailableRoles = ROLES.filter(
+    (role) => !permissions.canAddRoles?.includes(role),
+  );
 
-  const whoCanAddAvailableRoles =
-    roles.filter(
-      (role) =>
-        !permissions.canAddRoles?.map(({ id }) => id).includes(role.id) ?? [],
-    ) ?? [];
+  console.log({ whoCanAddAvailableRoles });
 
-  const whoCanRemoveAvailableRoles =
-    roles.filter(
-      (role) =>
-        !permissions.canRemoveRoles?.map(({ id }) => id).includes(role.id) ??
-        [],
-    ) ?? [];
+  const whoCanRemoveAvailableRoles = ROLES.filter(
+    (role) => !permissions.canRemoveRoles?.includes(role),
+  );
 
-  const whoCanSeeAvailableRoles =
-    roles.filter(
-      (role) =>
-        !permissions.canSeeRoles?.map(({ id }) => id).includes(role.id) ?? [],
-    ) ?? [];
+  const whoCanSeeAvailableRoles = ROLES.filter(
+    (role) => !permissions.canSeeRoles?.includes(role),
+  );
 
   const [whoCanAddKey, setWhoCanAddKey] = useState(0);
   const [whoCanRemoveKey, setWhoCanRemoveKey] = useState(0);
@@ -191,9 +182,9 @@ function TicketTagGroupAdmin({ group, isCreate }) {
 
     const patchObject = {
       permissions: {
-        canAddRoles: permissions.canAddRoles.map(({ id }) => id),
-        canRemoveRoles: permissions.canRemoveRoles.map(({ id }) => id),
-        canSeeRoles: permissions.canSeeRoles.map(({ id }) => id),
+        canAddRoles: permissions.canAddRoles,
+        canRemoveRoles: permissions.canRemoveRoles,
+        canSeeRoles: permissions.canSeeRoles,
       },
       nameIntl,
       descriptionIntl,
@@ -325,12 +316,15 @@ function TicketTagGroupAdmin({ group, isCreate }) {
           </Typography>
           <Box display="flex" width="100%">
             <ChipList
-              items={permissions.canAddRoles}
-              onClose={(closedId) => {
+              items={permissions.canAddRoles.map((name, index) => ({
+                name,
+                id: index,
+              }))}
+              onClose={({ name: closedRole }) => {
                 setPermissions((currentPermission) => ({
                   ...currentPermission,
                   canAddRoles: currentPermission.canAddRoles.filter(
-                    ({ id }) => id !== closedId,
+                    (role) => role !== closedRole,
                   ),
                 }));
               }}
@@ -354,12 +348,15 @@ function TicketTagGroupAdmin({ group, isCreate }) {
           </Typography>
           <Box display="flex">
             <ChipList
-              items={permissions.canRemoveRoles}
-              onClose={(closedId) => {
+              items={permissions.canRemoveRoles.map((name, index) => ({
+                name,
+                id: index,
+              }))}
+              onClose={({ name: closedRole }) => {
                 setPermissions((currentPermission) => ({
                   ...currentPermission,
                   canRemoveRoles: currentPermission.canRemoveRoles.filter(
-                    ({ id }) => id !== closedId,
+                    (role) => role !== closedRole,
                   ),
                 }));
               }}
@@ -386,12 +383,15 @@ function TicketTagGroupAdmin({ group, isCreate }) {
           </Typography>
           <Box display="flex">
             <ChipList
-              items={permissions.canSeeRoles}
-              onClose={(closedId) => {
+              items={permissions.canSeeRoles.map((name, index) => ({
+                name,
+                id: index,
+              }))}
+              onClose={({ name: closedRole }) => {
                 setPermissions((currentPermission) => ({
                   ...currentPermission,
                   canSeeRoles: currentPermission.canSeeRoles.filter(
-                    ({ id }) => id !== closedId,
+                    (role) => role !== closedRole,
                   ),
                 }));
               }}

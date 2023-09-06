@@ -1,6 +1,5 @@
 import api from '@/services/api';
 import { createSelector } from '@reduxjs/toolkit';
-import { selectGetRolesQueryResponse } from './roles';
 
 export const ticketTagSystemSlice = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -87,23 +86,9 @@ export const selectGetTicketTagGroupsQueryResponse = createSelector(
 );
 
 export const selectTicketTagGroups = createSelector(
-  [selectGetTicketTagGroupsQueryResult, selectGetRolesQueryResponse],
-  (queryResult, roles) => {
-    const groups = queryResult.data ?? [];
-    const result = groups.map((group) => ({
-      ...group,
-      permissions: {
-        ...group.permission,
-        canAddRoles: group.permissions.canAddRoles.map((roleId) =>
-          roles.find(({ id }) => id == roleId),
-        ),
-        canRemoveRoles: group.permissions.canRemoveRoles.map((roleId) =>
-          roles.find(({ id }) => id == roleId),
-        ),
-      },
-    }));
-
-    return result;
+  [selectGetTicketTagGroupsQueryResult],
+  (queryResult) => {
+    return queryResult.data ?? [];
   },
 );
 

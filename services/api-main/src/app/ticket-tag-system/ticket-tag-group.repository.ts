@@ -22,18 +22,6 @@ export class TicketTagGroupRepository {
       path: 'tags',
       model: 'TicketTag',
     },
-    {
-      path: 'permissions.canAddRoles',
-      model: 'Role',
-    },
-    {
-      path: 'permissions.canRemoveRoles',
-      model: 'Role',
-    },
-    {
-      path: 'permissions.canSeeRoles',
-      model: 'Role',
-    },
   ];
 
   findOne(id: string) {

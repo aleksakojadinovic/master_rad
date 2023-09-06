@@ -178,7 +178,7 @@ export class TicketsService extends BaseService {
       throw new TicketIdNotValidError(id);
     }
 
-    const isCustomer = user.roles.map(({ name }) => name).includes('customer');
+    const isCustomer = user.isCustomer();
 
     const ticket = await this.ticketsRepository.findById(id);
 
@@ -245,16 +245,9 @@ export class TicketsService extends BaseService {
   }
 
   private stripTags(ticket: Ticket, user: User) {
-    const userRoleIds = user.roles.map((role) => role._id.toString());
-    ticket.tags = ticket.tags.filter((tag) => {
-      const canSee = userRoleIds.some((userRoleId) =>
-        tag.group.permissions.canSeeRoles
-          .map(({ _id }) => _id.toString())
-          .includes(userRoleId.toString()),
-      );
-
-      return canSee;
-    });
+    ticket.tags = ticket.tags.filter((tag) =>
+      tag.group.permissions.canSeeRoles.includes(user.role),
+    );
     return ticket;
   }
 
@@ -272,12 +265,10 @@ export class TicketsService extends BaseService {
     const currentStatus = ticket.status;
     const targetStatus = dto.status;
 
-    const canChange = TICKET_STATUS_GRAPH[currentStatus].find((entry) => {
-      return (
-        entry.status === targetStatus &&
-        user.roles.some((role) => entry.roles.includes(role.name))
-      );
-    });
+    const canChange = TICKET_STATUS_GRAPH[currentStatus].find(
+      (entry) =>
+        entry.status === targetStatus && entry.roles.includes(user.role),
+    );
 
     if (!canChange) {
       throw new NotAllowedToChangeToThisStatusError(
@@ -483,7 +474,6 @@ export class TicketsService extends BaseService {
   ) {
     const addTags = dto.addTags || [];
     const removeTags = dto.removeTags || [];
-    const userRoleIds = user.roles.map((role) => role._id.toString());
 
     if (addTags.some((addId) => removeTags.includes(addId))) {
       throw new OverlapInTagIdsError();
@@ -492,15 +482,7 @@ export class TicketsService extends BaseService {
     if (removeTags.length > 0) {
       const tagsToRemove = await this.ticketTagService.findMany(removeTags);
       tagsToRemove.forEach((tag) => {
-        if (
-          !userRoleIds.some((userRoleId) => {
-            const isAllowed = tag.group.permissions.canRemoveRoles
-              .map((r) => r._id.toString())
-              .includes(userRoleId.toString());
-
-            return isAllowed;
-          })
-        ) {
+        if (!tag.group.permissions.canRemoveRoles.includes(user.role)) {
           throw new NotAllowedToRemoveThisTagError();
         }
       });
@@ -512,15 +494,7 @@ export class TicketsService extends BaseService {
     if (addTags.length > 0) {
       const tagsToAdd = await this.ticketTagService.findMany(addTags);
       tagsToAdd.forEach((tag) => {
-        if (
-          !userRoleIds.some((userRoleId) => {
-            const isAllowed = tag.group.permissions.canAddRoles
-              .map((r) => r._id.toString())
-              .includes(userRoleId.toString());
-
-            return isAllowed;
-          })
-        ) {
+        if (!tag.group.permissions.canAddRoles.includes(user.role)) {
           throw new NotAllowedToAddThisTagError();
         }
 

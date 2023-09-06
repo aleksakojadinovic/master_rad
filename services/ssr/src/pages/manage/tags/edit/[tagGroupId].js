@@ -1,5 +1,4 @@
-import { selectGetMeQueryResponse } from '@/api/auth';
-import { rolesSlice } from '@/api/roles';
+import { useStoreUser } from '@/api/auth';
 import {
   selectGetTicketTagGroupQueryResponse,
   ticketTagSystemSlice,
@@ -19,7 +18,7 @@ function EditTagGroupRoute({ id, tagGroup }) {
 
   useGetTicketTagGroupQuery({
     id,
-    includes: ['tags', 'roles'],
+    includes: ['tags'],
   });
 
   return (
@@ -42,15 +41,9 @@ EditTagGroupRoute.Layout = ManageTagsLayout;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-    const user = selectGetMeQueryResponse(store.getState());
-    if (user == null) {
-      return {
-        redirect: {
-          destination: '/404',
-        },
-      };
-    }
-    if (!user.roles.map(({ name }) => name).includes('administrator')) {
+    const { isAdministrator } = useStoreUser(store);
+
+    if (!isAdministrator) {
       return {
         redirect: {
           destination: '/404',
@@ -60,20 +53,22 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const {
       params: { tagGroupId: id },
     } = context;
+
     store.dispatch(
       ticketTagSystemSlice.endpoints.getTicketTagGroup.initiate({
         id,
-        includes: ['tags', 'roles'],
+        includes: ['tags'],
       }),
     );
 
-    store.dispatch(rolesSlice.endpoints.getRoles.initiate());
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
 
     const tagGroup = selectGetTicketTagGroupQueryResponse(store.getState(), {
       id,
-      includes: ['tags', 'roles'],
+      includes: ['tags'],
     });
+
+    console.log({ tagGroup });
 
     return {
       props: { id, isEditPage: true, tagGroup },

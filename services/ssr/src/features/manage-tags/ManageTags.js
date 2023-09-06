@@ -5,7 +5,6 @@ import {
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Button } from '@mui/material';
-import { useGetRolesQuery } from '@/api/roles';
 import { getManageTagsParams } from './utils/params';
 import TicketTagGroupPreview from './components/TicketTagGroupPreview';
 import { useIntl } from 'react-intl';
@@ -16,19 +15,11 @@ function ManageTags() {
   const { isLoading: isTagGroupsLoading, isFetching: isTagGroupsFetching } =
     useGetTicketTagGroupsQuery(getManageTagsParams());
 
-  const { isLoading: isRolesLoading, isFetching: isRolesFetching } =
-    useGetRolesQuery();
-
   const ticketTagGroups = useSelector((state) =>
     selectTicketTagGroups(state, getManageTagsParams()),
   );
 
-  if (
-    isTagGroupsLoading ||
-    isTagGroupsFetching ||
-    isRolesLoading ||
-    isRolesFetching
-  ) {
+  if (isTagGroupsLoading || isTagGroupsFetching) {
     return 'Loading...';
   }
 

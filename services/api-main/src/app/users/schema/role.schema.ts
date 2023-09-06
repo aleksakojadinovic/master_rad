@@ -1,30 +1,17 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { AutoMap } from '@automapper/classes';
+const ROLE_ADMINISTRATOR = 'administrator';
+const ROLE_AGENT = 'agent';
+const ROLE_CUSTOMER = 'customer';
 
-@Schema()
-export class Role {
-  constructor(name: string) {
-    this.name = name;
-  }
-
-  @AutoMap()
-  _id: string;
-
-  @AutoMap()
-  @Prop()
-  name: string;
+export enum Role {
+  ADMINISTRATOR = 'administrator',
+  AGENT = 'agent',
+  CUSTOMER = 'customer',
 }
 
-export const RoleSchema = SchemaFactory.createForClass(Role);
+export const ROLES = [Role.ADMINISTRATOR, Role.AGENT, Role.CUSTOMER];
 
-export const ROLE_SUPERADMINISTRATOR = 'superadministrator';
-export const ROLE_ADMINISTRATOR = 'administrator';
-export const ROLE_AGENT = 'agent';
-export const ROLE_CUSTOMER = 'customer';
-
-export const ROLE = {
-  [ROLE_SUPERADMINISTRATOR]: ROLE_SUPERADMINISTRATOR,
-  [ROLE_ADMINISTRATOR]: ROLE_ADMINISTRATOR,
-  [ROLE_AGENT]: ROLE_AGENT,
-  [ROLE_CUSTOMER]: ROLE_CUSTOMER,
+export const ROLE_VALUES = {
+  [ROLE_ADMINISTRATOR]: Role.ADMINISTRATOR,
+  [ROLE_AGENT]: Role.AGENT,
+  [ROLE_CUSTOMER]: Role.CUSTOMER,
 };
