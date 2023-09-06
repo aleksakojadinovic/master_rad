@@ -8,10 +8,10 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 const AuthenticationModal = dynamic(() =>
-  import('../auth/AuthenticationModal/AuthenticationModal.js'),
+  import('../../auth/AuthenticationModal/AuthenticationModal'),
 );
 
-function NavigationUserMenu() {
+function UserMenu() {
   useGetMeQuery();
 
   const intl = useIntl();
@@ -85,4 +85,4 @@ function NavigationUserMenu() {
   );
 }
 
-export default NavigationUserMenu;
+export default UserMenu;
