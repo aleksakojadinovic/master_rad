@@ -11,8 +11,7 @@ function CustomerDashboard() {
     <Box
       display="flex"
       width="100%"
-      overflowX="scroll"
-      sx={{ cursor: 'pointer' }}
+      sx={{ cursor: 'pointer', overflowX: 'scroll' }}
       onClick={handleCreateNewTicket}
     >
       <Card>
