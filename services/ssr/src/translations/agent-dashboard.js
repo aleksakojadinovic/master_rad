@@ -17,4 +17,12 @@ export const agentDashboardMessages = defineMessages({
     id: 'agent-dashboard.new-today',
     defaultMessage: 'New tickets today',
   },
+  sectionTitleTriage: {
+    id: 'agent-dashboard.section-title-triage',
+    defaultMessage: 'Triage - new tickets today',
+  },
+  emptyState: {
+    id: 'agent-dashboard.empty-state',
+    defaultMessage: 'Nothing to see here',
+  },
 });

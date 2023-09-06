@@ -16,7 +16,12 @@ export const getMyInProgressParams = (userId) => ({
   includes: ['createdBy', 'assignees'],
 });
 
-export const getNewTodayParams = () => ({ page: 1, perPage: 5 });
+export const getNewTodayParams = () => ({
+  page: 1,
+  perPage: 5,
+  status: TicketStatus.NEW,
+  includes: ['createdBy', 'assignees'],
+});
 
 export const getPredefinedParams = (userId) => {
   return [

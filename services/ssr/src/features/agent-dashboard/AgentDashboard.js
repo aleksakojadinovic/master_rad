@@ -4,7 +4,11 @@ import { Box, Divider, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import TicketPredefinedSearch from '../ticket-predefined-search/TicketPredefinedSearch';
-import { getMyInProgressParams, getMyOpenParams } from './utils';
+import {
+  getMyInProgressParams,
+  getMyOpenParams,
+  getNewTodayParams,
+} from './utils';
 import { agentDashboardMessages } from '@/translations/agent-dashboard';
 
 function AgentDashboard() {
@@ -13,6 +17,7 @@ function AgentDashboard() {
 
   const myOpenParams = getMyOpenParams(id);
   const myInProgressParams = getMyInProgressParams(id);
+  const newTodayParams = getNewTodayParams();
 
   return (
     <Box>
@@ -42,11 +47,18 @@ function AgentDashboard() {
               <TicketPredefinedSearch initialFilters={myInProgressParams} />
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}>
-            tjhree
-          </Grid>
-          <Grid item xs={12} md={6}>
-            four
+          <Grid item xs={12}>
+            <Box padding="6px" minHeight="500px">
+              <Box width="100%" display="flex" justifyContent="center">
+                <Typography variant="body1" fontSize="24px">
+                  {intl.formatMessage(
+                    agentDashboardMessages.sectionTitleTriage,
+                  )}
+                </Typography>
+              </Box>
+
+              <TicketPredefinedSearch initialFilters={newTodayParams} />
+            </Box>
           </Grid>
         </Grid>
       </Box>

@@ -14,21 +14,30 @@ function TicketPredefinedSearch({ initialFilters }) {
     setFilters((prev) => ({ ...prev, page: newPage }));
   };
 
-  const { data: tickets } = useGetTicketsQuery(filters);
+  const { data: tickets, isSuccess } = useGetTicketsQuery(filters);
+
+  const isEmpty = isSuccess && filters.page === 1 && tickets.length === 0;
 
   return (
     <Box>
       <Box marginTop="24px">
-        <TicketTable tickets={tickets ?? []} />
+        <TicketTable tickets={tickets ?? []} isEmpty={isEmpty} />
       </Box>
 
-      <Box width="100%" display="flex" justifyContent="center" marginTop="12px">
-        <TicketPagination
-          page={filters.page}
-          onPageChange={handlePageChange}
-          hasData={tickets?.length > 0}
-        />
-      </Box>
+      {!isEmpty && (
+        <Box
+          width="100%"
+          display="flex"
+          justifyContent="center"
+          marginTop="12px"
+        >
+          <TicketPagination
+            page={filters.page}
+            onPageChange={handlePageChange}
+            hasData={tickets?.length > 0}
+          />
+        </Box>
+      )}
     </Box>
   );
 }

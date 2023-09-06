@@ -12,12 +12,36 @@ import { useIntl } from 'react-intl';
 import { ticketSearchMessages } from '@/translations/ticket-search';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-export function TicketTable({ tickets }) {
+import TableRowsIcon from '@mui/icons-material/TableRows';
+import { agentDashboardMessages } from '@/translations/agent-dashboard';
+
+export function TicketTable({ tickets, isEmpty = false }) {
   const intl = useIntl();
   const theme = useTheme();
+
   const renderRowHeaderTitle = (title) => (
     <Typography variant="body1">{title}</Typography>
   );
+
+  if (isEmpty) {
+    return (
+      <Paper
+        sx={{
+          minHeight: '450px',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <TableRowsIcon />
+        <Typography variant="body1">
+          {intl.formatMessage(agentDashboardMessages.emptyState)}
+        </Typography>
+      </Paper>
+    );
+  }
 
   return (
     <TableContainer component={Paper} sx={{ minHeight: '450px' }}>
