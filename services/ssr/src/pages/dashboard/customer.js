@@ -1,5 +1,5 @@
 import { useStoreUser } from '@/api/auth';
-import CustomerDashboard from '@/features/customer-dashboard/CustomerLandingPage';
+import CustomerDashboard from '@/features/customer-dashboard/CustomerDashboard';
 import { wrapper } from '@/redux/store';
 import { customerDashboardMessages } from '@/translations/customer-dashboard';
 import Head from 'next/head';
