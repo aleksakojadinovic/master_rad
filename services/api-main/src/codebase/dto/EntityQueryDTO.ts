@@ -33,4 +33,20 @@ export class EntityQueryDTO {
     return value || [];
   })
   includes: string[] = [];
+
+  @Transform(({ value }) => value ?? null)
+  sortField: string | null = null;
+
+  @Transform(({ value }) => {
+    if (value == null) {
+      return 1;
+    }
+
+    if (value !== -1 && value !== 1) {
+      return 1;
+    }
+
+    return value;
+  })
+  sortOrder: 1 | -1;
 }

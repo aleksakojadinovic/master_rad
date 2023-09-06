@@ -12,5 +12,9 @@ export class TicketQueryDTO extends EntityQueryDTO {
 
   @IsOptional()
   @Transform(({ value }) => value || null)
+  unassigned: boolean | null = null;
+
+  @IsOptional()
+  @Transform(({ value }) => value || null)
   createdBy: string | null = null;
 }

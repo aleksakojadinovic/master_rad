@@ -21,6 +21,7 @@ import { DuplicateAssigneeError } from '../errors/DuplicateAssignee';
 import { NotAllowedToChangeToThisStatusError } from '../errors/NotAllowedToChangeToThisStatus';
 import { CustomerCannotAddInternalCommmentError } from '../errors/CustomerCannotAddInternalComment';
 import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../errors/NotAllowedToSearchOthersTicketsAsACustomer';
+import { BadTicketFiltersError } from '../errors/BadTicketFilters';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {
@@ -73,6 +74,10 @@ export class TicketInterceptor implements NestInterceptor {
 
         if (error instanceof NotAllowedToSearchOthersTicketsAsACustomerError) {
           throw new ForbiddenException(error.getPayload());
+        }
+
+        if (error instanceof BadTicketFiltersError) {
+          throw new BadRequestException(error.getPayload());
         }
 
         throw error;

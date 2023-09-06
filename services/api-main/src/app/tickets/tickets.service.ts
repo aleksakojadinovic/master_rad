@@ -40,6 +40,7 @@ import { TICKET_STATUS_GRAPH } from './schema/ticket-status.map';
 import { NotAllowedToChangeToThisStatusError } from './errors/NotAllowedToChangeToThisStatus';
 import { TicketsRepository } from './tickets.repository';
 import { CustomerCannotAddInternalCommmentError } from './errors/CustomerCannotAddInternalComment';
+import { BadTicketFiltersError } from './errors/BadTicketFilters';
 
 @Injectable()
 export class TicketsService extends BaseService {
@@ -112,12 +113,21 @@ export class TicketsService extends BaseService {
   }
 
   async findAll(user: User, queryDTO: TicketQueryDTO) {
+    if (queryDTO.assignee !== null && queryDTO.unassigned !== null) {
+      throw new BadTicketFiltersError(
+        'Cannot query both unassigned and assigned tickets.',
+      );
+    }
+
     const tickets = await this.ticketsRepository.findAll(
       queryDTO.page,
       queryDTO.perPage,
       queryDTO.status,
       queryDTO.assignee,
       queryDTO.createdBy,
+      queryDTO.unassigned,
+      queryDTO.sortOrder,
+      queryDTO.sortField,
     );
 
     return tickets.map((ticket) => this.stripTags(ticket, user));
@@ -129,6 +139,7 @@ export class TicketsService extends BaseService {
     if (!ticket) {
       throw new TicketNotFoundError(id);
     }
+
     const isTicketOwner =
       ticket.createdBy._id.toString() === user._id.toString();
 
@@ -137,8 +148,6 @@ export class TicketsService extends BaseService {
     }
 
     return this.prepareTicketResponse(ticket, user);
-
-    // return this.prepareTicketResponse(ticket, user);
   }
 
   async isTicketOwner(user: User, ticketId: string) {

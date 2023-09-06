@@ -1,31 +1,43 @@
-import { selectGetMeQueryResponse } from '@/api/auth';
+import { useStoreUser } from '@/api/auth';
 import { wrapper } from '@/redux/store';
-import Link from 'next/link';
 import React from 'react';
 
 function IndexPage() {
-  return <Link href="/dashboard">Dashboard</Link>;
+  return <div>TODO: unlogged users</div>;
 }
 
 export default IndexPage;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
-    const user = selectGetMeQueryResponse(store.getState());
-    if (user == null) {
+    const {
+      isLoggedIn,
+      isAgent,
+      isAdministator,
+      isSuperAdministrator,
+      isCustomer,
+    } = useStoreUser(store);
+    if (!isLoggedIn) {
       return {};
     }
-    if (user.roles.map(({ name }) => name).includes('agent')) {
+    if (isAgent) {
       return {
         redirect: {
-          destination: '/dashboard',
+          destination: '/dashboard/agent',
         },
       };
     }
-    if (user.roles.map(({ name }) => name).includes('customer')) {
+    if (isAdministator || isSuperAdministrator) {
       return {
         redirect: {
-          destination: '/customer',
+          destination: '/dashboard/admin',
+        },
+      };
+    }
+    if (isCustomer) {
+      return {
+        redirect: {
+          destination: '/dashboard/customer',
         },
       };
     }
