@@ -26,13 +26,13 @@ export class TicketTagGroup {
   @Prop({
     type: {
       canAddRoles: {
-        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
+        type: [String],
       },
       canRemoveRoles: {
-        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
+        type: [String],
       },
       canSeeRoles: {
-        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
+        type: [String],
       },
     },
   })

@@ -18,15 +18,10 @@ export class TicketsRepository {
     {
       path: 'createdBy',
       model: 'User',
-      populate: { path: 'roles', model: 'Role' },
     },
     {
       path: 'history.initiator',
       model: 'User',
-      populate: {
-        path: 'roles',
-        model: 'Role',
-      },
     },
     {
       path: 'tags',
@@ -39,10 +34,6 @@ export class TicketsRepository {
     {
       path: 'assignees',
       model: 'User',
-      populate: {
-        path: 'roles',
-        model: 'Role',
-      },
     },
   ];
 

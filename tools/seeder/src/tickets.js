@@ -92,23 +92,16 @@ function generateStatusChanges() {
   return Array.from(Array(length)).map(generateStatusChange);
 }
 
-async function getRoles(db) {
-  return await db.collection('roles').find().toArray();
-}
-
-async function getCustomers(db, customerRoleId) {
+async function getCustomers(db) {
   const result = await db
     .collection('users')
-    .find({ roles: customerRoleId })
+    .find({ role: 'customer' })
     .toArray();
   return result;
 }
 
-async function getAgents(db, adminRoleId) {
-  const result = await db
-    .collection('users')
-    .find({ roles: adminRoleId })
-    .toArray();
+async function getAgents(db) {
+  const result = await db.collection('users').find({ role: 'agent' }).toArray();
   return result;
 }
 
@@ -128,13 +121,8 @@ async function main() {
 
   const db = client.db('sts_db');
 
-  const roles = await getRoles(db);
-
-  const customerRoleId = roles.find(({ name }) => name === 'customer')._id;
-  const agentRoleId = roles.find(({ name }) => name === 'agent')._id;
-
-  const customers = await getCustomers(db, customerRoleId);
-  const agents = await getAgents(db, agentRoleId);
+  const customers = await getCustomers(db);
+  const agents = await getAgents(db);
 
   const tickets = [];
 

@@ -1,5 +1,5 @@
+import { ROLE_VALUES } from './../users/schema/role.schema';
 import { TicketTagGroupRepository } from './ticket-tag-group.repository';
-import { RolesService } from '../users/roles.service';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
 import { TicketTagGroup } from './schema/ticket-tag-group.schema';
@@ -22,6 +22,7 @@ import { TicketTagDuplicateNameError } from './errors/TicketTagDuplicateName';
 import { TicketTagNotFoundError } from './errors/TicketTagNotFound';
 import { TicketTagGroupDuplicateNameError } from './errors/TicketTagGroupDuplicateNameError';
 import { User } from '../users/schema/user.schema';
+import { Role } from '../users/schema/role.schema';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
@@ -29,7 +30,6 @@ export class TicketTagGroupService extends BaseService {
     @InjectModel(TicketTagGroup.name)
     @InjectMapper()
     private readonly mapper: Mapper,
-    private rolesService: RolesService,
     private ticketTagService: TicketTagService,
     private ticketTagGroupRepository: TicketTagGroupRepository,
   ) {
@@ -45,12 +45,7 @@ export class TicketTagGroupService extends BaseService {
       throw new TicketTagGroupDuplicateNameError();
     }
 
-    const defaultRoles = (
-      await this.rolesService.findManyByName([
-        'administrator',
-        'superadministrator',
-      ])
-    ).map((role) => role._id.toString());
+    const defaultRoles = [Role.ADMINISTRATOR];
 
     const group = await this.ticketTagGroupRepository.create({
       nameIntl: dto.nameIntl,
@@ -62,10 +57,9 @@ export class TicketTagGroupService extends BaseService {
   }
 
   async findAll(queryDTO: EntityQueryDTO, user: User) {
-    const userRoleIds = user.roles.map(({ _id }) => _id);
-    const groups = await this.ticketTagGroupRepository.findAllByRoles(
-      userRoleIds,
-    );
+    const groups = await this.ticketTagGroupRepository.findAllByRoles([
+      user.role,
+    ]);
     return groups;
   }
 
@@ -123,39 +117,26 @@ export class TicketTagGroupService extends BaseService {
     }
 
     if (newPermissionsValue.canAddRoles !== null) {
-      // TODO handle roles not exists
-      const roles = await this.rolesService.findMany(
-        newPermissionsValue.canAddRoles,
-      );
-      // const newCanAddRoles = await Promise.all(
-      //   newPermissionsValue.canAddRoles.map((roleId) =>
-      //     this.rolesService.findById(roleId),
-      //   ),
-      // );
+      const roles = newPermissionsValue.canAddRoles
+        .map((r) => ROLE_VALUES[r] ?? null)
+        .filter((r) => r !== null);
+
       document.permissions.canAddRoles = roles;
     }
 
     if (newPermissionsValue.canRemoveRoles !== null) {
-      const roles = await this.rolesService.findMany(
-        newPermissionsValue.canRemoveRoles,
-      );
-      // const newCanRemoveRoles = await Promise.all(
-      //   newPermissionsValue.canRemoveRoles.map((roleId) =>
-      //     this.rolesService.findById(roleId),
-      //   ),
-      // );
+      const roles = newPermissionsValue.canRemoveRoles
+        .map((r) => ROLE_VALUES[r] ?? null)
+        .filter((r) => r !== null);
+
       document.permissions.canRemoveRoles = roles;
     }
 
     if (newPermissionsValue.canSeeRoles !== null) {
-      const roles = await this.rolesService.findMany(
-        newPermissionsValue.canSeeRoles,
-      );
-      // const newCanSeeRole = await Promise.all(
-      //   newPermissionsValue.canRemoveRoles.map((roleId) =>
-      //     this.rolesService.findById(roleId),
-      //   ),
-      // );
+      const roles = newPermissionsValue.canSeeRoles
+        .map((r) => ROLE_VALUES[r] ?? null)
+        .filter((r) => r !== null);
+
       document.permissions.canSeeRoles = roles;
     }
   }

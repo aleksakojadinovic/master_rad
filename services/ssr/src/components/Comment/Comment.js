@@ -27,7 +27,7 @@ export default function Comment({ comment }) {
             }}
           >
             <Box>
-              <UserChip user={comment.user} />
+              <UserChip user={comment.user} includeRole />
             </Box>
             <Box sx={{ marginLeft: { xs: 0, md: '12px' } }}>
               <Typography variant="caption" sx={{ color: 'text.secondary' }}>

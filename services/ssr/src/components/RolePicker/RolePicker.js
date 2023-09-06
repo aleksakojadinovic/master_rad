@@ -5,8 +5,8 @@ import { useIntl } from 'react-intl';
 
 function RolePicker({ roles, onSelect }) {
   const intl = useIntl();
-  const options = roles.map(({ id, name }) => ({
-    id,
+  const options = roles.map((name, index) => ({
+    id: index,
     label: intl.formatMessage(rolesMessages[name]),
   }));
 
@@ -19,7 +19,10 @@ function RolePicker({ roles, onSelect }) {
       getOptionLabel={({ label }) => label}
       renderInput={(props) => <TextField {...props} size="small" />}
       onChange={(_e, val) => {
-        const selectedRole = roles.find((role) => role.id === val.id);
+        console.log({ roles, val });
+        const selectedRole = roles.find(
+          (role) => role === val.label.toLowerCase(),
+        );
         if (!selectedRole) {
           return;
         }

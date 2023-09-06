@@ -25,52 +25,39 @@ export const getStringPreview = (str, maxLen = 20) => {
 };
 
 export const wrapUser = (user) => {
-  const { id, email, firstName, lastName, roles } = user ?? {
+  const { id, email, firstName, lastName, role } = user ?? {
     id: null,
     username: '',
     firstName: '',
     lastName: '',
-    roles: [],
+    role: '',
   };
-
-  const roleNames = roles.map(({ name }) => name);
-  const roleIds = roles.map(({ id }) => id);
 
   const isLoggedIn = !!user;
 
-  const hasRole = (conditionRoles) => {
-    // debugger;
-    let conditionRoleIdentifiers = [];
-    if (typeof conditionRoles[0] === 'object') {
-      conditionRoleIdentifiers = conditionRoles.map(({ id }) => id);
-    } else {
-      conditionRoleIdentifiers = conditionRoles;
-    }
-
-    return conditionRoleIdentifiers.some(
-      (roleIdentifier) =>
-        roleIds.includes(roleIdentifier) || roleNames.includes(roleIdentifier),
-    );
+  const hasRole = (queryRole) => {
+    return role === queryRole;
   };
 
-  const isAgent = hasRole(['agent']);
-  const isCustomer = hasRole(['customer']);
-  const isAdministator = hasRole(['administrator']);
-  const isSuperAdministrator = hasRole(['superadministrator']);
+  const hasAnyRole = (roles) => {
+    return roles.includes(role);
+  };
+
+  const isAgent = role === 'agent';
+  const isCustomer = role === 'customer';
+  const isAdministrator = role === 'administrator';
 
   return {
     id,
     email,
     firstName,
     lastName,
-    roles,
-    roleNames,
-    roleIds,
+    role,
     isLoggedIn,
-    isAdministator,
-    isSuperAdministrator,
+    isAdministrator,
     isAgent,
     isCustomer,
     hasRole,
+    hasAnyRole,
   };
 };

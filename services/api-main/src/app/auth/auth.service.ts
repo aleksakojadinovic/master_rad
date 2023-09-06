@@ -25,7 +25,7 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
       passwordHash: '',
-      roles: user.roles,
+      role: user.role,
     };
 
     return userPayload;
@@ -37,10 +37,10 @@ export class AuthService {
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
-      roles: user.roles,
+      role: user.role,
     };
     const token = this.jwtService.sign(payload);
-    // TODO: Add token to database
+
     return {
       access_token: token,
     };

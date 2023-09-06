@@ -10,11 +10,11 @@ import { useIntl } from 'react-intl';
 function TicketStatusSection({ ticket }) {
   const intl = useIntl();
   const [isStatusListVisible, setIsStatusListVisible] = useState(false);
-  const { hasRole } = useUser();
+  const { hasAnyRole } = useUser();
 
   const statusChangesExplained = TICKET_STATUS_GRAPH[ticket.status].map(
     (entry) => {
-      const isAllowed = hasRole(entry.roles);
+      const isAllowed = hasAnyRole(entry.roles);
       return { ...entry, isAllowed };
     },
   );

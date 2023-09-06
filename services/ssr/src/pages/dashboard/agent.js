@@ -25,9 +25,9 @@ export default AgentDashboardPage;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
-    const { isAgent, id } = useStoreUser(store);
+    const { isAgent, isAdministrator, id } = useStoreUser(store);
 
-    if (!isAgent) {
+    if (!isAgent && !isAdministrator) {
       return {
         redirect: {
           destination: '/404',

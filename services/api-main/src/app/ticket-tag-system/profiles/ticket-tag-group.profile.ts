@@ -12,8 +12,6 @@ import { TicketTagDTO } from '../dto/ticket-tag.dto';
 import { TicketTagGroup } from '../schema/ticket-tag-group.schema';
 import { TicketTagGroupDTO } from '../dto/ticket-tag-group.dto';
 import { TicketTagGroupPermissionsDTO } from '../dto/ticket-tag-group-permissions.dto';
-import { Role } from 'src/app/users/schema/role.schema';
-import { RoleDTO } from 'src/app/users/dto/role.dto';
 
 @Injectable()
 export class TicketTagGroupProfile extends AutomapperProfile {
@@ -44,33 +42,11 @@ export class TicketTagGroupProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.permissions,
-          mapWithArguments((source, extra) => {
-            const shouldIncludeRoles =
-              extra.include && (extra.include as string[]).includes('roles');
-
-            const mapRoleList = (roleList: Role[]) =>
-              shouldIncludeRoles
-                ? mapper.mapArray(roleList, Role, RoleDTO, {
-                    extraArgs: () => extra,
-                  })
-                : roleList.map((role) => role._id.toString());
-
-            const mappedCanAddRoles = mapRoleList(
-              source.permissions.canAddRoles,
-            );
-
-            const mappedCanRemoveRoles = mapRoleList(
-              source.permissions.canRemoveRoles,
-            );
-
-            const mappedCanSeeRoles = mapRoleList(
-              source.permissions.canSeeRoles,
-            );
-
+          mapFrom((source) => {
             const mappedPermissiones = new TicketTagGroupPermissionsDTO(
-              mappedCanAddRoles,
-              mappedCanRemoveRoles,
-              mappedCanSeeRoles,
+              source.permissions.canAddRoles,
+              source.permissions.canRemoveRoles,
+              source.permissions.canSeeRoles,
             );
 
             return mappedPermissiones;

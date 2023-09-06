@@ -1,16 +1,16 @@
-import { selectGetMeQueryResponse } from '@/api/auth';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import React, { Fragment, useState } from 'react';
-import { useSelector } from 'react-redux';
 import TicketAssignees from '../components/TicketAssignees';
 import { useUpdateTicketMutation } from '@/api/tickets';
 import { useIntl } from 'react-intl';
 import { assignMessages } from '@/translations/assign';
 import UserAssignForm from '../components/UserAssignForm';
+import useUser from '@/hooks/useUser';
+import { ticketViewMessages } from '@/translations/ticket-view';
 
 function TicketAssigneeSection({ ticket }) {
   const intl = useIntl();
-  const { isCustomer } = useSelector(selectGetMeQueryResponse);
+  const { isCustomer } = useUser();
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -26,13 +26,9 @@ function TicketAssigneeSection({ ticket }) {
     updateTicket({ id: ticket.id, addAssignees: [newUser.id] });
   };
 
-  if (isCustomer) {
-    return null;
-  }
-
   return (
     <Fragment>
-      {isVisible && (
+      {isVisible && !isCustomer && (
         <UserAssignForm
           onClose={() => setIsVisible(false)}
           onSelect={(selectedUser) => {
@@ -48,17 +44,25 @@ function TicketAssigneeSection({ ticket }) {
         marginRight="12px"
         width="100%"
       >
+        {isCustomer && (
+          <Typography variant="body1">
+            {intl.formatMessage(ticketViewMessages.ticketAssigneesCustomerNote)}
+          </Typography>
+        )}
         <TicketAssignees
           assignees={ticket.assignees}
           onDelete={handleUnassignUser}
         />
-        <Button
-          onClick={() => {
-            setIsVisible(true);
-          }}
-        >
-          {intl.formatMessage(assignMessages.formTitle)}
-        </Button>
+
+        {!isCustomer && (
+          <Button
+            onClick={() => {
+              setIsVisible(true);
+            }}
+          >
+            {intl.formatMessage(assignMessages.formTitle)}
+          </Button>
+        )}
       </Box>
     </Fragment>
   );

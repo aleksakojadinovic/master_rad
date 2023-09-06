@@ -1,5 +1,4 @@
-import { selectGetMeQueryResponse } from '@/api/auth';
-import { rolesSlice } from '@/api/roles';
+import { useStoreUser } from '@/api/auth';
 import { ticketTagSystemSlice } from '@/api/ticket-tag-system';
 import ManageTagsLayout from '@/features/manage-tags/Layout';
 import ManageTags from '@/features/manage-tags/ManageTags';
@@ -29,15 +28,8 @@ ManageTagsRoute.Layout = ManageTagsLayout;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
-    const user = selectGetMeQueryResponse(store.getState());
-    if (user == null) {
-      return {
-        redirect: {
-          destination: '/404',
-        },
-      };
-    }
-    if (!user.roles.map(({ name }) => name).includes('administrator')) {
+    const { isAdministrator } = useStoreUser(store);
+    if (!isAdministrator) {
       return {
         redirect: {
           destination: '/404',
@@ -50,8 +42,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     store.dispatch(
       ticketTagSystemSlice.endpoints.getTicketTagGroups.initiate(params),
     );
-
-    store.dispatch(rolesSlice.endpoints.getRoles.initiate());
 
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
 

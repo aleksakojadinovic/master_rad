@@ -3,13 +3,10 @@ import TagPicker from '../../../components/TagPicker/TagPicker';
 import { useGetTicketTagsQuery } from '@/api/ticket-tag-system';
 import { Box, Typography } from '@mui/material';
 import TagChip from '../../../components/TagChip/TagChip';
-import { useSelector } from 'react-redux';
-import { selectGetMeQueryResponse } from '@/api/auth';
-import _ from 'lodash';
+import useUser from '@/hooks/useUser';
 
 function TagForm({ ticketTags, onSelect, onDelete }) {
-  const user = useSelector(selectGetMeQueryResponse);
-  const roleIds = user.roles.map(({ id }) => id);
+  const { role } = useUser();
 
   const { data: tags } = useGetTicketTagsQuery({ includes: 'group' });
 
@@ -19,9 +16,7 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
     }
 
     return ticketTags.reduce((acc, curr) => {
-      const canDelete =
-        _.intersection(curr.group.permissions.canRemoveRoles, roleIds).length >
-        0;
+      const canDelete = curr.group.permissions.canRemoveRoles.includes(role);
 
       if (!acc[curr.group.id]) {
         acc[curr.group.id] = {
@@ -35,7 +30,7 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
       acc[curr.group.id].tags.push({ ...curr, canDelete });
       return acc;
     }, {});
-  }, [tags, ticketTags, roleIds]);
+  }, [tags, ticketTags, role]);
 
   const groupIds = Array.from(Object.keys(groupedTicketTags));
 
@@ -46,9 +41,7 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
 
     return tags
       .filter((tag) => {
-        return (
-          _.intersection(roleIds, tag.group.permissions.canAddRoles).length > 0
-        );
+        return tag.group.permissions.canAddRoles.includes(role);
       })
       .filter((tag) => !ticketTags.map(({ id }) => id).includes(tag.id))
       .map((tag) => {
@@ -57,7 +50,7 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
           groupName: tag.group.name,
         };
       });
-  }, [tags, roleIds, ticketTags]);
+  }, [tags, role, ticketTags]);
 
   const handleDelete = (id) => {
     onDelete(id);

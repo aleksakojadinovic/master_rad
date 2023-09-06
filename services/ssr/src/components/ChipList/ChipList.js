@@ -8,7 +8,7 @@ function ChipList({ items, onClose = null }) {
         <Box key={id} marginRight="12px" marginBottom="6px">
           <Chip
             label={name}
-            onDelete={onClose != null ? () => onClose(id) : undefined}
+            onDelete={onClose != null ? () => onClose({ id, name }) : undefined}
           />
         </Box>
       ))}
