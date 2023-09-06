@@ -11,6 +11,7 @@ function TicketFilters({ filters, onChange }) {
   const intl = useIntl();
 
   const handleChange = (key, value) => {
+    console.log(value);
     if (value === '') {
       const newFilters = { ...filters };
       delete newFilters[key];
@@ -40,9 +41,9 @@ function TicketFilters({ filters, onChange }) {
         </Box>
         <Box marginBottom="12px" marginLeft="6px">
           <TicketStatusFilter
-            value={filters.status ?? ''}
+            value={filters.statuses ?? ''}
             onChange={(status) => {
-              handleChange('statuses', [status]);
+              handleChange('statuses', status ? [status] : '');
             }}
           />
         </Box>

@@ -15,17 +15,17 @@ export class TicketQueryDTO extends EntityQueryDTO {
   })
   statuses: string[] | null = null;
 
-  @Transform(({ obj }) => {
-    if (!obj.status || obj.status.length === 0) {
-      return false;
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      return value.split(',');
     }
-    const firstSymbol = obj[0];
-    if (firstSymbol === '-') {
-      return true;
+    if (value == null) {
+      return null;
     }
-    return false;
+
+    return value as string[];
   })
-  statusNegative: boolean;
+  notStatuses: string[] | null = null;
 
   @IsOptional()
   @Transform(({ value }) => value || null)

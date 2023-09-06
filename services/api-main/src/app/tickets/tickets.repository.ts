@@ -10,6 +10,7 @@ export type TicketsQuery = {
   page: number | null;
   perPage: number | null;
   statuses: string[] | null;
+  notStatuses: string[] | null;
   assignee: string | null;
   createdBy: string | null;
   unassigned: boolean | null;
@@ -58,6 +59,7 @@ export class TicketsRepository {
     page = 1,
     perPage = 10,
     statuses = null,
+    notStatuses = null,
     assignee = null,
     createdBy = null,
     unassigned = null,
@@ -70,11 +72,13 @@ export class TicketsRepository {
       query.where('status', { $in: statuses });
     }
 
+    if (notStatuses !== null) {
+      query.where('status', { $nin: notStatuses });
+    }
+
     if (assignee !== null) {
       query.where('assignees', { $in: [assignee] });
     }
-
-    console.log({ type: typeof createdBy, value: createdBy });
 
     if (createdBy !== null) {
       query.where('createdBy', createdBy);
