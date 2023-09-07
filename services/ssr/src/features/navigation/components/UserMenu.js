@@ -72,9 +72,6 @@ function UserMenu() {
             anchorEl={menuAnchorRef}
             open={!!menuAnchorRef}
             onClose={() => setMenuAnchorRef(null)}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
           >
             {renderMenuItems()}
           </Menu>
