@@ -1,10 +1,9 @@
 export class UserDTO {
-  constructor(
-    public id: string,
-    public username: string,
-    public firstName: string,
-    public lastName: string,
-    public role: string,
-    public fullName: string,
-  ) {}
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  initials: string;
+  role: string;
 }

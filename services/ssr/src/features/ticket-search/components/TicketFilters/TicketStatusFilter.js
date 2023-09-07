@@ -17,8 +17,7 @@ function TicketStatusFilter({ value, onChange }) {
     }
     onChange(e.target.value);
   };
-
-  const resolvedValue = value || ANY_TICKET;
+  const resolvedValue = value[0] || ANY_TICKET;
 
   return (
     <FormControl>

@@ -1,0 +1,5 @@
+export const TICKET_TITLE_MIN_LENGTH = 20;
+export const TICKET_TITLE_MAX_LENGTH = 100;
+
+export const TICKET_BODY_MIN_LENGTH = 100;
+export const TICKET_BODY_MAX_LENGTH = 5000;

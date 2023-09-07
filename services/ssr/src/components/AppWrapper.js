@@ -1,5 +1,5 @@
 import React from 'react';
-import NavigationBar from './Navigation/NavigationBar';
+import NavigationBar from '../features/navigation/NavigationBar';
 import { Box } from '@mui/material';
 import Footer from './Footer/Footer';
 import { FirebaseProvider } from '@/features/firebase/FirebaseProvider';

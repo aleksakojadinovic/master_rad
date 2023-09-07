@@ -39,6 +39,7 @@ export const ticketViewMessages = defineMessages({
   },
   ticketAssigneesCustomerNote: {
     id: 'ticket-view.ticket-assignees-customer-note:',
-    defaultMessage: 'Your ticket is assigned to',
+    defaultMessage:
+      'Your ticket {count, plural, =0 {is not assigned to anyone right now.} other {is assigned to:}}',
   },
 });

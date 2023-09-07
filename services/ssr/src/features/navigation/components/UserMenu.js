@@ -1,21 +1,21 @@
-import { selectGetMeQueryResponse, useGetMeQuery } from '@/api/auth';
+import { useGetMeQuery } from '@/api/auth';
+import useUser from '@/hooks/useUser';
 import { navMessages } from '@/translations/nav';
 import { Button, Menu, MenuItem } from '@mui/material';
 import Cookies from 'js-cookie';
 import dynamic from 'next/dynamic';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
 
 const AuthenticationModal = dynamic(() =>
-  import('../AuthenticationModal/AuthenticationModal'),
+  import('../../auth/AuthenticationModal/AuthenticationModal'),
 );
 
-function NavigationUserMenu() {
+function UserMenu() {
   useGetMeQuery();
 
   const intl = useIntl();
-  const user = useSelector(selectGetMeQueryResponse);
+  const { isLoggedIn, initials } = useUser();
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [menuAnchorRef, setMenuAnchorRef] = useState(null);
@@ -27,7 +27,7 @@ function NavigationUserMenu() {
   };
 
   const renderMenuItems = () => {
-    if (user == null) {
+    if (!isLoggedIn) {
       return (
         <MenuItem
           onClick={() => {
@@ -57,25 +57,20 @@ function NavigationUserMenu() {
     setMenuAnchorRef(e.currentTarget);
   };
 
-  const initials = `${user?.firstName?.[0] ?? ''}.${user?.lastName?.[0] ?? ''}`;
   return (
     <Fragment>
       {isAuthModalOpen && <AuthenticationModal />}
       <div>
         <Button ref={menuAnchorRef} onClick={handleMenuButtonClick}>
-          {user == null
+          {!isLoggedIn
             ? intl.formatMessage(navMessages.menuButtonText)
             : initials}
         </Button>
         {shouldRenderMenu && (
           <Menu
-            id="basic-menu"
             anchorEl={menuAnchorRef}
             open={!!menuAnchorRef}
             onClose={() => setMenuAnchorRef(null)}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
           >
             {renderMenuItems()}
           </Menu>
@@ -85,4 +80,4 @@ function NavigationUserMenu() {
   );
 }
 
-export default NavigationUserMenu;
+export default UserMenu;

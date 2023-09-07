@@ -119,16 +119,29 @@ export class TicketsService extends BaseService {
       );
     }
 
-    const tickets = await this.ticketsRepository.findAll(
-      queryDTO.page,
-      queryDTO.perPage,
-      queryDTO.status,
-      queryDTO.assignee,
-      queryDTO.createdBy,
-      queryDTO.unassigned,
-      queryDTO.sortOrder,
-      queryDTO.sortField,
-    );
+    const {
+      page,
+      perPage,
+      statuses,
+      notStatuses,
+      assignee,
+      createdBy,
+      unassigned,
+      sortOrder,
+      sortField,
+    } = queryDTO;
+
+    const tickets = await this.ticketsRepository.findAll({
+      page,
+      perPage,
+      statuses,
+      notStatuses,
+      assignee,
+      createdBy,
+      unassigned,
+      sortOrder,
+      sortField,
+    });
 
     return tickets.map((ticket) => this.stripTags(ticket, user));
   }

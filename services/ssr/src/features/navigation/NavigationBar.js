@@ -2,9 +2,10 @@
 import { useGetMeQuery } from '@/api/auth';
 import { Box } from '@mui/material';
 import React, { Fragment } from 'react';
-import NotificationsMenu from './NotificationsMenu';
-import NavigationUserMenu from './NavigationUserMenu';
+import NotificationsMenu from './components/NotificationsMenu';
+import UserMenu from './components/UserMenu';
 import useUser from '@/hooks/useUser';
+import LinksMenu from './components/LinksMenu';
 
 function NavigationBar() {
   const { isLoggedIn } = useUser();
@@ -27,8 +28,9 @@ function NavigationBar() {
           />
         </Box>
         <Box display="flex" alignItems="center">
+          {isLoggedIn && <LinksMenu />}
           {isLoggedIn && <NotificationsMenu />}
-          <NavigationUserMenu />
+          <UserMenu />
         </Box>
       </Box>
     </Fragment>

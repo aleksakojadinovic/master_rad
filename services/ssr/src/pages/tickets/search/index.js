@@ -46,6 +46,24 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     const page = parseInt(pageParam, 10) || 1;
     const perPage = parseInt(perPageParam, 10) || 10;
+    const assignee = filters.assignee || null;
+    const createdBy = filters.createdBy || null;
+    const statuses =
+      filters.statuses == null ? null : filters.statuses.split(',');
+
+    const resolvedFilters = { page, perPage, assignee, createdBy, statuses };
+
+    if (assignee == null) {
+      delete resolvedFilters.assignee;
+    }
+
+    if (createdBy == null) {
+      delete resolvedFilters.createdBy;
+    }
+
+    if (statuses == null) {
+      delete resolvedFilters.statuses;
+    }
 
     const { isLoggedIn, isAdministator, isSuperAdministrator, isAgent } =
       useStoreUser(store);
@@ -70,7 +88,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     store.dispatch(
       ticketsSlice.endpoints.getTickets.initiate(
-        getTicketSearchTicketsParams(page, perPage, filters),
+        getTicketSearchTicketsParams(page, perPage, resolvedFilters),
       ),
     );
 
@@ -82,7 +100,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       props: {
         page,
         perPage,
-        filters,
+        filters: resolvedFilters,
       },
     };
   },

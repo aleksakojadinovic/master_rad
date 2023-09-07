@@ -40,9 +40,9 @@ function TicketFilters({ filters, onChange }) {
         </Box>
         <Box marginBottom="12px" marginLeft="6px">
           <TicketStatusFilter
-            value={filters.status ?? ''}
+            value={filters.statuses ?? ''}
             onChange={(status) => {
-              handleChange('status', status);
+              handleChange('statuses', status ? [status] : '');
             }}
           />
         </Box>
