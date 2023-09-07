@@ -23,7 +23,7 @@ function UserMenu() {
 
   const handleLogout = () => {
     Cookies.remove('accessToken');
-    window.location.reload();
+    window.location = '/';
   };
 
   const renderMenuItems = () => {

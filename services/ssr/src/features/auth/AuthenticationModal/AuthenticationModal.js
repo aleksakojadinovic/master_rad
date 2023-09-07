@@ -1,6 +1,7 @@
 import { useLoginMutation } from '@/api/auth';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 const modalStyles = {
@@ -25,6 +26,8 @@ function AuthenticationModal({ onClose }) {
 
   const [triggerLogin, { data, isSuccess, isLoading }] = useLoginMutation();
 
+  const router = useRouter();
+
   const handleLogin = () => {
     triggerLogin({ username, password });
   };
@@ -36,8 +39,12 @@ function AuthenticationModal({ onClose }) {
     const { accessToken } = data;
     Cookies.set('accessToken', accessToken);
 
-    window.location.reload();
-  }, [isSuccess, data]);
+    if (router.pathname === '/404') {
+      window.location = '/';
+    } else {
+      window.location.reload();
+    }
+  }, [isSuccess, data, router]);
 
   return (
     <Modal sx={modalStyles} open keepMounted onClose={onClose}>
