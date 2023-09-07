@@ -5,6 +5,7 @@ import React, { Fragment } from 'react';
 import NotificationsMenu from './components/NotificationsMenu';
 import UserMenu from './components/UserMenu';
 import useUser from '@/hooks/useUser';
+import LinksMenu from './components/LinksMenu';
 
 function NavigationBar() {
   const { isLoggedIn } = useUser();
@@ -27,7 +28,7 @@ function NavigationBar() {
           />
         </Box>
         <Box display="flex" alignItems="center">
-          {isLoggedIn && null}
+          {isLoggedIn && <LinksMenu />}
           {isLoggedIn && <NotificationsMenu />}
           <UserMenu />
         </Box>

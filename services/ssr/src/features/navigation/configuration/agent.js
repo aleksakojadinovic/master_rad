@@ -1,0 +1,3 @@
+const AGENT_LINKS_CONFIGURATION = [];
+
+export default AGENT_LINKS_CONFIGURATION;

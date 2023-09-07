@@ -1,0 +1,3 @@
+const ADMIN_LINKS_CONFIGURATION = [];
+
+export default ADMIN_LINKS_CONFIGURATION;
