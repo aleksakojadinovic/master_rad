@@ -37,3 +37,10 @@ export const selectNotificationsByPage = createSelector(
     return notificationsSlice.endpoints.getNotifications.select({ page });
   },
 );
+
+export const selectHasAnyNotifications = (state) => {
+  return (
+    notificationsSlice.endpoints.getNotifications.select({ page: 1 })(state)
+      ?.data?.notifications?.length > 0
+  );
+};
