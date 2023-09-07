@@ -10,7 +10,6 @@ import {
 import { useRouter } from 'next/router';
 import React from 'react';
 import { myActiveParams } from './utils';
-import { useGetTicketsQuery } from '@/api/tickets';
 import TicketPredefinedSearch from '../ticket-predefined-search/TicketPredefinedSearch';
 
 function CustomerDashboard() {
