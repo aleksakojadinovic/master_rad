@@ -13,15 +13,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import * as CONFIG from '../configuration';
 import useUser from '@/hooks/useUser';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 
 function LinksMenu() {
   const intl = useIntl();
+  const [menuAnchorRef, setMenuAnchorRef] = useState(null);
+
   const { role } = useUser();
   const isDesktop = useMediaQuery('(min-width:800px)');
 
   const configuration = CONFIG[role];
-
-  const [menuAnchorRef, setMenuAnchorRef] = useState(null);
+  const router = useRouter();
 
   const handleMenuButtonClick = (e) => {
     setMenuAnchorRef(e.currentTarget);
@@ -29,7 +31,7 @@ function LinksMenu() {
 
   const renderMenuItems = () => {
     return configuration.map(({ id, href, translation }) => (
-      <MenuItem key={id} href={href}>
+      <MenuItem key={id} href={href} disabled={router.pathname === href}>
         {intl.formatMessage(translation)}
       </MenuItem>
     ));
@@ -38,7 +40,11 @@ function LinksMenu() {
   const renderLinks = () => {
     return configuration.map(({ id, href, translation }) => (
       <Box key={id} marginRight="12px">
-        <Button href={href} variant="outlined">
+        <Button
+          href={href}
+          variant="outlined"
+          disabled={router.pathname === href}
+        >
           <Typography variant="body2">
             {intl.formatMessage(translation)}
           </Typography>

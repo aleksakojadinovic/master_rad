@@ -65,8 +65,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       delete resolvedFilters.statuses;
     }
 
-    const { isLoggedIn, isAdministator, isSuperAdministrator, isAgent } =
-      useStoreUser(store);
+    const { isLoggedIn, isAdministrator, isAgent } = useStoreUser(store);
 
     if (!isLoggedIn) {
       return {
@@ -76,7 +75,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       };
     }
 
-    const isAuthorized = isAdministator || isSuperAdministrator || isAgent;
+    const isAuthorized = isAdministrator || isAgent;
 
     if (!isAuthorized) {
       return {
