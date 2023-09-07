@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-// TODO: Split to multiple files
-
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import {
   TicketHistoryItem,
@@ -12,7 +9,7 @@ import { TicketTag } from 'src/app/ticket-tag-system/schema/ticket-tag.schema';
 import { TicketStatus } from '../../types';
 
 @Schema()
-export class Ticket extends Document {
+export class TicketDb extends Document {
   constructor() {
     super();
     this.history = [];
@@ -45,6 +42,6 @@ export class Ticket extends Document {
   history: TicketHistoryItem[];
 }
 
-export const TicketSchema = SchemaFactory.createForClass(Ticket);
+export const TicketSchema = SchemaFactory.createForClass(TicketDb);
 
-export type TicketDocument = Ticket & Document;
+export type TicketDocument = TicketDb & Document;

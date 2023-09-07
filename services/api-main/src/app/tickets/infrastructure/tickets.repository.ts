@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
-  Ticket,
+  TicketDb,
   TicketDocument,
 } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import { Model, SortOrder } from 'mongoose';
@@ -24,7 +24,7 @@ export type TicketsQuery = {
 @Injectable()
 export class TicketsRepository {
   constructor(
-    @InjectModel(Ticket.name) private ticketModel: Model<Ticket>,
+    @InjectModel(TicketDb.name) private ticketModel: Model<TicketDb>,
     @InjectMapper() private readonly mapper: Mapper,
     private usersService: UsersService,
   ) {}
