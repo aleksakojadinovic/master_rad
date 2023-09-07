@@ -10,13 +10,8 @@ export default IndexPage;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async () => {
-    const {
-      isLoggedIn,
-      isAgent,
-      isAdministator,
-      isSuperAdministrator,
-      isCustomer,
-    } = useStoreUser(store);
+    const { isLoggedIn, isAgent, isAdministrator, isCustomer } =
+      useStoreUser(store);
     if (!isLoggedIn) {
       return {};
     }
@@ -27,7 +22,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         },
       };
     }
-    if (isAdministator || isSuperAdministrator) {
+    if (isAdministrator) {
       return {
         redirect: {
           destination: '/dashboard/admin',

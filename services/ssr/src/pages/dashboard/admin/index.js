@@ -9,9 +9,9 @@ function AdminDashboardPage() {
 export default AdminDashboardPage;
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => () => {
-  const { isAdministator, isSuperAdministrator } = useStoreUser(store);
+  const { isAdministrator } = useStoreUser(store);
 
-  if (!isAdministator && !isSuperAdministrator) {
+  if (!isAdministrator) {
     return {
       redirect: {
         destination: '/404',
