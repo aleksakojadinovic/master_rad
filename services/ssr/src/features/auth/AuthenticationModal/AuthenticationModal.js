@@ -43,22 +43,20 @@ function AuthenticationModal({ onClose }) {
     <Modal sx={modalStyles} open keepMounted onClose={onClose}>
       <Box sx={modalContentStyles}>
         <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginBottom: '20px',
-            position: 'relative',
-          }}
+          display="flex"
+          justifyContent="center"
+          marginBottom="20px"
+          position="relative"
         >
           <Typography variant="h6" component="h2">
             Login
           </Typography>
-          <Box sx={{ position: 'absolute', top: '0', right: '5px' }}>
+          <Box position="absolute" top="0" right="5px">
             <Button onClick={onClose}>X</Button>
           </Box>
         </Box>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box display="flex" justifyContent="center">
           <form>
             <TextField
               label="Username"
@@ -66,7 +64,7 @@ function AuthenticationModal({ onClose }) {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <Box sx={{ marginTop: '12px' }}>
+            <Box marginTop="12px">
               <TextField
                 label="Password"
                 variant="outlined"
@@ -75,7 +73,7 @@ function AuthenticationModal({ onClose }) {
                 onChange={(e) => setPassowrd(e.target.value)}
               />
             </Box>
-            <Box sx={{ marginTop: '12px', marginBottom: '20px' }}>
+            <Box marginTop="12px" marginBottom="20px">
               <Button
                 fullWidth
                 variant="contained"
