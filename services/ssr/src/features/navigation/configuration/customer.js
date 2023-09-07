@@ -18,7 +18,7 @@ const messages = defineMessages({
 const CUSTOMER_LINKS_CONFIGURATION = [
   {
     id: 'customer-config-home-page',
-    href: '/',
+    href: '/dashboard/customer',
     translation: messages.homePage,
   },
   {

@@ -26,7 +26,7 @@ const messages = defineMessages({
 const ADMIN_LINKS_CONFIGURATION = [
   {
     id: 'admin-config-home-page',
-    href: '/',
+    href: '/dashboard/admin',
     translation: messages.homePage,
   },
   {

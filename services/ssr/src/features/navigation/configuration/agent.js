@@ -14,7 +14,7 @@ const messages = defineMessages({
 const AGENT_LINKS_CONFIGURATION = [
   {
     id: 'agent-config-home-page',
-    href: '/',
+    href: '/dashboard/agent',
     translation: messages.homePage,
   },
   {
