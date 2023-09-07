@@ -1,8 +1,9 @@
 import { Avatar, Box, Chip, Typography } from '@mui/material';
 import React from 'react';
 
-export default function UserCard({ user: { firstName, lastName, roles } }) {
-  const initials = `${firstName[0]}${lastName[0]}`;
+export default function UserCard({
+  user: { firstName, lastName, initials, roles },
+}) {
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex" alignItems="center">

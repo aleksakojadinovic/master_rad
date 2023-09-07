@@ -1,11 +1,11 @@
-import { selectGetMeQueryResponse, useGetMeQuery } from '@/api/auth';
+import { useGetMeQuery } from '@/api/auth';
+import useUser from '@/hooks/useUser';
 import { navMessages } from '@/translations/nav';
 import { Button, Menu, MenuItem } from '@mui/material';
 import Cookies from 'js-cookie';
 import dynamic from 'next/dynamic';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
 
 const AuthenticationModal = dynamic(() =>
   import('../../auth/AuthenticationModal/AuthenticationModal'),
@@ -15,7 +15,7 @@ function UserMenu() {
   useGetMeQuery();
 
   const intl = useIntl();
-  const user = useSelector(selectGetMeQueryResponse);
+  const { isLoggedIn, initials } = useUser();
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [menuAnchorRef, setMenuAnchorRef] = useState(null);
@@ -27,7 +27,7 @@ function UserMenu() {
   };
 
   const renderMenuItems = () => {
-    if (user == null) {
+    if (!isLoggedIn) {
       return (
         <MenuItem
           onClick={() => {
@@ -57,13 +57,12 @@ function UserMenu() {
     setMenuAnchorRef(e.currentTarget);
   };
 
-  const initials = `${user?.firstName?.[0] ?? ''}.${user?.lastName?.[0] ?? ''}`;
   return (
     <Fragment>
       {isAuthModalOpen && <AuthenticationModal />}
       <div>
         <Button ref={menuAnchorRef} onClick={handleMenuButtonClick}>
-          {user == null
+          {!isLoggedIn
             ? intl.formatMessage(navMessages.menuButtonText)
             : initials}
         </Button>
