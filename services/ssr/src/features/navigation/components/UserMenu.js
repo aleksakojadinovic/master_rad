@@ -68,7 +68,6 @@ function UserMenu() {
         </Button>
         {shouldRenderMenu && (
           <Menu
-            id="basic-menu"
             anchorEl={menuAnchorRef}
             open={!!menuAnchorRef}
             onClose={() => setMenuAnchorRef(null)}
