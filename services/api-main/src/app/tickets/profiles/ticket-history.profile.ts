@@ -8,7 +8,7 @@ import {
   mapWithArguments,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { TicketHistoryItem } from '../schema/ticket-history.schema';
+import { TicketHistoryItem } from '../infrastructure/schema/ticket-history.schema';
 import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 import { User } from 'src/app/users/schema/user.schema';
 import { UserDTO } from 'src/app/users/dto/user.dto';

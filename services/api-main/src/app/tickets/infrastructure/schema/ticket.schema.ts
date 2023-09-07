@@ -8,8 +8,8 @@ import {
 } from './ticket-history.schema';
 import { User } from 'src/app/users/schema/user.schema';
 import mongoose, { Document } from 'mongoose';
-import { TicketStatus } from '../types';
 import { TicketTag } from 'src/app/ticket-tag-system/schema/ticket-tag.schema';
+import { TicketStatus } from '../../types';
 
 @Schema()
 export class Ticket extends Document {

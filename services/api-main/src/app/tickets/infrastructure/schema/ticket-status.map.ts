@@ -1,5 +1,5 @@
 import { Role } from 'src/app/users/schema/role.schema';
-import { TicketStatus } from './../types';
+import { TicketStatus } from '../../types';
 
 export class TicketStatusGraphEntry {
   constructor(public status: TicketStatus, public roles: Role[]) {}

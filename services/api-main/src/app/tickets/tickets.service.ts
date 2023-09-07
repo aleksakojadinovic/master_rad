@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Ticket, TicketDocument } from 'src/app/tickets/schema/ticket.schema';
+import { Ticket, TicketDocument } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import mongoose, { Model, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/app/users/users.service';
 import { v4 as uuid } from 'uuid';
@@ -15,7 +15,7 @@ import {
   TicketHistoryEntryStatusChange,
   TicketHistoryEntryTitleChanged,
   TicketHistoryItem,
-} from './schema/ticket-history.schema';
+} from './infrastructure/schema/ticket-history.schema';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketHistoryEntryType, TicketStatus } from './types';
@@ -36,9 +36,9 @@ import { TooSoonToCreateAnotherTicketError } from './errors/TooSoonToCreateAnoth
 import { NotificationFactory } from '../notifications/factory/notification.factory';
 import { Notification } from '../notifications/schema/notification.schema';
 import { NotificationsService } from '../notifications/notifications.service';
-import { TICKET_STATUS_GRAPH } from './schema/ticket-status.map';
+import { TICKET_STATUS_GRAPH } from './infrastructure/schema/ticket-status.map';
 import { NotAllowedToChangeToThisStatusError } from './errors/NotAllowedToChangeToThisStatus';
-import { TicketsRepository } from './tickets.repository';
+import { TicketsRepository } from './infrastructure/tickets.repository';
 import { CustomerCannotAddInternalCommmentError } from './errors/CustomerCannotAddInternalComment';
 import { BadTicketFiltersError } from './errors/BadTicketFilters';
 

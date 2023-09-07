@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { TicketHistoryEntryTypeUnion } from '../types';
+import { TicketHistoryEntryTypeUnion } from '../../types';
 import { User } from 'src/app/users/schema/user.schema';
-import { TicketHistoryEntryType, TicketStatus } from '../types';
+import { TicketHistoryEntryType, TicketStatus } from '../../types';
 
 import { v4 as uuid } from 'uuid';
 import mongoose from 'mongoose';

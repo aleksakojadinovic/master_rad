@@ -5,7 +5,7 @@ import {
   TicketHistoryEntryDeleted,
   TicketHistoryEntryStatusChange,
   TicketHistoryEntryTitleChanged,
-} from './schema/ticket-history.schema';
+} from './infrastructure/schema/ticket-history.schema';
 
 export enum TicketStatus {
   NEW = 'NEW',

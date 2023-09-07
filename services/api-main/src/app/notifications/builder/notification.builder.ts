@@ -5,9 +5,9 @@ import {
   Notification,
   NotificationPayload,
 } from '../schema/notification.schema';
-import { Ticket } from 'src/app/tickets/schema/ticket.schema';
+import { Ticket } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import { TicketHistoryEntryType } from 'src/app/tickets/types';
-import { TicketHistoryEntryCommentAdded } from 'src/app/tickets/schema/ticket-history.schema';
+import { TicketHistoryEntryCommentAdded } from 'src/app/tickets/infrastructure/schema/ticket-history.schema';
 
 interface Instantiable<T> {
   new (...args: any[]): T;

@@ -16,7 +16,7 @@ import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { Ticket } from 'src/app/tickets/schema/ticket.schema';
+import { Ticket } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import { isValidObjectId } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
