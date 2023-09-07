@@ -9,9 +9,18 @@ const messages = defineMessages({
     id: 'customer-links.contact-us',
     defaultMessage: 'Contact us',
   },
+  homePage: {
+    id: 'customer-links.home-page',
+    defaultMessage: 'Home',
+  },
 });
 
 const CUSTOMER_LINKS_CONFIGURATION = [
+  {
+    id: 'customer-config-home-page',
+    href: '/',
+    translation: messages.homePage,
+  },
   {
     id: 'customer-config-new-ticket',
     href: '/tickets/create',
