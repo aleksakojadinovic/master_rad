@@ -1,4 +1,4 @@
-import { User } from 'src/app/users/schema/user.schema';
+import { User } from 'src/app/users/infrastructure/schema/user.schema';
 import {
   AssignedNotificationPayload,
   CommentAddedNotificationPayload,

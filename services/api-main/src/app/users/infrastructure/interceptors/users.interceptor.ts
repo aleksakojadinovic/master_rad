@@ -6,7 +6,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
-import { CannotSearchThisRoleError } from '../errors/CannotSearchThisRole';
+import { CannotSearchThisRoleError } from '../../domain/errors/CannotSearchThisRole';
 
 @Injectable()
 export class UsersInterceptor implements NestInterceptor {

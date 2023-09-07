@@ -3,7 +3,7 @@ import {
   TicketHistoryItem,
   TicketHistoryItemSchemaType,
 } from './ticket-history.schema';
-import { User } from 'src/app/users/schema/user.schema';
+import { User } from 'src/app/users/infrastructure/schema/user.schema';
 import mongoose, { Document } from 'mongoose';
 import { TicketTag } from 'src/app/ticket-tag-system/schema/ticket-tag.schema';
 import { TicketStatus } from '../../types';

@@ -5,7 +5,7 @@ import {
   TicketDocument,
 } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import { Model, SortOrder } from 'mongoose';
-import { UsersService } from 'src/app/users/users.service';
+import { UsersService } from 'src/app/users/domain/users.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 

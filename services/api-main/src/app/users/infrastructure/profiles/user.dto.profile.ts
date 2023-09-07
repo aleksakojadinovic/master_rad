@@ -7,11 +7,12 @@ import {
   mapFrom,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { User } from '../schema/user.schema';
-import { UserDTO } from '../dto/user.dto';
+import { UserDTO } from '../../api/dto/user.dto';
+import { User } from '../../domain/entities/user.entity';
 
+// Maps DB object to domain object
 @Injectable()
-export class UserProfile extends AutomapperProfile {
+export class UserDTOProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
@@ -25,7 +26,7 @@ export class UserProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.id,
           mapFrom((source) => {
-            return source._id;
+            return source.id;
           }),
         ),
         forMember(

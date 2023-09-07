@@ -14,16 +14,16 @@ import {
   UseInterceptors,
   BadRequestException,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersService } from '../domain/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { User } from './schema/user.schema';
+import { User } from '../infrastructure/schema/user.schema';
 import { UserDTO } from './dto/user.dto';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { UsersQueryDTO } from './dto/users-query.dto';
-import { UsersInterceptor } from './interceptors/users.interceptor';
+import { UsersInterceptor } from '../infrastructure/interceptors/users.interceptor';
 @UseInterceptors(UsersInterceptor)
 @Controller('users')
 export class UsersController {

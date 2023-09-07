@@ -4,7 +4,7 @@ import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Ticket, TicketDocument } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import mongoose, { Model, isValidObjectId } from 'mongoose';
-import { UsersService } from 'src/app/users/users.service';
+import { UsersService } from 'src/app/users/domain/users.service';
 import { v4 as uuid } from 'uuid';
 import * as moment from 'moment';
 import {
@@ -19,7 +19,7 @@ import {
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketHistoryEntryType, TicketStatus } from './types';
-import { User } from 'src/app/users/schema/user.schema';
+import { User } from 'src/app/users/infrastructure/schema/user.schema';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketNotFoundError } from './errors/TicketNotFound';

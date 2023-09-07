@@ -28,7 +28,7 @@ import { TicketIdNotValidError } from './errors/TicketIdNotValid';
 import { resolveLanguageCode } from 'src/codebase/utils';
 import { Request } from 'express';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
-import { User } from '../users/schema/user.schema';
+import { User } from '../users/infrastructure/schema/user.schema';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { NotAllowedToSearchOthersTicketsAsACustomerError } from './errors/NotAllowedToSearchOthersTicketsAsACustomer';
 

@@ -9,8 +9,8 @@ import {
 import { Injectable } from '@nestjs/common';
 import { Notification } from '../schema/notification.schema';
 import { NotificationDTO } from '../dto/notification.dto';
-import { User } from 'src/app/users/schema/user.schema';
-import { UserDTO } from 'src/app/users/dto/user.dto';
+import { User } from 'src/app/users/infrastructure/schema/user.schema';
+import { UserDTO } from 'src/app/users/api/dto/user.dto';
 
 @Injectable()
 export class NotificationProfile extends AutomapperProfile {

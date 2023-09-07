@@ -6,7 +6,7 @@ import { AuthModule } from './app/auth/auth.module';
 import { TicketsModule } from './app/tickets/tickets.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
-import { UserProfile } from './app/users/profiles/user.profile';
+import { UserDTOProfile } from './app/users/infrastructure/profiles/user.dto.profile';
 import { TicketProfile } from './app/tickets/profiles/ticket.profile';
 import { TicketHistoryItemProfile } from './app/tickets/profiles/ticket-history.profile';
 import { TicketTagProfile } from './app/ticket-tag-system/profiles/ticket-tag.profile';
@@ -36,7 +36,7 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
   ],
   providers: [
     AppService,
-    UserProfile,
+    UserDTOProfile,
     TicketProfile,
     TicketHistoryItemProfile,
     TicketTagProfile,

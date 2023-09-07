@@ -1,4 +1,4 @@
-import { ROLE_VALUES } from './../users/schema/role.schema';
+import { ROLE_VALUES } from '../users/domain/value-objects/role';
 import { TicketTagGroupRepository } from './ticket-tag-group.repository';
 import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
@@ -21,8 +21,8 @@ import { CannotRemoveAndAddOrUpdateTicketTagError } from './errors/CannotRemoveA
 import { TicketTagDuplicateNameError } from './errors/TicketTagDuplicateName';
 import { TicketTagNotFoundError } from './errors/TicketTagNotFound';
 import { TicketTagGroupDuplicateNameError } from './errors/TicketTagGroupDuplicateNameError';
-import { User } from '../users/schema/user.schema';
-import { Role } from '../users/schema/role.schema';
+import { User } from '../users/infrastructure/schema/user.schema';
+import { Role } from '../users/domain/value-objects/role';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {

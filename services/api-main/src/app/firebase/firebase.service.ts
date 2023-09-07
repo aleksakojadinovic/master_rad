@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import * as firebase from 'firebase-admin';
-import { User } from '../users/schema/user.schema';
+import { User } from '../users/infrastructure/schema/user.schema';
 import { Notification } from '../notifications/schema/notification.schema';
 
 @Injectable()

@@ -19,7 +19,7 @@ import { TicketTagDTO } from './dto/ticket-tag.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
-import { User } from '../users/schema/user.schema';
+import { User } from '../users/infrastructure/schema/user.schema';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 
 @UseInterceptors(TicketTagInterceptor)

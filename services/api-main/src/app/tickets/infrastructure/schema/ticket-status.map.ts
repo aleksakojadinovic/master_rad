@@ -1,4 +1,4 @@
-import { Role } from 'src/app/users/schema/role.schema';
+import { Role } from 'src/app/users/domain/value-objects/role';
 import { TicketStatus } from '../../types';
 
 export class TicketStatusGraphEntry {

@@ -11,7 +11,7 @@ import {
 import { IsValidObjectId } from 'src/codebase/pipes/objectid-pipe';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 import { CreateTicketTagDTO } from './create-ticket-tag.dto';
-import { ROLES } from 'src/app/users/schema/role.schema';
+import { ROLES } from 'src/app/users/domain/value-objects/role';
 
 const ROLES_STRING = ROLES.map((role) => role.toString());
 

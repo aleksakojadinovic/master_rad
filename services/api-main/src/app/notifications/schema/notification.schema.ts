@@ -1,7 +1,7 @@
 import { Ticket } from '../../tickets/infrastructure/schema/ticket.schema';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { User } from 'src/app/users/schema/user.schema';
+import { User } from 'src/app/users/infrastructure/schema/user.schema';
 
 export class CommentAddedNotificationPayload {
   ticket: Ticket | string;

@@ -12,8 +12,8 @@ import { Ticket } from '../infrastructure/schema/ticket.schema';
 import { TicketDTO } from '../dto/ticket.dto';
 import { TicketHistoryItem } from '../infrastructure/schema/ticket-history.schema';
 import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
-import { User } from 'src/app/users/schema/user.schema';
-import { UserDTO } from 'src/app/users/dto/user.dto';
+import { User } from 'src/app/users/infrastructure/schema/user.schema';
+import { UserDTO } from 'src/app/users/api/dto/user.dto';
 import { TicketTag } from 'src/app/ticket-tag-system/schema/ticket-tag.schema';
 import { TicketTagDTO } from 'src/app/ticket-tag-system/dto/ticket-tag.dto';
 

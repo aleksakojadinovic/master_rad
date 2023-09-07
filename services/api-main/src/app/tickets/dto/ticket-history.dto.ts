@@ -1,4 +1,4 @@
-import { UserDTO } from 'src/app/users/dto/user.dto';
+import { UserDTO } from 'src/app/users/api/dto/user.dto';
 import { TicketHistoryEntryType } from '../types';
 
 export class TicketHistoryItemDTO {

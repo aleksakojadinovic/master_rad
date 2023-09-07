@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketTag } from './schema/ticket-tag.schema';
 import { CreateTicketTagDTO } from './dto/create-ticket-tag.dto';
-import { User } from '../users/schema/user.schema';
+import { User } from '../users/infrastructure/schema/user.schema';
 import { TicketTagRepository } from './ticket-tag.repository';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Notification } from './schema/notification.schema';
-import { User } from '../users/schema/user.schema';
+import { User } from '../users/infrastructure/schema/user.schema';
 import { NotificationQueryDTO } from './dto/notification-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
 import { FirebaseService } from '../firebase/firebase.service';

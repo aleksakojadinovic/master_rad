@@ -29,7 +29,7 @@ import { resolveLanguageCode } from 'src/codebase/utils';
 import { AuthGuard } from '@nestjs/passport';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
-import { User } from '../users/schema/user.schema';
+import { User } from '../users/infrastructure/schema/user.schema';
 
 @UseInterceptors(TicketTagInterceptor)
 @Controller('ticket-tag-groups')

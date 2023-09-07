@@ -1,32 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from '../api/dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './schema/user.schema';
+import { UserDb } from '../infrastructure/schema/user.schema';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { UsersQueryDTO } from './dto/users-query.dto';
-import { ROLE_VALUES, Role } from './schema/role.schema';
+import { UsersQueryDTO } from '../api/dto/users-query.dto';
+import { ROLE_VALUES, Role } from './value-objects/role';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(@InjectModel(UserDb.name) private userModel: Model<UserDb>) {}
 
-  async create(dto: CreateUserDto): Promise<User> {
-    const role = ROLE_VALUES[dto.role] ?? Role.CUSTOMER;
+  // async create(dto: CreateUserDto): Promise<User> {
+  //   const role = ROLE_VALUES[dto.role] ?? Role.CUSTOMER;
 
-    const userObject = new User(
-      dto.username,
-      dto.firstName,
-      dto.lastName,
-      await bcrypt.hash(dto.password, 10),
-      role,
-    );
-    const user = new this.userModel(userObject);
-    await user.save();
+  //   const userObject = new User(
+  //     dto.username,
+  //     dto.firstName,
+  //     dto.lastName,
+  //     await bcrypt.hash(dto.password, 10),
+  //     role,
+  //   );
+  //   const user = new this.userModel(userObject);
+  //   await user.save();
 
-    return user;
-  }
+  //   return user;
+  // }
 
+  //TODO
   async findAll(queryDTO: UsersQueryDTO): Promise<User[]> {
     const query = this.userModel.find({});
 

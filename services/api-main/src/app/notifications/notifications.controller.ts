@@ -13,12 +13,12 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../users/domain/users.service';
 import { NotificationQueryDTO } from './dto/notification-query.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
-import { User } from '../users/schema/user.schema';
+import { User } from '../users/infrastructure/schema/user.schema';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { Notification } from './schema/notification.schema';

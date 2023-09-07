@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { Role } from 'src/app/users/schema/role.schema';
+import { Role } from 'src/app/users/domain/value-objects/role';
 import { TicketTag } from './ticket-tag.schema';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 
