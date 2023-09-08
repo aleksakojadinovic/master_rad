@@ -8,13 +8,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
-import { TicketTagGroupNotFoundError } from '../errors/TicketTagGroupNotFound';
-import { TicketTagNameAlreadyExistsError } from '../errors/TicketTagNameAlreadyExists';
-import { CannotRemoveAndAddOrUpdateTicketTagError } from '../errors/CannotRemoveAndAddOrUpdateTicketTag';
-import { TicketTagNotFoundError } from '../errors/TicketTagNotFound';
-import { TicketTagDuplicateNameError } from '../errors/TicketTagDuplicateName';
-import { TicketTagGroupDuplicateNameError } from '../errors/TicketTagGroupDuplicateNameError';
-import { OverlapInTagIdsError } from 'src/app/tickets/errors/OverlapInTagIds';
+import { TicketTagGroupNotFoundError } from '../../domain/errors/TicketTagGroupNotFound';
+import { TicketTagNameAlreadyExistsError } from '../../domain/errors/TicketTagNameAlreadyExists';
+import { CannotRemoveAndAddOrUpdateTicketTagError } from '../../domain/errors/CannotRemoveAndAddOrUpdateTicketTag';
+import { TicketTagNotFoundError } from '../../domain/errors/TicketTagNotFound';
+import { TicketTagDuplicateNameError } from '../../domain/errors/TicketTagDuplicateName';
+import { TicketTagGroupDuplicateNameError } from '../../domain/errors/TicketTagGroupDuplicateNameError';
+import { OverlapInTagIdsError } from 'src/app/tickets/domain/errors/OverlapInTagIds';
 
 @Injectable()
 export class TicketTagInterceptor implements NestInterceptor {

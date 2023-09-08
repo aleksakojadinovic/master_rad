@@ -9,7 +9,6 @@ import mongoose from 'mongoose';
 export class TicketHistoryEntryCreated {
   constructor() {}
 }
-e;
 export class TicketHistoryEntryStatusChange {
   constructor(public status: TicketStatus) {}
 }

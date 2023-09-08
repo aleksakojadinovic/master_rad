@@ -6,7 +6,7 @@ import { Mapper } from '@automapper/core';
 import {
   TicketTagGroup,
   TicketTagGroupPermissions,
-} from './schema/ticket-tag-group.schema';
+} from '../schema/ticket-tag-group.schema';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 
 @Injectable()

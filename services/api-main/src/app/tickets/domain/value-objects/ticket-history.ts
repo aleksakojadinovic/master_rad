@@ -1,27 +1,24 @@
-// export enum TicketHistoryEntryType {
-//   CREATED = 'CREATED',
-//   TITLE_CHANGED = 'TITLE_CHANGED',
-//   BODY_CHANGED = 'BODY_CHANGED',
-//   COMMENT_ADDED = 'COMMENT_ADDED',
-//   ASSIGNEES_ADDED = 'ASSIGNEES_ADDED',
-
+import { User } from 'src/app/users/domain/entities/user.entity';
 import { TicketStatus } from './ticket-status';
 
-// }
 export class CreatedPayload {
-  // TODO: user ddd
-  user: any;
+  user: User;
 }
 export class CommentAddedPayload {
   commentId: string;
   body: string;
 }
 export class AssigneeAddedPayload {
-  // TODO: user ddd
-  user: any;
+  user: User;
 }
 export class StatusChangedPayload {
   status: TicketStatus;
+}
+
+export class TagsChangedPayload {
+  // TODO: tags go here.
+  added: string[];
+  removed: string[];
 }
 
 export type TicketHistoryPayload =
@@ -32,7 +29,6 @@ export type TicketHistoryPayload =
 
 export class TicketHistoryEntry {
   timestamp: Date;
-  // TODO: user ddd
-  user: any;
+  user: User;
   payload: TicketHistoryEntry;
 }

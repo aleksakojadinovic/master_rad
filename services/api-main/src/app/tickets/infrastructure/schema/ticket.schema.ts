@@ -5,7 +5,7 @@ import {
 } from './ticket-history.schema';
 import { User } from 'src/app/users/infrastructure/schema/user.schema';
 import mongoose, { Document } from 'mongoose';
-import { TicketTag } from 'src/app/ticket-tag-system/schema/ticket-tag.schema';
+import { TicketTag } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
 import { TicketStatus } from '../../types';
 
 @Schema()
@@ -32,7 +32,7 @@ export class TicketDb extends Document {
   @Prop()
   body: string;
 
-  @Prop()
+  @Prop({ type: String })
   status: TicketStatus;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TicketTag' }] })

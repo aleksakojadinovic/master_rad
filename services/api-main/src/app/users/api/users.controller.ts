@@ -2,7 +2,6 @@ import { AuthGuard } from '@nestjs/passport';
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
@@ -15,15 +14,14 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from '../domain/users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { User } from '../infrastructure/schema/user.schema';
 import { UserDTO } from './dto/user.dto';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { UsersQueryDTO } from './dto/users-query.dto';
 import { UsersInterceptor } from '../infrastructure/interceptors/users.interceptor';
+import { User } from '../domain/entities/user.entity';
 @UseInterceptors(UsersInterceptor)
 @Controller('users')
 export class UsersController {
@@ -31,18 +29,6 @@ export class UsersController {
     private readonly usersService: UsersService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
-
-  @Post()
-  async create(@Body() dto: CreateUserDto) {
-    const result = await this.usersService.create(dto);
-    return this.mapper.map(result, User, UserDTO);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('profile')
-  getProfile() {
-    return 'Hello!';
-  }
 
   @Get()
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
@@ -73,7 +59,7 @@ export class UsersController {
     @Body('token') token: string,
     @GetUserInfo() user: User,
   ) {
-    if (!(user.hasRole('superadministrator') || user._id.toString() !== id)) {
+    if (!user.isAdministrator() && user.id !== id) {
       throw new UnauthorizedException();
     }
 

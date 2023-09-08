@@ -1,5 +1,5 @@
 import { IsArray, IsOptional, Validate } from 'class-validator';
-import { TicketStatus } from '../types';
+import { TicketStatus } from '../../types';
 import { isValidObjectId } from 'mongoose';
 
 export class UpdateTicketDto {

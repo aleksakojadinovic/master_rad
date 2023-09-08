@@ -9,19 +9,19 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
-import { TicketNotFoundError } from '../errors/TicketNotFound';
-import { TicketIdNotValidError } from '../errors/TicketIdNotValid';
-import { AssigneeIdNotValidError } from '../errors/AssigneeIdNotValid';
-import { CannotAssignCustomerError } from '../errors/CannotAssignCustomer';
-import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
-import { NotAllowedToAddThisTagError } from '../errors/NotAllowedToAddThisTag';
-import { NotAllowedToRemoveThisTagError } from '../errors/NotAllowedToRemoveThisTag';
-import { DuplicateTagError } from '../errors/DuplicateTag';
-import { DuplicateAssigneeError } from '../errors/DuplicateAssignee';
-import { NotAllowedToChangeToThisStatusError } from '../errors/NotAllowedToChangeToThisStatus';
-import { CustomerCannotAddInternalCommmentError } from '../errors/CustomerCannotAddInternalComment';
-import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../errors/NotAllowedToSearchOthersTicketsAsACustomer';
-import { BadTicketFiltersError } from '../errors/BadTicketFilters';
+import { TicketNotFoundError } from '../../domain/errors/TicketNotFound';
+import { TicketIdNotValidError } from '../../domain/errors/TicketIdNotValid';
+import { AssigneeIdNotValidError } from '../../domain/errors/AssigneeIdNotValid';
+import { CannotAssignCustomerError } from '../../domain/errors/CannotAssignCustomer';
+import { TooSoonToCreateAnotherTicketError } from '../../domain/errors/TooSoonToCreateAnotherTicket';
+import { NotAllowedToAddThisTagError } from '../../domain/errors/NotAllowedToAddThisTag';
+import { NotAllowedToRemoveThisTagError } from '../../domain/errors/NotAllowedToRemoveThisTag';
+import { DuplicateTagError } from '../../domain/errors/DuplicateTag';
+import { DuplicateAssigneeError } from '../../domain/errors/DuplicateAssignee';
+import { NotAllowedToChangeToThisStatusError } from '../../domain/errors/NotAllowedToChangeToThisStatus';
+import { CustomerCannotAddInternalCommmentError } from '../../domain/errors/CustomerCannotAddInternalComment';
+import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../../domain/errors/NotAllowedToSearchOthersTicketsAsACustomer';
+import { BadTicketFiltersError } from '../../domain/errors/BadTicketFilters';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {

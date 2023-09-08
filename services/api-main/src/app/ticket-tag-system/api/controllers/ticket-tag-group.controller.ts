@@ -14,22 +14,22 @@ import {
   ValidationPipe,
   UseGuards,
 } from '@nestjs/common';
-import { TicketTagGroupService } from './ticket-tag-group.service';
-import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
-import { CreateOrUpdateTicketTagGroupDTO } from './dto/update-ticket-tag-group.dto';
+import { TicketTagGroupService } from '../../domain/services/ticket-tag-group.service';
+import { CreateTicketTagGroupDTO } from '../dto/create-ticket-tag-group.dto';
+import { CreateOrUpdateTicketTagGroupDTO } from '../dto/update-ticket-tag-group.dto';
 import { isValidObjectId } from 'mongoose';
-import { TicketTagInterceptor } from './interceptors/ticket-tag.interceptor';
+import { TicketTagInterceptor } from '../../infrastructure/interceptors/ticket-tag.interceptor';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketTagGroup } from './schema/ticket-tag-group.schema';
-import { TicketTagGroupDTO } from './dto/ticket-tag-group.dto';
+import { TicketTagGroup } from '../../infrastructure/schema/ticket-tag-group.schema';
+import { TicketTagGroupDTO } from '../dto/ticket-tag-group.dto';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { Request } from 'express';
 import { resolveLanguageCode } from 'src/codebase/utils';
 import { AuthGuard } from '@nestjs/passport';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
-import { User } from '../users/infrastructure/schema/user.schema';
+import { User } from '../../../users/infrastructure/schema/user.schema';
 
 @UseInterceptors(TicketTagInterceptor)
 @Controller('ticket-tag-groups')

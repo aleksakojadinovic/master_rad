@@ -8,9 +8,9 @@ import {
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { TicketTag } from '../schema/ticket-tag.schema';
-import { TicketTagDTO } from '../dto/ticket-tag.dto';
+import { TicketTagDTO } from '../../api/dto/ticket-tag.dto';
 import { TicketTagGroup } from '../schema/ticket-tag-group.schema';
-import { TicketTagGroupDTO } from '../dto/ticket-tag-group.dto';
+import { TicketTagGroupDTO } from '../../api/dto/ticket-tag-group.dto';
 
 @Injectable()
 export class TicketTagProfile extends AutomapperProfile {

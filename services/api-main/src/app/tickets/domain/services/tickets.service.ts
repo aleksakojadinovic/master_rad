@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { CreateTicketDto } from '../../api/dto/create-ticket.dto';
+import { UpdateTicketDto } from '../../api/dto/update-ticket.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Ticket, TicketDocument } from 'src/app/tickets/infrastructure/schema/ticket.schema';
+import { TicketDb } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import mongoose, { Model, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/app/users/domain/users.service';
 import { v4 as uuid } from 'uuid';
@@ -15,37 +15,38 @@ import {
   TicketHistoryEntryStatusChange,
   TicketHistoryEntryTitleChanged,
   TicketHistoryItem,
-} from './infrastructure/schema/ticket-history.schema';
+} from '../../infrastructure/schema/ticket-history.schema';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketHistoryEntryType, TicketStatus } from './types';
-import { User } from 'src/app/users/infrastructure/schema/user.schema';
-import { TicketQueryDTO } from './dto/ticket-query.dto';
+import { TicketHistoryEntryType } from '../../types';
+import { TicketQueryDTO } from '../../api/dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
-import { TicketNotFoundError } from './errors/TicketNotFound';
-import { TicketIdNotValidError } from './errors/TicketIdNotValid';
-import { CannotAssignCustomerError } from './errors/CannotAssignCustomer';
-import { TicketTagService } from '../ticket-tag-system/ticket-tag.service';
-import { OverlapInTagIdsError } from './errors/OverlapInTagIds';
-import { NotAllowedToAddThisTagError } from './errors/NotAllowedToAddThisTag';
-import { NotAllowedToRemoveThisTagError } from './errors/NotAllowedToRemoveThisTag';
-import { DuplicateTagError } from './errors/DuplicateTag';
-import { AssigneeNotFoundError } from './errors/AssigneeNotFound';
-import { DuplicateAssigneeError } from './errors/DuplicateAssignee';
-import { TooSoonToCreateAnotherTicketError } from './errors/TooSoonToCreateAnotherTicket';
-import { NotificationFactory } from '../notifications/factory/notification.factory';
-import { Notification } from '../notifications/schema/notification.schema';
-import { NotificationsService } from '../notifications/notifications.service';
-import { TICKET_STATUS_GRAPH } from './infrastructure/schema/ticket-status.map';
-import { NotAllowedToChangeToThisStatusError } from './errors/NotAllowedToChangeToThisStatus';
-import { TicketsRepository } from './infrastructure/tickets.repository';
-import { CustomerCannotAddInternalCommmentError } from './errors/CustomerCannotAddInternalComment';
-import { BadTicketFiltersError } from './errors/BadTicketFilters';
+import { TicketNotFoundError } from '../errors/TicketNotFound';
+import { TicketIdNotValidError } from '../errors/TicketIdNotValid';
+import { CannotAssignCustomerError } from '../errors/CannotAssignCustomer';
+import { TicketTagService } from '../../../ticket-tag-system/domain/services/ticket-tag.service';
+import { OverlapInTagIdsError } from '../errors/OverlapInTagIds';
+import { NotAllowedToAddThisTagError } from '../errors/NotAllowedToAddThisTag';
+import { NotAllowedToRemoveThisTagError } from '../errors/NotAllowedToRemoveThisTag';
+import { DuplicateTagError } from '../errors/DuplicateTag';
+import { AssigneeNotFoundError } from '../errors/AssigneeNotFound';
+import { DuplicateAssigneeError } from '../errors/DuplicateAssignee';
+import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
+import { NotificationFactory } from '../../../notifications/factory/notification.factory';
+import { Notification } from '../../../notifications/schema/notification.schema';
+import { NotificationsService } from '../../../notifications/notifications.service';
+import { TICKET_STATUS_GRAPH } from '../../infrastructure/schema/ticket-status.map';
+import { NotAllowedToChangeToThisStatusError } from '../errors/NotAllowedToChangeToThisStatus';
+import { TicketsRepository } from '../../infrastructure/tickets.repository';
+import { CustomerCannotAddInternalCommmentError } from '../errors/CustomerCannotAddInternalComment';
+import { BadTicketFiltersError } from '../errors/BadTicketFilters';
+import { User } from '../../../users/domain/entities/user.entity';
+import { Ticket } from '../entities/ticket.entity';
 
 @Injectable()
 export class TicketsService extends BaseService {
   constructor(
-    @InjectModel(Ticket.name) private ticketModel: Model<Ticket>,
+    @InjectModel(TicketDb.name) private ticketModel: Model<TicketDb>,
     @InjectMapper() private readonly mapper: Mapper,
     private ticketTagService: TicketTagService,
     private usersService: UsersService,
@@ -58,7 +59,7 @@ export class TicketsService extends BaseService {
   async create(user: User, createTicketDto: CreateTicketDto) {
     const mostRecentTicket =
       await this.ticketsRepository.findMostRecentTicketByUserId(
-        user._id.toString(),
+        user.id.toString(),
       );
     if (mostRecentTicket) {
       const createdAt = moment(mostRecentTicket.createdAt);
@@ -153,8 +154,7 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    const isTicketOwner =
-      ticket.createdBy._id.toString() === user._id.toString();
+    const isTicketOwner = ticket.createdBy._id.toString() === user.id;
 
     if (user.isCustomer() && !isTicketOwner) {
       throw new TicketNotFoundError(id);
@@ -173,13 +173,10 @@ export class TicketsService extends BaseService {
 
     const creatorId = ticket.createdBy._id.toString();
 
-    return user._id.toString() === creatorId.toString();
+    return user.id === creatorId.toString();
   }
 
-  private prepareTicketResponse(
-    ticket: TicketDocument,
-    user: User,
-  ): TicketDocument {
+  private prepareTicketResponse(ticket: Ticket, user: User): Ticket {
     this.stripInternalComments(ticket, user);
     this.stripTags(ticket, user);
 
@@ -199,8 +196,7 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    const isTicketOwner =
-      ticket.createdBy._id.toString() === user._id.toString();
+    const isTicketOwner = ticket.createdBy._id.toString() === user.id;
 
     if (isCustomer && !isTicketOwner) {
       throw new TicketNotFoundError(id);
@@ -265,7 +261,7 @@ export class TicketsService extends BaseService {
   }
 
   private updateTicketStatus(
-    ticket: TicketDocument,
+    ticket: Ticket,
     user: User,
     dto: UpdateTicketDto,
     groupId: any,
@@ -305,7 +301,7 @@ export class TicketsService extends BaseService {
   }
 
   private updateTicketBody(
-    ticket: TicketDocument,
+    ticket: Ticket,
     user: User,
     dto: UpdateTicketDto,
     groupId: string,
@@ -326,7 +322,7 @@ export class TicketsService extends BaseService {
   }
 
   private updateTicketTitle(
-    ticket: TicketDocument,
+    ticket: Ticket,
     user: User,
     dto: UpdateTicketDto,
     groupId: string,
@@ -347,7 +343,7 @@ export class TicketsService extends BaseService {
   }
 
   private updateTicketAddComment(
-    ticket: TicketDocument,
+    ticket: Ticket,
     user: User,
     dto: UpdateTicketDto,
     groupId: string,
@@ -379,16 +375,13 @@ export class TicketsService extends BaseService {
     const usersToNotify: User[] = [];
     usersToNotify.push(
       ...ticket.assignees.filter(
-        (assignee) => assignee._id.toString() !== user._id.toString(),
+        (assignee) => assignee._id.toString() !== user.id,
       ),
     );
 
     // First condition prevents self-notifications
     // Second condition prevents notifying customers of internal comments
-    if (
-      user._id.toString() !== ticket.createdBy._id.toString() &&
-      !dto.isCommentInternal
-    ) {
+    if (user.id !== ticket.createdBy._id.toString() && !dto.isCommentInternal) {
       usersToNotify.push(ticket.createdBy);
     }
 
@@ -409,7 +402,7 @@ export class TicketsService extends BaseService {
   }
 
   private async updateTicketAddAssignees(
-    ticket: TicketDocument,
+    ticket: Ticket,
     user: User,
     dto: UpdateTicketDto,
     groupId: string,
@@ -424,12 +417,10 @@ export class TicketsService extends BaseService {
       if (!assigneeUser) {
         throw new AssigneeNotFoundError();
       }
-      if (assigneeUser.hasRole('customer')) {
+      if (assigneeUser.isCustomer()) {
         throw new CannotAssignCustomerError(assigneeId);
       }
-      if (
-        ticket.assignees.map((user) => user._id.toString()).includes(assigneeId)
-      ) {
+      if (ticket.assignees.map((user) => user.id).includes(assigneeId)) {
         throw new DuplicateAssigneeError(assigneeId);
       }
       assignees.push(assigneeUser);
@@ -449,7 +440,7 @@ export class TicketsService extends BaseService {
     }
 
     const usersToNotify = assignees.filter(
-      (assignee) => assignee._id.toString() !== user._id.toString(),
+      (assignee) => assignee.id !== user.id,
     );
 
     if (usersToNotify.length == 0) {
@@ -470,18 +461,18 @@ export class TicketsService extends BaseService {
   }
 
   private async updateTicketRemoveAssignees(
-    ticket: TicketDocument,
+    ticket: Ticket,
     dto: UpdateTicketDto,
   ) {
     if (dto.removeAssignees && dto.removeAssignees.length > 0) {
       ticket.assignees = ticket.assignees.filter(
-        (user) => !dto.removeAssignees.includes(user._id.toString()),
+        (user) => !dto.removeAssignees.includes(user.id),
       );
     }
   }
 
   private async updateTicketTags(
-    ticket: TicketDocument,
+    ticket: Ticket,
     user: User,
     dto: UpdateTicketDto,
   ) {
@@ -523,7 +514,7 @@ export class TicketsService extends BaseService {
     }
   }
 
-  private stripInternalComments(ticket: TicketDocument, user: User) {
+  private stripInternalComments(ticket: Ticket, user: User) {
     if (!user.isCustomer()) {
       return;
     }

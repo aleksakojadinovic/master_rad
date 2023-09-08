@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { TicketsService } from './tickets.service';
-import { TicketsController } from './tickets.controller';
+import { TicketsService } from './domain/services/tickets.service';
+import { TicketsController } from './api/tickets.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
   Ticket,

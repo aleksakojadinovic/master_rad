@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
+import { Role } from '../../domain/value-objects/role';
 
 export class UsersQueryDTO extends EntityQueryDTO {
   @Transform(({ value }) => {
@@ -8,5 +9,5 @@ export class UsersQueryDTO extends EntityQueryDTO {
     }
     return value || [];
   })
-  roles: string[] = [];
+  roles: Role[] = [];
 }

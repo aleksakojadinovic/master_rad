@@ -1,10 +1,10 @@
-import { ROLE_VALUES } from '../users/domain/value-objects/role';
-import { TicketTagGroupRepository } from './ticket-tag-group.repository';
-import { CreateTicketTagGroupDTO } from './dto/create-ticket-tag-group.dto';
+import { ROLE_VALUES } from '../../../users/domain/value-objects/role';
+import { TicketTagGroupRepository } from '../../infrastructure/repositories/ticket-tag-group.repository';
+import { CreateTicketTagGroupDTO } from '../../api/dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
-import { TicketTagGroup } from './schema/ticket-tag-group.schema';
+import { TicketTagGroup } from '../../infrastructure/schema/ticket-tag-group.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { TicketTagGroupNotFoundError } from './errors/TicketTagGroupNotFound';
+import { TicketTagGroupNotFoundError } from '../errors/TicketTagGroupNotFound';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketTagService } from './ticket-tag.service';
@@ -14,15 +14,15 @@ import {
   CreateOrUpdateTicketTagGroupDTO,
   UpdateTicketTagGroupPermissionsDTO,
   UpdateTicketTagGroupTagsDTO,
-} from './dto/update-ticket-tag-group.dto';
+} from '../../api/dto/update-ticket-tag-group.dto';
 import * as _ from 'lodash';
 import { IntlValue } from 'src/codebase/types/IntlValue';
-import { CannotRemoveAndAddOrUpdateTicketTagError } from './errors/CannotRemoveAndAddOrUpdateTicketTag';
-import { TicketTagDuplicateNameError } from './errors/TicketTagDuplicateName';
-import { TicketTagNotFoundError } from './errors/TicketTagNotFound';
-import { TicketTagGroupDuplicateNameError } from './errors/TicketTagGroupDuplicateNameError';
-import { User } from '../users/infrastructure/schema/user.schema';
-import { Role } from '../users/domain/value-objects/role';
+import { CannotRemoveAndAddOrUpdateTicketTagError } from '../errors/CannotRemoveAndAddOrUpdateTicketTag';
+import { TicketTagDuplicateNameError } from '../errors/TicketTagDuplicateName';
+import { TicketTagNotFoundError } from '../errors/TicketTagNotFound';
+import { TicketTagGroupDuplicateNameError } from '../errors/TicketTagGroupDuplicateNameError';
+import { User } from '../../../users/infrastructure/schema/user.schema';
+import { Role } from '../../../users/domain/value-objects/role';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {

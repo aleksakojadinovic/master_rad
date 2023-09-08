@@ -8,14 +8,14 @@ import {
   mapWithArguments,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { Ticket } from '../infrastructure/schema/ticket.schema';
+import { Ticket } from '../../infrastructure/schema/ticket.schema';
 import { TicketDTO } from '../dto/ticket.dto';
-import { TicketHistoryItem } from '../infrastructure/schema/ticket-history.schema';
+import { TicketHistoryItem } from '../../infrastructure/schema/ticket-history.schema';
 import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 import { User } from 'src/app/users/infrastructure/schema/user.schema';
 import { UserDTO } from 'src/app/users/api/dto/user.dto';
-import { TicketTag } from 'src/app/ticket-tag-system/schema/ticket-tag.schema';
-import { TicketTagDTO } from 'src/app/ticket-tag-system/dto/ticket-tag.dto';
+import { TicketTag } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
+import { TicketTagDTO } from 'src/app/ticket-tag-system/api/dto/ticket-tag.dto';
 
 @Injectable()
 export class TicketProfile extends AutomapperProfile {

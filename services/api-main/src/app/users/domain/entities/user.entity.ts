@@ -18,4 +18,16 @@ export class User {
   }
 
   role: Role;
+
+  isAdministrator() {
+    return this.role === Role.ADMINISTRATOR;
+  }
+
+  isAgent() {
+    return this.role === Role.AGENT;
+  }
+
+  isCustomer() {
+    return this.role === Role.CUSTOMER;
+  }
 }

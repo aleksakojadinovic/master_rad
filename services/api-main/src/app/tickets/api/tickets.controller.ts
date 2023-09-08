@@ -12,7 +12,7 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import { TicketsService } from './tickets.service';
+import { TicketsService } from '../domain/services/tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -23,14 +23,14 @@ import { Mapper } from '@automapper/core';
 import { TicketDTO } from './dto/ticket.dto';
 import { BaseController } from 'src/codebase/BaseController';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
-import { TicketInterceptor } from './interceptors/ticket.interceptor';
-import { TicketIdNotValidError } from './errors/TicketIdNotValid';
+import { TicketInterceptor } from '../infrastructure/interceptors/ticket.interceptor';
+import { TicketIdNotValidError } from '../domain/errors/TicketIdNotValid';
 import { resolveLanguageCode } from 'src/codebase/utils';
 import { Request } from 'express';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
-import { User } from '../users/infrastructure/schema/user.schema';
+import { User } from '../../users/infrastructure/schema/user.schema';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
-import { NotAllowedToSearchOthersTicketsAsACustomerError } from './errors/NotAllowedToSearchOthersTicketsAsACustomer';
+import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../domain/errors/NotAllowedToSearchOthersTicketsAsACustomer';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')

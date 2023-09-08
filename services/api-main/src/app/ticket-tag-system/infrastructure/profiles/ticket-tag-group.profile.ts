@@ -8,10 +8,10 @@ import {
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { TicketTag } from '../schema/ticket-tag.schema';
-import { TicketTagDTO } from '../dto/ticket-tag.dto';
+import { TicketTagDTO } from '../../api/dto/ticket-tag.dto';
 import { TicketTagGroup } from '../schema/ticket-tag-group.schema';
-import { TicketTagGroupDTO } from '../dto/ticket-tag-group.dto';
-import { TicketTagGroupPermissionsDTO } from '../dto/ticket-tag-group-permissions.dto';
+import { TicketTagGroupDTO } from '../../api/dto/ticket-tag-group.dto';
+import { TicketTagGroupPermissionsDTO } from '../../api/dto/ticket-tag-group-permissions.dto';
 
 @Injectable()
 export class TicketTagGroupProfile extends AutomapperProfile {

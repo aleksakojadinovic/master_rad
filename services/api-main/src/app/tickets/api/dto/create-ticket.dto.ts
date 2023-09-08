@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, MinLength } from 'class-validator';
-import { MIN_BODY_LENGTH, MIN_TITLE_LENGTH } from '../constants';
+import { MIN_BODY_LENGTH, MIN_TITLE_LENGTH } from '../../constants';
 
 export class CreateTicketDto {
   @IsString()

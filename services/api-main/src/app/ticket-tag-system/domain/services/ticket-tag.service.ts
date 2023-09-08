@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseService } from 'src/codebase/BaseService';
-import { TicketTag } from './schema/ticket-tag.schema';
-import { CreateTicketTagDTO } from './dto/create-ticket-tag.dto';
-import { User } from '../users/infrastructure/schema/user.schema';
-import { TicketTagRepository } from './ticket-tag.repository';
+import { TicketTag } from '../../infrastructure/schema/ticket-tag.schema';
+import { CreateTicketTagDTO } from '../../api/dto/create-ticket-tag.dto';
+import { User } from '../../../users/infrastructure/schema/user.schema';
+import { TicketTagRepository } from '../../infrastructure/repositories/ticket-tag.repository';
 
 @Injectable()
 export class TicketTagService extends BaseService {
