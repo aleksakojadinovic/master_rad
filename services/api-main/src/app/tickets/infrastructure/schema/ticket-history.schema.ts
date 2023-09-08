@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { TicketHistoryEntryTypeUnion } from '../../types';
-import { User } from 'src/app/users/infrastructure/schema/user.schema';
-import { TicketHistoryEntryType, TicketStatus } from '../../types';
+import { TicketHistoryEntryType } from '../../types';
 
 import { v4 as uuid } from 'uuid';
 import mongoose from 'mongoose';
+import { TicketStatus } from '../../domain/value-objects/ticket-status';
+import { User } from 'src/app/users/domain/entities/user.entity';
 
 export class TicketHistoryEntryCreated {
   constructor() {}

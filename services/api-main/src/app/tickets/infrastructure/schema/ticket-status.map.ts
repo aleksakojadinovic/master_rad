@@ -1,5 +1,5 @@
 import { Role } from 'src/app/users/domain/value-objects/role';
-import { TicketStatus } from '../../types';
+import { TicketStatus } from '../../domain/value-objects/ticket-status';
 
 export class TicketStatusGraphEntry {
   constructor(public status: TicketStatus, public roles: Role[]) {}

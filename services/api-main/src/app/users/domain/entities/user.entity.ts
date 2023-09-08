@@ -19,6 +19,10 @@ export class User {
 
   role: Role;
 
+  passwordHash: string;
+
+  firebaseTokens: string[];
+
   isAdministrator() {
     return this.role === Role.ADMINISTRATOR;
   }

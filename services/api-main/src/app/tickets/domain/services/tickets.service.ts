@@ -42,6 +42,7 @@ import { CustomerCannotAddInternalCommmentError } from '../errors/CustomerCannot
 import { BadTicketFiltersError } from '../errors/BadTicketFilters';
 import { User } from '../../../users/domain/entities/user.entity';
 import { Ticket } from '../entities/ticket.entity';
+import { TicketStatus } from '../value-objects/ticket-status';
 
 @Injectable()
 export class TicketsService extends BaseService {

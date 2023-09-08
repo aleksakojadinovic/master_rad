@@ -45,6 +45,14 @@ export class UserEntityProfile extends AutomapperProfile {
           (destination) => destination.role,
           mapFrom((source) => source.role),
         ),
+        forMember(
+          (destination) => destination.passwordHash,
+          mapFrom((source) => source.passwordHash),
+        ),
+        forMember(
+          (destination) => destination.firebaseTokens,
+          mapFrom((source) => source.firebaseTokens),
+        ),
       );
     };
   }

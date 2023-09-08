@@ -20,7 +20,7 @@ export class AuthService {
     }
 
     const userPayload = {
-      id: user._id.toString(),
+      id: user.id,
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
