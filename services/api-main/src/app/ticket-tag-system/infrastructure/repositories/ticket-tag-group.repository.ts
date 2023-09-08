@@ -8,6 +8,18 @@ import {
   TicketTagGroupPermissions,
 } from '../schema/ticket-tag-group.schema';
 import { IntlValue } from 'src/codebase/types/IntlValue';
+import { TicketTagGroup } from '../../domain/entities/ticket-tag-group.entity';
+import { TicketTagDb } from '../schema/ticket-tag.schema';
+import {
+  CAN_ADD,
+  CAN_REMOVE,
+  CAN_SEE,
+} from '../../domain/value-objects/ticket-tag-group-permissions';
+
+export type UpdateTicketTagGroupCommand = {
+  nameIntl: IntlValue;
+  descriptionIntl: IntlValue;
+};
 
 @Injectable()
 export class TicketTagGroupRepository {
@@ -24,10 +36,16 @@ export class TicketTagGroupRepository {
     },
   ];
 
-  findOne(id: string) {
-    return this.ticketTagGroupModel
-      .findOne({ _id: id })
+  async findOne(id: string): Promise<TicketTagGroup | null> {
+    const result = await this.ticketTagGroupModel
+      .findById(id)
       .populate(TicketTagGroupRepository.POPULATE);
+
+    if (!result) {
+      return null;
+    }
+
+    return this.mapper.map(result, TicketTagGroupDb, TicketTagGroup);
   }
 
   async doesAlreadyExist(nameIntl: IntlValue): Promise<boolean> {
@@ -41,15 +59,17 @@ export class TicketTagGroupRepository {
     return !!result;
   }
 
-  async findAllByRoles(roles: string[]): Promise<TicketTagGroupDb[]> {
-    return this.ticketTagGroupModel
+  async findAllByRoles(roles: string[]): Promise<TicketTagGroup[]> {
+    const result = await this.ticketTagGroupModel
       .find({
         'permissions.canSeeRoles': { $in: roles },
       })
       .populate(TicketTagGroupRepository.POPULATE);
+
+    return this.mapper.mapArray(result, TicketTagGroupDb, TicketTagGroup);
   }
 
-  create({
+  async create({
     nameIntl,
     descriptionIntl,
     roles,
@@ -58,15 +78,42 @@ export class TicketTagGroupRepository {
     descriptionIntl: IntlValue;
     roles: string[];
   }) {
-    const newGroup = new this.ticketTagGroupModel();
-    newGroup.nameIntl = nameIntl;
-    newGroup.descriptionIntl = descriptionIntl;
-    newGroup.permissions = new TicketTagGroupPermissions(
+    const obj = new this.ticketTagGroupModel();
+    obj.nameIntl = nameIntl;
+    obj.descriptionIntl = descriptionIntl;
+    obj.permissions = new TicketTagGroupPermissions(
       roles as any,
       roles as any,
       roles as any,
     );
 
-    return newGroup.save();
+    const newGroup = await obj.save();
+
+    return this.mapper.map(newGroup, TicketTagGroupDb, TicketTagGroup);
+  }
+
+  // Let's go
+  async update(group: TicketTagGroup): Promise<TicketTagGroup | null> {
+    const groupDocument = await this.ticketTagGroupModel.findById(group.id);
+
+    if (!groupDocument) {
+      return null;
+    }
+
+    groupDocument.nameIntl = group.nameIntl;
+    groupDocument.descriptionIntl = group.nameIntl;
+    groupDocument.tags = group.tags.map(
+      (tag) => tag.id as unknown as TicketTagDb,
+    );
+    groupDocument.permissions.canAddRoles = group.permissions[CAN_ADD];
+    groupDocument.permissions.canRemoveRoles = group.permissions[CAN_REMOVE];
+    groupDocument.permissions.canSeeRoles = group.permissions[CAN_SEE];
+
+    const updatedGroup = await this.ticketTagGroupModel.findOneAndUpdate(
+      { _id: group.id },
+      groupDocument,
+    );
+
+    return this.mapper.map(updatedGroup, TicketTagGroupDb, TicketTagGroup);
   }
 }

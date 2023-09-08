@@ -10,7 +10,6 @@ import { Injectable } from '@nestjs/common';
 import { UserDTO } from '../../api/dto/user.dto';
 import { User } from '../../domain/entities/user.entity';
 
-// Maps DB object to domain object
 @Injectable()
 export class UserDTOProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {

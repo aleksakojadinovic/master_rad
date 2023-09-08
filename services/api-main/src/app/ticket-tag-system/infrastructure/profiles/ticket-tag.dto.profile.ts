@@ -11,10 +11,9 @@ import { TicketTagDb } from '../schema/ticket-tag.schema';
 import { TicketTagDTO } from '../../api/dto/ticket-tag.dto';
 import { TicketTagGroupDb } from '../schema/ticket-tag-group.schema';
 import { TicketTagGroupDTO } from '../../api/dto/ticket-tag-group.dto';
-import { TicketTagGroupPermissionsDTO } from '../../api/dto/ticket-tag-group-permissions.dto';
 
 @Injectable()
-export class TicketTagGroupProfile extends AutomapperProfile {
+export class TicketTagDTOProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
@@ -23,46 +22,23 @@ export class TicketTagGroupProfile extends AutomapperProfile {
     return (mapper: Mapper) => {
       createMap(
         mapper,
-        TicketTagGroupDb,
-        TicketTagGroupDTO,
+        TicketTagDb,
+        TicketTagDTO,
         forMember(
           (destination) => destination.id,
           mapFrom((source) => source._id),
         ),
         forMember(
-          (destination) => destination.tags,
-          mapWithArguments((source, extra) => {
-            if (extra.include && (extra.include as string[]).includes('tags')) {
-              return mapper.mapArray(source.tags, TicketTagDb, TicketTagDTO, {
-                extraArgs: () => extra,
-              });
-            }
-            return source.tags.map((tag) => tag._id.toString());
-          }),
-        ),
-        forMember(
-          (destination) => destination.permissions,
-          mapFrom((source) => {
-            const mappedPermissiones = new TicketTagGroupPermissionsDTO(
-              source.permissions.canAddRoles,
-              source.permissions.canRemoveRoles,
-              source.permissions.canSeeRoles,
-            );
-
-            return mappedPermissiones;
-          }),
-        ),
-        forMember(
           (destination) => destination.name,
-          mapWithArguments((source, extraArgs) => {
-            return source.nameIntl[extraArgs['languageCode'] as string];
+          mapWithArguments((source, extra) => {
+            return source.nameIntl[extra['languageCode'] as string];
           }),
         ),
         forMember(
           (destination) => destination.description,
           mapWithArguments(
-            (source, extraArgs) =>
-              source.descriptionIntl[extraArgs['languageCode'] as string],
+            (source, extra) =>
+              source.descriptionIntl[extra['languageCode'] as string],
           ),
         ),
         forMember(
@@ -72,6 +48,28 @@ export class TicketTagGroupProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.descriptionIntl,
           mapFrom((source) => source.descriptionIntl),
+        ),
+        forMember(
+          (destination) => destination.group,
+          mapWithArguments((source, extra) => {
+            const includeArray = extra.include
+              ? (extra.include as string[])
+              : [];
+            if (includeArray.includes('group')) {
+              return mapper.map(
+                source.group,
+                TicketTagGroupDb,
+                TicketTagGroupDTO,
+                {
+                  extraArgs: () => ({
+                    ...extra,
+                    include: includeArray.filter((key) => key !== 'tags'),
+                  }),
+                },
+              );
+            }
+            return source.group._id.toString();
+          }),
         ),
       );
     };

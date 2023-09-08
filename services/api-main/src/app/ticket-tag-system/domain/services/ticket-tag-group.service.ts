@@ -2,8 +2,6 @@ import { ROLE_VALUES } from '../../../users/domain/value-objects/role';
 import { TicketTagGroupRepository } from '../../infrastructure/repositories/ticket-tag-group.repository';
 import { CreateTicketTagGroupDTO } from '../../api/dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
-import { TicketTagGroupDb } from '../../infrastructure/schema/ticket-tag-group.schema';
-import { InjectModel } from '@nestjs/mongoose';
 import { TicketTagGroupNotFoundError } from '../errors/TicketTagGroupNotFound';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { BaseService } from 'src/codebase/BaseService';
@@ -17,17 +15,21 @@ import {
 } from '../../api/dto/update-ticket-tag-group.dto';
 import * as _ from 'lodash';
 import { IntlValue } from 'src/codebase/types/IntlValue';
-import { CannotRemoveAndAddOrUpdateTicketTagError } from '../errors/CannotRemoveAndAddOrUpdateTicketTag';
 import { TicketTagDuplicateNameError } from '../errors/TicketTagDuplicateName';
 import { TicketTagNotFoundError } from '../errors/TicketTagNotFound';
 import { TicketTagGroupDuplicateNameError } from '../errors/TicketTagGroupDuplicateNameError';
-import { User } from '../../../users/infrastructure/schema/user.schema';
 import { Role } from '../../../users/domain/value-objects/role';
+import { User } from 'src/app/users/domain/entities/user.entity';
+import { TicketTagGroup } from '../entities/ticket-tag-group.entity';
+import {
+  CAN_ADD,
+  CAN_REMOVE,
+  CAN_SEE,
+} from '../value-objects/ticket-tag-group-permissions';
 
 @Injectable()
 export class TicketTagGroupService extends BaseService {
   constructor(
-    @InjectModel(TicketTagGroupDb.name)
     @InjectMapper()
     private readonly mapper: Mapper,
     private ticketTagService: TicketTagService,
@@ -85,7 +87,7 @@ export class TicketTagGroupService extends BaseService {
   }
 
   private updateIntlValue(
-    document: TicketTagGroupDb,
+    group: TicketTagGroup,
     newIntlValue: IntlValue | null,
     isName: boolean,
   ) {
@@ -93,23 +95,21 @@ export class TicketTagGroupService extends BaseService {
       return;
     }
 
-    const originalValue = isName ? document.nameIntl : document.descriptionIntl;
+    const originalValue = isName ? group.nameIntl : group.descriptionIntl;
 
     if (_.isEqual(originalValue, newIntlValue)) {
       return;
     }
 
-    // ? Should we allow for omitted locale values or assume they're always sent? Check for best practices
-
     if (isName) {
-      document.nameIntl = newIntlValue;
+      group.nameIntl = newIntlValue;
     } else {
-      document.descriptionIntl = newIntlValue;
+      group.descriptionIntl = newIntlValue;
     }
   }
 
   private async updatePermissions(
-    document: TicketTagGroupDb,
+    group: TicketTagGroup,
     newPermissionsValue: UpdateTicketTagGroupPermissionsDTO | null,
   ) {
     if (newPermissionsValue === null) {
@@ -121,7 +121,7 @@ export class TicketTagGroupService extends BaseService {
         .map((r) => ROLE_VALUES[r] ?? null)
         .filter((r) => r !== null);
 
-      document.permissions.canAddRoles = roles;
+      group.permissions[CAN_ADD] = roles;
     }
 
     if (newPermissionsValue.canRemoveRoles !== null) {
@@ -129,7 +129,7 @@ export class TicketTagGroupService extends BaseService {
         .map((r) => ROLE_VALUES[r] ?? null)
         .filter((r) => r !== null);
 
-      document.permissions.canRemoveRoles = roles;
+      group.permissions[CAN_REMOVE] = roles;
     }
 
     if (newPermissionsValue.canSeeRoles !== null) {
@@ -137,85 +137,40 @@ export class TicketTagGroupService extends BaseService {
         .map((r) => ROLE_VALUES[r] ?? null)
         .filter((r) => r !== null);
 
-      document.permissions.canSeeRoles = roles;
+      group.permissions[CAN_SEE] = roles;
     }
   }
 
-  // So this can either add or remove tags, the question is what the hell I'm sending
   private async updateTags(
-    document: TicketTagGroupDb,
+    group: TicketTagGroup,
     dto: UpdateTicketTagGroupTagsDTO | null,
   ) {
     if (dto === null) {
       return;
     }
 
-    // Whatever is in add or update cannot be in remove, because it makes no sense
-    if (dto.removeIds !== null && dto.addOrUpdateTags !== null) {
-      if (
-        dto.removeIds.some((removeId) =>
-          dto.addOrUpdateTags.some(
-            (addOrUpdateDTO) =>
-              addOrUpdateDTO.id && addOrUpdateDTO.id === removeId,
-          ),
-        )
-      ) {
-        throw new CannotRemoveAndAddOrUpdateTicketTagError();
-      }
-    }
-
-    // Remove the ones that are requested for removal
-    // Should we delete them from the database?
-    // TODO: Untag all tagged tickets from ticket service, leaving for later
-    // TODO: API doesn't care but frontend should warn about this
     if (dto.removeIds !== null) {
-      document.tags = document.tags.filter(
-        (tag) => !dto.removeIds.includes(tag._id.toString()),
-      );
-    }
-
-    if (dto.addOrUpdateTags === null) {
-      return;
+      group.tags = group.tags.filter((tag) => !dto.removeIds.includes(tag.id));
     }
 
     const addDTOs = dto.addOrUpdateTags.filter((dto) => dto.id == null);
     const updateDTOs = dto.addOrUpdateTags.filter((dto) => dto.id != null);
 
-    // const addOrUpdateNameIntls = dto.addOrUpdateTags.map(
-    //   ({ nameIntl }) => nameIntl,
-    // );
-
-    // const existingNameIntls = document.tags.map(({ nameIntl }) => nameIntl);
-
-    //   for (const addOrUpdate of dto.addOrUpdateTags) {
-    //     for (const existingTag of document.tags) {
-
-    //     }
-    //   }
-
-    // for (const addOrUpdateNameIntl of addOrUpdateNameIntls) {
-    //   for (const existingNameIntl of existingNameIntls) {
-    //     this.preventIntlNameDuplicates(addOrUpdateNameIntl, existingNameIntl);
-    //   }
-    // }
-
     for (const updateDTO of updateDTOs) {
-      if (
-        !document.tags.map(({ _id }) => _id.toString()).includes(updateDTO.id)
-      ) {
+      if (!group.tags.map(({ id }) => id).includes(updateDTO.id)) {
         throw new TicketTagNotFoundError();
       }
     }
 
     for (const addDTO of addDTOs) {
-      const tag = await this.ticketTagService.create(addDTO, document._id);
-      document.tags.push(tag);
+      const tag = await this.ticketTagService.create(addDTO, group.id);
+      group.tags.push(tag);
     }
 
     for (const updateDTO of updateDTOs) {
       const tag = await this.ticketTagService.update(updateDTO);
-      const index = document.tags.findIndex(({ _id }) => _id === tag._id);
-      document.tags[index] = tag;
+      const index = group.tags.findIndex(({ id }) => id === tag.id);
+      group.tags[index] = tag;
     }
   }
 
@@ -229,15 +184,10 @@ export class TicketTagGroupService extends BaseService {
     this.updateIntlValue(group, dto.nameIntl, true);
     this.updateIntlValue(group, dto.descriptionIntl, false);
     await this.updatePermissions(group, dto.permissions);
-
     await this.updateTags(group, dto.tags);
 
-    await group.save();
+    const updatedGroup = await this.ticketTagGroupRepository.update(group);
 
-    return group;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} ticketTag`;
+    return updatedGroup;
   }
 }

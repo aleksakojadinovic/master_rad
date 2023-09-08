@@ -3,10 +3,9 @@ import {
   TicketHistoryItem,
   TicketHistoryItemSchemaType,
 } from './ticket-history.schema';
-import { User } from 'src/app/users/infrastructure/schema/user.schema';
+import { UserDb } from 'src/app/users/infrastructure/schema/user.schema';
 import mongoose, { Document } from 'mongoose';
 import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
-import { TicketStatus } from '../../types';
 
 @Schema()
 export class TicketDb extends Document {
@@ -18,10 +17,10 @@ export class TicketDb extends Document {
   _id: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId })
-  createdBy: User;
+  createdBy: UserDb;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-  assignees: User[];
+  assignees: UserDb[];
 
   @Prop()
   createdAt: Date;
@@ -33,7 +32,7 @@ export class TicketDb extends Document {
   body: string;
 
   @Prop({ type: String })
-  status: TicketStatus;
+  status: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TicketTag' }] })
   tags: TicketTagDb[];

@@ -484,7 +484,7 @@ export class TicketsService extends BaseService {
     }
 
     if (removeTags.length > 0) {
-      const tagsToRemove = await this.ticketTagService.findMany(removeTags);
+      const tagsToRemove = await this.ticketTagService.findByIds(removeTags);
       tagsToRemove.forEach((tag) => {
         if (!tag.group.permissions.canRemoveRoles.includes(user.role)) {
           throw new NotAllowedToRemoveThisTagError();
@@ -496,7 +496,7 @@ export class TicketsService extends BaseService {
     }
 
     if (addTags.length > 0) {
-      const tagsToAdd = await this.ticketTagService.findMany(addTags);
+      const tagsToAdd = await this.ticketTagService.findByIds(addTags);
       tagsToAdd.forEach((tag) => {
         if (!tag.group.permissions.canAddRoles.includes(user.role)) {
           throw new NotAllowedToAddThisTagError();

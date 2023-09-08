@@ -12,7 +12,7 @@ import { UserDb } from '../schema/user.schema';
 
 // Maps DB object to domain object
 @Injectable()
-export class UserDomainProfile extends AutomapperProfile {
+export class UserEntityProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }

@@ -1,19 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { UserDb } from '../infrastructure/schema/user.schema';
-import { Model } from 'mongoose';
 import { UsersQueryDTO } from '../api/dto/users-query.dto';
 import { UsersRepository } from '../infrastructure/users.repository';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectModel(UserDb.name) private userModel: Model<UserDb>,
-    private usersRepository: UsersRepository,
-  ) {}
+  constructor(private usersRepository: UsersRepository) {}
 
-  //TODO
   findAll({
     roles,
     page,

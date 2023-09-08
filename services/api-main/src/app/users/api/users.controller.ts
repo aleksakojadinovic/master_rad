@@ -34,17 +34,16 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findAll(
     @Query(new ValidationPipe({ transform: true }))
-    queryDTO: UsersQueryDTO,
+    dto: UsersQueryDTO,
     @GetUserInfo() user: User,
   ) {
     if (!user.isAdministrator() && !user.isAgent()) {
       throw new UnauthorizedException();
     }
-    const users = await this.usersService.findAll(queryDTO);
+    const users = await this.usersService.findAll(dto);
     return this.mapper.mapArray(users, User, UserDTO);
   }
 
-  // TODO: protect
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);

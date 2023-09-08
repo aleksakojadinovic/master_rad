@@ -9,8 +9,8 @@ import { classes } from '@automapper/classes';
 import { UserDTOProfile } from './app/users/infrastructure/profiles/user.dto.profile';
 import { TicketProfile } from './app/tickets/api/profiles/ticket.profile';
 import { TicketHistoryItemProfile } from './app/tickets/api/profiles/ticket-history.profile';
-import { TicketTagProfile } from './app/ticket-tag-system/infrastructure/profiles/ticket-tag.profile';
-import { TicketTagGroupProfile } from './app/ticket-tag-system/infrastructure/profiles/ticket-tag-group.profile';
+import { TicketTagDTOProfile } from './app/ticket-tag-system/infrastructure/profiles/ticket-tag.dto.profile';
+import { TicketTagGroupDTOProfile } from './app/ticket-tag-system/infrastructure/profiles/ticket-tag-group.dto.profile';
 import { TicketTagSystemModule } from './app/ticket-tag-system/ticket-tag-system.module';
 import { NotificationsModule } from './app/notifications/notifications.module';
 import { NotificationProfile } from './app/notifications/profiles/notification.profile';
@@ -39,8 +39,8 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
     UserDTOProfile,
     TicketProfile,
     TicketHistoryItemProfile,
-    TicketTagProfile,
-    TicketTagGroupProfile,
+    TicketTagDTOProfile,
+    TicketTagGroupDTOProfile,
     NotificationProfile,
     FirebaseService,
   ],
