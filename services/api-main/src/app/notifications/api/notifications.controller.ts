@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Patch,
   Delete,
   Query,
@@ -13,7 +12,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { NotificationsService } from '../domain/notifications.service';
-import { UsersService } from '../../users/domain/users.service';
 import { NotificationQueryDTO } from './dto/notification-query.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
@@ -30,14 +28,8 @@ import { User } from 'src/app/users/domain/entities/user.entity';
 export class NotificationsController {
   constructor(
     private readonly notificationsService: NotificationsService,
-    private readonly usersService: UsersService,
     @InjectMapper() private mapper: Mapper,
   ) {}
-
-  @Post()
-  create() {
-    return this.notificationsService.create();
-  }
 
   @Get()
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
@@ -65,11 +57,6 @@ export class NotificationsController {
     };
   }
 
-  @Get(':id')
-  async findOne() {
-    return null;
-  }
-
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async update(
@@ -88,10 +75,5 @@ export class NotificationsController {
       default:
         throw new BadRequestException('Unknown action');
     }
-  }
-
-  @Delete(':id')
-  remove() {
-    return this.notificationsService.remove();
   }
 }
