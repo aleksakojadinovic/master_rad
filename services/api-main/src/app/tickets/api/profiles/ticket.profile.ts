@@ -14,7 +14,7 @@ import { TicketHistoryItem } from '../../infrastructure/schema/ticket-history.sc
 import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 import { User } from 'src/app/users/infrastructure/schema/user.schema';
 import { UserDTO } from 'src/app/users/api/dto/user.dto';
-import { TicketTag } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
+import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
 import { TicketTagDTO } from 'src/app/ticket-tag-system/api/dto/ticket-tag.dto';
 
 @Injectable()
@@ -102,7 +102,7 @@ export class TicketProfile extends AutomapperProfile {
                 includeArray[includeGroupIndex] = 'group';
               }
 
-              return mapper.mapArray(source.tags, TicketTag, TicketTagDTO, {
+              return mapper.mapArray(source.tags, TicketTagDb, TicketTagDTO, {
                 extraArgs: () => ({ ...extra, include: includeArray }),
               });
             }

@@ -7,9 +7,9 @@ import {
   mapWithArguments,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { TicketTag } from '../schema/ticket-tag.schema';
+import { TicketTagDb } from '../schema/ticket-tag.schema';
 import { TicketTagDTO } from '../../api/dto/ticket-tag.dto';
-import { TicketTagGroup } from '../schema/ticket-tag-group.schema';
+import { TicketTagGroupDb } from '../schema/ticket-tag-group.schema';
 import { TicketTagGroupDTO } from '../../api/dto/ticket-tag-group.dto';
 
 @Injectable()
@@ -22,7 +22,7 @@ export class TicketTagProfile extends AutomapperProfile {
     return (mapper: Mapper) => {
       createMap(
         mapper,
-        TicketTag,
+        TicketTagDb,
         TicketTagDTO,
         forMember(
           (destination) => destination.id,
@@ -58,7 +58,7 @@ export class TicketTagProfile extends AutomapperProfile {
             if (includeArray.includes('group')) {
               return mapper.map(
                 source.group,
-                TicketTagGroup,
+                TicketTagGroupDb,
                 TicketTagGroupDTO,
                 {
                   extraArgs: () => ({

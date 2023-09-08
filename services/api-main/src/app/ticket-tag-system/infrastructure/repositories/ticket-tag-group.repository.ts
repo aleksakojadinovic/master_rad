@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import {
-  TicketTagGroup,
+  TicketTagGroupDb,
   TicketTagGroupPermissions,
 } from '../schema/ticket-tag-group.schema';
 import { IntlValue } from 'src/codebase/types/IntlValue';
@@ -12,8 +12,8 @@ import { IntlValue } from 'src/codebase/types/IntlValue';
 @Injectable()
 export class TicketTagGroupRepository {
   constructor(
-    @InjectModel(TicketTagGroup.name)
-    private ticketTagGroupModel: Model<TicketTagGroup>,
+    @InjectModel(TicketTagGroupDb.name)
+    private ticketTagGroupModel: Model<TicketTagGroupDb>,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
@@ -41,7 +41,7 @@ export class TicketTagGroupRepository {
     return !!result;
   }
 
-  async findAllByRoles(roles: string[]): Promise<TicketTagGroup[]> {
+  async findAllByRoles(roles: string[]): Promise<TicketTagGroupDb[]> {
     return this.ticketTagGroupModel
       .find({
         'permissions.canSeeRoles': { $in: roles },

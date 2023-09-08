@@ -1,10 +1,9 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Role } from 'src/app/users/domain/value-objects/role';
-import { TicketTag } from './ticket-tag.schema';
+import { TicketTagDb } from './ticket-tag.schema';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 
-// TODO: Should this be on the tag level?
 export class TicketTagGroupPermissions {
   constructor(
     public canAddRoles: Role[],
@@ -14,14 +13,8 @@ export class TicketTagGroupPermissions {
 }
 
 @Schema()
-export class TicketTagGroup {
+export class TicketTagGroupDb {
   _id: string;
-
-  // Whether or not adding multiple tags is allowed in this group
-  // I do not plan on supporting more granular permissions, as in some combinations
-  // being possible and some not, as it seems like overkill
-  @Prop()
-  exclusive: boolean;
 
   @Prop({
     type: {
@@ -39,7 +32,7 @@ export class TicketTagGroup {
   permissions: TicketTagGroupPermissions;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TicketTag' }] })
-  tags: TicketTag[];
+  tags: TicketTagDb[];
 
   @Prop({ type: Object })
   nameIntl: IntlValue;
@@ -49,6 +42,6 @@ export class TicketTagGroup {
 }
 
 export const TicketTagGroupSchema =
-  SchemaFactory.createForClass(TicketTagGroup);
+  SchemaFactory.createForClass(TicketTagGroupDb);
 
-export type TicketTagGroupDocument = TicketTagGroup & Document;
+export type TicketTagGroupDocument = TicketTagGroupDb & Document;

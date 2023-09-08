@@ -21,7 +21,7 @@ import { isValidObjectId } from 'mongoose';
 import { TicketTagInterceptor } from '../../infrastructure/interceptors/ticket-tag.interceptor';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketTagGroup } from '../../infrastructure/schema/ticket-tag-group.schema';
+import { TicketTagGroupDb } from '../../infrastructure/schema/ticket-tag-group.schema';
 import { TicketTagGroupDTO } from '../dto/ticket-tag-group.dto';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { Request } from 'express';
@@ -50,7 +50,7 @@ export class TicketTagGroupController {
       createTicketTagGroupDTO,
     );
 
-    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
+    return this.mapper.map(group, TicketTagGroupDb, TicketTagGroupDTO, {
       extraArgs: () => ({ languageCode }),
     });
   }
@@ -64,7 +64,7 @@ export class TicketTagGroupController {
   ) {
     const languageCode = resolveLanguageCode(req);
     const group = await this.ticketTagGroupService.findOne(id);
-    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
+    return this.mapper.map(group, TicketTagGroupDb, TicketTagGroupDTO, {
       extraArgs: () => ({ languageCode, include: queryDTO.includes }),
     });
   }
@@ -85,7 +85,7 @@ export class TicketTagGroupController {
     );
     return this.mapper.mapArray(
       ticketTagGroups,
-      TicketTagGroup,
+      TicketTagGroupDb,
       TicketTagGroupDTO,
       {
         extraArgs: () => ({
@@ -117,7 +117,7 @@ export class TicketTagGroupController {
       updateTicketTagGroupDto,
     );
 
-    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
+    return this.mapper.map(group, TicketTagGroupDb, TicketTagGroupDTO, {
       extraArgs: () => ({ languageCode }),
     });
   }

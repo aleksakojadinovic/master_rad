@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseService } from 'src/codebase/BaseService';
-import { TicketTag } from '../../infrastructure/schema/ticket-tag.schema';
+import { TicketTagDb } from '../../infrastructure/schema/ticket-tag.schema';
 import { CreateTicketTagDTO } from '../../api/dto/create-ticket-tag.dto';
 import { User } from '../../../users/infrastructure/schema/user.schema';
 import { TicketTagRepository } from '../../infrastructure/repositories/ticket-tag.repository';
@@ -10,8 +10,8 @@ import { TicketTagRepository } from '../../infrastructure/repositories/ticket-ta
 @Injectable()
 export class TicketTagService extends BaseService {
   constructor(
-    @InjectModel(TicketTag.name)
-    private ticketTagModel: Model<TicketTag>,
+    @InjectModel(TicketTagDb.name)
+    private ticketTagModel: Model<TicketTagDb>,
     private ticketTagRepository: TicketTagRepository,
   ) {
     super();

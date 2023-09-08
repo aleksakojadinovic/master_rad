@@ -3,10 +3,10 @@ import { TicketTagGroupService } from './domain/services/ticket-tag-group.servic
 import { TicketTagGroupController } from './api/controllers/ticket-tag-group.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
-  TicketTagGroup,
+  TicketTagGroupDb,
   TicketTagGroupSchema,
 } from './infrastructure/schema/ticket-tag-group.schema';
-import { TicketTag, TicketTagSchema } from './infrastructure/schema/ticket-tag.schema';
+import { TicketTagDb, TicketTagSchema } from './infrastructure/schema/ticket-tag.schema';
 import { UsersModule } from '../users/users.module';
 import { TicketTagService } from './domain/services/ticket-tag.service';
 import { TicketTagController } from './api/controllers/ticket-tag.controller';
@@ -25,10 +25,10 @@ import { TicketTagRepository } from './infrastructure/repositories/ticket-tag.re
   imports: [
     UsersModule,
     MongooseModule.forFeature([
-      { name: TicketTagGroup.name, schema: TicketTagGroupSchema },
+      { name: TicketTagGroupDb.name, schema: TicketTagGroupSchema },
     ]),
     MongooseModule.forFeature([
-      { name: TicketTag.name, schema: TicketTagSchema },
+      { name: TicketTagDb.name, schema: TicketTagSchema },
     ]),
   ],
 })

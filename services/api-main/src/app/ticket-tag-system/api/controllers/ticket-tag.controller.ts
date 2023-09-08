@@ -14,7 +14,7 @@ import { Mapper } from '@automapper/core';
 import { Request } from 'express';
 import { resolveLanguageCode } from 'src/codebase/utils';
 import { TicketTagService } from '../../domain/services/ticket-tag.service';
-import { TicketTag } from '../../infrastructure/schema/ticket-tag.schema';
+import { TicketTagDb } from '../../infrastructure/schema/ticket-tag.schema';
 import { TicketTagDTO } from '../dto/ticket-tag.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
@@ -41,7 +41,7 @@ export class TicketTagController {
     const languageCode = resolveLanguageCode(req);
     const tags = await this.ticketTagService.findAll(user);
 
-    return this.mapper.mapArray(tags as TicketTag[], TicketTag, TicketTagDTO, {
+    return this.mapper.mapArray(tags as TicketTagDb[], TicketTagDb, TicketTagDTO, {
       extraArgs: () => ({
         languageCode,
         include: queryDTO.includes,

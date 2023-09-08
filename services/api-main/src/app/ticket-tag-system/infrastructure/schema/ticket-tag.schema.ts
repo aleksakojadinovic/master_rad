@@ -1,10 +1,10 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { TicketTagGroup } from './ticket-tag-group.schema';
+import { TicketTagGroupDb } from './ticket-tag-group.schema';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 
 @Schema()
-export class TicketTag {
+export class TicketTagDb {
   constructor(nameIntl: IntlValue, descriptionIntl: IntlValue) {
     this.nameIntl = nameIntl;
     this.descriptionIntl = descriptionIntl;
@@ -13,7 +13,7 @@ export class TicketTag {
   _id: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'TicketTagGroup' })
-  group: TicketTagGroup;
+  group: TicketTagGroupDb;
 
   @Prop({ type: Object })
   nameIntl: IntlValue;
@@ -22,6 +22,6 @@ export class TicketTag {
   descriptionIntl: IntlValue;
 }
 
-export const TicketTagSchema = SchemaFactory.createForClass(TicketTag);
+export const TicketTagSchema = SchemaFactory.createForClass(TicketTagDb);
 
-export type TicketTagDocument = TicketTag & Document;
+export type TicketTagDocument = TicketTagDb & Document;

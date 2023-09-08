@@ -2,7 +2,7 @@ import { ROLE_VALUES } from '../../../users/domain/value-objects/role';
 import { TicketTagGroupRepository } from '../../infrastructure/repositories/ticket-tag-group.repository';
 import { CreateTicketTagGroupDTO } from '../../api/dto/create-ticket-tag-group.dto';
 import { Injectable } from '@nestjs/common';
-import { TicketTagGroup } from '../../infrastructure/schema/ticket-tag-group.schema';
+import { TicketTagGroupDb } from '../../infrastructure/schema/ticket-tag-group.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { TicketTagGroupNotFoundError } from '../errors/TicketTagGroupNotFound';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
@@ -27,7 +27,7 @@ import { Role } from '../../../users/domain/value-objects/role';
 @Injectable()
 export class TicketTagGroupService extends BaseService {
   constructor(
-    @InjectModel(TicketTagGroup.name)
+    @InjectModel(TicketTagGroupDb.name)
     @InjectMapper()
     private readonly mapper: Mapper,
     private ticketTagService: TicketTagService,
@@ -85,7 +85,7 @@ export class TicketTagGroupService extends BaseService {
   }
 
   private updateIntlValue(
-    document: TicketTagGroup,
+    document: TicketTagGroupDb,
     newIntlValue: IntlValue | null,
     isName: boolean,
   ) {
@@ -109,7 +109,7 @@ export class TicketTagGroupService extends BaseService {
   }
 
   private async updatePermissions(
-    document: TicketTagGroup,
+    document: TicketTagGroupDb,
     newPermissionsValue: UpdateTicketTagGroupPermissionsDTO | null,
   ) {
     if (newPermissionsValue === null) {
@@ -143,7 +143,7 @@ export class TicketTagGroupService extends BaseService {
 
   // So this can either add or remove tags, the question is what the hell I'm sending
   private async updateTags(
-    document: TicketTagGroup,
+    document: TicketTagGroupDb,
     dto: UpdateTicketTagGroupTagsDTO | null,
   ) {
     if (dto === null) {

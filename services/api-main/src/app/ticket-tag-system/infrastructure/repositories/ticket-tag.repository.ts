@@ -3,13 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketTag, TicketTagDocument } from '../schema/ticket-tag.schema';
+import { TicketTagDb, TicketTagDocument } from '../schema/ticket-tag.schema';
 
 @Injectable()
 export class TicketTagRepository {
   constructor(
-    @InjectModel(TicketTag.name)
-    private ticketTagModel: Model<TicketTag>,
+    @InjectModel(TicketTagDb.name)
+    private ticketTagModel: Model<TicketTagDb>,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
