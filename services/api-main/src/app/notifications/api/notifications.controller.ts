@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Patch,
-  Delete,
   Query,
   ValidationPipe,
   UseGuards,
@@ -18,10 +17,10 @@ import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { NotificationDb } from '../infrastructure/schema/notification.schema';
 import { NotificationDTO } from './dto/notification.dto';
 import { NotificationsInterceptor } from '../infrastructure/interceptors/notifications.interceptors';
 import { User } from 'src/app/users/domain/entities/user.entity';
+import { Notification } from '../domain/entities/notification.entity';
 
 @UseInterceptors(NotificationsInterceptor)
 @Controller('notifications')
@@ -50,7 +49,7 @@ export class NotificationsController {
     return {
       notifications: this.mapper.mapArray(
         notifications,
-        NotificationDb,
+        Notification,
         NotificationDTO,
       ),
       unreadCount,

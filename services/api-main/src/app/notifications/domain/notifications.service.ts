@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { NotificationDb } from '../infrastructure/schema/notification.schema';
 import { NotificationQueryDTO } from '../api/dto/notification-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
 import { FirebaseService } from '../../firebase/firebase.service';
 import { NotificationNotFoundError } from './errors/NotificationNotFound';
 import { NotificationsRepository } from '../infrastructure/notifications.repository';
 import { User } from 'src/app/users/domain/entities/user.entity';
+import { Notification } from './entities/notification.entity';
 
 @Injectable()
 export class NotificationsService extends BaseService {
@@ -39,7 +39,7 @@ export class NotificationsService extends BaseService {
   }
 
   findOne(id: string) {
-    return this.notificationsRepository.findNotificationById(id);
+    return this.notificationsRepository.findOne(id);
   }
 
   update() {
@@ -50,7 +50,7 @@ export class NotificationsService extends BaseService {
     return `This action removes a notification`;
   }
 
-  async emitNotifications(...notifications: NotificationDb[]) {
+  async emitNotifications(...notifications: Notification[]) {
     try {
       const createdNotifications =
         await this.notificationsRepository.createMany(...notifications);
@@ -69,7 +69,7 @@ export class NotificationsService extends BaseService {
       throw new NotificationNotFoundError();
     }
 
-    if (notification.user._id.toString() !== user.id.toString()) {
+    if (notification.user.id !== user.id) {
       throw new NotificationNotFoundError();
     }
 
@@ -78,6 +78,6 @@ export class NotificationsService extends BaseService {
     }
 
     notification.readAt = new Date();
-    return notification.save();
+    return this.notificationsRepository.update(notification);
   }
 }

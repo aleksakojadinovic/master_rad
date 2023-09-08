@@ -3,10 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import {
-  NotificationDb,
-  NotificationDocument,
-} from './schema/notification.schema';
+import { NotificationDb } from './schema/notification.schema';
+import { Notification } from '../domain/entities/notification.entity';
 
 export type NotificationFilterType = {
   userId?: string | null;
@@ -30,18 +28,20 @@ export class NotificationsRepository {
     { path: 'payload.user', model: 'User' },
   ];
 
-  findOne(id: string) {
-    return this.notificationModel
-      .findOne({ _id: id })
+  async findOne(id: string): Promise<Notification | null> {
+    const result = await this.notificationModel
+      .findById(id)
       .populate(NotificationsRepository.POPULATE);
+
+    return this.mapper.map(result, NotificationDb, Notification);
   }
 
-  findNotifications(
+  async findNotifications(
     filters: NotificationFilterType,
     sort: any = null,
     page: number | null = null,
     perPage: number | null = null,
-  ) {
+  ): Promise<Notification[]> {
     const queryObject: any = {};
     if (filters.userId) {
       queryObject.user = filters.userId;
@@ -70,10 +70,11 @@ export class NotificationsRepository {
       query.skip((page - 1) * perPage).limit(perPage);
     }
 
-    return query.exec();
+    const result = await query.exec();
+    return this.mapper.mapArray(result, NotificationDb, Notification);
   }
 
-  async createMany(...notifications: NotificationDb[]) {
+  async createMany(...notifications: Notification[]) {
     const models = notifications.map((n) => {
       const obj = Object.assign({}, n);
       const payload = Object.assign({}, obj.payload);
@@ -86,12 +87,41 @@ export class NotificationsRepository {
           .then((model) => model.populate(NotificationsRepository.POPULATE)),
       ),
     );
-    return savedNotifications;
+
+    return this.mapper.mapArray(
+      savedNotifications,
+      NotificationDb,
+      Notification,
+    );
   }
 
-  findNotificationById(id: string): Promise<NotificationDocument> {
-    return this.notificationModel
-      .findById(id)
-      .populate(NotificationsRepository.POPULATE);
+  async update(notification: Notification) {
+    const updateObject: any = {};
+    updateObject.user = notification.user.id;
+    updateObject.createdAt = notification.createdAt;
+    updateObject.readAt = notification.readAt;
+    updateObject.type = notification.type;
+    updateObject.payload = {};
+
+    if (notification.payload.ticket) {
+      updateObject.payload.ticket = notification.payload.ticket.id;
+    }
+
+    if (notification.payload.user) {
+      updateObject.payload.user = notification.payload.user.id;
+    }
+
+    if ((notification.payload as any).comment) {
+      updateObject.payload.comment = (notification.payload as any).comment;
+    }
+
+    const updatedNotification = await this.notificationModel.findOneAndUpdate(
+      {
+        _id: notification.id,
+      },
+      updateObject,
+    );
+
+    return this.mapper.map(updatedNotification, NotificationDb, Notification);
   }
 }
