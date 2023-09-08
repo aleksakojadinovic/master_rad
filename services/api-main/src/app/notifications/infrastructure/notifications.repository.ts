@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import {
-  Notification,
+  NotificationDb,
   NotificationDocument,
 } from './schema/notification.schema';
 
@@ -19,8 +19,8 @@ export type NotificationFilterType = {
 @Injectable()
 export class NotificationsRepository {
   constructor(
-    @InjectModel(Notification.name)
-    private notificationModel: Model<Notification>,
+    @InjectModel(NotificationDb.name)
+    private notificationModel: Model<NotificationDb>,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
@@ -73,7 +73,7 @@ export class NotificationsRepository {
     return query.exec();
   }
 
-  async createMany(...notifications: Notification[]) {
+  async createMany(...notifications: NotificationDb[]) {
     const models = notifications.map((n) => {
       const obj = Object.assign({}, n);
       const payload = Object.assign({}, obj.payload);

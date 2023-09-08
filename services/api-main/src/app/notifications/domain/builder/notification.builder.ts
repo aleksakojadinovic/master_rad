@@ -1,13 +1,9 @@
-import { User } from 'src/app/users/infrastructure/schema/user.schema';
-import {
-  AssignedNotificationPayload,
-  CommentAddedNotificationPayload,
-  Notification,
-  NotificationPayload,
-} from '../schema/notification.schema';
-import { Ticket } from 'src/app/tickets/infrastructure/schema/ticket.schema';
-import { TicketHistoryEntryType } from 'src/app/tickets/types';
-import { TicketHistoryEntryCommentAdded } from 'src/app/tickets/infrastructure/schema/ticket-history.schema';
+import { User } from 'src/app/users/domain/entities/user.entity';
+import { Ticket } from 'src/app/tickets/domain/entities/ticket.entity';
+import { NotificationPayloadCommentAdded } from '../value-objects/notification-payload-comment-added';
+import { NotificationPayloadAssigned } from '../value-objects/notification-payload-assigned';
+import { NotificationPayload } from '../value-objects/notification-payload';
+import { Notification } from '../entities/notification.entity';
 
 interface Instantiable<T> {
   new (...args: any[]): T;
@@ -33,7 +29,7 @@ export class CommentAddedNotificationPayloadBuilder {
     return this;
   }
 
-  build(): CommentAddedNotificationPayload {
+  build(): NotificationPayloadCommentAdded {
     if (this.commentId === null) {
       throw new Error(`Comment notification requires comment id.`);
     }
@@ -47,22 +43,19 @@ export class CommentAddedNotificationPayloadBuilder {
     }
 
     if (
-      !this.ticket.history
-        .filter(
-          (item) => item.entryType === TicketHistoryEntryType.COMMEND_ADDED,
-        )
-        .map((item) => item.entry as TicketHistoryEntryCommentAdded)
-        .find((entry) => entry.commentId === this.commentId)
+      !this.ticket.comments.find(
+        (comment) => comment.commentId === this.commentId,
+      )
     ) {
       throw new Error(
-        `Comment with id ${this.commentId} not found for ticket ${this.ticket._id}`,
+        `Comment with id ${this.commentId} not found for ticket ${this.ticket.id}`,
       );
     }
 
-    const payload = new CommentAddedNotificationPayload();
+    const payload = new NotificationPayloadCommentAdded();
     payload.comment = this.commentId;
-    payload.user = this.user._id.toString();
-    payload.ticket = this.ticket._id.toString();
+    payload.user = this.user;
+    payload.ticket = this.ticket;
 
     return payload;
   }
@@ -82,7 +75,7 @@ export class AssignedNotificationPayloadBuilder {
     return this;
   }
 
-  build(): AssignedNotificationPayload {
+  build(): NotificationPayloadAssigned {
     if (this.ticket === null) {
       throw new Error(`Assign notification requires ticket.`);
     }
@@ -91,9 +84,9 @@ export class AssignedNotificationPayloadBuilder {
       throw new Error(`Assign notification requires user.`);
     }
 
-    const payload = new AssignedNotificationPayload();
-    payload.ticket = this.ticket._id.toString();
-    payload.user = this.user._id.toString();
+    const payload = new NotificationPayloadAssigned();
+    payload.ticket = this.ticket;
+    payload.user = this.user;
 
     return payload;
   }

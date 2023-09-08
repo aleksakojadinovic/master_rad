@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Notification } from './schema/notification.schema';
-import { User } from '../users/infrastructure/schema/user.schema';
-import { NotificationQueryDTO } from './dto/notification-query.dto';
+import { NotificationDb } from '../infrastructure/schema/notification.schema';
+import { NotificationQueryDTO } from '../api/dto/notification-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
-import { FirebaseService } from '../firebase/firebase.service';
+import { FirebaseService } from '../../firebase/firebase.service';
 import { NotificationNotFoundError } from './errors/NotificationNotFound';
-import { NotificationsRepository } from './notifications.repository';
+import { NotificationsRepository } from '../infrastructure/notifications.repository';
+import { User } from 'src/app/users/domain/entities/user.entity';
 
 @Injectable()
 export class NotificationsService extends BaseService {
@@ -22,7 +22,7 @@ export class NotificationsService extends BaseService {
 
   async findAll(queryDTO: NotificationQueryDTO, user: User) {
     const notifications = await this.notificationsRepository.findNotifications(
-      { userId: user._id.toString() },
+      { userId: user.id },
       { createdAt: -1 },
       queryDTO.page,
       queryDTO.perPage,
@@ -32,7 +32,7 @@ export class NotificationsService extends BaseService {
 
   async countNewNotifications(user: User) {
     const notifications = await this.notificationsRepository.findNotifications({
-      userId: user._id,
+      userId: user.id,
       unread: true,
     });
     return notifications.length;
@@ -50,7 +50,7 @@ export class NotificationsService extends BaseService {
     return `This action removes a notification`;
   }
 
-  async emitNotifications(...notifications: Notification[]) {
+  async emitNotifications(...notifications: NotificationDb[]) {
     try {
       const createdNotifications =
         await this.notificationsRepository.createMany(...notifications);
@@ -69,7 +69,7 @@ export class NotificationsService extends BaseService {
       throw new NotificationNotFoundError();
     }
 
-    if (notification.user._id.toString() !== user._id.toString()) {
+    if (notification.user._id.toString() !== user.id.toString()) {
       throw new NotificationNotFoundError();
     }
 

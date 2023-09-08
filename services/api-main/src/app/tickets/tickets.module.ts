@@ -3,7 +3,7 @@ import { TicketsService } from './domain/services/tickets.service';
 import { TicketsController } from './api/tickets.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
-  Ticket,
+  TicketDb,
   TicketSchema,
 } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import { UsersModule } from 'src/app/users/users.module';
@@ -13,7 +13,7 @@ import { TicketsRepository } from './infrastructure/tickets.repository';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Ticket.name, schema: TicketSchema }]),
+    MongooseModule.forFeature([{ name: TicketDb.name, schema: TicketSchema }]),
     UsersModule,
     TicketTagSystemModule,
     NotificationsModule,

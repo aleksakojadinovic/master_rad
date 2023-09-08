@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import * as firebase from 'firebase-admin';
-import { Notification } from '../notifications/schema/notification.schema';
+import { NotificationDb } from '../notifications/infrastructure/schema/notification.schema';
 import { User } from '../users/domain/entities/user.entity';
 
 @Injectable()
@@ -53,7 +53,7 @@ export class FirebaseService {
       .replace(/^\w/, (c) => c.toUpperCase());
   }
 
-  async sendNotification(notification: Notification) {
+  async sendNotification(notification: NotificationDb) {
     const title = this.parseNotificationType(notification.type);
 
     if (notification.user.firebaseTokens.length == 0) {
@@ -69,7 +69,7 @@ export class FirebaseService {
     });
   }
 
-  async sendNotifications(...notifications: Notification[]) {
+  async sendNotifications(...notifications: NotificationDb[]) {
     if (!this.isInitialized) {
       return;
     }

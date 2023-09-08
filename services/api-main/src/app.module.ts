@@ -13,7 +13,7 @@ import { TicketTagDTOProfile } from './app/ticket-tag-system/infrastructure/prof
 import { TicketTagGroupDTOProfile } from './app/ticket-tag-system/infrastructure/profiles/ticket-tag-group.dto.profile';
 import { TicketTagSystemModule } from './app/ticket-tag-system/ticket-tag-system.module';
 import { NotificationsModule } from './app/notifications/notifications.module';
-import { NotificationProfile } from './app/notifications/profiles/notification.profile';
+import { NotificationDTOProfile } from './app/notifications/infrastructure/profiles/notification.dto.profile';
 import { FirebaseService } from './app/firebase/firebase.service';
 import { FirebaseModule } from './app/firebase/firebase.module';
 
@@ -41,7 +41,7 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
     TicketHistoryItemProfile,
     TicketTagDTOProfile,
     TicketTagGroupDTOProfile,
-    NotificationProfile,
+    NotificationDTOProfile,
     FirebaseService,
   ],
 })

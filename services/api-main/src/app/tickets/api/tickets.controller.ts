@@ -16,7 +16,6 @@ import { TicketsService } from '../domain/services/tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { Ticket } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import { isValidObjectId } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
@@ -28,9 +27,10 @@ import { TicketIdNotValidError } from '../domain/errors/TicketIdNotValid';
 import { resolveLanguageCode } from 'src/codebase/utils';
 import { Request } from 'express';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
-import { User } from '../../users/infrastructure/schema/user.schema';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../domain/errors/NotAllowedToSearchOthersTicketsAsACustomer';
+import { User } from 'src/app/users/domain/entities/user.entity';
+import { Ticket } from '../domain/entities/ticket.entity';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
@@ -59,7 +59,7 @@ export class TicketsController extends BaseController {
     @GetUserInfo() user: User,
   ) {
     if (user.isCustomer()) {
-      if (!queryDTO.createdBy || queryDTO.createdBy !== user._id.toString()) {
+      if (!queryDTO.createdBy || queryDTO.createdBy !== user.id) {
         throw new NotAllowedToSearchOthersTicketsAsACustomerError();
       }
     }

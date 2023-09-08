@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   BadRequestException,
   UseInterceptors,
   Query,
@@ -21,7 +20,6 @@ import { isValidObjectId } from 'mongoose';
 import { TicketTagInterceptor } from '../../infrastructure/interceptors/ticket-tag.interceptor';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketTagGroupDb } from '../../infrastructure/schema/ticket-tag-group.schema';
 import { TicketTagGroupDTO } from '../dto/ticket-tag-group.dto';
 import { EntityQueryDTO } from 'src/codebase/dto/EntityQueryDTO';
 import { Request } from 'express';
@@ -29,7 +27,8 @@ import { resolveLanguageCode } from 'src/codebase/utils';
 import { AuthGuard } from '@nestjs/passport';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
-import { User } from '../../../users/infrastructure/schema/user.schema';
+import { TicketTagGroup } from '../../domain/entities/ticket-tag-group.entity';
+import { User } from 'src/app/users/domain/entities/user.entity';
 
 @UseInterceptors(TicketTagInterceptor)
 @Controller('ticket-tag-groups')
@@ -50,7 +49,7 @@ export class TicketTagGroupController {
       createTicketTagGroupDTO,
     );
 
-    return this.mapper.map(group, TicketTagGroupDb, TicketTagGroupDTO, {
+    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
       extraArgs: () => ({ languageCode }),
     });
   }
@@ -64,7 +63,7 @@ export class TicketTagGroupController {
   ) {
     const languageCode = resolveLanguageCode(req);
     const group = await this.ticketTagGroupService.findOne(id);
-    return this.mapper.map(group, TicketTagGroupDb, TicketTagGroupDTO, {
+    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
       extraArgs: () => ({ languageCode, include: queryDTO.includes }),
     });
   }
@@ -85,7 +84,7 @@ export class TicketTagGroupController {
     );
     return this.mapper.mapArray(
       ticketTagGroups,
-      TicketTagGroupDb,
+      TicketTagGroup,
       TicketTagGroupDTO,
       {
         extraArgs: () => ({
@@ -117,13 +116,8 @@ export class TicketTagGroupController {
       updateTicketTagGroupDto,
     );
 
-    return this.mapper.map(group, TicketTagGroupDb, TicketTagGroupDTO, {
+    return this.mapper.map(group, TicketTagGroup, TicketTagGroupDTO, {
       extraArgs: () => ({ languageCode }),
     });
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketTagGroupService.remove(+id);
   }
 }

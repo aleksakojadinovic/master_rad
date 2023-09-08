@@ -32,9 +32,9 @@ import { DuplicateTagError } from '../errors/DuplicateTag';
 import { AssigneeNotFoundError } from '../errors/AssigneeNotFound';
 import { DuplicateAssigneeError } from '../errors/DuplicateAssignee';
 import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
-import { NotificationFactory } from '../../../notifications/factory/notification.factory';
-import { Notification } from '../../../notifications/schema/notification.schema';
-import { NotificationsService } from '../../../notifications/notifications.service';
+import { NotificationFactory } from '../../../notifications/domain/factory/notification.factory';
+import { NotificationDb } from '../../../notifications/infrastructure/schema/notification.schema';
+import { NotificationsService } from '../../../notifications/domain/notifications.service';
 import { TICKET_STATUS_GRAPH } from '../../infrastructure/schema/ticket-status.map';
 import { NotAllowedToChangeToThisStatusError } from '../errors/NotAllowedToChangeToThisStatus';
 import { TicketsRepository } from '../../infrastructure/tickets.repository';
@@ -210,7 +210,7 @@ export class TicketsService extends BaseService {
     const groupId = uuid();
     const timestamp = new Date();
 
-    const notifications: Notification[] = [];
+    const notifications: NotificationDb[] = [];
 
     this.updateTicketStatus(ticket, user, dto, groupId, timestamp);
     this.updateTicketBody(ticket, user, dto, groupId, timestamp);
@@ -349,7 +349,7 @@ export class TicketsService extends BaseService {
     dto: UpdateTicketDto,
     groupId: string,
     timestamp: Date,
-  ): Notification[] | null {
+  ): NotificationDb[] | null {
     if (dto.comment == null || dto.comment.length === 0) {
       return null;
     }
@@ -408,7 +408,7 @@ export class TicketsService extends BaseService {
     dto: UpdateTicketDto,
     groupId: string,
     timestamp: Date,
-  ): Promise<Notification[] | null> {
+  ): Promise<NotificationDb[] | null> {
     if (dto.addAssignees == null || dto.addAssignees.length == 0) {
       return null;
     }

@@ -7,13 +7,13 @@ import {
   mapFrom,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { Notification } from '../schema/notification.schema';
-import { NotificationDTO } from '../dto/notification.dto';
-import { User } from 'src/app/users/infrastructure/schema/user.schema';
+import { NotificationDTO } from '../../api/dto/notification.dto';
 import { UserDTO } from 'src/app/users/api/dto/user.dto';
+import { Notification } from '../../domain/entities/notification.entity';
+import { User } from 'src/app/users/domain/entities/user.entity';
 
 @Injectable()
-export class NotificationProfile extends AutomapperProfile {
+export class NotificationDTOProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
@@ -26,7 +26,7 @@ export class NotificationProfile extends AutomapperProfile {
         NotificationDTO,
         forMember(
           (destination) => destination.id,
-          mapFrom((source) => source._id),
+          mapFrom((source) => source.id),
         ),
         forMember(
           (destination) => destination.createdAt,

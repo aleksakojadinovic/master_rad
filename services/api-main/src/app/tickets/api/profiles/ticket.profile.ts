@@ -8,14 +8,14 @@ import {
   mapWithArguments,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { Ticket } from '../../infrastructure/schema/ticket.schema';
 import { TicketDTO } from '../dto/ticket.dto';
 import { TicketHistoryItem } from '../../infrastructure/schema/ticket-history.schema';
 import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
-import { User } from 'src/app/users/infrastructure/schema/user.schema';
 import { UserDTO } from 'src/app/users/api/dto/user.dto';
 import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
 import { TicketTagDTO } from 'src/app/ticket-tag-system/api/dto/ticket-tag.dto';
+import { Ticket } from '../../domain/entities/ticket.entity';
+import { User } from 'src/app/users/domain/entities/user.entity';
 
 @Injectable()
 export class TicketProfile extends AutomapperProfile {
@@ -31,7 +31,7 @@ export class TicketProfile extends AutomapperProfile {
         TicketDTO,
         forMember(
           (destination) => destination.id,
-          mapFrom((source) => source._id),
+          mapFrom((source) => source.id),
         ),
         forMember(
           (destination) => destination.history,
@@ -55,7 +55,7 @@ export class TicketProfile extends AutomapperProfile {
               });
             }
 
-            return source.createdBy._id.toString();
+            return source.createdBy.id;
           }),
         ),
         forMember(
@@ -69,7 +69,7 @@ export class TicketProfile extends AutomapperProfile {
                 extraArgs: () => extra,
               });
             }
-            return source.assignees.map((user) => user._id.toString());
+            return source.assignees.map((user) => user.id);
           }),
         ),
         forMember(

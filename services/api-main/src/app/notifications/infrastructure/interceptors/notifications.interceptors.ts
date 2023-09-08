@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
-import { NotificationNotFoundError } from '../errors/NotificationNotFound';
+import { NotificationNotFoundError } from '../../domain/errors/NotificationNotFound';
 
 @Injectable()
 export class NotificationsInterceptor implements NestInterceptor {

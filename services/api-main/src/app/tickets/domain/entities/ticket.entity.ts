@@ -11,6 +11,8 @@ export class Ticket {
 
   body: string;
 
+  createdAt: Date;
+
   createdBy: User;
 
   status: TicketStatus;
