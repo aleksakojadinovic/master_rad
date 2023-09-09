@@ -17,7 +17,7 @@ export class AssignedNotificationPayloadDb {
   user: UserDb;
 }
 
-export type NotificationPayloadDb =
+export type NotificationPayload =
   | CommentAddedNotificationPayloadDb
   | AssignedNotificationPayloadDb;
 

@@ -1,5 +1,6 @@
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { TicketStatus } from './ticket-status';
+import { TicketTag } from 'src/app/ticket-tag-system/domain/entities/ticket-tag.entity';
 
 export class CreatedPayload {
   user: User;
@@ -16,19 +17,18 @@ export class StatusChangedPayload {
 }
 
 export class TagsChangedPayload {
-  // TODO: tags go here.
-  added: string[];
-  removed: string[];
+  tags: TicketTag[];
 }
 
 export type TicketHistoryPayload =
   | CreatedPayload
   | CommentAddedPayload
   | AssigneeAddedPayload
-  | StatusChangedPayload;
+  | StatusChangedPayload
+  | TagsChangedPayload;
 
 export class TicketHistoryEntry {
   timestamp: Date;
-  user: User;
+  initiator: User;
   payload: TicketHistoryEntry;
 }

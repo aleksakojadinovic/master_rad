@@ -8,17 +8,16 @@ import { UsersService } from 'src/app/users/domain/users.service';
 import { v4 as uuid } from 'uuid';
 import * as moment from 'moment';
 import {
-  TicketHistoryEntryAssigneesAdded,
+  TicketHistoryEntryAssigneesChanged,
   TicketHistoryEntryBodyChanged,
   TicketHistoryEntryCommentAdded,
   TicketHistoryEntryCreated,
-  TicketHistoryEntryStatusChange,
+  TicketHistoryEntryStatusChanged,
   TicketHistoryEntryTitleChanged,
   TicketHistoryItem,
 } from '../../infrastructure/schema/ticket-history.schema';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { TicketHistoryEntryType } from '../../types';
 import { TicketQueryDTO } from '../../api/dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
@@ -35,7 +34,7 @@ import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnot
 import { NotificationFactory } from '../../../notifications/domain/factory/notification.factory';
 import { NotificationDb } from '../../../notifications/infrastructure/schema/notification.schema';
 import { NotificationsService } from '../../../notifications/domain/notifications.service';
-import { TICKET_STATUS_GRAPH } from '../../infrastructure/schema/ticket-status.map';
+import { TICKET_STATUS_GRAPH } from '../value-objects/ticket-status.map';
 import { NotAllowedToChangeToThisStatusError } from '../errors/NotAllowedToChangeToThisStatus';
 import { TicketsRepository } from '../../infrastructure/tickets.repository';
 import { CustomerCannotAddInternalCommmentError } from '../errors/CustomerCannotAddInternalComment';
@@ -287,7 +286,7 @@ export class TicketsService extends BaseService {
       );
     }
 
-    const entry = new TicketHistoryEntryStatusChange(targetStatus);
+    const entry = new TicketHistoryEntryStatusChanged(targetStatus);
 
     ticket.history.push(
       TicketHistoryItem.create({
@@ -426,7 +425,7 @@ export class TicketsService extends BaseService {
       }
       assignees.push(assigneeUser);
     }
-    const entry = new TicketHistoryEntryAssigneesAdded(dto.addAssignees);
+    const entry = new TicketHistoryEntryAssigneesChanged(dto.addAssignees);
 
     ticket.history.push(
       TicketHistoryItem.create({

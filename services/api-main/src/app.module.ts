@@ -7,8 +7,7 @@ import { TicketsModule } from './app/tickets/tickets.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { UserDTOProfile } from './app/users/infrastructure/profiles/user.dto.profile';
-import { TicketProfile } from './app/tickets/api/profiles/ticket.profile';
-import { TicketHistoryItemProfile } from './app/tickets/api/profiles/ticket-history.profile';
+import { TicketDTOProfile } from './app/tickets/api/profiles/ticket.dto.profile';
 import { TicketTagDTOProfile } from './app/ticket-tag-system/infrastructure/profiles/ticket-tag.dto.profile';
 import { TicketTagGroupDTOProfile } from './app/ticket-tag-system/infrastructure/profiles/ticket-tag-group.dto.profile';
 import { TicketTagSystemModule } from './app/ticket-tag-system/ticket-tag-system.module';
@@ -37,8 +36,7 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
   providers: [
     AppService,
     UserDTOProfile,
-    TicketProfile,
-    TicketHistoryItemProfile,
+    TicketDTOProfile,
     TicketTagDTOProfile,
     TicketTagGroupDTOProfile,
     NotificationDTOProfile,

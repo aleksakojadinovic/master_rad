@@ -9,16 +9,15 @@ import {
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { TicketDTO } from '../dto/ticket.dto';
-import { TicketHistoryItem } from '../../infrastructure/schema/ticket-history.schema';
-import { TicketHistoryItemDTO } from '../dto/ticket-history.dto';
 import { UserDTO } from 'src/app/users/api/dto/user.dto';
-import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
 import { TicketTagDTO } from 'src/app/ticket-tag-system/api/dto/ticket-tag.dto';
 import { Ticket } from '../../domain/entities/ticket.entity';
 import { User } from 'src/app/users/domain/entities/user.entity';
+import { TicketTag } from 'src/app/ticket-tag-system/domain/entities/ticket-tag.entity';
+import { CommentDTO } from '../dto/comment.dto';
 
 @Injectable()
-export class TicketProfile extends AutomapperProfile {
+export class TicketDTOProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
@@ -32,16 +31,6 @@ export class TicketProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.id,
           mapFrom((source) => source.id),
-        ),
-        forMember(
-          (destination) => destination.history,
-          mapWithArguments((source, extra) =>
-            source.history.map((item) =>
-              mapper.map(item, TicketHistoryItem, TicketHistoryItemDTO, {
-                extraArgs: () => extra,
-              }),
-            ),
-          ),
         ),
         forMember(
           (destination) => destination.createdBy,
@@ -102,11 +91,31 @@ export class TicketProfile extends AutomapperProfile {
                 includeArray[includeGroupIndex] = 'group';
               }
 
-              return mapper.mapArray(source.tags, TicketTagDb, TicketTagDTO, {
+              return mapper.mapArray(source.tags, TicketTag, TicketTagDTO, {
                 extraArgs: () => ({ ...extra, include: includeArray }),
               });
             }
-            return source.tags.map((tag) => tag._id.toString());
+            return source.tags.map((tag) => tag.id);
+          }),
+        ),
+        forMember(
+          (destination) => destination.comments,
+          mapWithArguments((source, extra) => {
+            const includeArray = extra.include
+              ? (extra.include as string[])
+              : [];
+
+            return source.comments.map(
+              (comment) =>
+                new CommentDTO(
+                  comment.commentId,
+                  comment.timestamp,
+                  includeArray.includes('commenter')
+                    ? mapper.map(comment.user, User, UserDTO)
+                    : comment.user.id,
+                  comment.body,
+                ),
+            );
           }),
         ),
       );

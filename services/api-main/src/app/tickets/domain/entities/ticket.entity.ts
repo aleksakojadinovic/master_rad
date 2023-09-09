@@ -1,8 +1,8 @@
 import { User } from 'src/app/users/domain/entities/user.entity';
-import { TicketHistoryEntry } from '../value-objects/ticket-history';
 import { TicketStatus } from '../value-objects/ticket-status';
 import { TicketComment } from '../value-objects/ticket-comment';
 import { TicketStatusChange } from '../value-objects/ticket-status-change';
+import { TicketTag } from 'src/app/ticket-tag-system/domain/entities/ticket-tag.entity';
 
 export class Ticket {
   id: string;
@@ -19,9 +19,7 @@ export class Ticket {
 
   assignees: User[];
 
-  tags: any[];
-
-  history: TicketHistoryEntry[];
+  tags: TicketTag[];
 
   comments: TicketComment[];
 
