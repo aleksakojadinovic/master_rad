@@ -21,7 +21,7 @@ export type NotificationPayload =
   | CommentAddedNotificationPayloadDb
   | AssignedNotificationPayloadDb;
 
-@Schema({ collection: 'notification' })
+@Schema({ collection: 'notifications' })
 export class NotificationDb {
   _id: string;
 
