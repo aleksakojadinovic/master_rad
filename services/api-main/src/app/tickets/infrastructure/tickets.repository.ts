@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  TicketDb,
-  TicketDocument,
-} from 'src/app/tickets/infrastructure/schema/ticket.schema';
+import { TicketDb } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import { Model, SortOrder } from 'mongoose';
 import { UsersService } from 'src/app/users/domain/users.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
+import { Ticket } from '../domain/entities/ticket.entity';
 
 export type TicketsQuery = {
   page: number | null;
@@ -52,13 +50,19 @@ export class TicketsRepository {
     },
   ];
 
-  findById(id: string): Promise<TicketDocument> {
-    return this.ticketModel
+  async findById(id: string): Promise<Ticket | null> {
+    const result = await this.ticketModel
       .findOne({ _id: id })
       .populate(TicketsRepository.POPULATE);
+
+    if (!result) {
+      return null;
+    }
+
+    return this.mapper.map(result, TicketDb, Ticket);
   }
 
-  findAll({
+  async findAll({
     page = 1,
     perPage = 10,
     statuses = null,
@@ -68,7 +72,7 @@ export class TicketsRepository {
     unassigned = null,
     sortOrder = 1,
     sortField = null,
-  }: TicketsQuery): Promise<TicketDocument[]> {
+  }: TicketsQuery): Promise<Ticket[]> {
     const query = this.ticketModel.find({});
 
     if (statuses !== null) {
@@ -106,14 +110,22 @@ export class TicketsRepository {
     query.skip((page - 1) * perPage).limit(perPage);
     query.populate(TicketsRepository.POPULATE);
 
-    return query.exec();
+    const result = await query.exec();
+
+    return this.mapper.mapArray(result, TicketDb, Ticket);
   }
 
-  async findMostRecentTicketByUserId(userId: string): Promise<TicketDocument> {
-    return this.ticketModel.findOne(
+  async findMostRecentTicketByUserId(userId: string): Promise<Ticket | null> {
+    const result = await this.ticketModel.findOne(
       { createdBy: userId },
       {},
       { sort: { createdAt: -1 } },
     );
+
+    if (!result) {
+      return null;
+    }
+
+    return this.mapper.map(result, TicketDb, Ticket);
   }
 }

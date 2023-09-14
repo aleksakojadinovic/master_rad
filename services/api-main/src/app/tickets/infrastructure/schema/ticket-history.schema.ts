@@ -6,12 +6,13 @@ export enum TicketHistoryEntryType {
   BODY_CHANGED,
   STATUS_CHANGED,
   COMMEND_ADDED,
-  DELETED,
-  ASSIGNEES_ADDED,
+  ASSIGNEES_CHANGED,
+  TAGS_CHANGED,
 }
 
 import { TicketStatus } from '../../domain/value-objects/ticket-status';
 import { UserDb } from 'src/app/users/infrastructure/schema/user.schema';
+import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
 
 export class TicketHistoryEntryCreated {
   title: string;
@@ -39,7 +40,11 @@ export class TicketHistoryEntryBodyChanged {
 }
 
 export class TicketHistoryEntryAssigneesChanged {
-  constructor(public assignees: string[]) {}
+  constructor(public assignees: UserDb[]) {}
+}
+
+export class TicketHistoryEntryTagsChanged {
+  constructor(public tags: TicketTagDb[]) {}
 }
 
 export class TicketHistoryItem {
@@ -52,7 +57,8 @@ export class TicketHistoryItem {
     | TicketHistoryEntryCommentAdded
     | TicketHistoryEntryTitleChanged
     | TicketHistoryEntryBodyChanged
-    | TicketHistoryEntryAssigneesChanged;
+    | TicketHistoryEntryAssigneesChanged
+    | TicketHistoryEntryTagsChanged;
 }
 
 export const TicketHistoryItemSchemaType = {

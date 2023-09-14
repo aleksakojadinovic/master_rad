@@ -3,7 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import { TicketTagGroupDb } from './ticket-tag-group.schema';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 
-@Schema()
+@Schema({ collection: 'tickettag' })
 export class TicketTagDb {
   constructor(nameIntl: IntlValue, descriptionIntl: IntlValue) {
     this.nameIntl = nameIntl;

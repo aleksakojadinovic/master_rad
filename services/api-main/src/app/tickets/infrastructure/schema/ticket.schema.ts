@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { TicketHistoryItem } from './ticket-history.schema';
 import mongoose, { Document } from 'mongoose';
 
-@Schema()
+@Schema({ collection: 'ticket' })
 export class TicketDb extends Document {
   _id: string;
 

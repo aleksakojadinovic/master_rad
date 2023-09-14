@@ -7,4 +7,5 @@ export class TicketComment {
   body: string;
   timestamp: Date;
   user: User;
+  isInternal: boolean;
 }

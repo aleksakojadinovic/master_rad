@@ -1,27 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTicketDto } from '../../api/dto/create-ticket.dto';
 import { UpdateTicketDto } from '../../api/dto/update-ticket.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { TicketDb } from 'src/app/tickets/infrastructure/schema/ticket.schema';
-import mongoose, { Model, isValidObjectId } from 'mongoose';
 import { UsersService } from 'src/app/users/domain/users.service';
-import { v4 as uuid } from 'uuid';
 import * as moment from 'moment';
-import {
-  TicketHistoryEntryAssigneesChanged,
-  TicketHistoryEntryBodyChanged,
-  TicketHistoryEntryCommentAdded,
-  TicketHistoryEntryCreated,
-  TicketHistoryEntryStatusChanged,
-  TicketHistoryEntryTitleChanged,
-  TicketHistoryItem,
-} from '../../infrastructure/schema/ticket-history.schema';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketQueryDTO } from '../../api/dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
-import { TicketIdNotValidError } from '../errors/TicketIdNotValid';
 import { CannotAssignCustomerError } from '../errors/CannotAssignCustomer';
 import { TicketTagService } from '../../../ticket-tag-system/domain/services/ticket-tag.service';
 import { OverlapInTagIdsError } from '../errors/OverlapInTagIds';
@@ -32,7 +18,6 @@ import { AssigneeNotFoundError } from '../errors/AssigneeNotFound';
 import { DuplicateAssigneeError } from '../errors/DuplicateAssignee';
 import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
 import { NotificationFactory } from '../../../notifications/domain/factory/notification.factory';
-import { NotificationDb } from '../../../notifications/infrastructure/schema/notification.schema';
 import { NotificationsService } from '../../../notifications/domain/notifications.service';
 import { TICKET_STATUS_GRAPH } from '../value-objects/ticket-status.map';
 import { NotAllowedToChangeToThisStatusError } from '../errors/NotAllowedToChangeToThisStatus';
@@ -42,11 +27,13 @@ import { BadTicketFiltersError } from '../errors/BadTicketFilters';
 import { User } from '../../../users/domain/entities/user.entity';
 import { Ticket } from '../entities/ticket.entity';
 import { TicketStatus } from '../value-objects/ticket-status';
+import { TicketComment } from '../value-objects/ticket-comment';
+import { Notification } from 'src/app/notifications/domain/entities/notification.entity';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class TicketsService extends BaseService {
   constructor(
-    @InjectModel(TicketDb.name) private ticketModel: Model<TicketDb>,
     @InjectMapper() private readonly mapper: Mapper,
     private ticketTagService: TicketTagService,
     private usersService: UsersService,
@@ -56,7 +43,7 @@ export class TicketsService extends BaseService {
     super();
   }
 
-  async create(user: User, createTicketDto: CreateTicketDto) {
+  async create(user: User, dto: CreateTicketDto) {
     const mostRecentTicket =
       await this.ticketsRepository.findMostRecentTicketByUserId(
         user.id.toString(),
@@ -74,43 +61,17 @@ export class TicketsService extends BaseService {
         );
       }
     }
-    // TODO apply builder pattern here.
-    const ticketObject = new this.ticketModel();
-    const groupId = uuid();
-    const timestamp = new Date();
 
-    const initialEntry = TicketHistoryItem.create({
-      initiator: user,
-      groupId,
-      timestamp,
-      entry: new TicketHistoryEntryCreated(),
-    });
+    const ticket = new Ticket();
+    ticket.title = dto.title;
+    ticket.body = dto.body;
+    ticket.status = TicketStatus.NEW;
+    ticket.createdBy = user;
+    ticket.createdAt = new Date();
 
-    const titleEntry = TicketHistoryItem.create({
-      initiator: user,
-      groupId,
-      timestamp,
-      entry: new TicketHistoryEntryTitleChanged(createTicketDto.title),
-    });
+    // TODO: call repo method to persist this.
 
-    const bodyEntry = TicketHistoryItem.create({
-      initiator: user,
-      groupId,
-      timestamp,
-      entry: new TicketHistoryEntryBodyChanged(createTicketDto.body),
-    });
-
-    ticketObject.history = [initialEntry, titleEntry, bodyEntry];
-
-    ticketObject.title = createTicketDto.title;
-    ticketObject.body = createTicketDto.body;
-    ticketObject.status = TicketStatus.NEW;
-    ticketObject.createdBy = user;
-    ticketObject.createdAt = timestamp;
-
-    await ticketObject.save();
-
-    return ticketObject;
+    return ticket;
   }
 
   async findAll(user: User, queryDTO: TicketQueryDTO) {
@@ -154,7 +115,7 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    const isTicketOwner = ticket.createdBy._id.toString() === user.id;
+    const isTicketOwner = ticket.createdBy.id === user.id;
 
     if (user.isCustomer() && !isTicketOwner) {
       throw new TicketNotFoundError(id);
@@ -171,23 +132,19 @@ export class TicketsService extends BaseService {
       throw e;
     }
 
-    const creatorId = ticket.createdBy._id.toString();
+    const creatorId = ticket.createdBy.id.toString();
 
     return user.id === creatorId.toString();
   }
 
   private prepareTicketResponse(ticket: Ticket, user: User): Ticket {
-    this.stripInternalComments(ticket, user);
     this.stripTags(ticket, user);
+    this.stripInternalComments(ticket, user);
 
     return ticket;
   }
 
   async update(id: string, user: User, dto: UpdateTicketDto) {
-    if (!isValidObjectId(id)) {
-      throw new TicketIdNotValidError(id);
-    }
-
     const isCustomer = user.isCustomer();
 
     const ticket = await this.ticketsRepository.findById(id);
@@ -196,7 +153,7 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    const isTicketOwner = ticket.createdBy._id.toString() === user.id;
+    const isTicketOwner = ticket.createdBy.id === id;
 
     if (isCustomer && !isTicketOwner) {
       throw new TicketNotFoundError(id);
@@ -206,35 +163,22 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    const groupId = uuid();
-    const timestamp = new Date();
+    const notifications: Notification[] = [];
 
-    const notifications: NotificationDb[] = [];
+    this.updateTicketStatus(ticket, user, dto);
+    this.updateTicketBody(ticket, dto);
+    const commentNotifications = this.updateTicketAddComment(ticket, user, dto);
 
-    this.updateTicketStatus(ticket, user, dto, groupId, timestamp);
-    this.updateTicketBody(ticket, user, dto, groupId, timestamp);
-    const commentNotifications = this.updateTicketAddComment(
-      ticket,
-      user,
-      dto,
-      groupId,
-      timestamp,
-    );
-
-    this.updateTicketTitle(ticket, user, dto, groupId, timestamp);
+    this.updateTicketTitle(ticket, dto);
 
     const addAssigneeNotifications = await this.updateTicketAddAssignees(
       ticket,
       user,
       dto,
-      groupId,
-      timestamp,
     );
 
     this.updateTicketRemoveAssignees(ticket, dto);
     await this.updateTicketTags(ticket, user, dto);
-
-    await ticket.save();
 
     if (commentNotifications) {
       notifications.push(...commentNotifications);
@@ -254,19 +198,11 @@ export class TicketsService extends BaseService {
   }
 
   private stripTags(ticket: Ticket, user: User) {
-    ticket.tags = ticket.tags.filter((tag) =>
-      tag.group.permissions.canSeeRoles.includes(user.role),
-    );
+    ticket.tags = ticket.tags.filter((tag) => tag.group.canSee(user));
     return ticket;
   }
 
-  private updateTicketStatus(
-    ticket: Ticket,
-    user: User,
-    dto: UpdateTicketDto,
-    groupId: any,
-    timestamp: any,
-  ) {
+  private updateTicketStatus(ticket: Ticket, user: User, dto: UpdateTicketDto) {
     if (!dto.status) {
       return;
     }
@@ -286,58 +222,17 @@ export class TicketsService extends BaseService {
       );
     }
 
-    const entry = new TicketHistoryEntryStatusChanged(targetStatus);
-
-    ticket.history.push(
-      TicketHistoryItem.create({
-        groupId,
-        timestamp,
-        initiator: user,
-        entry,
-      }),
-    );
-
     ticket.status = targetStatus;
   }
 
-  private updateTicketBody(
-    ticket: Ticket,
-    user: User,
-    dto: UpdateTicketDto,
-    groupId: string,
-    timestamp: Date,
-  ) {
+  private updateTicketBody(ticket: Ticket, dto: UpdateTicketDto) {
     if (dto.body != null) {
-      const entry = new TicketHistoryEntryBodyChanged(dto.body);
-      ticket.history.push(
-        TicketHistoryItem.create({
-          groupId,
-          timestamp,
-          initiator: user,
-          entry,
-        }),
-      );
       ticket.body = dto.body;
     }
   }
 
-  private updateTicketTitle(
-    ticket: Ticket,
-    user: User,
-    dto: UpdateTicketDto,
-    groupId: string,
-    timestamp: Date,
-  ) {
+  private updateTicketTitle(ticket: Ticket, dto: UpdateTicketDto) {
     if (dto.title != null) {
-      const entry = new TicketHistoryEntryTitleChanged(dto.title);
-      ticket.history.push(
-        TicketHistoryItem.create({
-          groupId,
-          timestamp,
-          initiator: user,
-          entry,
-        }),
-      );
       ticket.title = dto.title;
     }
   }
@@ -346,9 +241,7 @@ export class TicketsService extends BaseService {
     ticket: Ticket,
     user: User,
     dto: UpdateTicketDto,
-    groupId: string,
-    timestamp: Date,
-  ): NotificationDb[] | null {
+  ): Notification[] | null {
     if (dto.comment == null || dto.comment.length === 0) {
       return null;
     }
@@ -357,33 +250,25 @@ export class TicketsService extends BaseService {
       throw new CustomerCannotAddInternalCommmentError();
     }
 
-    const entry = new TicketHistoryEntryCommentAdded(
-      dto.comment,
-      new mongoose.Types.ObjectId().toString(),
-      dto.isCommentInternal,
-    );
-
-    ticket.history.push(
-      TicketHistoryItem.create({
-        groupId,
-        timestamp,
-        initiator: user,
-        entry,
-      }),
-    );
-
     const usersToNotify: User[] = [];
     usersToNotify.push(
-      ...ticket.assignees.filter(
-        (assignee) => assignee._id.toString() !== user.id,
-      ),
+      ...ticket.assignees.filter((assignee) => assignee.id !== user.id),
     );
 
     // First condition prevents self-notifications
     // Second condition prevents notifying customers of internal comments
-    if (user.id !== ticket.createdBy._id.toString() && !dto.isCommentInternal) {
+    if (user.id !== ticket.createdBy.id && !dto.isCommentInternal) {
       usersToNotify.push(ticket.createdBy);
     }
+
+    const comment = new TicketComment();
+    comment.commentId = uuid();
+    comment.body = dto.comment;
+    comment.isInternal = dto.isCommentInternal;
+    comment.timestamp = new Date();
+    comment.user = user;
+
+    ticket.comments.push(comment);
 
     const notifications = usersToNotify.map((userToNotify) => {
       return NotificationFactory.create((builder) =>
@@ -393,7 +278,7 @@ export class TicketsService extends BaseService {
             commentBuilder
               .atTicket(ticket)
               .byUser(user)
-              .hasCommentId(entry.commentId),
+              .hasCommentId(comment.commentId),
           ),
       );
     });
@@ -405,9 +290,7 @@ export class TicketsService extends BaseService {
     ticket: Ticket,
     user: User,
     dto: UpdateTicketDto,
-    groupId: string,
-    timestamp: Date,
-  ): Promise<NotificationDb[] | null> {
+  ): Promise<Notification[] | null> {
     if (dto.addAssignees == null || dto.addAssignees.length == 0) {
       return null;
     }
@@ -425,16 +308,7 @@ export class TicketsService extends BaseService {
       }
       assignees.push(assigneeUser);
     }
-    const entry = new TicketHistoryEntryAssigneesChanged(dto.addAssignees);
 
-    ticket.history.push(
-      TicketHistoryItem.create({
-        groupId,
-        timestamp,
-        initiator: user,
-        entry,
-      }),
-    );
     for (const a of assignees) {
       ticket.assignees.push(a);
     }
@@ -486,19 +360,17 @@ export class TicketsService extends BaseService {
     if (removeTags.length > 0) {
       const tagsToRemove = await this.ticketTagService.findByIds(removeTags);
       tagsToRemove.forEach((tag) => {
-        if (!tag.group.permissions.canRemoveRoles.includes(user.role)) {
+        if (!tag.group.canRemove(user)) {
           throw new NotAllowedToRemoveThisTagError();
         }
       });
-      ticket.tags = ticket.tags.filter(
-        (tag) => !removeTags.includes(tag._id.toString()),
-      );
+      ticket.tags = ticket.tags.filter((tag) => !removeTags.includes(tag.id));
     }
 
     if (addTags.length > 0) {
       const tagsToAdd = await this.ticketTagService.findByIds(addTags);
       tagsToAdd.forEach((tag) => {
-        if (!tag.group.permissions.canAddRoles.includes(user.role)) {
+        if (!tag.group.canAdd(user)) {
           throw new NotAllowedToAddThisTagError();
         }
 
@@ -518,15 +390,6 @@ export class TicketsService extends BaseService {
     if (!user.isCustomer()) {
       return;
     }
-    ticket.history = ticket.history.filter((item) => {
-      if (item.entryType !== TicketHistoryEntryType.COMMEND_ADDED) {
-        return true;
-      }
-
-      if ((item.entry as TicketHistoryEntryCommentAdded).isInternal) {
-        return false;
-      }
-      return true;
-    });
+    ticket.comments = ticket.comments.filter((comment) => !comment.isInternal);
   }
 }

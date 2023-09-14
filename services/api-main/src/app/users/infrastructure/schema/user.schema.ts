@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { AutoMap } from '@automapper/classes';
 import { Role } from '../../domain/value-objects/role';
 
-@Schema()
+@Schema({ collection: 'user' })
 export class UserDb {
   _id: string;
 

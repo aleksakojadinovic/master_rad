@@ -12,7 +12,7 @@ export class TicketTagGroupPermissions {
   ) {}
 }
 
-@Schema()
+@Schema({ collection: 'tickettaggroup' })
 export class TicketTagGroupDb {
   _id: string;
 
