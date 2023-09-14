@@ -111,7 +111,7 @@ export class TicketEntityProfile extends AutomapperProfile {
             );
 
             if (bodyChangeEntries.length === 0) {
-              return (initialEntry.payload as TicketHistoryEntryCreated).title;
+              return (initialEntry.payload as TicketHistoryEntryCreated).body;
             }
 
             return (

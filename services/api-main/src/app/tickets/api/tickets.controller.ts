@@ -80,10 +80,6 @@ export class TicketsController extends BaseController {
     @GetUserInfo() user: User,
   ) {
     const languageCode = resolveLanguageCode(req);
-    if (!isValidObjectId(id)) {
-      throw new TicketIdNotValidError(id);
-    }
-
     const ticket = await this.ticketsService.findOne(id, user);
 
     return this.mapper.map(ticket, Ticket, TicketDTO, {

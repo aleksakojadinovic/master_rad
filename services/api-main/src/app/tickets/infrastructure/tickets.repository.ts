@@ -60,7 +60,7 @@ export class TicketsRepository {
 
   async findById(id: string): Promise<Ticket | null> {
     const result = await this.ticketModel
-      .findOne({ _id: id })
+      .findById(id)
       .populate(TicketsRepository.POPULATE);
 
     if (!result) {
