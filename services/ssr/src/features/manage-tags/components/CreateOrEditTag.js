@@ -9,8 +9,8 @@ function CreateOrEditTagGroups({ tag, isCreate }) {
           descriptionIntl: { en: '', sr: '' },
           tags: [],
           permissions: {
-            canAddRoles: [],
-            canRemoveRoles: [],
+            canAdd: [],
+            canRemove: [],
           },
         }
       : { ...tag },
