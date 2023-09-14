@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
 export enum TicketHistoryEntryType {
-  CREATED,
-  TITLE_CHANGED,
-  BODY_CHANGED,
-  STATUS_CHANGED,
-  COMMEND_ADDED,
-  ASSIGNEES_CHANGED,
-  TAGS_CHANGED,
+  CREATED = 'CREATED',
+  TITLE_CHANGED = 'TITLE_CHANGED',
+  BODY_CHANGED = 'BODY_CHANGED',
+  STATUS_CHANGED = 'STATUS_CHANGED',
+  COMMEND_ADDED = 'COMMEND_ADDED',
+  ASSIGNEES_CHANGED = 'ASSIGNEES_CHANGED',
+  TAGS_CHANGED = 'TAGS_CHANGED',
 }
 
 import { TicketStatus } from '../../domain/value-objects/ticket-status';
