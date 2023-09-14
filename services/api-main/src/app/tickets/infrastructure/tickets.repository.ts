@@ -11,6 +11,7 @@ import {
   TicketHistoryEntryAssigneesChanged,
   TicketHistoryEntryBodyChanged,
   TicketHistoryEntryCommentAdded,
+  TicketHistoryEntryCreated,
   TicketHistoryEntryStatusChanged,
   TicketHistoryEntryTagsChanged,
   TicketHistoryEntryTitleChanged,
@@ -142,7 +143,26 @@ export class TicketsRepository {
     return this.mapper.map(result, TicketDb, Ticket);
   }
 
-  async updateTicket(newTicket: Ticket, user: User): Promise<Ticket | null> {
+  async create(ticket: Ticket) {
+    const document = new this.ticketModel();
+
+    const initialItem = new TicketHistoryItem();
+    initialItem.timestamp = ticket.createdAt;
+    initialItem.initiator = ticket.createdBy.id as unknown as UserDb;
+    initialItem.type = TicketHistoryEntryType.CREATED;
+    initialItem.payload = new TicketHistoryEntryCreated(
+      ticket.title,
+      ticket.body,
+      ticket.status,
+    );
+
+    await document.save();
+    await document.populate(TicketsRepository.POPULATE);
+
+    return this.mapper.map(document, TicketDb, Ticket);
+  }
+
+  async update(newTicket: Ticket, user: User): Promise<Ticket | null> {
     const document = await this.ticketModel
       .findById(newTicket.id)
       .populate(TicketsRepository.POPULATE);
@@ -242,9 +262,9 @@ export class TicketsRepository {
       document.history.push(item);
     }
 
-    const savedDocument = await document.save();
-    await savedDocument.populate(TicketsRepository.POPULATE);
+    await document.save();
+    await document.populate(TicketsRepository.POPULATE);
 
-    return this.mapper.map(savedDocument, TicketDb, Ticket);
+    return this.mapper.map(document, TicketDb, Ticket);
   }
 }

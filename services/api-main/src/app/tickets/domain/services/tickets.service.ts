@@ -69,9 +69,9 @@ export class TicketsService extends BaseService {
     ticket.createdBy = user;
     ticket.createdAt = new Date();
 
-    // TODO: call repo method to persist this.
+    const savedTicket = await this.ticketsRepository.create(ticket);
 
-    return ticket;
+    return savedTicket;
   }
 
   async findAll(user: User, queryDTO: TicketQueryDTO) {
@@ -188,9 +188,10 @@ export class TicketsService extends BaseService {
       notifications.push(...addAssigneeNotifications);
     }
 
+    const updatedTicket = await this.ticketsRepository.update(ticket, user);
     await this.notificationsService.emitNotifications(...notifications);
 
-    return this.prepareTicketResponse(ticket, user);
+    return this.prepareTicketResponse(updatedTicket, user);
   }
 
   remove(id: number) {

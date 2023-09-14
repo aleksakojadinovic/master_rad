@@ -15,9 +15,11 @@ import { UserDb } from 'src/app/users/infrastructure/schema/user.schema';
 import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
 
 export class TicketHistoryEntryCreated {
-  title: string;
-  body: string;
-  status: TicketStatus;
+  constructor(
+    public title: string,
+    public body: string,
+    public status: TicketStatus,
+  ) {}
 }
 export class TicketHistoryEntryStatusChanged {
   constructor(public status: TicketStatus) {}
