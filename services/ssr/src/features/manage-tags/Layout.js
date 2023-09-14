@@ -1,5 +1,5 @@
 import { manageTagsMessages } from '@/translations/tags';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -62,7 +62,9 @@ function ManageTagsLayout({
       <Box display="flex" flexWrap="wrap">
         {breadcrumbs.map((b, index) => (
           <Box key={b.id}>
-            <Link href={b.link}>{b.title}</Link>
+            <Link href={b.link}>
+              <Typography variant="caption">{b.title}</Typography>
+            </Link>
             {index !== breadcrumbs.length - 1 && (
               <Box display="inline-block" marginLeft="8px" marginRight="8px">
                 {'>'}
