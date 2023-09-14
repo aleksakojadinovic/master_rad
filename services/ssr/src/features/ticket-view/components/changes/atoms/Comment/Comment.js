@@ -2,7 +2,7 @@ import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Box, Chip, Tooltip, Typography } from '@mui/material';
-import UserChip from '../User/UserChip';
+import UserChip from '../../../../../../components/User/UserChip';
 import { formatDate } from '@/utils';
 import { INTERNAL_TICKET_COLOR } from '@/features/ticket-view/constants';
 import { useIntl } from 'react-intl';

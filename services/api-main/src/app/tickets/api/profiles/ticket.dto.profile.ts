@@ -16,6 +16,7 @@ import { User } from 'src/app/users/domain/entities/user.entity';
 import { TicketTag } from 'src/app/ticket-tag-system/domain/entities/ticket-tag.entity';
 import { CommentDTO } from '../dto/comment.dto';
 import { StatusChangeDTO } from '../dto/status-change.dto';
+import { AssigneeChangeDTO } from '../dto/assignee-change.dto';
 
 @Injectable()
 export class TicketDTOProfile extends AutomapperProfile {
@@ -139,6 +140,43 @@ export class TicketDTOProfile extends AutomapperProfile {
                 statusChange.timestamp,
                 statusChange.changeIndex,
               );
+            });
+          }),
+        ),
+        forMember(
+          (destination) => destination.assigneeChanges,
+          mapWithArguments((source, extra) => {
+            const includeArray = extra.include
+              ? (extra.include as string[])
+              : [];
+            const shouldIncludeUser = includeArray.includes('historyInitiator');
+            const shouldIncludeAssignees = includeArray.includes('assignees');
+
+            return source.assigneeChanges.map((assigneeChange) => {
+              const added = assigneeChange.after.filter(
+                (user) =>
+                  !assigneeChange.before.map((a) => a.id).includes(user.id),
+              );
+              const removed = assigneeChange.before.filter(
+                (user) =>
+                  !assigneeChange.after.map((a) => a.id).includes(user.id),
+              );
+
+              const dto = new AssigneeChangeDTO();
+              dto.timestamp = assigneeChange.timestamp;
+              dto.user = shouldIncludeUser
+                ? mapper.map(assigneeChange.user, User, UserDTO)
+                : assigneeChange.user.id;
+
+              dto.added = shouldIncludeAssignees
+                ? mapper.mapArray(added, User, UserDTO)
+                : added.map(({ id }) => id);
+
+              dto.removed = shouldIncludeAssignees
+                ? mapper.mapArray(removed, User, UserDTO)
+                : added.map(({ id }) => id);
+
+              return dto;
             });
           }),
         ),

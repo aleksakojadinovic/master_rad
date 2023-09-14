@@ -1,4 +1,5 @@
 import {
+  TicketHistoryEntryAssigneesChanged,
   TicketHistoryEntryCommentAdded,
   TicketHistoryEntryCreated,
   TicketHistoryEntryStatusChanged,
@@ -21,6 +22,7 @@ import { UserDb } from 'src/app/users/infrastructure/schema/user.schema';
 import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
 import { TicketComment } from '../../domain/value-objects/ticket-comment';
 import { TicketStatusChange } from '../../domain/value-objects/ticket-status-change';
+import { TicketAssigneeChange } from '../../domain/value-objects/ticket-assignee-change';
 
 @Injectable()
 export class TicketEntityProfile extends AutomapperProfile {
@@ -128,6 +130,43 @@ export class TicketEntityProfile extends AutomapperProfile {
                 return statusChange;
               },
             );
+          }),
+        ),
+        forMember(
+          (destination) => destination.assigneeChanges,
+          mapFrom((source) => {
+            const assigneeChangeEntries = source.history
+              .map((item, index) => ({ item, index }))
+              .filter(
+                ({ item }) =>
+                  item.type === TicketHistoryEntryType.ASSIGNEES_CHANGED,
+              );
+
+            return assigneeChangeEntries.map(({ item }, index) => {
+              const assigneeChange = new TicketAssigneeChange();
+              assigneeChange.before =
+                index === 0
+                  ? []
+                  : mapper.mapArray(
+                      (
+                        assigneeChangeEntries[index - 1].item
+                          .payload as TicketHistoryEntryAssigneesChanged
+                      ).assignees,
+                      UserDb,
+                      User,
+                    );
+
+              assigneeChange.after = mapper.mapArray(
+                (item.payload as TicketHistoryEntryAssigneesChanged).assignees,
+                UserDb,
+                User,
+              );
+
+              assigneeChange.timestamp = item.timestamp;
+              assigneeChange.user = mapper.map(item.initiator, UserDb, User);
+
+              return assigneeChange;
+            });
           }),
         ),
       );

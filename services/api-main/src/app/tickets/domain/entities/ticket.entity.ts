@@ -3,6 +3,7 @@ import { TicketStatus } from '../value-objects/ticket-status';
 import { TicketComment } from '../value-objects/ticket-comment';
 import { TicketStatusChange } from '../value-objects/ticket-status-change';
 import { TicketTag } from 'src/app/ticket-tag-system/domain/entities/ticket-tag.entity';
+import { TicketAssigneeChange } from '../value-objects/ticket-assignee-change';
 
 export class Ticket {
   id: string;
@@ -24,4 +25,6 @@ export class Ticket {
   comments: TicketComment[];
 
   statusChanges: TicketStatusChange[];
+
+  assigneeChanges: TicketAssigneeChange[];
 }
