@@ -121,24 +121,24 @@ export class TicketTagGroupService extends BaseService {
       return;
     }
 
-    if (newPermissionsValue.canAddRoles !== null) {
-      const roles = newPermissionsValue.canAddRoles
+    if (newPermissionsValue.canAdd !== null) {
+      const roles = newPermissionsValue.canAdd
         .map((r) => ROLE_VALUES[r] ?? null)
         .filter((r) => r !== null);
 
       group.permissions[CAN_ADD] = roles;
     }
 
-    if (newPermissionsValue.canRemoveRoles !== null) {
-      const roles = newPermissionsValue.canRemoveRoles
+    if (newPermissionsValue.canRemove !== null) {
+      const roles = newPermissionsValue.canRemove
         .map((r) => ROLE_VALUES[r] ?? null)
         .filter((r) => r !== null);
 
       group.permissions[CAN_REMOVE] = roles;
     }
 
-    if (newPermissionsValue.canSeeRoles !== null) {
-      const roles = newPermissionsValue.canSeeRoles
+    if (newPermissionsValue.canSee !== null) {
+      const roles = newPermissionsValue.canSee
         .map((r) => ROLE_VALUES[r] ?? null)
         .filter((r) => r !== null);
 

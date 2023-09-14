@@ -82,28 +82,23 @@ export class TicketTagGroupRepository {
     return this.mapper.map(document, TicketTagGroupDb, TicketTagGroup);
   }
 
-  // Let's go
   async update(group: TicketTagGroup): Promise<TicketTagGroup | null> {
-    const groupDocument = await this.ticketTagGroupModel.findById(group.id);
+    const document = await this.ticketTagGroupModel.findById(group.id);
 
-    if (!groupDocument) {
+    if (!document) {
       return null;
     }
 
-    groupDocument.nameIntl = group.nameIntl;
-    groupDocument.descriptionIntl = group.nameIntl;
-    groupDocument.tags = group.tags.map(
-      (tag) => tag.id as unknown as TicketTagDb,
-    );
-    groupDocument.permissions.canAddRoles = group.permissions[CAN_ADD];
-    groupDocument.permissions.canRemoveRoles = group.permissions[CAN_REMOVE];
-    groupDocument.permissions.canSeeRoles = group.permissions[CAN_SEE];
+    document.nameIntl = group.nameIntl;
+    document.descriptionIntl = group.descriptionIntl;
+    document.tags = group.tags.map((tag) => tag.id as unknown as TicketTagDb);
+    document.permissions.canAddRoles = group.permissions[CAN_ADD];
+    document.permissions.canRemoveRoles = group.permissions[CAN_REMOVE];
+    document.permissions.canSeeRoles = group.permissions[CAN_SEE];
 
-    const updatedGroup = await this.ticketTagGroupModel.findOneAndUpdate(
-      { _id: group.id },
-      groupDocument,
-    );
+    await document.save();
+    await document.populate(TicketTagGroupRepository.POPULATE);
 
-    return this.mapper.map(updatedGroup, TicketTagGroupDb, TicketTagGroup);
+    return this.mapper.map(document, TicketTagGroupDb, TicketTagGroup);
   }
 }

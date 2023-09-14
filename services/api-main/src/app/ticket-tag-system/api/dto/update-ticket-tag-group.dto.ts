@@ -23,7 +23,7 @@ export class UpdateTicketTagGroupPermissionsDTO {
   @IsOptional()
   // @ArrayUnique()
   @Transform(({ value }) => (value !== undefined ? value : null))
-  public canAddRoles?: string[] | null;
+  public canAdd?: string[] | null;
 
   @Expose()
   @IsArray()
@@ -32,7 +32,7 @@ export class UpdateTicketTagGroupPermissionsDTO {
   @IsOptional()
   // @ArrayUnique()
   @Transform(({ value }) => (value !== undefined ? value : null))
-  public canRemoveRoles?: string[] | null;
+  public canRemove?: string[] | null;
 
   @Expose()
   @IsArray()
@@ -41,7 +41,7 @@ export class UpdateTicketTagGroupPermissionsDTO {
   @IsOptional()
   @ArrayUnique()
   @Transform(({ value }) => (value !== undefined ? value : null))
-  public canSeeRoles?: string[] | null;
+  public canSee?: string[] | null;
 }
 
 export class UpdateTicketTagGroupTagsDTO {
