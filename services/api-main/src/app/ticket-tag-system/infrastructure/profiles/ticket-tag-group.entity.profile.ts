@@ -1,5 +1,11 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
-import { Mapper, createMap, forMember, mapFrom } from '@automapper/core';
+import {
+  Mapper,
+  createMap,
+  forMember,
+  mapFrom,
+  mapWithArguments,
+} from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { TicketTagDb } from '../schema/ticket-tag.schema';
 import { TicketTagGroupDb } from '../schema/ticket-tag-group.schema';
@@ -29,9 +35,13 @@ export class TicketTagGroupEntityProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.tags,
-          mapFrom((source) =>
-            this.mapper.mapArray(source.tags, TicketTagDb, TicketTag),
-          ),
+          mapWithArguments((source, extra) => {
+            const skipTags = extra && extra.skipTags;
+            if (skipTags) {
+              return [];
+            }
+            return this.mapper.mapArray(source.tags, TicketTagDb, TicketTag);
+          }),
         ),
         forMember(
           (destination) => destination.permissions,

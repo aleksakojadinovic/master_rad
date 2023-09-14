@@ -158,8 +158,9 @@ export class TicketTagGroupService extends BaseService {
       group.tags = group.tags.filter((tag) => !dto.removeIds.includes(tag.id));
     }
 
-    const addDTOs = dto.addOrUpdateTags.filter((dto) => dto.id == null);
-    const updateDTOs = dto.addOrUpdateTags.filter((dto) => dto.id != null);
+    const addDTOs = dto?.addOrUpdateTags?.filter((dto) => dto.id == null) ?? [];
+    const updateDTOs =
+      dto?.addOrUpdateTags?.filter((dto) => dto.id != null) ?? [];
 
     for (const updateDTO of updateDTOs) {
       if (!group.tags.map(({ id }) => id).includes(updateDTO.id)) {
@@ -168,7 +169,7 @@ export class TicketTagGroupService extends BaseService {
     }
 
     for (const addDTO of addDTOs) {
-      const tag = await this.ticketTagService.create(addDTO, group.id);
+      const tag = await this.ticketTagService.create(addDTO, group);
       group.tags.push(tag);
     }
 
@@ -188,7 +189,8 @@ export class TicketTagGroupService extends BaseService {
 
     this.updateIntlValue(group, dto.nameIntl, true);
     this.updateIntlValue(group, dto.descriptionIntl, false);
-    await this.updatePermissions(group, dto.permissions);
+    this.updatePermissions(group, dto.permissions);
+
     await this.updateTags(group, dto.tags);
 
     const updatedGroup = await this.ticketTagGroupRepository.update(group);

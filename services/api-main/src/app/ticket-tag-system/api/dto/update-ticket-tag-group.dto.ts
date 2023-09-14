@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { IsValidObjectId } from 'src/codebase/pipes/objectid-pipe';
 import { IntlValue } from 'src/codebase/types/IntlValue';
-import { CreateTicketTagDTO } from './create-ticket-tag.dto';
+import { CreateOrUpdateTicketTagDTO } from './create-ticket-tag.dto';
 import { ROLES } from 'src/app/users/domain/value-objects/role';
 
 const ROLES_STRING = ROLES.map((role) => role.toString());
@@ -57,10 +57,10 @@ export class UpdateTicketTagGroupTagsDTO {
   @Expose()
   @IsArray()
   @IsOptional()
-  @Type(() => CreateTicketTagDTO)
+  @Type(() => CreateOrUpdateTicketTagDTO)
   @ValidateNested()
   @Transform(({ value }) => (value !== undefined ? value : null))
-  public addOrUpdateTags?: CreateTicketTagDTO[] | null;
+  public addOrUpdateTags?: CreateOrUpdateTicketTagDTO[] | null;
 }
 
 export class CreateOrUpdateTicketTagGroupDTO {

@@ -3,8 +3,7 @@ import { IsOptional, Validate } from 'class-validator';
 import { IsValidObjectId } from 'src/codebase/pipes/objectid-pipe';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 
-// TODO rename to createOrUpdate
-export class CreateTicketTagDTO {
+export class CreateOrUpdateTicketTagDTO {
   @Expose()
   @IsOptional()
   @Validate(IsValidObjectId)

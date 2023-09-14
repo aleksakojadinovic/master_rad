@@ -30,6 +30,10 @@ export class TicketTagGroupRepository {
     {
       path: 'tags',
       model: 'TicketTagDb',
+      populate: {
+        path: 'group',
+        model: 'TicketTagGroupDb',
+      },
     },
   ];
 
@@ -63,7 +67,8 @@ export class TicketTagGroupRepository {
       })
       .populate(TicketTagGroupRepository.POPULATE);
 
-    return this.mapper.mapArray(result, TicketTagGroupDb, TicketTagGroup);
+    const test = this.mapper.mapArray(result, TicketTagGroupDb, TicketTagGroup);
+    return test;
   }
 
   async create(group: TicketTagGroup) {

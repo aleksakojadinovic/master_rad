@@ -1,4 +1,3 @@
-import { IntlValue } from 'src/codebase/types/IntlValue';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -6,6 +5,7 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { TicketTagDb } from '../schema/ticket-tag.schema';
 import { TicketTag } from '../../domain/entities/ticket-tag.entity';
+import { TicketTagGroupDb } from '../schema/ticket-tag-group.schema';
 
 @Injectable()
 export class TicketTagRepository {
@@ -18,7 +18,7 @@ export class TicketTagRepository {
   private static POPULATE = [
     {
       path: 'group',
-      model: 'TicketTagGroup',
+      model: 'TicketTagGroupDb',
     },
   ];
 
@@ -48,38 +48,29 @@ export class TicketTagRepository {
     return this.mapper.mapArray(result, TicketTagDb, TicketTag);
   }
 
-  async create({
-    groupId,
-    nameIntl,
-    descriptionIntl,
-  }: {
-    groupId: string;
-    nameIntl: IntlValue;
-    descriptionIntl: IntlValue;
-  }): Promise<TicketTag> {
-    const obj = new this.ticketTagModel({
-      group: groupId,
-      nameIntl,
-      descriptionIntl,
-    });
+  async create(tag: TicketTag): Promise<TicketTag> {
+    const document = new this.ticketTagModel();
 
-    const newTicketTag = await obj.save();
+    document.nameIntl = tag.nameIntl;
+    document.descriptionIntl = tag.descriptionIntl;
+    document.group = tag.group.id as unknown as TicketTagGroupDb;
 
-    return this.mapper.map(newTicketTag, TicketTagDb, TicketTag);
+    await document.save();
+    await document.populate(TicketTagRepository.POPULATE);
+
+    return this.mapper.map(document, TicketTagDb, TicketTag);
   }
 
-  async update(
-    id: string,
-    {
-      nameIntl,
-      descriptionIntl,
-    }: { nameIntl: IntlValue; descriptionIntl: IntlValue },
-  ) {
-    const tag = await this.ticketTagModel.findOneAndUpdate(
-      { _id: id },
-      { nameIntl, descriptionIntl },
-    );
+  async update(tag: TicketTag) {
+    const document = await this.ticketTagModel
+      .findById(tag.id)
+      .populate(TicketTagRepository.POPULATE);
 
-    return this.mapper.map(tag, TicketTagDb, TicketTag);
+    document.nameIntl = tag.nameIntl;
+    document.descriptionIntl = tag.descriptionIntl;
+
+    await document.save();
+
+    return this.mapper.map(document, TicketTagDb, TicketTag);
   }
 }
