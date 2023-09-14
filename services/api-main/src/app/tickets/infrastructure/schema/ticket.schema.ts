@@ -14,9 +14,4 @@ export class TicketDb extends Document {
 
 export const TicketSchema = SchemaFactory.createForClass(TicketDb);
 
-TicketSchema.methods.getMostRecentTitle = function () {
-  console.log(this);
-  return '';
-};
-
 export type TicketDocument = TicketDb & Document;

@@ -22,6 +22,7 @@ import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { UsersQueryDTO } from './dto/users-query.dto';
 import { UsersInterceptor } from '../infrastructure/interceptors/users.interceptor';
 import { User } from '../domain/entities/user.entity';
+
 @UseInterceptors(UsersInterceptor)
 @Controller('users')
 export class UsersController {
@@ -53,7 +54,7 @@ export class UsersController {
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async update(
-    @Param('string') id: string,
+    @Param('id') id: string,
     @Body('action') action: string,
     @Body('token') token: string,
     @GetUserInfo() user: User,

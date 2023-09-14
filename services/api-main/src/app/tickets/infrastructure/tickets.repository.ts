@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { TicketDb } from 'src/app/tickets/infrastructure/schema/ticket.schema';
 import { Model, SortOrder } from 'mongoose';
-import { UsersService } from 'src/app/users/domain/users.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { Ticket } from '../domain/entities/ticket.entity';
@@ -38,29 +37,24 @@ export class TicketsRepository {
   constructor(
     @InjectModel(TicketDb.name) private ticketModel: Model<TicketDb>,
     @InjectMapper() private readonly mapper: Mapper,
-    private usersService: UsersService,
   ) {}
 
   private static POPULATE = [
     {
-      path: 'createdBy',
-      model: 'User',
-    },
-    {
       path: 'history.initiator',
-      model: 'User',
+      model: 'UserDb',
     },
     {
-      path: 'tags',
-      model: 'TicketTag',
+      path: 'history.payload.assignees',
+      model: 'UserDb',
+    },
+    {
+      path: 'history.payload.tags',
+      model: 'TicketTagDb',
       populate: {
         path: 'group',
-        model: 'TicketTagGroup',
+        model: 'TicketTagGroupDb',
       },
-    },
-    {
-      path: 'assignees',
-      model: 'User',
     },
   ];
 
@@ -155,6 +149,8 @@ export class TicketsRepository {
       ticket.body,
       ticket.status,
     );
+
+    document.history.push(initialItem);
 
     await document.save();
     await document.populate(TicketsRepository.POPULATE);
