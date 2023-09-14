@@ -116,32 +116,27 @@ export class NotificationsRepository {
   }
 
   async update(notification: Notification) {
-    const updateObject: any = {};
-    updateObject.user = notification.user.id;
-    updateObject.createdAt = notification.createdAt;
-    updateObject.readAt = notification.readAt;
-    updateObject.type = notification.type;
-    updateObject.payload = {};
+    const document = await this.notificationModel
+      .findById(notification.id)
+      .populate(NotificationsRepository.POPULATE);
+    document.user = notification.user.id as unknown as UserDb;
+    document.createdAt = notification.createdAt;
+    document.readAt = notification.readAt;
+    document.type = notification.type;
+    document.payload = notification.payload as any;
 
     if (notification.payload.ticket) {
-      updateObject.payload.ticket = notification.payload.ticket.id;
+      document.payload.ticket = notification.payload.ticket
+        .id as unknown as TicketDb;
     }
 
     if (notification.payload.user) {
-      updateObject.payload.user = notification.payload.user.id;
+      document.payload.user = notification.payload.user.id as unknown as UserDb;
     }
 
-    if ((notification.payload as any).comment) {
-      updateObject.payload.comment = (notification.payload as any).comment;
-    }
+    await document.save();
+    await document.populate(NotificationsRepository.POPULATE);
 
-    const updatedNotification = await this.notificationModel.findOneAndUpdate(
-      {
-        _id: notification.id,
-      },
-      updateObject,
-    );
-
-    return this.mapper.map(updatedNotification, NotificationDb, Notification);
+    return this.mapper.map(document, NotificationDb, Notification);
   }
 }
