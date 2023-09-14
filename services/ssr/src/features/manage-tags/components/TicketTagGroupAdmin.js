@@ -132,8 +132,6 @@ function TicketTagGroupAdmin({ group, isCreate }) {
     (role) => !permissions.canAdd?.includes(role),
   );
 
-  console.log({ whoCanAddAvailableRoles });
-
   const whoCanRemoveAvailableRoles = ROLES.filter(
     (role) => !permissions.canRemove?.includes(role),
   );

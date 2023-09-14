@@ -9,7 +9,6 @@ import { useIntl } from 'react-intl';
 import { ticketViewMessages } from '@/translations/ticket-view';
 
 export default function Comment({ item }) {
-  console.log({ item });
   const intl = useIntl();
 
   const styleProp = item.isInternal

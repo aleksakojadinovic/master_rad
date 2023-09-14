@@ -5,6 +5,9 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { NotificationDb } from './schema/notification.schema';
 import { Notification } from '../domain/entities/notification.entity';
+import { UserDb } from 'src/app/users/infrastructure/schema/user.schema';
+import { TicketDb } from 'src/app/tickets/infrastructure/schema/ticket.schema';
+import { TicketsRepository } from 'src/app/tickets/infrastructure/tickets.repository';
 
 export type NotificationFilterType = {
   userId?: string | null;
@@ -23,9 +26,13 @@ export class NotificationsRepository {
   ) {}
 
   private static POPULATE = [
-    { path: 'user', model: 'User' },
-    { path: 'payload.ticket', model: 'Ticket' },
-    { path: 'payload.user', model: 'User' },
+    { path: 'user', model: 'UserDb' },
+    {
+      path: 'payload.ticket',
+      model: 'TicketDb',
+      populate: TicketsRepository.POPULATE,
+    },
+    { path: 'payload.user', model: 'UserDb' },
   ];
 
   async findOne(id: string): Promise<Notification | null> {
@@ -75,13 +82,26 @@ export class NotificationsRepository {
   }
 
   async createMany(...notifications: Notification[]) {
-    const models = notifications.map((n) => {
-      const obj = Object.assign({}, n);
-      const payload = Object.assign({}, obj.payload);
-      return new this.notificationModel({ ...obj, payload });
+    const documents = notifications.map((notification) => {
+      const document = new this.notificationModel();
+      document.createdAt = notification.createdAt;
+      document.user = notification.user.id as unknown as UserDb;
+      document.readAt = null;
+      document.type = notification.type;
+      document.payload = notification.payload as any;
+      if (notification.payload.ticket) {
+        document.payload.ticket = notification.payload.ticket
+          .id as unknown as TicketDb;
+      }
+      if (notification.payload.user) {
+        document.payload.user = notification.payload.user
+          .id as unknown as UserDb;
+      }
+      return document;
     });
+
     const savedNotifications = await Promise.all(
-      models.map((model) =>
+      documents.map((model) =>
         model
           .save()
           .then((model) => model.populate(NotificationsRepository.POPULATE)),

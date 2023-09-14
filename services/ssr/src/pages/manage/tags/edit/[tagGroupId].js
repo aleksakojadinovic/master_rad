@@ -68,8 +68,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       includes: ['tags'],
     });
 
-    console.log({ tagGroup });
-
     return {
       props: { id, isEditPage: true, tagGroup },
     };

@@ -33,7 +33,7 @@ export class NotificationEntityProfile extends AutomapperProfile {
         Notification,
         forMember(
           (destination) => destination.id,
-          mapFrom((source) => source._id),
+          mapFrom((source) => source._id.toString()),
         ),
         forMember(
           (destination) => destination.createdAt,
@@ -46,6 +46,10 @@ export class NotificationEntityProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.type,
           mapFrom((source) => source.type),
+        ),
+        forMember(
+          (destination) => destination.user,
+          mapFrom((source) => mapper.map(source.user, UserDb, User)),
         ),
         forMember(
           (destination) => destination.payload,

@@ -58,6 +58,8 @@ export class NotificationsService extends BaseService {
       await this.firebaseService.sendNotifications(...createdNotifications);
       return createdNotifications;
     } catch (e) {
+      console.log(e);
+
       return null;
     }
   }

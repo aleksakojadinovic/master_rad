@@ -39,7 +39,7 @@ export class TicketsRepository {
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
-  private static POPULATE = [
+  public static POPULATE = [
     {
       path: 'history.initiator',
       model: 'UserDb',
