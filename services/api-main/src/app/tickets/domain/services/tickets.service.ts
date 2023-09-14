@@ -153,7 +153,7 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    const isTicketOwner = ticket.createdBy.id === id;
+    const isTicketOwner = ticket.createdBy.id === user.id;
 
     if (isCustomer && !isTicketOwner) {
       throw new TicketNotFoundError(id);
