@@ -1,5 +1,5 @@
 import Comment from '@/features/ticket-view/components/changes/atoms/Comment/Comment';
-import StatusChange from '@/features/ticket-view/components/StatusChange';
+import StatusChange from '@/features/ticket-view/components/changes/atoms/StatusChange';
 import { TicketHistoryEntryType } from '@/enums/tickets';
 import { Box, Card, CardContent } from '@mui/material';
 import React, { useMemo } from 'react';

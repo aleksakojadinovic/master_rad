@@ -54,4 +54,16 @@ export const ticketViewMessages = defineMessages({
     id: 'ticket-view.date-on',
     defaultMessage: 'on',
   },
+  movedFrom: {
+    id: 'ticket-view.status-moved-from',
+    defaultMessage: 'moved this from',
+  },
+  movedTo: {
+    id: 'ticket-view.status-moved-to',
+    defaultMessage: 'to',
+  },
+  movedOn: {
+    id: 'ticket-view.status-moved-on',
+    defaultMessage: 'on',
+  },
 });

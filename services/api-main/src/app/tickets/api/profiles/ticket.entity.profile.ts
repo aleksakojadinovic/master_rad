@@ -113,8 +113,9 @@ export class TicketEntityProfile extends AutomapperProfile {
               ({ item, index: changeIndex }, index) => {
                 const statusChange = new TicketStatusChange();
                 statusChange.changeIndex = changeIndex;
+                statusChange.timestamp = item.timestamp;
                 statusChange.statusFrom =
-                  changeIndex === 0
+                  index === 0
                     ? (initialEntry.payload as TicketHistoryEntryCreated).status
                     : (
                         statusChangeEntries[index - 1].item

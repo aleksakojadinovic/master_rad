@@ -6,7 +6,7 @@ export class StatusChangeDTO {
     public statusFrom: TicketStatus,
     public statusTo: TicketStatus,
     public user: UserDTO | string,
-    public timestampp: Date,
+    public timestamp: Date,
     public changeIndex: number,
   ) {}
 }
