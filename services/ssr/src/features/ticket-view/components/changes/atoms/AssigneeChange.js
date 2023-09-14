@@ -35,13 +35,13 @@ function AssigneeChange({ item: { added, removed, timestamp, user } }) {
                 <UserChip key={u.id} user={u} />
               ))}
             </Box>
-            <Box>
+            <Box display="flex">
               <Typography variant="caption">
                 {intl.formatMessage(ticketViewMessages.dateOn)}
               </Typography>
             </Box>
 
-            <Box>
+            <Box display="flex">
               <Typography variant="caption">
                 <Box>{dateFormatted}</Box>
               </Typography>
