@@ -112,8 +112,6 @@ export class TicketsService extends BaseService {
     const ticket = await this.ticketsRepository.findById(id);
 
     if (!ticket) {
-      console.log('e moj ti');
-
       throw new TicketNotFoundError(id);
     }
 

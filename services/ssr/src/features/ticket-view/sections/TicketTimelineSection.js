@@ -4,6 +4,10 @@ import { TicketHistoryEntryType } from '@/enums/tickets';
 import { Box, Card, CardContent } from '@mui/material';
 import React from 'react';
 
+const resolveTicketTimeline = (ticket) => {
+  console.log({ ticket });
+};
+
 function TicketTimelineSection({ ticket }) {
   return null;
   // const wrap = (content, index) => (

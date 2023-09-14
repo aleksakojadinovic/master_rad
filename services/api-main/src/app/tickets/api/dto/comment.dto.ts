@@ -6,5 +6,6 @@ export class CommentDTO {
     public createdAt: Date,
     public user: UserDTO | string,
     public body: string,
+    public changeIndex: number,
   ) {}
 }

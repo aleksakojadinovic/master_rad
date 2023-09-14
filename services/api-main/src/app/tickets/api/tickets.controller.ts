@@ -55,19 +55,19 @@ export class TicketsController extends BaseController {
   @Get()
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findAll(
-    @Query(new ValidationPipe({ transform: true })) queryDTO: TicketQueryDTO,
+    @Query(new ValidationPipe({ transform: true })) dto: TicketQueryDTO,
     @GetUserInfo() user: User,
   ) {
     if (user.isCustomer()) {
-      if (!queryDTO.createdBy || queryDTO.createdBy !== user.id) {
+      if (!dto.createdBy || dto.createdBy !== user.id) {
         throw new NotAllowedToSearchOthersTicketsAsACustomerError();
       }
     }
 
-    const tickets = await this.ticketsService.findAll(user, queryDTO);
+    const tickets = await this.ticketsService.findAll(user, dto);
 
     return this.mapper.mapArray(tickets, Ticket, TicketDTO, {
-      extraArgs: () => ({ include: queryDTO.includes }),
+      extraArgs: () => ({ include: dto.includes }),
     });
   }
 

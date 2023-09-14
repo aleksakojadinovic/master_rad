@@ -91,7 +91,7 @@ function CreateTicket() {
             {...createTicketMessages.success}
             values={{
               NewTicketLink: (
-                <a href={`/tickets/view/${data.Id}`}>
+                <a href={`/tickets/view/${data.id}`}>
                   {intl.formatMessage(globalMessages.clickHere)}
                 </a>
               ),

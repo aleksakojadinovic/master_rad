@@ -15,6 +15,7 @@ import { Ticket } from '../../domain/entities/ticket.entity';
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { TicketTag } from 'src/app/ticket-tag-system/domain/entities/ticket-tag.entity';
 import { CommentDTO } from '../dto/comment.dto';
+import { StatusChangeDTO } from '../dto/status-change.dto';
 
 @Injectable()
 export class TicketDTOProfile extends AutomapperProfile {
@@ -114,8 +115,31 @@ export class TicketDTOProfile extends AutomapperProfile {
                     ? mapper.map(comment.user, User, UserDTO)
                     : comment.user.id,
                   comment.body,
+                  comment.changeIndex,
                 ),
             );
+          }),
+        ),
+        forMember(
+          (destination) => destination.statusChanges,
+          mapWithArguments((source, extra) => {
+            const includeArray = extra.include
+              ? (extra.include as string[])
+              : [];
+
+            const shouldIncludeUser = includeArray.includes('historyInitiator');
+
+            return source.statusChanges.map((statusChange) => {
+              return new StatusChangeDTO(
+                statusChange.statusFrom,
+                statusChange.statusTo,
+                shouldIncludeUser
+                  ? mapper.map(statusChange.user, User, UserDTO)
+                  : statusChange.user.id.toString(),
+                statusChange.timestamp,
+                statusChange.changeIndex,
+              );
+            });
           }),
         ),
       );

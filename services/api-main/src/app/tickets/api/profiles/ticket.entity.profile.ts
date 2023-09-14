@@ -1,11 +1,7 @@
 import {
-  TicketHistoryEntryAssigneesChanged,
-  TicketHistoryEntryBodyChanged,
   TicketHistoryEntryCommentAdded,
   TicketHistoryEntryCreated,
   TicketHistoryEntryStatusChanged,
-  TicketHistoryEntryTagsChanged,
-  TicketHistoryEntryTitleChanged,
 } from './../../infrastructure/schema/ticket-history.schema';
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import {
@@ -26,7 +22,6 @@ import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/tic
 import { TicketComment } from '../../domain/value-objects/ticket-comment';
 import { TicketStatusChange } from '../../domain/value-objects/ticket-status-change';
 
-// TODO maybe rewrite this so that it uses completely custom mapping
 @Injectable()
 export class TicketEntityProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
@@ -45,120 +40,33 @@ export class TicketEntityProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.createdBy,
-          mapFrom((source) => {
-            return mapper.map(
-              source.history.find(
-                (item) => item.type === TicketHistoryEntryType.CREATED,
-              ).initiator,
-              UserDb,
-              User,
-            );
-          }),
+          mapFrom((source) => mapper.map(source.createdBy, UserDb, User)),
         ),
         forMember(
           (destination) => destination.assignees,
-          mapFrom((source) => {
-            const items = source.history.filter(
-              (item) => item.type === TicketHistoryEntryType.ASSIGNEES_CHANGED,
-            );
-
-            if (items.length === 0) {
-              return [];
-            }
-
-            const lastChange = items[items.length - 1]
-              .payload as TicketHistoryEntryAssigneesChanged;
-            return mapper.mapArray(lastChange.assignees, UserDb, User);
-          }),
+          mapFrom((source) => mapper.mapArray(source.assignees, UserDb, User)),
         ),
         forMember(
           (destination) => destination.createdAt,
-          mapFrom((source) => {
-            const initialEntry = source.history.find(
-              (item) => item.type === TicketHistoryEntryType.CREATED,
-            );
-            return initialEntry.timestamp;
-          }),
+          mapFrom((source) => source.createdAt),
         ),
         forMember(
           (destination) => destination.title,
-          mapFrom((source) => {
-            const initialEntry = source.history.find(
-              (item) => item.type === TicketHistoryEntryType.CREATED,
-            );
-            const titleChangeEntries = source.history.filter(
-              (item) => item.type === TicketHistoryEntryType.TITLE_CHANGED,
-            );
-
-            if (titleChangeEntries.length === 0) {
-              return (initialEntry.payload as TicketHistoryEntryCreated).title;
-            }
-
-            return (
-              titleChangeEntries[titleChangeEntries.length - 1]
-                .payload as TicketHistoryEntryTitleChanged
-            ).title;
-          }),
+          mapFrom((source) => source.title),
         ),
         forMember(
           (destination) => destination.body,
-          mapFrom((source) => {
-            const initialEntry = source.history.find(
-              (item) => item.type === TicketHistoryEntryType.CREATED,
-            );
-            const bodyChangeEntries = source.history.filter(
-              (item) => item.type === TicketHistoryEntryType.BODY_CHANGED,
-            );
-
-            if (bodyChangeEntries.length === 0) {
-              return (initialEntry.payload as TicketHistoryEntryCreated).body;
-            }
-
-            return (
-              bodyChangeEntries[bodyChangeEntries.length - 1]
-                .payload as TicketHistoryEntryBodyChanged
-            ).body;
-          }),
+          mapFrom((source) => source.body),
         ),
         forMember(
           (destination) => destination.status,
-          mapFrom((source) => {
-            const initialEntry = source.history.find(
-              (item) => item.type === TicketHistoryEntryType.CREATED,
-            );
-
-            const statusChangeEntries = source.history.filter(
-              (item) => item.type === TicketHistoryEntryType.STATUS_CHANGED,
-            );
-
-            if (statusChangeEntries.length === 0) {
-              return (initialEntry.payload as TicketHistoryEntryCreated).status;
-            }
-
-            return (
-              statusChangeEntries[statusChangeEntries.length - 1]
-                .payload as TicketHistoryEntryStatusChanged
-            ).status;
-          }),
+          mapFrom((source) => source.status),
         ),
         forMember(
           (destination) => destination.tags,
-          mapFrom((source) => {
-            const tagChangeItems = source.history.filter(
-              (item) => item.type === TicketHistoryEntryType.TAGS_CHANGED,
-            );
-
-            if (tagChangeItems.length === 0) {
-              return [];
-            }
-
-            const tags = (
-              tagChangeItems[tagChangeItems.length - 1]
-                .payload as TicketHistoryEntryTagsChanged
-            ).tags;
-
-            return mapper.mapArray(tags, TicketTagDb, TicketTag);
-          }),
+          mapFrom((source) =>
+            mapper.mapArray(source.tags, TicketTagDb, TicketTag),
+          ),
         ),
         forMember(
           (destination) => destination.comments,

@@ -48,6 +48,13 @@ export class TicketsRepository {
       path: 'history.payload.assignees',
       model: 'UserDb',
     },
+    { path: 'createdBy', model: 'UserDb' },
+    {
+      path: 'tags',
+      model: 'TicketTagDb',
+      populate: { path: 'group', model: 'TicketTagGroupDb' },
+    },
+    { path: 'assignees', model: 'UserDb' },
     {
       path: 'history.payload.tags',
       model: 'TicketTagDb',
@@ -151,6 +158,13 @@ export class TicketsRepository {
     );
 
     document.history.push(initialItem);
+    document.title = ticket.title;
+    document.body = ticket.body;
+    document.status = ticket.status;
+    document.createdBy = ticket.createdBy.id as unknown as UserDb;
+    document.createdAt = ticket.createdAt;
+    document.tags = [];
+    document.assignees = [];
 
     await document.save();
     await document.populate(TicketsRepository.POPULATE);
@@ -178,6 +192,7 @@ export class TicketsRepository {
       item.type = TicketHistoryEntryType.TITLE_CHANGED;
       item.payload = new TicketHistoryEntryTitleChanged(newTicket.title);
       document.history.push(item);
+      document.title = ticket.title;
     }
 
     if (newTicket.body !== ticket.body) {
@@ -187,6 +202,7 @@ export class TicketsRepository {
       item.type = TicketHistoryEntryType.BODY_CHANGED;
       item.payload = new TicketHistoryEntryBodyChanged(newTicket.body);
       document.history.push(item);
+      document.body = ticket.body;
     }
 
     const currentCommentsIds = ticket.comments.map(
@@ -228,6 +244,9 @@ export class TicketsRepository {
         newTicket.assignees.map((user) => user.id as unknown as UserDb),
       );
       document.history.push(item);
+      document.assignees = ticket.assignees.map(
+        (user) => user.id as unknown as UserDb,
+      );
     }
 
     if (ticket.status !== newTicket.status) {
@@ -237,6 +256,7 @@ export class TicketsRepository {
       item.type = TicketHistoryEntryType.STATUS_CHANGED;
       item.payload = new TicketHistoryEntryStatusChanged(newTicket.status);
       document.history.push(item);
+      document.status = ticket.status;
     }
 
     const currentTagIds = ticket.tags.map((tag) => tag.id);
@@ -256,6 +276,9 @@ export class TicketsRepository {
         newTicket.tags.map((tag) => tag.id as unknown as TicketTagDb),
       );
       document.history.push(item);
+      document.tags = ticket.tags.map(
+        (tag) => tag.id as unknown as TicketTagDb,
+      );
     }
 
     await document.save();
