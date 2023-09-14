@@ -45,4 +45,8 @@ export const ticketSearchMessages = defineMessages({
     id: 'ticket-search.title-assignees',
     defaultMessage: 'Assigned to',
   },
+  userFormTitle: {
+    id: 'ticket-search.user-form-title',
+    defaultMessage: 'Pick a user',
+  },
 });

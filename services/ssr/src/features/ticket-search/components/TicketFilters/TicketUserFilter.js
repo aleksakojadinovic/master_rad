@@ -1,9 +1,10 @@
 import { useGetUserQuery } from '@/api/users';
-import UserAssignForm from '@/features/ticket-view/components/UserAssignForm';
+import UserPicker from '@/features/ticket-view/components/UserPicker';
 import { Button, IconButton } from '@mui/material';
 import React, { Fragment, useState } from 'react';
 import { useIntl } from 'react-intl';
 import ClearIcon from '@mui/icons-material/Clear';
+import { ticketSearchMessages } from '@/translations/ticket-search';
 
 const TicketUserFilter = ({
   value: selectedUserId,
@@ -32,9 +33,10 @@ const TicketUserFilter = ({
   return (
     <Fragment>
       {open && (
-        <UserAssignForm
+        <UserPicker
           onSelect={handleSelectUser}
           onClose={() => setOpen(false)}
+          formTitle={intl.formatMessage(ticketSearchMessages.userFormTitle)}
         />
       )}
       <Button

@@ -18,7 +18,7 @@ const style = {
   p: 4,
 };
 
-function UserAssignForm({ onClose, onSelect }) {
+function UserPicker({ onClose, onSelect, formTitle = '' }) {
   const intl = useIntl();
 
   const [search, setSearch] = useState({
@@ -62,9 +62,7 @@ function UserAssignForm({ onClose, onSelect }) {
   return (
     <Modal open={true} onClose={onClose}>
       <Box sx={style}>
-        <Typography variant="h6">
-          {intl.formatMessage(assignMessages.formTitle)}
-        </Typography>
+        <Typography variant="h6">{formTitle}</Typography>
 
         <Box marginTop="6px">
           <UserSearchForm
@@ -81,4 +79,4 @@ function UserAssignForm({ onClose, onSelect }) {
   );
 }
 
-export default UserAssignForm;
+export default UserPicker;
