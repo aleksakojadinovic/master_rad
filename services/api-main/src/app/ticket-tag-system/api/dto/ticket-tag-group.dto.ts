@@ -5,7 +5,7 @@ import { TicketTagDTO } from './ticket-tag.dto';
 export class TicketTagGroupDTO {
   constructor(
     public id: string,
-    public tags: TicketTagDTO[],
+    public tags: TicketTagDTO[] | string[],
     public permissions: TicketTagGroupPermissionsDTO,
     public name: string,
     public description: string,

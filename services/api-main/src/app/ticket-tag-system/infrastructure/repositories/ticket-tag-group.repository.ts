@@ -3,10 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import {
-  TicketTagGroupDb,
-  TicketTagGroupPermissions,
-} from '../schema/ticket-tag-group.schema';
+import { TicketTagGroupDb } from '../schema/ticket-tag-group.schema';
 import { IntlValue } from 'src/codebase/types/IntlValue';
 import { TicketTagGroup } from '../../domain/entities/ticket-tag-group.entity';
 import { TicketTagDb } from '../schema/ticket-tag.schema';
@@ -32,7 +29,7 @@ export class TicketTagGroupRepository {
   private static POPULATE = [
     {
       path: 'tags',
-      model: 'TicketTag',
+      model: 'TicketTagDb',
     },
   ];
 
@@ -69,27 +66,20 @@ export class TicketTagGroupRepository {
     return this.mapper.mapArray(result, TicketTagGroupDb, TicketTagGroup);
   }
 
-  async create({
-    nameIntl,
-    descriptionIntl,
-    roles,
-  }: {
-    nameIntl: IntlValue;
-    descriptionIntl: IntlValue;
-    roles: string[];
-  }) {
-    const obj = new this.ticketTagGroupModel();
-    obj.nameIntl = nameIntl;
-    obj.descriptionIntl = descriptionIntl;
-    obj.permissions = new TicketTagGroupPermissions(
-      roles as any,
-      roles as any,
-      roles as any,
-    );
+  async create(group: TicketTagGroup) {
+    const document = new this.ticketTagGroupModel();
+    document.nameIntl = group.nameIntl;
+    document.descriptionIntl = group.descriptionIntl;
+    document.permissions = {
+      canAddRoles: group.permissions[CAN_ADD],
+      canRemoveRoles: group.permissions[CAN_REMOVE],
+      canSeeRoles: group.permissions[CAN_SEE],
+    };
 
-    const newGroup = await obj.save();
+    await document.save();
+    await document.populate(TicketTagGroupRepository.POPULATE);
 
-    return this.mapper.map(newGroup, TicketTagGroupDb, TicketTagGroup);
+    return this.mapper.map(document, TicketTagGroupDb, TicketTagGroup);
   }
 
   // Let's go

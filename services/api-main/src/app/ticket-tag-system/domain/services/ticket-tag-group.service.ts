@@ -49,13 +49,18 @@ export class TicketTagGroupService extends BaseService {
 
     const defaultRoles = [Role.ADMINISTRATOR];
 
-    const group = await this.ticketTagGroupRepository.create({
-      nameIntl: dto.nameIntl,
-      descriptionIntl: dto.descriptionIntl,
-      roles: defaultRoles,
-    });
+    const group = new TicketTagGroup();
+    group.nameIntl = dto.nameIntl;
+    group.descriptionIntl = dto.descriptionIntl;
+    group.permissions = {
+      [CAN_ADD]: defaultRoles,
+      [CAN_REMOVE]: defaultRoles,
+      [CAN_SEE]: defaultRoles,
+    };
 
-    return group;
+    const createdGroup = await this.ticketTagGroupRepository.create(group);
+
+    return createdGroup;
   }
 
   async findAll(queryDTO: EntityQueryDTO, user: User) {

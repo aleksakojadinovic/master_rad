@@ -7,9 +7,7 @@ import {
   mapWithArguments,
 } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { TicketTagDb } from '../schema/ticket-tag.schema';
 import { TicketTagDTO } from '../../api/dto/ticket-tag.dto';
-import { TicketTagGroupDb } from '../schema/ticket-tag-group.schema';
 import { TicketTagGroupDTO } from '../../api/dto/ticket-tag-group.dto';
 import { TicketTagGroupPermissionsDTO } from '../../api/dto/ticket-tag-group-permissions.dto';
 import {
@@ -17,6 +15,8 @@ import {
   CAN_REMOVE,
   CAN_SEE,
 } from '../../domain/value-objects/ticket-tag-group-permissions';
+import { TicketTagGroup } from '../../domain/entities/ticket-tag-group.entity';
+import { TicketTag } from '../../domain/entities/ticket-tag.entity';
 
 @Injectable()
 export class TicketTagGroupDTOProfile extends AutomapperProfile {
@@ -28,21 +28,21 @@ export class TicketTagGroupDTOProfile extends AutomapperProfile {
     return (mapper: Mapper) => {
       createMap(
         mapper,
-        TicketTagGroupDb,
+        TicketTagGroup,
         TicketTagGroupDTO,
         forMember(
           (destination) => destination.id,
-          mapFrom((source) => source._id),
+          mapFrom((source) => source.id),
         ),
         forMember(
           (destination) => destination.tags,
           mapWithArguments((source, extra) => {
             if (extra.include && (extra.include as string[]).includes('tags')) {
-              return mapper.mapArray(source.tags, TicketTagDb, TicketTagDTO, {
+              return mapper.mapArray(source.tags, TicketTag, TicketTagDTO, {
                 extraArgs: () => extra,
               });
             }
-            return source.tags.map((tag) => tag._id.toString());
+            return source.tags.map((tag) => tag.id);
           }),
         ),
         forMember(
