@@ -8,8 +8,15 @@ export class TicketDb extends Document {
 
   @Prop({ type: [{ type: mongoose.Schema.Types.Mixed }] })
   history: TicketHistoryItem[];
+
+  getMostRecentTitle!: () => string;
 }
 
 export const TicketSchema = SchemaFactory.createForClass(TicketDb);
+
+TicketSchema.methods.getMostRecentTitle = function () {
+  console.log(this);
+  return '';
+};
 
 export type TicketDocument = TicketDb & Document;
