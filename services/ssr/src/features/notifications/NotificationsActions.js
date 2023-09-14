@@ -10,14 +10,14 @@ function NotificationsActions({ notification }) {
       case NOTIFICATION_TYPES.COMMENT_ADDED:
         arr.push(
           <OpenTicketAtom
-            id={notification.payload.ticket.Id}
+            id={notification.payload.ticket.id}
             anchor={notification.payload.comment ?? null}
             notification={notification}
           />,
         );
         break;
       case NOTIFICATION_TYPES.ASSIGNED:
-        arr.push(<OpenTicketAtom id={notification.payload.ticket.Id} />);
+        arr.push(<OpenTicketAtom id={notification.payload.ticket.id} />);
         break;
       default:
         return arr;

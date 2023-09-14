@@ -37,7 +37,7 @@ function AuthenticationModal({ onClose }) {
       return;
     }
     const { accessToken } = data;
-    Cookies.set('accessToken', accessToken);
+    Cookies.set('accessToken', accessToken, { expires: 7 });
 
     if (router.pathname === '/404') {
       window.location = '/';

@@ -42,4 +42,28 @@ export const ticketViewMessages = defineMessages({
     defaultMessage:
       'Your ticket {count, plural, =0 {is not assigned to anyone right now.} other {is assigned to:}}',
   },
+  hasAssigned: {
+    id: 'ticket-view.has-assigned',
+    defaultMessage: 'assigned',
+  },
+  hasUnassigned: {
+    id: 'ticket-view.has-assigned',
+    defaultMessage: 'unassigned',
+  },
+  dateOn: {
+    id: 'ticket-view.date-on',
+    defaultMessage: 'on',
+  },
+  movedFrom: {
+    id: 'ticket-view.status-moved-from',
+    defaultMessage: 'moved this from',
+  },
+  movedTo: {
+    id: 'ticket-view.status-moved-to',
+    defaultMessage: 'to',
+  },
+  movedOn: {
+    id: 'ticket-view.status-moved-on',
+    defaultMessage: 'on',
+  },
 });

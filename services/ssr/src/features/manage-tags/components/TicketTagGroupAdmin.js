@@ -78,9 +78,9 @@ function TicketTagGroupAdmin({ group, isCreate }) {
   const constructInitialPermissionsStateValue = useCallback(() => {
     return {
       ...originalPermissions,
-      canAddRoles: originalPermissions?.canAddRoles ?? [],
-      canRemoveRoles: originalPermissions?.canRemoveRoles ?? [],
-      canSeeRoles: originalPermissions?.canSeeRoles ?? [],
+      canAdd: originalPermissions?.canAdd ?? [],
+      canRemove: originalPermissions?.canRemove ?? [],
+      canSee: originalPermissions?.canSee ?? [],
     };
   }, [originalPermissions]);
 
@@ -129,17 +129,15 @@ function TicketTagGroupAdmin({ group, isCreate }) {
   );
 
   const whoCanAddAvailableRoles = ROLES.filter(
-    (role) => !permissions.canAddRoles?.includes(role),
+    (role) => !permissions.canAdd?.includes(role),
   );
 
-  console.log({ whoCanAddAvailableRoles });
-
   const whoCanRemoveAvailableRoles = ROLES.filter(
-    (role) => !permissions.canRemoveRoles?.includes(role),
+    (role) => !permissions.canRemove?.includes(role),
   );
 
   const whoCanSeeAvailableRoles = ROLES.filter(
-    (role) => !permissions.canSeeRoles?.includes(role),
+    (role) => !permissions.canSee?.includes(role),
   );
 
   const [whoCanAddKey, setWhoCanAddKey] = useState(0);
@@ -182,9 +180,9 @@ function TicketTagGroupAdmin({ group, isCreate }) {
 
     const patchObject = {
       permissions: {
-        canAddRoles: permissions.canAddRoles,
-        canRemoveRoles: permissions.canRemoveRoles,
-        canSeeRoles: permissions.canSeeRoles,
+        canAdd: permissions.canAdd,
+        canRemove: permissions.canRemove,
+        canSee: permissions.canSee,
       },
       nameIntl,
       descriptionIntl,
@@ -316,14 +314,14 @@ function TicketTagGroupAdmin({ group, isCreate }) {
           </Typography>
           <Box display="flex" width="100%">
             <ChipList
-              items={permissions.canAddRoles.map((name, index) => ({
+              items={permissions.canAdd.map((name, index) => ({
                 name,
                 id: index,
               }))}
               onClose={({ name: closedRole }) => {
                 setPermissions((currentPermission) => ({
                   ...currentPermission,
-                  canAddRoles: currentPermission.canAddRoles.filter(
+                  canAdd: currentPermission.canAdd.filter(
                     (role) => role !== closedRole,
                   ),
                 }));
@@ -335,7 +333,7 @@ function TicketTagGroupAdmin({ group, isCreate }) {
               onSelect={(newRole) => {
                 setPermissions((currentPermissions) => ({
                   ...currentPermissions,
-                  canAddRoles: [...currentPermissions.canAddRoles, newRole],
+                  canAdd: [...currentPermissions.canAdd, newRole],
                 }));
                 setWhoCanAddKey((prev) => (prev + 1) % 10000);
               }}
@@ -348,14 +346,14 @@ function TicketTagGroupAdmin({ group, isCreate }) {
           </Typography>
           <Box display="flex">
             <ChipList
-              items={permissions.canRemoveRoles.map((name, index) => ({
+              items={permissions.canRemove.map((name, index) => ({
                 name,
                 id: index,
               }))}
               onClose={({ name: closedRole }) => {
                 setPermissions((currentPermission) => ({
                   ...currentPermission,
-                  canRemoveRoles: currentPermission.canRemoveRoles.filter(
+                  canRemove: currentPermission.canRemove.filter(
                     (role) => role !== closedRole,
                   ),
                 }));
@@ -367,10 +365,7 @@ function TicketTagGroupAdmin({ group, isCreate }) {
               onSelect={(newRole) => {
                 setPermissions((currentPermissions) => ({
                   ...currentPermissions,
-                  canRemoveRoles: [
-                    ...currentPermissions.canRemoveRoles,
-                    newRole,
-                  ],
+                  canRemove: [...currentPermissions.canRemove, newRole],
                 }));
                 setWhoCanRemoveKey((prev) => (prev + 1) % 10000);
               }}
@@ -383,14 +378,14 @@ function TicketTagGroupAdmin({ group, isCreate }) {
           </Typography>
           <Box display="flex">
             <ChipList
-              items={permissions.canSeeRoles.map((name, index) => ({
+              items={permissions.canSee.map((name, index) => ({
                 name,
                 id: index,
               }))}
               onClose={({ name: closedRole }) => {
                 setPermissions((currentPermission) => ({
                   ...currentPermission,
-                  canSeeRoles: currentPermission.canSeeRoles.filter(
+                  canSee: currentPermission.canSee.filter(
                     (role) => role !== closedRole,
                   ),
                 }));
@@ -402,7 +397,7 @@ function TicketTagGroupAdmin({ group, isCreate }) {
               onSelect={(newRole) => {
                 setPermissions((currentPermissions) => ({
                   ...currentPermissions,
-                  canSeeRoles: [...currentPermissions.canSeeRoles, newRole],
+                  canSee: [...currentPermissions.canSee, newRole],
                 }));
                 setWhoCanSeeKey((prev) => (prev + 1) % 10000);
               }}

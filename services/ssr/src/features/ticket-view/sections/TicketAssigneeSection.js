@@ -4,7 +4,7 @@ import TicketAssignees from '../components/TicketAssignees';
 import { useUpdateTicketMutation } from '@/api/tickets';
 import { useIntl } from 'react-intl';
 import { assignMessages } from '@/translations/assign';
-import UserAssignForm from '../components/UserAssignForm';
+import UserPicker from '../components/UserPicker';
 import useUser from '@/hooks/useUser';
 import { ticketViewMessages } from '@/translations/ticket-view';
 
@@ -29,12 +29,13 @@ function TicketAssigneeSection({ ticket }) {
   return (
     <Fragment>
       {isVisible && !isCustomer && (
-        <UserAssignForm
+        <UserPicker
           onClose={() => setIsVisible(false)}
           onSelect={(selectedUser) => {
             handleAssignUser(selectedUser);
             setIsVisible(false);
           }}
+          formTitle={intl.formatMessage(assignMessages.formTitle)}
         />
       )}
       <Box

@@ -12,8 +12,8 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
-import { User } from '../users/schema/user.schema';
-import { UserDTO } from '../users/dto/user.dto';
+import { UserDTO } from '../users/api/dto/user.dto';
+import { User } from '../users/domain/entities/user.entity';
 @Controller('auth')
 export class AuthController {
   constructor(

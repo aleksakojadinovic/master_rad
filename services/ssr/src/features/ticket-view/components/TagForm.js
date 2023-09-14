@@ -16,7 +16,7 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
     }
 
     return ticketTags.reduce((acc, curr) => {
-      const canDelete = curr.group.permissions.canRemoveRoles.includes(role);
+      const canDelete = curr.group.permissions.canRemove.includes(role);
 
       if (!acc[curr.group.id]) {
         acc[curr.group.id] = {
@@ -41,7 +41,7 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
 
     return tags
       .filter((tag) => {
-        return tag.group.permissions.canAddRoles.includes(role);
+        return tag.group.permissions.canAdd.includes(role);
       })
       .filter((tag) => !ticketTags.map(({ id }) => id).includes(tag.id))
       .map((tag) => {

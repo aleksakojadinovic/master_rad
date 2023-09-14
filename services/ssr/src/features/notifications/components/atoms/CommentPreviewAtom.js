@@ -1,26 +1,14 @@
-import { TicketHistoryEntryType } from '@/enums/tickets';
 import { notificationsMessages } from '@/translations/notifications';
 import { getStringPreview } from '@/utils';
 import CommentIcon from '@mui/icons-material/Comment';
 import { Box, Tooltip, Typography } from '@mui/material';
-import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 function CommentPreviewAtom({ ticket, commentId }) {
   const intl = useIntl();
-  const commentEntry = useMemo(
-    () =>
-      ticket.history
-        .filter((item) => {
-          return item.entryType === TicketHistoryEntryType.COMMENT_ADDED;
-        })
-        .find((item) => {
-          return item.entry.commentId === commentId;
-        }),
-    [ticket.history, commentId],
-  );
 
-  const commentContent = commentEntry?.entry?.body ?? null;
+  const comment = ticket.comments.find(({ commentId: id }) => id === commentId);
+  const commentContent = comment.body;
 
   const commentPreview = commentContent
     ? getStringPreview(commentContent)
