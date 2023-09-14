@@ -14,9 +14,9 @@ import { TicketTagDTO } from 'src/app/ticket-tag-system/api/dto/ticket-tag.dto';
 import { Ticket } from '../../domain/entities/ticket.entity';
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { TicketTag } from 'src/app/ticket-tag-system/domain/entities/ticket-tag.entity';
-import { CommentDTO } from '../dto/comment.dto';
 import { StatusChangeDTO } from '../dto/status-change.dto';
 import { AssigneeChangeDTO } from '../dto/assignee-change.dto';
+import { CommentDTO } from '../dto/comment.dto';
 
 @Injectable()
 export class TicketDTOProfile extends AutomapperProfile {
@@ -107,18 +107,17 @@ export class TicketDTOProfile extends AutomapperProfile {
               ? (extra.include as string[])
               : [];
 
-            return source.comments.map(
-              (comment) =>
-                new CommentDTO(
-                  comment.commentId,
-                  comment.timestamp,
-                  includeArray.includes('commenter')
-                    ? mapper.map(comment.user, User, UserDTO)
-                    : comment.user.id,
-                  comment.body,
-                  comment.changeIndex,
-                ),
-            );
+            return source.comments.map((comment) => {
+              const dto = new CommentDTO();
+              dto.commentId = comment.commentId;
+              dto.timestamp = comment.timestamp;
+              dto.isInternal = comment.isInternal;
+              dto.user = includeArray.includes('historyInitiator')
+                ? mapper.map(comment.user, User, UserDTO)
+                : comment.user.id;
+              dto.body = comment.body;
+              return dto;
+            });
           }),
         ),
         forMember(

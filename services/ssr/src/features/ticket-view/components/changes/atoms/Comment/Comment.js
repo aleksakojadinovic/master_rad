@@ -8,15 +8,16 @@ import { INTERNAL_TICKET_COLOR } from '@/features/ticket-view/constants';
 import { useIntl } from 'react-intl';
 import { ticketViewMessages } from '@/translations/ticket-view';
 
-export default function Comment({ comment }) {
+export default function Comment({ item }) {
+  console.log({ item });
   const intl = useIntl();
 
-  const styleProp = comment.isInternal
+  const styleProp = item.isInternal
     ? { backgroundColor: INTERNAL_TICKET_COLOR }
     : {};
 
   return (
-    <div id={comment.commentId ?? ''} style={styleProp}>
+    <div id={item.commentId ?? ''} style={styleProp}>
       <Card sx={styleProp}>
         <CardContent>
           <Box
@@ -27,14 +28,14 @@ export default function Comment({ comment }) {
             }}
           >
             <Box>
-              <UserChip user={comment.user} includeRole />
+              <UserChip user={item.user} includeRole />
             </Box>
             <Box sx={{ marginLeft: { xs: 0, md: '12px' } }}>
               <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                {formatDate(comment.timestamp)}
+                {formatDate(item.timestamp)}
               </Typography>
             </Box>
-            {comment.isInternal && (
+            {item.isInternal && (
               <Tooltip
                 title={intl.formatMessage(
                   ticketViewMessages.internalCommentNote,
@@ -54,7 +55,7 @@ export default function Comment({ comment }) {
           </Box>
 
           <Box marginTop="12px">
-            <Typography variant="body2">{comment.body}</Typography>
+            <Typography variant="body2">{item.body}</Typography>
           </Box>
         </CardContent>
       </Card>

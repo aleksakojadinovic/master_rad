@@ -91,6 +91,8 @@ export class TicketEntityProfile extends AutomapperProfile {
               comment.body = payload.body;
               comment.commentId = payload.commentId;
               comment.isInternal = payload.isInternal;
+              comment.user = mapper.map(item.initiator, UserDb, User);
+              comment.timestamp = item.timestamp;
               return comment;
             });
           }),
