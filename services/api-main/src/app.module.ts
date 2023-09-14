@@ -15,6 +15,10 @@ import { NotificationsModule } from './app/notifications/notifications.module';
 import { NotificationDTOProfile } from './app/notifications/infrastructure/profiles/notification.dto.profile';
 import { FirebaseService } from './app/firebase/firebase.service';
 import { FirebaseModule } from './app/firebase/firebase.module';
+import { UserEntityProfile } from './app/users/infrastructure/profiles/user.entity.profile';
+import { TicketEntityProfile } from './app/tickets/api/profiles/ticket.entity.profile';
+import { TicketTagGroupEntityProfile } from './app/ticket-tag-system/infrastructure/profiles/ticket-tag-group.entity.profile';
+import { NotificationEntityProfile } from './app/notifications/infrastructure/profiles/notification.entity.profile';
 
 const MAIN_DB_USERNAME = process.env.MAIN_DB_USERNAME;
 const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
@@ -35,10 +39,15 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
   ],
   providers: [
     AppService,
+    UserEntityProfile,
     UserDTOProfile,
+    TicketEntityProfile,
     TicketDTOProfile,
+    TicketTagGroupEntityProfile,
     TicketTagDTOProfile,
+    TicketTagGroupEntityProfile,
     TicketTagGroupDTOProfile,
+    NotificationEntityProfile,
     NotificationDTOProfile,
     FirebaseService,
   ],
