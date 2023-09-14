@@ -192,7 +192,7 @@ export class TicketsRepository {
       item.type = TicketHistoryEntryType.TITLE_CHANGED;
       item.payload = new TicketHistoryEntryTitleChanged(newTicket.title);
       document.history.push(item);
-      document.title = ticket.title;
+      document.title = newTicket.title;
     }
 
     if (newTicket.body !== ticket.body) {
@@ -202,7 +202,7 @@ export class TicketsRepository {
       item.type = TicketHistoryEntryType.BODY_CHANGED;
       item.payload = new TicketHistoryEntryBodyChanged(newTicket.body);
       document.history.push(item);
-      document.body = ticket.body;
+      document.body = newTicket.body;
     }
 
     const currentCommentsIds = ticket.comments.map(
@@ -244,7 +244,7 @@ export class TicketsRepository {
         newTicket.assignees.map((user) => user.id as unknown as UserDb),
       );
       document.history.push(item);
-      document.assignees = ticket.assignees.map(
+      document.assignees = newTicket.assignees.map(
         (user) => user.id as unknown as UserDb,
       );
     }
@@ -256,7 +256,7 @@ export class TicketsRepository {
       item.type = TicketHistoryEntryType.STATUS_CHANGED;
       item.payload = new TicketHistoryEntryStatusChanged(newTicket.status);
       document.history.push(item);
-      document.status = ticket.status;
+      document.status = newTicket.status;
     }
 
     const currentTagIds = ticket.tags.map((tag) => tag.id);
@@ -276,7 +276,7 @@ export class TicketsRepository {
         newTicket.tags.map((tag) => tag.id as unknown as TicketTagDb),
       );
       document.history.push(item);
-      document.tags = ticket.tags.map(
+      document.tags = newTicket.tags.map(
         (tag) => tag.id as unknown as TicketTagDb,
       );
     }
