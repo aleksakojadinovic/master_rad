@@ -29,14 +29,6 @@ export class UsersService {
     return this.usersRepository.findById(id);
   }
 
-  update(id: number) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
-
   registerFirebaseToken(user: User, token: string) {
     return this.usersRepository.addFirebaseToken(user.id, token);
   }

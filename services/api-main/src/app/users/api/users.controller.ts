@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   UseGuards,
   UnauthorizedException,
   Query,
@@ -77,10 +76,5 @@ export class UsersController {
       default:
         throw new BadRequestException('Unknown action');
     }
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
   }
 }
