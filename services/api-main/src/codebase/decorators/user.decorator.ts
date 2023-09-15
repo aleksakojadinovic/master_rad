@@ -5,6 +5,7 @@ export const GetUserInfo = createParamDecorator<User | null>(
   (data: unknown, ctx: ExecutionContext): User => {
     const request = ctx.switchToHttp().getRequest();
     const userInfo = request.userInfo;
+
     return userInfo ?? null;
   },
 );

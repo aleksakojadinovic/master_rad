@@ -5,12 +5,13 @@ import {
   Header,
   Post,
   Request,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
+import { ExtractUserInfoSilent } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { UserDTO } from '../users/api/dto/user.dto';
 import { User } from '../users/domain/entities/user.entity';
@@ -29,8 +30,12 @@ export class AuthController {
 
   @Get('me')
   @Header('content-type', 'application/json')
-  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
-  async me(@GetUserInfo() user: User) {
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfoSilent)
+  async me(@GetUserInfo() user: User, @Request() req) {
+    if (req.isBanned) {
+      throw new UnauthorizedException();
+    }
+
     return this.mapper.map(user, User, UserDTO);
   }
 }
