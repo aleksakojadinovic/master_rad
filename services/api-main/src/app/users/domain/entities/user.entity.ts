@@ -1,4 +1,5 @@
 import { Role } from '../value-objects/role';
+import { UserStatus } from '../value-objects/user-status';
 
 export class User {
   id: string;
@@ -22,6 +23,20 @@ export class User {
   passwordHash: string;
 
   firebaseTokens: string[];
+
+  status: UserStatus;
+
+  isActive() {
+    return this.status === UserStatus.ACTIVE;
+  }
+
+  isRegistered() {
+    return this.status === UserStatus.REGISTERED;
+  }
+
+  isBanned() {
+    return this.status === UserStatus.BANNED;
+  }
 
   isAdministrator() {
     return this.role === Role.ADMINISTRATOR;

@@ -52,6 +52,10 @@ export class UserDTOProfile extends AutomapperProfile {
           (destination) => destination.role,
           mapFrom((source) => source.role),
         ),
+        forMember(
+          (destination) => destination.status,
+          mapFrom((source) => source.status?.toString() ?? ''),
+        ),
       );
     };
   }
