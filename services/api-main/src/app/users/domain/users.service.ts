@@ -21,8 +21,8 @@ export class UsersService {
     });
   }
 
-  async findByUsername(username: string) {
-    return this.usersRepository.findByUsername(username, true);
+  async findByUsername(username: string, includePassword = false) {
+    return this.usersRepository.findByUsername(username, includePassword);
   }
 
   findOne(id: string) {
