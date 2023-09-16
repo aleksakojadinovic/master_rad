@@ -17,4 +17,8 @@ export const apiErrorMessages = defineMessages({
     id: 'api-errors.duplicate-assignee',
     defaultMessage: 'This person is already assigned to this ticket.',
   },
+  CannotChangeYourRoleError: {
+    id: 'api-errors.cannot-change-your-role',
+    defaultMessage: 'You are not allowed to change your own role.',
+  },
 });

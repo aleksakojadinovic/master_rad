@@ -7,6 +7,7 @@ import { UserDb } from './schema/user.schema';
 import { User } from '../domain/entities/user.entity';
 import { PaginatedValue } from 'src/codebase/types/PaginatedValue';
 import { createPaginatedResponse } from 'src/codebase/utils';
+import { Role } from '../domain/value-objects/role';
 
 export type UsersQuery = {
   roles?: string[] | null;
@@ -136,5 +137,10 @@ export class UsersRepository {
         $pull: { firebaseTokens: token },
       },
     );
+  }
+
+  async updateRole(id: string, role: Role) {
+    await this.userModel.updateOne({ _id: id }, { role });
+    return Promise.resolve();
   }
 }

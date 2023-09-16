@@ -22,6 +22,7 @@ import { UsersQueryDTO } from './dto/users-query.dto';
 import { UsersInterceptor } from '../infrastructure/interceptors/users.interceptor';
 import { User } from '../domain/entities/user.entity';
 import { createPaginatedResponse } from 'src/codebase/utils';
+import { ROLE_VALUES } from '../domain/value-objects/role';
 
 @UseInterceptors(UsersInterceptor)
 @Controller('users')
@@ -57,18 +58,16 @@ export class UsersController {
     return this.mapper.map(user, User, UserDTO);
   }
 
+  // TODO: Rework this
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async update(
     @Param('id') id: string,
     @Body('action') action: string,
     @Body('token') token: string,
+    @Body('role') role: string,
     @GetUserInfo() user: User,
   ) {
-    if (!user.isAdministrator() && user.id !== id) {
-      throw new UnauthorizedException();
-    }
-
     if (!action) {
       throw new BadRequestException('No action');
     }
@@ -78,8 +77,13 @@ export class UsersController {
         if (!token) {
           throw new BadRequestException('No token');
         }
-        await this.usersService.registerFirebaseToken(user, token);
+        await this.usersService.registerFirebaseToken(id, user, token);
         return;
+      case 'change_role':
+        if (!role || !ROLE_VALUES[role]) {
+          throw new BadRequestException('Bad role');
+        }
+        await this.usersService.updateRole(id, user, ROLE_VALUES[role]);
       default:
         throw new BadRequestException('Unknown action');
     }
