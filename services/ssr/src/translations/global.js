@@ -69,4 +69,8 @@ export const globalMessages = defineMessages({
     id: 'global.support-email',
     defaultMessage: 'support@example.com',
   },
+  search: {
+    id: 'global.search',
+    defaultMessage: 'Search',
+  },
 });

@@ -1,0 +1,5 @@
+export const USER_STATUS = {
+  ACTIVE: 'ACTIVE',
+  REGISTERED: 'REGISTERED',
+  BANNED: 'BANNED',
+};
