@@ -7,6 +7,10 @@ import { userStatusMessages } from '@/translations/user-status';
 import { STATUS_COLOR_MAP } from '@/features/manage-users/constants/status-map';
 import { USER_STATUSES } from '@/enums/users';
 import UserStatusChip from '../../table/atoms/UserStatusChip';
+import { useChangeStatusMutation } from '@/api/users';
+import ServerActionSnackbar from '@/components/ServerActionSnackbar/ServerActionSnackbar';
+import { queryStatusMessages } from '@/translations/query-statuses';
+import { globalMessages } from '@/translations/global';
 
 function ChangeStatusDialog({ user, open, onClose }) {
   const intl = useIntl();
@@ -38,22 +42,31 @@ function ChangeStatusDialog({ user, open, onClose }) {
     (status) => status !== user.status,
   );
 
+  const [changeStatus, { isLoading, isError, isSuccess, error }] =
+    useChangeStatusMutation();
+
+  const handleChangeStatus = () => {
+    changeStatus({ userId: user.id, status: chosenStatus });
+    setChosenStatus(null);
+    onClose();
+  };
+
   return (
     <Fragment>
-      {/* <ServerActionSnackbar
+      <ServerActionSnackbar
         error={error}
         isLoading={isLoading}
         isSuccess={isSuccess}
         isError={isError}
         successMessage={intl.formatMessage(
           queryStatusMessages.updateSuccessfulX,
-          { x: intl.formatMessage(globalMessages.user) },
+          { x: intl.formatMessage(globalMessages.status) },
         )}
-      /> */}
+      />
       <AreYouSureDialog
         open={chosenStatus !== null}
         onClose={() => setChosenStatus(null)}
-        onYes={() => {}}
+        onYes={handleChangeStatus}
         title={warningTitle}
         body={warningBody}
       />

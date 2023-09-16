@@ -8,6 +8,7 @@ import { User } from '../domain/entities/user.entity';
 import { PaginatedValue } from 'src/codebase/types/PaginatedValue';
 import { createPaginatedResponse } from 'src/codebase/utils';
 import { Role } from '../domain/value-objects/role';
+import { UserStatus } from '../domain/value-objects/user-status';
 
 export type UsersQuery = {
   roles?: string[] | null;
@@ -141,6 +142,11 @@ export class UsersRepository {
 
   async updateRole(id: string, role: Role) {
     await this.userModel.updateOne({ _id: id }, { role });
+    return Promise.resolve();
+  }
+
+  async updateStatus(id: string, status: UserStatus) {
+    await this.userModel.updateOne({ _id: id }, { status });
     return Promise.resolve();
   }
 }

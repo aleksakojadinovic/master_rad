@@ -23,6 +23,7 @@ import { UsersInterceptor } from '../infrastructure/interceptors/users.intercept
 import { User } from '../domain/entities/user.entity';
 import { createPaginatedResponse } from 'src/codebase/utils';
 import { ROLE_VALUES } from '../domain/value-objects/role';
+import { USER_STATUS_VALUES } from '../domain/value-objects/user-status';
 
 @UseInterceptors(UsersInterceptor)
 @Controller('users')
@@ -66,6 +67,7 @@ export class UsersController {
     @Body('action') action: string,
     @Body('token') token: string,
     @Body('role') role: string,
+    @Body('status') status: string,
     @GetUserInfo() user: User,
   ) {
     if (!action) {
@@ -84,6 +86,16 @@ export class UsersController {
           throw new BadRequestException('Bad role');
         }
         await this.usersService.updateRole(id, user, ROLE_VALUES[role]);
+        return;
+      case 'change_status':
+        if (!status || !USER_STATUS_VALUES[status]) {
+          throw new BadRequestException('Bad status');
+        }
+        await this.usersService.updateStatus(
+          id,
+          user,
+          USER_STATUS_VALUES[status],
+        );
         return;
       default:
         throw new BadRequestException('Unknown action');

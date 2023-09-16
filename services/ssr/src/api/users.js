@@ -38,6 +38,15 @@ export const usersSlice = api.injectEndpoints({
       invalidatesTags: (_result, error, { userId }) =>
         error ? [] : [{ type: 'USERS_TAG', id: userId }, 'USERS_TAG'],
     }),
+    changeStatus: builder.mutation({
+      query: ({ userId, status }) => ({
+        method: 'PATCH',
+        url: `/users/${userId}`,
+        body: { action: 'change_status', status },
+      }),
+      invalidatesTags: (_result, error, { userId }) =>
+        error ? [] : [{ type: 'USERS_TAG', id: userId }, 'USERS_TAG'],
+    }),
   }),
   overrideExisting: true,
 });
@@ -47,6 +56,7 @@ export const {
   useGetUserQuery,
   useRegsterFirebaseTokenMutation,
   useChangeRoleMutation,
+  useChangeStatusMutation,
 } = usersSlice;
 
 const selectGetUsersQueryResult = createSelector(

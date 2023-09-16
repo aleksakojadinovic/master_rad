@@ -9,7 +9,7 @@ import {
 import { Injectable } from '@nestjs/common';
 import { User } from '../../domain/entities/user.entity';
 import { UserDb } from '../schema/user.schema';
-import { USER_STATUS_MAP } from '../../domain/value-objects/user-status';
+import { USER_STATUS_VALUES } from '../../domain/value-objects/user-status';
 
 // Maps DB object to domain object
 @Injectable()
@@ -56,7 +56,9 @@ export class UserEntityProfile extends AutomapperProfile {
         ),
         forMember(
           (destination) => destination.status,
-          mapFrom((source) => USER_STATUS_MAP[source.status?.toString()] ?? ''),
+          mapFrom(
+            (source) => USER_STATUS_VALUES[source.status?.toString()] ?? '',
+          ),
         ),
       );
     };

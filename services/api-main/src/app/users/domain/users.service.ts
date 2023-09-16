@@ -8,6 +8,9 @@ import { CannotChangeYourRoleError } from './errors/CannotChangeYourRole';
 import { CannotUpdateSomeoneElsesFirebaseTokenError } from './errors/CannotUpdateSomeoneElsesFirebaseToken';
 import { OnlyAdminsCanChangeRolesError } from './errors/OnlyAdminsCanChangeRoles';
 import { CannotChangeCustomersRoleError } from './errors/CannotChangeCustomersRole';
+import { UserStatus } from './value-objects/user-status';
+import { OnlyAdminsCanChangeStatusError } from './errors/OnlyAdminsCanChangeStatus';
+import { CannotChangeYourStatusError } from './errors/CannotChangeYourStatus';
 
 @Injectable()
 export class UsersService {
@@ -64,5 +67,17 @@ export class UsersService {
     }
 
     return this.usersRepository.updateRole(userId, role);
+  }
+
+  updateStatus(userId: string, requester: User, status: UserStatus) {
+    if (!requester.isAdministrator()) {
+      throw new OnlyAdminsCanChangeStatusError();
+    }
+
+    if (userId === requester.id) {
+      throw new CannotChangeYourStatusError();
+    }
+
+    return this.usersRepository.updateStatus(userId, status);
   }
 }

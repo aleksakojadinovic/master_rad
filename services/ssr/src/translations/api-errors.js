@@ -21,4 +21,8 @@ export const apiErrorMessages = defineMessages({
     id: 'api-errors.cannot-change-your-role',
     defaultMessage: 'You are not allowed to change your own role.',
   },
+  CannotChangeYourStatusError: {
+    id: 'api-errors.cannot-change-your-status',
+    defaultMessage: 'You are not allowed to change your own status.',
+  },
 });
