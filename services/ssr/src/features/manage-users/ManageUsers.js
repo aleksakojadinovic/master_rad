@@ -3,9 +3,9 @@ import { manageUsersMessages } from '@/translations/manage-users';
 import Head from 'next/head';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
-import UsersTable from './components/UsersTable';
+import UsersTable from './components/table/UsersTable';
 import { useRouter } from 'next/router';
-import UserFilters from './components/UserFilters';
+import UserFilters from './components/filters/UserFilters';
 
 function ManageUsers({ queryParams }) {
   const intl = useIntl();
