@@ -1,5 +1,6 @@
 import { useStoreUser } from '@/api/auth';
 import { ROLES } from '@/constants/roles';
+import { USER_STATUSES } from '@/enums/users';
 import ManageUsers from '@/features/manage-users/ManageUsers';
 import { wrapper } from '@/redux/store';
 import React from 'react';
@@ -39,6 +40,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const roles =
       params.roles && ROLES.includes(params.roles) ? params.roles : null;
 
+    const statuses =
+      params.statuses && USER_STATUSES.includes(params.statuses)
+        ? params.statuses
+        : null;
+
     const searchString =
       params.searchString && params.searchString.trim().length > 0
         ? params.searchString.trim()
@@ -50,6 +56,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
     queryParams.perPage = perPage;
     if (roles) {
       queryParams.roles = roles;
+    }
+    if (statuses) {
+      queryParams.statuses = statuses;
     }
     if (searchString) {
       queryParams.searchString = searchString;

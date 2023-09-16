@@ -8,6 +8,7 @@ import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import RoleFilter from './components/RoleFilter';
 import SearchBox from './components/SearchBox';
+import StatusFilter from './components/StatusFilter';
 
 function ManageUsers({ queryParams }) {
   const intl = useIntl();
@@ -57,6 +58,15 @@ function ManageUsers({ queryParams }) {
     handleParamsChange(newQueryParams);
   };
 
+  const handleStatusChange = (status) => {
+    const newQueryParams = {
+      ...queryParams,
+      statuses: status,
+      page: 1,
+    };
+    handleParamsChange(newQueryParams);
+  };
+
   return (
     <Fragment>
       <Head>
@@ -69,6 +79,10 @@ function ManageUsers({ queryParams }) {
           onChange={handleSearchChange}
         />
         <RoleFilter value={queryParams.roles} onChange={handleRoleChange} />
+        <StatusFilter
+          value={queryParams.statuses}
+          onChange={handleStatusChange}
+        />
       </Box>
       <Box>
         {isSuccess && (

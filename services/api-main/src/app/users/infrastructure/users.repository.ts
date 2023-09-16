@@ -10,6 +10,7 @@ import { createPaginatedResponse } from 'src/codebase/utils';
 
 export type UsersQuery = {
   roles?: string[] | null;
+  statuses?: string[] | null;
   search?: string | null;
   page?: number;
   perPage?: number;
@@ -27,6 +28,7 @@ export class UsersRepository {
 
   async findAll({
     roles = null,
+    statuses = null,
     search = null,
     page = 1,
     perPage = 100,
@@ -38,6 +40,11 @@ export class UsersRepository {
     if (roles && roles.length > 0) {
       query.where({ role: { $in: roles } });
       countQuery.where({ role: { $in: roles } });
+    }
+
+    if (statuses && statuses.length > 0) {
+      query.where({ status: { $in: statuses } });
+      countQuery.where({ status: { $in: statuses } });
     }
 
     if (search && search.trim().length > 0) {

@@ -10,12 +10,14 @@ export class UsersService {
 
   findAll({
     roles,
+    statuses,
     page,
     perPage,
     searchString,
   }: UsersQueryDTO): Promise<PaginatedValue<User>> {
     return this.usersRepository.findAll({
       roles,
+      statuses,
       page,
       perPage,
       search: searchString,

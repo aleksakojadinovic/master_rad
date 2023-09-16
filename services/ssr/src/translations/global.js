@@ -73,4 +73,8 @@ export const globalMessages = defineMessages({
     id: 'global.search',
     defaultMessage: 'Search',
   },
+  status: {
+    id: 'global.status',
+    defaultMessage: 'Status',
+  },
 });
