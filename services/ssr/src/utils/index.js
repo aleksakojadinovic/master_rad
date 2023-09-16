@@ -25,17 +25,26 @@ export const getStringPreview = (str, maxLen = 20) => {
 };
 
 export const wrapUser = (user) => {
-  const { id, email, firstName, lastName, fullName, initials, role, status } =
-    user ?? {
-      id: null,
-      username: '',
-      firstName: '',
-      lastName: '',
-      fullName: '',
-      initials: '//',
-      role: '',
-      status: '',
-    };
+  const {
+    id,
+    email,
+    username,
+    firstName,
+    lastName,
+    fullName,
+    initials,
+    role,
+    status,
+  } = user ?? {
+    id: null,
+    username: '',
+    firstName: '',
+    lastName: '',
+    fullName: '',
+    initials: '//',
+    role: '',
+    status: '',
+  };
 
   const isLoggedIn = !!user;
 
@@ -58,6 +67,7 @@ export const wrapUser = (user) => {
   return {
     id,
     email,
+    username,
     firstName,
     lastName,
     fullName,

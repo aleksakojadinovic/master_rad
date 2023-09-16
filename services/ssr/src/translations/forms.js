@@ -36,4 +36,8 @@ export const validationMessages = defineMessages({
     id: 'validation.field-required',
     defaultMessage: 'This field is required.',
   },
+  errorPasswordsMustMatch: {
+    id: 'validation.passwords-match',
+    defaultMessage: 'Passwords must match',
+  },
 });
