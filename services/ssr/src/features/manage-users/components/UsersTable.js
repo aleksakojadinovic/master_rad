@@ -7,6 +7,7 @@ import {
   TableHead,
   TableRow,
   TablePagination,
+  Box,
   Paper,
 } from '@mui/material';
 import RoleChip from './RoleChip';
@@ -24,8 +25,8 @@ function UsersTable({ data, onPageChange, onPerPageChange }) {
   };
 
   return (
-    <Paper style={{ overflowX: 'auto' }}>
-      <TableContainer>
+    <Box>
+      <TableContainer component={Paper} sx={{ overflowX: 'scroll' }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -60,7 +61,7 @@ function UsersTable({ data, onPageChange, onPerPageChange }) {
           rowsPerPageOptions={[5, 10, 20, 50]}
         />
       )}
-    </Paper>
+    </Box>
   );
 }
 

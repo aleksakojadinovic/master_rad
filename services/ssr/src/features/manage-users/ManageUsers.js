@@ -11,7 +11,7 @@ function ManageUsers({ queryParams }) {
   const intl = useIntl();
   const router = useRouter();
 
-  const { data, isSuccess } = useGetUsersQuery(queryParams);
+  const { data } = useGetUsersQuery(queryParams);
 
   const handleParamsChange = (newParams) => {
     const searchParams = new URLSearchParams();
