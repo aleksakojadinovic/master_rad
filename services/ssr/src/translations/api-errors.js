@@ -25,4 +25,8 @@ export const apiErrorMessages = defineMessages({
     id: 'api-errors.cannot-change-your-status',
     defaultMessage: 'You are not allowed to change your own status.',
   },
+  OldPasswordInvalidError: {
+    id: 'api.errors.old-password-invalid',
+    defaultMessage: 'Old password is incorrect.',
+  },
 });

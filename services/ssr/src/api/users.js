@@ -47,6 +47,13 @@ export const usersSlice = api.injectEndpoints({
       invalidatesTags: (_result, error, { userId }) =>
         error ? [] : [{ type: 'USERS_TAG', id: userId }, 'USERS_TAG'],
     }),
+    changePassword: builder.mutation({
+      query: ({ userId, oldPassword, newPassword }) => ({
+        method: 'PATCH',
+        url: `/users/${userId}`,
+        body: { action: 'change_password', oldPassword, newPassword },
+      }),
+    }),
   }),
   overrideExisting: true,
 });
@@ -57,6 +64,7 @@ export const {
   useRegsterFirebaseTokenMutation,
   useChangeRoleMutation,
   useChangeStatusMutation,
+  useChangePasswordMutation,
 } = usersSlice;
 
 const selectGetUsersQueryResult = createSelector(

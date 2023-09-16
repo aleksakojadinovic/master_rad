@@ -64,30 +64,32 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async update(
     @Param('id') id: string,
-    @Body('action') action: string,
-    @Body('token') token: string,
-    @Body('role') role: string,
-    @Body('status') status: string,
+    @Body() body: any,
     @GetUserInfo() user: User,
   ) {
+    const { action } = body;
+
     if (!action) {
       throw new BadRequestException('No action');
     }
 
     switch (action) {
       case 'register_firebase_token':
+        const { token } = body;
         if (!token) {
           throw new BadRequestException('No token');
         }
         await this.usersService.registerFirebaseToken(id, user, token);
         return;
       case 'change_role':
+        const { role } = body;
         if (!role || !ROLE_VALUES[role]) {
           throw new BadRequestException('Bad role');
         }
         await this.usersService.updateRole(id, user, ROLE_VALUES[role]);
         return;
       case 'change_status':
+        const { status } = body;
         if (!status || !USER_STATUS_VALUES[status]) {
           throw new BadRequestException('Bad status');
         }
@@ -95,6 +97,20 @@ export class UsersController {
           id,
           user,
           USER_STATUS_VALUES[status],
+        );
+        return;
+      case 'change_password':
+        const { oldPassword, newPassword } = body;
+        if (!oldPassword || !newPassword) {
+          throw new BadRequestException(
+            'Old password or new password missing.',
+          );
+        }
+        await this.usersService.changePassword(
+          id,
+          user,
+          oldPassword,
+          newPassword,
         );
         return;
       default:

@@ -13,6 +13,7 @@ import { CannotUpdateSomeoneElsesFirebaseTokenError } from '../../domain/errors/
 import { OnlyAdminsCanChangeRolesError } from '../../domain/errors/OnlyAdminsCanChangeRoles';
 import { CannotChangeCustomersRoleError } from '../../domain/errors/CannotChangeCustomersRole';
 import { OnlyAdminsCanChangeStatusError } from '../../domain/errors/OnlyAdminsCanChangeStatus';
+import { OldPasswordInvalidError } from '../../domain/errors/OldPasswordInvalid';
 
 @Injectable()
 export class UsersInterceptor implements NestInterceptor {
@@ -44,6 +45,10 @@ export class UsersInterceptor implements NestInterceptor {
         }
 
         if (error instanceof CannotChangeYourStatusError) {
+          throw new ForbiddenException(error.getPayload());
+        }
+
+        if (error instanceof OldPasswordInvalidError) {
           throw new ForbiddenException(error.getPayload());
         }
 

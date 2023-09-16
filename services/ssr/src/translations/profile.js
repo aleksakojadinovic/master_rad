@@ -53,4 +53,8 @@ export const changePasswordMessages = defineMessages({
     id: 'change-password.cta',
     defaultMessage: 'Confirm',
   },
+  successfullyChanged: {
+    id: 'change-password.successfully-changed',
+    defaultMessage: 'Password successfully changed',
+  },
 });

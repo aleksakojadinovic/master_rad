@@ -11,6 +11,9 @@ import { CannotChangeCustomersRoleError } from './errors/CannotChangeCustomersRo
 import { UserStatus } from './value-objects/user-status';
 import { OnlyAdminsCanChangeStatusError } from './errors/OnlyAdminsCanChangeStatus';
 import { CannotChangeYourStatusError } from './errors/CannotChangeYourStatus';
+import { CannotChangeSomeoneElsesPasswordError } from './errors/CannotChangeSomeoneElsesPassword';
+import * as bcrypt from 'bcrypt';
+import { OldPasswordInvalidError } from './errors/OldPasswordInvalid';
 
 @Injectable()
 export class UsersService {
@@ -79,5 +82,23 @@ export class UsersService {
     }
 
     return this.usersRepository.updateStatus(userId, status);
+  }
+
+  async changePassword(
+    id: string,
+    requester: User,
+    oldPassword: string,
+    newPassword: string,
+  ) {
+    if (id !== requester.id) {
+      throw new CannotChangeSomeoneElsesPasswordError();
+    }
+
+    const user = await this.usersRepository.findById(id, true);
+    if (!(await bcrypt.compare(oldPassword, user.passwordHash))) {
+      throw new OldPasswordInvalidError();
+    }
+
+    await this.usersRepository.changePassword(id, newPassword);
   }
 }
