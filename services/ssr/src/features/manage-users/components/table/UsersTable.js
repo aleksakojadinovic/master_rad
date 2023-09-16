@@ -15,6 +15,7 @@ import UserStatusChip from './atoms/UserStatusChip';
 import { useIntl } from 'react-intl';
 import { manageUsersMessages } from '@/translations/manage-users';
 import { globalMessages } from '@/translations/global';
+import UserActions from '../actions/UserActions';
 
 function UsersTable({ data, onPageChange, onPerPageChange }) {
   const intl = useIntl();
@@ -57,6 +58,9 @@ function UsersTable({ data, onPageChange, onPerPageChange }) {
                 </TableCell>
                 <TableCell>
                   <UserStatusChip status={user.status} />
+                </TableCell>
+                <TableCell>
+                  <UserActions user={user} />
                 </TableCell>
               </TableRow>
             ))}
