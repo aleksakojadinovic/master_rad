@@ -63,12 +63,12 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
 
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
 
-    const { isActive } = useStoreUser(store);
+    const { isLoggedIn, isActive } = useStoreUser(store);
 
     const isErrorPage = context.ctx.pathname === '/404';
     const isProfilePage = context.ctx.pathname === '/profile';
 
-    if (!isActive && !(isErrorPage || isProfilePage)) {
+    if (isLoggedIn && !isActive && !(isErrorPage || isProfilePage)) {
       redirect(context.ctx, '/profile');
       return;
     }
