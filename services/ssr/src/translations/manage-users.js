@@ -40,6 +40,19 @@ export const manageUsersMessages = defineMessages({
     defaultMessage:
       'This may expose user to info that was previously considered private for them. You also may not be able to undo this action yourself depending on your role.',
   },
+  changeTo: {
+    id: 'manage-users.change-to',
+    defaultMessage: 'Change to {what}',
+  },
+  changeStatusAreYouSure: {
+    id: 'manage-users.change-status-are-you-sure',
+    defaultMessage:
+      'Are you sure you want to change {name} from {OldStatus} to {NewStatus}? ',
+  },
+  changeStatusWarning: {
+    id: 'manage-users.change-status-wraning',
+    defaultMessage: 'This may enable or disable the user to use some services.',
+  },
 });
 
 export const cannotChangeRoleNotesMessages = defineMessages({

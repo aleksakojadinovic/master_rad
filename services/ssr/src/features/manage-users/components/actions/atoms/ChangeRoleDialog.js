@@ -27,7 +27,7 @@ function ChangeRoleDialog({ user, open, onClose }) {
 
   const [chosenRole, setChosenRole] = useState(null);
 
-  const title = useMemo(() => {
+  const warningTitle = useMemo(() => {
     if (chosenRole === null) {
       return null;
     }
@@ -43,7 +43,7 @@ function ChangeRoleDialog({ user, open, onClose }) {
     );
   }, [chosenRole, fullName, role]);
 
-  const body = intl.formatMessage(manageUsersMessages.changeRoleWarning);
+  const warningBody = intl.formatMessage(manageUsersMessages.changeRoleWarning);
 
   const availableRoles = ROLE_CHANGE_MAP[role];
   const cannotChangeNote =
@@ -76,8 +76,8 @@ function ChangeRoleDialog({ user, open, onClose }) {
         open={chosenRole !== null}
         onClose={() => setChosenRole(null)}
         onYes={handleChangeRole}
-        title={title}
-        body={body}
+        title={warningTitle}
+        body={warningBody}
       />
 
       <Dialog open={open} onClose={onClose}>
@@ -96,7 +96,9 @@ function ChangeRoleDialog({ user, open, onClose }) {
               variant="outlined"
               onClick={() => setChosenRole(availableRole)}
             >
-              Change to {intl.formatMessage(rolesMessages[availableRole])}
+              {intl.formatMessage(manageUsersMessages.changeTo, {
+                what: intl.formatMessage(rolesMessages[availableRole]),
+              })}
             </Button>
           ))}
         </DialogContent>

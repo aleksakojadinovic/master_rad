@@ -1,4 +1,4 @@
-import { USER_STATUS } from '@/enums/users';
+import { STATUS_COLOR_MAP } from '@/features/manage-users/constants/status-map';
 import { userStatusMessages } from '@/translations/user-status';
 import { Chip } from '@mui/material';
 import React from 'react';
@@ -8,14 +8,12 @@ export default function UserStatusChip({ status }) {
   const intl = useIntl();
   const label = intl.formatMessage(userStatusMessages[status]);
 
-  const color =
-    status === USER_STATUS.ACTIVE
-      ? 'success'
-      : status === USER_STATUS.REGISTERED
-      ? 'warning'
-      : status === USER_STATUS.BANNED
-      ? 'danger'
-      : 'primary';
-
-  return <Chip size="small" color={color} variant="contained" label={label} />;
+  return (
+    <Chip
+      size="small"
+      color={STATUS_COLOR_MAP[status] ?? 'primary'}
+      variant="contained"
+      label={label}
+    />
+  );
 }
