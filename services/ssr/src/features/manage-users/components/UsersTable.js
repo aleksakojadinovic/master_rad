@@ -12,8 +12,11 @@ import {
 } from '@mui/material';
 import RoleChip from './RoleChip';
 import UserStatusChip from './UserStatusChip';
+import { useIntl } from 'react-intl';
+import { manageUsersMessages } from '@/translations/manage-users';
 
 function UsersTable({ data, onPageChange, onPerPageChange }) {
+  const intl = useIntl();
   const { entities, page, perPage, totalEntities } = data;
 
   const handleChangePage = (_event, newPage) => {
@@ -30,9 +33,18 @@ function UsersTable({ data, onPageChange, onPerPageChange }) {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Full Name</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>
+                {intl.formatMessage(manageUsersMessages.fullNameTableHeader)}
+              </TableCell>
+              <TableCell>
+                {intl.formatMessage(manageUsersMessages.roleTableHeader)}
+              </TableCell>
+              <TableCell>
+                {intl.formatMessage(manageUsersMessages.statusTableHeader)}
+              </TableCell>
+              <TableCell>
+                {intl.formatMessage(manageUsersMessages.actionsTableHeader)}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
