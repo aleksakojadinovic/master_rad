@@ -1,14 +1,10 @@
 import { useStoreUser } from '@/api/auth';
 import Profile from '@/features/profile/Profile';
 import { wrapper } from '@/redux/store';
-import React, { Fragment } from 'react';
+import React from 'react';
 
 function ProfilePage() {
-  return (
-    <Fragment>
-      <Profile />
-    </Fragment>
-  );
+  return <Profile />;
 }
 
 export default ProfilePage;

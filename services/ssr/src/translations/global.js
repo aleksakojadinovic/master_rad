@@ -65,4 +65,8 @@ export const globalMessages = defineMessages({
     id: 'global.welcome-back',
     defaultMessage: 'Welcome back, {user}',
   },
+  supportEmail: {
+    id: 'global.support-email',
+    defaultMessage: 'support@example.com',
+  },
 });

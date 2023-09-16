@@ -1,9 +1,22 @@
 import useUser from '@/hooks/useUser';
-import React from 'react';
+import { profileMessages } from '@/translations/profile';
+import Head from 'next/head';
+import React, { Fragment } from 'react';
+import { useIntl } from 'react-intl';
+import InactiveAlert from './components/InactiveAlert';
 
 function Profile() {
-  const { isRegistered } = useUser();
-  return <div>Profile</div>;
+  const intl = useIntl();
+  const { isActive } = useUser();
+
+  return (
+    <Fragment>
+      <Head>
+        <title>{intl.formatMessage(profileMessages.pageTitle)}</title>
+      </Head>
+      {!isActive && <InactiveAlert />}
+    </Fragment>
+  );
 }
 
 export default Profile;
