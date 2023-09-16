@@ -10,10 +10,11 @@ import {
   Box,
   Paper,
 } from '@mui/material';
-import RoleChip from './RoleChip';
-import UserStatusChip from './UserStatusChip';
+import RoleChip from './atoms/RoleChip';
+import UserStatusChip from './atoms/UserStatusChip';
 import { useIntl } from 'react-intl';
 import { manageUsersMessages } from '@/translations/manage-users';
+import { globalMessages } from '@/translations/global';
 
 function UsersTable({ data, onPageChange, onPerPageChange }) {
   const intl = useIntl();
@@ -71,6 +72,7 @@ function UsersTable({ data, onPageChange, onPerPageChange }) {
           rowsPerPage={perPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           rowsPerPageOptions={[5, 10, 20, 50]}
+          labelRowsPerPage={intl.formatMessage(globalMessages.rowsPerPage)}
         />
       )}
     </Box>

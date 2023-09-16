@@ -77,4 +77,8 @@ export const globalMessages = defineMessages({
     id: 'global.status',
     defaultMessage: 'Status',
   },
+  rowsPerPage: {
+    id: 'global.rows-per-page',
+    defaultMessage: 'Per page',
+  },
 });

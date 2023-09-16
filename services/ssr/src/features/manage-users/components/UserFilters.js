@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import SearchBox from './SearchBox';
-import RoleFilter from './RoleFilter';
-import StatusFilter from './StatusFilter';
+import SearchBox from './filters/SearchBox';
+import RoleFilter from './filters/RoleFilter';
+import StatusFilter from './filters/StatusFilter';
 
 function UserFilters({ value, onChange }) {
   const handleRoleChange = (role) => {
