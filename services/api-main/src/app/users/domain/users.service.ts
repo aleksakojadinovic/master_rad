@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersQueryDTO } from '../api/dto/users-query.dto';
 import { UsersRepository } from '../infrastructure/users.repository';
 import { User } from './entities/user.entity';
+import { PaginatedValue } from 'src/codebase/types/PaginatedValue';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +13,7 @@ export class UsersService {
     page,
     perPage,
     searchString,
-  }: UsersQueryDTO): Promise<User[]> {
+  }: UsersQueryDTO): Promise<PaginatedValue<User>> {
     return this.usersRepository.findAll({
       roles,
       page,

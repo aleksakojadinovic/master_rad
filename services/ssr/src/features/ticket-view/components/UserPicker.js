@@ -1,7 +1,5 @@
-import { assignMessages } from '@/translations/assign';
 import { Box, Modal, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
 import UserSearchForm from '../../../components/User/UsersSearchForm';
 import { useGetUsersQuery } from '@/api/users';
 import UserSearchResult from '../../../components/User/UserSearchResult';
@@ -19,17 +17,17 @@ const style = {
 };
 
 function UserPicker({ onClose, onSelect, formTitle = '' }) {
-  const intl = useIntl();
-
   const [search, setSearch] = useState({
     page: 1,
     perPage: 100,
     includes: ['roles'],
   });
 
-  const { data: results } = useGetUsersQuery(search, {
+  const { data } = useGetUsersQuery(search, {
     skip: !open,
   });
+
+  const results = data?.entities ?? [];
 
   const handleChange = (searchValue) => {
     const newSearch = { page: 1, perPage: 100 };

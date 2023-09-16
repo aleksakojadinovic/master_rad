@@ -5,6 +5,8 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { UserDb } from './schema/user.schema';
 import { User } from '../domain/entities/user.entity';
+import { PaginatedValue } from 'src/codebase/types/PaginatedValue';
+import { createPaginatedResponse } from 'src/codebase/utils';
 
 export type UsersQuery = {
   roles?: string[] | null;
@@ -29,15 +31,23 @@ export class UsersRepository {
     page = 1,
     perPage = 100,
     includePassword = false,
-  }: UsersQuery): Promise<User[]> {
+  }: UsersQuery): Promise<PaginatedValue<User>> {
     const query = this.userModel.find({});
+    const countQuery = this.userModel.find({});
 
     if (roles && roles.length > 0) {
       query.where({ role: { $in: roles } });
+      countQuery.where({ role: { $in: roles } });
     }
 
     if (search && search.trim().length > 0) {
       query.where({
+        $or: [
+          { firstName: { $regex: new RegExp(search, 'i') } },
+          { lastName: { $regex: new RegExp(search, 'i') } },
+        ],
+      });
+      countQuery.where({
         $or: [
           { firstName: { $regex: new RegExp(search, 'i') } },
           { lastName: { $regex: new RegExp(search, 'i') } },
@@ -54,9 +64,13 @@ export class UsersRepository {
     }
 
     query.populate(UsersRepository.POPULATE);
+    const [result, count] = await Promise.all([
+      query.exec(),
+      countQuery.countDocuments(),
+    ]);
 
-    const result = await query.exec();
-    return this.mapper.mapArray(result, UserDb, User);
+    const users = this.mapper.mapArray(result, UserDb, User);
+    return createPaginatedResponse(users, page, perPage, count);
   }
 
   async findByUsername(

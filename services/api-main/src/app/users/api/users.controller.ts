@@ -21,6 +21,7 @@ import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { UsersQueryDTO } from './dto/users-query.dto';
 import { UsersInterceptor } from '../infrastructure/interceptors/users.interceptor';
 import { User } from '../domain/entities/user.entity';
+import { createPaginatedResponse } from 'src/codebase/utils';
 
 @UseInterceptors(UsersInterceptor)
 @Controller('users')
@@ -40,8 +41,14 @@ export class UsersController {
     if (!user.isAdministrator() && !user.isAgent()) {
       throw new UnauthorizedException();
     }
-    const users = await this.usersService.findAll(dto);
-    return this.mapper.mapArray(users, User, UserDTO);
+    const results = await this.usersService.findAll(dto);
+    const users = this.mapper.mapArray(results.entities, User, UserDTO);
+    return createPaginatedResponse(
+      users,
+      results.page,
+      results.perPage,
+      results.totalEntities,
+    );
   }
 
   @Get(':id')
