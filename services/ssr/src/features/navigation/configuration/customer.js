@@ -26,11 +26,11 @@ const CUSTOMER_LINKS_CONFIGURATION = [
     href: '/tickets/create',
     translation: messages.newTicket,
   },
-  {
-    id: 'customer-config-contact-us',
-    href: '/contact',
-    translation: messages.contactUs,
-  },
+  // {
+  //   id: 'customer-config-contact-us',
+  //   href: '/contact',
+  //   translation: messages.contactUs,
+  // },
 ];
 
 export default CUSTOMER_LINKS_CONFIGURATION;

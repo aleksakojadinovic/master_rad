@@ -1,4 +1,4 @@
-import { authSlice } from '@/api/auth';
+import { authSlice, useStoreUser } from '@/api/auth';
 import AppWrapper from '@/components/AppWrapper';
 import PageContainer from '@/components/PageContainer/PageContainer';
 import { wrapper } from '@/redux/store';
@@ -12,6 +12,7 @@ import { isServer } from '@/utils';
 import Cookies from 'js-cookie';
 import { LanguageProvider } from '@/context/LanguageContext';
 import api from '@/services/api';
+import { Router } from 'next/router';
 
 function MyApp({ Component, pageProps, languageCode }) {
   const store = wrapper.useStore();
@@ -38,6 +39,15 @@ function MyApp({ Component, pageProps, languageCode }) {
   );
 }
 
+const redirect = ({ res }, url) => {
+  if (res) {
+    res.writeHead(307, { Location: url });
+    res.end();
+  } else {
+    Router.replace(url);
+  }
+};
+
 MyApp.getInitialProps = wrapper.getInitialAppProps(
   (store) => async (context) => {
     let languageCode = isServer()
@@ -51,6 +61,16 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
     store.dispatch(authSlice.endpoints.getMe.initiate());
 
     await Promise.all(store.dispatch(api.util.getRunningQueriesThunk()));
+
+    const { isLoggedIn, isActive } = useStoreUser(store);
+
+    const isErrorPage = context.ctx.pathname === '/404';
+    const isProfilePage = context.ctx.pathname === '/profile';
+
+    if (isLoggedIn && !isActive && !(isErrorPage || isProfilePage)) {
+      redirect(context.ctx, '/profile');
+      return;
+    }
 
     const appProps = await App.getInitialProps(context);
     return { ...appProps, languageCode };

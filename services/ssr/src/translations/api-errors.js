@@ -17,4 +17,16 @@ export const apiErrorMessages = defineMessages({
     id: 'api-errors.duplicate-assignee',
     defaultMessage: 'This person is already assigned to this ticket.',
   },
+  CannotChangeYourRoleError: {
+    id: 'api-errors.cannot-change-your-role',
+    defaultMessage: 'You are not allowed to change your own role.',
+  },
+  CannotChangeYourStatusError: {
+    id: 'api-errors.cannot-change-your-status',
+    defaultMessage: 'You are not allowed to change your own status.',
+  },
+  OldPasswordInvalidError: {
+    id: 'api.errors.old-password-invalid',
+    defaultMessage: 'Old password is incorrect.',
+  },
 });

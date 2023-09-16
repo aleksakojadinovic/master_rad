@@ -65,4 +65,24 @@ export const globalMessages = defineMessages({
     id: 'global.welcome-back',
     defaultMessage: 'Welcome back, {user}',
   },
+  user: {
+    id: 'global.user',
+    defaultMessage: 'user',
+  },
+  supportEmail: {
+    id: 'global.support-email',
+    defaultMessage: 'support@example.com',
+  },
+  search: {
+    id: 'global.search',
+    defaultMessage: 'Search',
+  },
+  status: {
+    id: 'global.status',
+    defaultMessage: 'Status',
+  },
+  rowsPerPage: {
+    id: 'global.rows-per-page',
+    defaultMessage: 'Per page',
+  },
 });

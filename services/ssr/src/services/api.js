@@ -54,5 +54,6 @@ export default createApi({
     'ticket-tag-groups',
     'ticket-tag-group',
     'notifications',
+    'USERS_TAG',
   ],
 });

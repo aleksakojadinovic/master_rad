@@ -8,6 +8,10 @@ export const usersSlice = api.injectEndpoints({
         url: '/users',
         params,
       }),
+      providesTags: ({ entities }) => [
+        ...entities.map(({ id }) => ({ type: 'USERS_TAG', id })),
+        'USERS_TAG',
+      ],
     }),
     getUser: builder.query({
       query: ({ id }) => ({
@@ -25,6 +29,31 @@ export const usersSlice = api.injectEndpoints({
         },
       }),
     }),
+    changeRole: builder.mutation({
+      query: ({ userId, role }) => ({
+        method: 'PATCH',
+        url: `/users/${userId}`,
+        body: { action: 'change_role', role },
+      }),
+      invalidatesTags: (_result, error, { userId }) =>
+        error ? [] : [{ type: 'USERS_TAG', id: userId }, 'USERS_TAG'],
+    }),
+    changeStatus: builder.mutation({
+      query: ({ userId, status }) => ({
+        method: 'PATCH',
+        url: `/users/${userId}`,
+        body: { action: 'change_status', status },
+      }),
+      invalidatesTags: (_result, error, { userId }) =>
+        error ? [] : [{ type: 'USERS_TAG', id: userId }, 'USERS_TAG'],
+    }),
+    changePassword: builder.mutation({
+      query: ({ userId, oldPassword, newPassword }) => ({
+        method: 'PATCH',
+        url: `/users/${userId}`,
+        body: { action: 'change_password', oldPassword, newPassword },
+      }),
+    }),
   }),
   overrideExisting: true,
 });
@@ -33,6 +62,9 @@ export const {
   useGetUsersQuery,
   useGetUserQuery,
   useRegsterFirebaseTokenMutation,
+  useChangeRoleMutation,
+  useChangeStatusMutation,
+  useChangePasswordMutation,
 } = usersSlice;
 
 const selectGetUsersQueryResult = createSelector(

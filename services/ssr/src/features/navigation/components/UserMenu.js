@@ -26,6 +26,10 @@ function UserMenu() {
     window.location = '/';
   };
 
+  const handleProfileClick = () => {
+    window.location = '/profile';
+  };
+
   const renderMenuItems = () => {
     if (!isLoggedIn) {
       return (
@@ -40,7 +44,7 @@ function UserMenu() {
       );
     }
     return [
-      <MenuItem key="profile-item">
+      <MenuItem key="profile-item" onClick={handleProfileClick}>
         {intl.formatMessage(navMessages.profileButtonText)}
       </MenuItem>,
       <MenuItem key="logout-item" onClick={handleLogout}>

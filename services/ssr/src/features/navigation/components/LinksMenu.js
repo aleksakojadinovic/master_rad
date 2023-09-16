@@ -31,7 +31,14 @@ function LinksMenu() {
 
   const renderMenuItems = () => {
     return configuration.map(({ id, href, translation }) => (
-      <MenuItem key={id} href={href} disabled={router.pathname === href}>
+      <MenuItem
+        key={id}
+        disabled={router.pathname === href}
+        onClick={() => {
+          router.push(href);
+          setMenuAnchorRef(null);
+        }}
+      >
         {intl.formatMessage(translation)}
       </MenuItem>
     ));

@@ -3,7 +3,7 @@ import { Autocomplete, TextField } from '@mui/material';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-function RolePicker({ roles, onSelect }) {
+function RolePicker({ roles, onSelect, inputSize = 'small' }) {
   const intl = useIntl();
   const options = roles.map((name, index) => ({
     id: index,
@@ -17,9 +17,8 @@ function RolePicker({ roles, onSelect }) {
       options={options}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       getOptionLabel={({ label }) => label}
-      renderInput={(props) => <TextField {...props} size="small" />}
+      renderInput={(props) => <TextField {...props} size={inputSize} />}
       onChange={(_e, val) => {
-        console.log({ roles, val });
         const selectedRole = roles.find(
           (role) => role === val.label.toLowerCase(),
         );

@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { AutoMap } from '@automapper/classes';
 import { Role } from '../../domain/value-objects/role';
+import { UserStatus } from '../../domain/value-objects/user-status';
 
 @Schema({ collection: 'users' })
 export class UserDb {
@@ -26,6 +27,9 @@ export class UserDb {
 
   @Prop({ type: [{ type: String }] })
   firebaseTokens: string[];
+
+  @Prop({ type: String })
+  status: UserStatus;
 }
 
 export const UserSchema = SchemaFactory.createForClass<UserDb>(UserDb);

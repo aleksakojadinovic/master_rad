@@ -25,7 +25,17 @@ export const getStringPreview = (str, maxLen = 20) => {
 };
 
 export const wrapUser = (user) => {
-  const { id, email, firstName, lastName, fullName, initials, role } = user ?? {
+  const {
+    id,
+    email,
+    username,
+    firstName,
+    lastName,
+    fullName,
+    initials,
+    role,
+    status,
+  } = user ?? {
     id: null,
     username: '',
     firstName: '',
@@ -33,6 +43,7 @@ export const wrapUser = (user) => {
     fullName: '',
     initials: '//',
     role: '',
+    status: '',
   };
 
   const isLoggedIn = !!user;
@@ -49,9 +60,14 @@ export const wrapUser = (user) => {
   const isCustomer = role === 'customer';
   const isAdministrator = role === 'administrator';
 
+  const isActive = status === 'ACTIVE';
+  const isRegistered = status === 'REGISTERED';
+  const isBanned = status === 'BANNED';
+
   return {
     id,
     email,
+    username,
     firstName,
     lastName,
     fullName,
@@ -63,5 +79,9 @@ export const wrapUser = (user) => {
     isCustomer,
     hasRole,
     hasAnyRole,
+    isActive,
+    isRegistered,
+    isBanned,
+    status,
   };
 };

@@ -9,6 +9,7 @@ import {
 import { Injectable } from '@nestjs/common';
 import { User } from '../../domain/entities/user.entity';
 import { UserDb } from '../schema/user.schema';
+import { USER_STATUS_VALUES } from '../../domain/value-objects/user-status';
 
 // Maps DB object to domain object
 @Injectable()
@@ -52,6 +53,12 @@ export class UserEntityProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.firebaseTokens,
           mapFrom((source) => source.firebaseTokens),
+        ),
+        forMember(
+          (destination) => destination.status,
+          mapFrom(
+            (source) => USER_STATUS_VALUES[source.status?.toString()] ?? '',
+          ),
         ),
       );
     };

@@ -5,9 +5,15 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { UserDb } from './schema/user.schema';
 import { User } from '../domain/entities/user.entity';
+import { PaginatedValue } from 'src/codebase/types/PaginatedValue';
+import { createPaginatedResponse } from 'src/codebase/utils';
+import { Role } from '../domain/value-objects/role';
+import { UserStatus } from '../domain/value-objects/user-status';
+import * as bcrypt from 'bcrypt';
 
 export type UsersQuery = {
   roles?: string[] | null;
+  statuses?: string[] | null;
   search?: string | null;
   page?: number;
   perPage?: number;
@@ -25,19 +31,33 @@ export class UsersRepository {
 
   async findAll({
     roles = null,
+    statuses = null,
     search = null,
     page = 1,
     perPage = 100,
     includePassword = false,
-  }: UsersQuery): Promise<User[]> {
+  }: UsersQuery): Promise<PaginatedValue<User>> {
     const query = this.userModel.find({});
+    const countQuery = this.userModel.find({});
 
     if (roles && roles.length > 0) {
       query.where({ role: { $in: roles } });
+      countQuery.where({ role: { $in: roles } });
+    }
+
+    if (statuses && statuses.length > 0) {
+      query.where({ status: { $in: statuses } });
+      countQuery.where({ status: { $in: statuses } });
     }
 
     if (search && search.trim().length > 0) {
       query.where({
+        $or: [
+          { firstName: { $regex: new RegExp(search, 'i') } },
+          { lastName: { $regex: new RegExp(search, 'i') } },
+        ],
+      });
+      countQuery.where({
         $or: [
           { firstName: { $regex: new RegExp(search, 'i') } },
           { lastName: { $regex: new RegExp(search, 'i') } },
@@ -54,9 +74,13 @@ export class UsersRepository {
     }
 
     query.populate(UsersRepository.POPULATE);
+    const [result, count] = await Promise.all([
+      query.exec(),
+      countQuery.countDocuments(),
+    ]);
 
-    const result = await query.exec();
-    return this.mapper.mapArray(result, UserDb, User);
+    const users = this.mapper.mapArray(result, UserDb, User);
+    return createPaginatedResponse(users, page, perPage, count);
   }
 
   async findByUsername(
@@ -115,5 +139,20 @@ export class UsersRepository {
         $pull: { firebaseTokens: token },
       },
     );
+  }
+
+  async updateRole(id: string, role: Role) {
+    await this.userModel.updateOne({ _id: id }, { role });
+    return Promise.resolve();
+  }
+
+  async updateStatus(id: string, status: UserStatus) {
+    await this.userModel.updateOne({ _id: id }, { status });
+    return Promise.resolve();
+  }
+
+  async changePassword(id: string, newPassword: string) {
+    const hash = await bcrypt.hash(newPassword, 10);
+    await this.userModel.updateOne({ _id: id }, { passwordHash: hash });
   }
 }

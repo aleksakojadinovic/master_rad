@@ -6,4 +6,5 @@ export class UserDTO {
   fullName: string;
   initials: string;
   role: string;
+  status: string;
 }

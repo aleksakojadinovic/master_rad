@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { parse } from 'accept-language-parser';
+import { PaginatedValue } from './types/PaginatedValue';
 
 export function resolveLanguageCode(req: Request) {
   const headerValue = req.headers['accept-language'];
@@ -16,4 +17,19 @@ export function resolveLanguageCode(req: Request) {
   }
 
   return parsedLanguages[0].code;
+}
+
+export function createPaginatedResponse<T>(
+  entities: T[],
+  page: number,
+  perPage: number,
+  count: number,
+): PaginatedValue<T> {
+  return {
+    entities,
+    page,
+    perPage,
+    totalEntities: count,
+    totalPages: Math.ceil(count / perPage),
+  };
 }
