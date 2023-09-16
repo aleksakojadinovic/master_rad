@@ -39,9 +39,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const roles =
       params.roles && ROLES.includes(params.roles) ? params.roles : null;
 
-    const search =
-      params.search && params.search.trim().length > 0
-        ? params.search.trim()
+    const searchString =
+      params.searchString && params.searchString.trim().length > 0
+        ? params.searchString.trim()
         : null;
 
     const queryParams = {};
@@ -51,8 +51,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (roles) {
       queryParams.roles = roles;
     }
-    if (search) {
-      queryParams.search = search;
+    if (searchString) {
+      queryParams.searchString = searchString;
     }
 
     return { props: { queryParams } };

@@ -4,16 +4,14 @@ import Head from 'next/head';
 import React, { Fragment } from 'react';
 import { useIntl } from 'react-intl';
 import UsersTable from './components/UsersTable';
-import { Box, TextField } from '@mui/material';
+import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
-import { globalMessages } from '@/translations/global';
 import RoleFilter from './components/RoleFilter';
+import SearchBox from './components/SearchBox';
 
 function ManageUsers({ queryParams }) {
   const intl = useIntl();
   const router = useRouter();
-
-  console.log({ queryParams });
 
   const { data, isSuccess } = useGetUsersQuery(queryParams);
 
@@ -48,6 +46,17 @@ function ManageUsers({ queryParams }) {
     handleParamsChange(newQueryParams);
   };
 
+  const handleSearchChange = (search) => {
+    const resolvedSearchValue = search.trim() || null;
+    const newQueryParams = {
+      ...queryParams,
+      searchString: resolvedSearchValue,
+      page: 1,
+    };
+
+    handleParamsChange(newQueryParams);
+  };
+
   return (
     <Fragment>
       <Head>
@@ -55,10 +64,9 @@ function ManageUsers({ queryParams }) {
       </Head>
 
       <Box marginBottom="12px" display="flex" flexWrap="wrap" gap="12px">
-        <TextField
-          placeholder={intl.formatMessage(globalMessages.search)}
-          size="small"
-          value={queryParams.search}
+        <SearchBox
+          value={queryParams.searchString}
+          onChange={handleSearchChange}
         />
         <RoleFilter value={queryParams.roles} onChange={handleRoleChange} />
       </Box>

@@ -44,7 +44,6 @@ const redirect = ({ res }, url) => {
     res.writeHead(307, { Location: url });
     res.end();
   } else {
-    console.log('clie');
     Router.replace(url);
   }
 };

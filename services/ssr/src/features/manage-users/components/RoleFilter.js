@@ -9,14 +9,15 @@ function RoleFilter({ value, onChange }) {
   return (
     <Autocomplete
       size="small"
-      options={ROLES.map((role) => ({ label: role }))}
+      options={ROLES}
       value={value}
       onChange={(_event, newRole) => {
-        onChange(newRole?.label ?? null);
+        onChange(newRole ?? null);
       }}
       renderInput={(params) => (
         <TextField
           {...params}
+          sx={{ minWidth: '220px' }}
           variant="outlined"
           size="small"
           label={intl.formatMessage(globalMessages.roles)}
