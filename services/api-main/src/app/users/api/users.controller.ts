@@ -84,6 +84,7 @@ export class UsersController {
           throw new BadRequestException('Bad role');
         }
         await this.usersService.updateRole(id, user, ROLE_VALUES[role]);
+        return;
       default:
         throw new BadRequestException('Unknown action');
     }

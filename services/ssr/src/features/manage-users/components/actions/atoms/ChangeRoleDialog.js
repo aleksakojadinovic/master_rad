@@ -16,6 +16,10 @@ import RoleChip from '../../table/atoms/RoleChip';
 import AreYouSureDialog from '@/components/AreYouSure/AreYouSureDialog';
 import { ROLE_CHANGE_MAP } from '@/features/manage-users/constants/role-map';
 import { rolesMessages } from '@/translations/roles';
+import { useChangeRoleMutation } from '@/api/users';
+import ServerActionSnackbar from '@/components/ServerActionSnackbar/ServerActionSnackbar';
+import { queryStatusMessages } from '@/translations/query-statuses';
+import { globalMessages } from '@/translations/global';
 
 function ChangeRoleDialog({ user, open, onClose }) {
   const intl = useIntl();
@@ -47,13 +51,27 @@ function ChangeRoleDialog({ user, open, onClose }) {
       ? intl.formatMessage(cannotChangeRoleNotesMessages[role])
       : intl.formatMessage(cannotChangeRoleNotesMessages.default);
 
+  const [changeRole, { isSuccess, isError, isLoading, error }] =
+    useChangeRoleMutation();
+
   const handleChangeRole = () => {
+    changeRole({ userId: user.id, role: chosenRole });
     setChosenRole(null);
     onClose();
   };
 
   return (
     <Fragment>
+      <ServerActionSnackbar
+        error={error}
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        isError={isError}
+        successMessage={intl.formatMessage(
+          queryStatusMessages.updateSuccessfulX,
+          { x: intl.formatMessage(globalMessages.user) },
+        )}
+      />
       <AreYouSureDialog
         open={chosenRole !== null}
         onClose={() => setChosenRole(null)}
@@ -61,6 +79,7 @@ function ChangeRoleDialog({ user, open, onClose }) {
         title={title}
         body={body}
       />
+
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>
           {intl.formatMessage(manageUsersMessages.changeRoleTitle)}
