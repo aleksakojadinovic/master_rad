@@ -35,6 +35,14 @@ function ManageUsers({ queryParams }) {
     handleParamsChange(newQueryParams);
   };
 
+  const DEFAULT_VALUE = {
+    entities: [],
+    page: 0,
+    perPage: 5,
+    totalEntities: 0,
+    totalPages: 0,
+  };
+
   return (
     <Fragment>
       <Head>
@@ -42,13 +50,11 @@ function ManageUsers({ queryParams }) {
       </Head>
 
       <UserFilters value={queryParams} onChange={handleParamsChange} />
-      {isSuccess && (
-        <UsersTable
-          data={data}
-          onPageChange={handlePageChange}
-          onPerPageChange={handlePerPageChange}
-        />
-      )}
+      <UsersTable
+        data={data ?? DEFAULT_VALUE}
+        onPageChange={handlePageChange}
+        onPerPageChange={handlePerPageChange}
+      />
     </Fragment>
   );
 }

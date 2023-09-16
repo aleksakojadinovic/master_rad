@@ -49,15 +49,17 @@ function UsersTable({ data, onPageChange, onPerPageChange }) {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        component="div"
-        count={totalEntities}
-        page={page - 1}
-        onPageChange={handleChangePage}
-        rowsPerPage={perPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={[5, 10, 20, 50]}
-      />
+      {totalEntities > 0 && (
+        <TablePagination
+          component="div"
+          count={totalEntities}
+          page={page - 1}
+          onPageChange={handleChangePage}
+          rowsPerPage={perPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 20, 50]}
+        />
+      )}
     </Paper>
   );
 }
