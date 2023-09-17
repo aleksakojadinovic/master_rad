@@ -72,6 +72,21 @@ services:
     volumes:
       - ./services/etl/scripts:/app/scripts
 
+  analytics:
+    container_name: analytics-local
+    build:
+      context: ./services/analytics
+      dockerfile: ./Dockerfile
+    ports:
+      - "3004:8501"
+    environment:
+      MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
+      MAIN_DB_PWD: ${MAIN_DB_PWD}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./services/analytics:/app
+
   seeder:
     container_name: seeder
     build:
