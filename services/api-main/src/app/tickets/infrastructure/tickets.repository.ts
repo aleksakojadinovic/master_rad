@@ -11,6 +11,7 @@ import {
   TicketHistoryEntryBodyChanged,
   TicketHistoryEntryCommentAdded,
   TicketHistoryEntryCommentChanged,
+  TicketHistoryEntryCommentDeleted,
   TicketHistoryEntryCreated,
   TicketHistoryEntryStatusChanged,
   TicketHistoryEntryTagsChanged,
@@ -182,6 +183,19 @@ export class TicketsRepository {
       comment.commentId,
       comment.body,
     );
+    document.history.push(item);
+    await document.save();
+    await document.populate(TicketsRepository.POPULATE);
+    return this.mapper.map(document, TicketDb, Ticket);
+  }
+
+  async deleteComment(ticket: Ticket, comment: TicketComment, user: User) {
+    const document = await this.ticketModel.findById(ticket.id);
+    const item = new TicketHistoryItem();
+    item.initiator = user.id as unknown as UserDb;
+    item.timestamp = new Date();
+    item.type = TicketHistoryEntryType.COMMENT_DELETED;
+    item.payload = new TicketHistoryEntryCommentDeleted(comment.commentId);
     document.history.push(item);
     await document.save();
     await document.populate(TicketsRepository.POPULATE);

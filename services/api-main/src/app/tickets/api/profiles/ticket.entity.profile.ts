@@ -83,33 +83,52 @@ export class TicketEntityProfile extends AutomapperProfile {
               return [];
             }
 
-            return commentItems.map((item) => {
-              const payload = item.payload as TicketHistoryEntryCommentAdded;
+            return commentItems
+              .map((item) => {
+                const payload = item.payload as TicketHistoryEntryCommentAdded;
 
-              const changes = source.history.filter(
-                (changeItem) =>
-                  changeItem.type === TicketHistoryEntryType.COMMENT_CHANGED &&
-                  (changeItem.payload as TicketHistoryEntryCommentChanged)
-                    .commentId === payload.commentId,
-              );
+                const deletes = source.history.filter(
+                  (deleteItem) =>
+                    deleteItem.type ===
+                      TicketHistoryEntryType.COMMENT_CHANGED &&
+                    (deleteItem.payload as TicketHistoryEntryCommentChanged)
+                      .commentId === payload.commentId,
+                );
 
-              const comment = new TicketComment();
+                const wasDeleted = deletes.length > 0;
 
-              const lastChange =
-                changes.length > 0 ? changes[changes.length - 1] : null;
+                if (wasDeleted) {
+                  return null;
+                }
 
-              const lastChangePayload = lastChange
-                ? (lastChange.payload as TicketHistoryEntryCommentChanged)
-                : null;
+                const changes = source.history.filter(
+                  (changeItem) =>
+                    changeItem.type ===
+                      TicketHistoryEntryType.COMMENT_CHANGED &&
+                    (changeItem.payload as TicketHistoryEntryCommentChanged)
+                      .commentId === payload.commentId,
+                );
 
-              comment.body = lastChange ? lastChangePayload.body : payload.body;
-              comment.commentId = payload.commentId;
-              comment.isInternal = payload.isInternal;
-              comment.user = mapper.map(item.initiator, UserDb, User);
-              comment.timestamp = item.timestamp;
-              comment.dateUpdated = lastChange ? lastChange.timestamp : null;
-              return comment;
-            });
+                const comment = new TicketComment();
+
+                const lastChange =
+                  changes.length > 0 ? changes[changes.length - 1] : null;
+
+                const lastChangePayload = lastChange
+                  ? (lastChange.payload as TicketHistoryEntryCommentChanged)
+                  : null;
+
+                comment.body = lastChange
+                  ? lastChangePayload.body
+                  : payload.body;
+                comment.commentId = payload.commentId;
+                comment.isInternal = payload.isInternal;
+                comment.user = mapper.map(item.initiator, UserDb, User);
+                comment.timestamp = item.timestamp;
+                comment.dateUpdated = lastChange ? lastChange.timestamp : null;
+                return comment;
+              })
+              .filter((comment) => !!comment);
           }),
         ),
         forMember(

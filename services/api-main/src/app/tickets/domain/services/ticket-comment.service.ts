@@ -61,7 +61,22 @@ export class TicketsCommentService extends BaseService {
     return updatedTicket;
   }
 
-  deleteComment(ticketId: string, user: User, commentId: string) {
-    throw new Error('Method not implemented.');
+  async deleteComment(id: string, user: User, commentId: string) {
+    const ticket = await this.ticketsRepository.findById(id);
+
+    if (!ticket) {
+      throw new TicketNotFoundError(id);
+    }
+
+    const comment = this.findAndProtectComment(ticket, user, commentId);
+
+    const updatedTicket = await this.ticketsRepository.deleteComment(
+      ticket,
+      comment,
+      user,
+    );
+
+    this.ticketRedactionService.prepareTicketResponse(updatedTicket, user);
+    return updatedTicket;
   }
 }
