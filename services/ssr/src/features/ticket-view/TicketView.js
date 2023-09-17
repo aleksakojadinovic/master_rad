@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Box, Divider, Typography } from '@mui/material';
+import {
+  Box,
+  CardHeader,
+  Divider,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import TicketAssigneeSection from './sections/TicketAssigneeSection';
 import TicketTitleSection from './sections/TicketTitleSection';
 import TicketTagSection from './sections/TicketTagSection';
@@ -15,11 +21,21 @@ import { queryStatusMessages } from '@/translations/query-statuses';
 import { globalMessages } from '@/translations/global';
 import StickyPanel from './components/StickyPanel/StickyPanel';
 
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import useUser from '@/hooks/useUser';
+
 export default function TicketView({ ticket }) {
   const intl = useIntl();
+
+  const { id } = useUser();
+
   const [, { error, isLoading, isSuccess, isError }] = useUpdateTicketMutation({
     fixedCacheKey: 'ticket-view-page',
   });
+
+  const isOwner = ticket.createdBy.id == id;
+
   return (
     <Box id="ticket-view">
       <StickyPanel />
@@ -45,7 +61,26 @@ export default function TicketView({ ticket }) {
         <TicketStatusSection ticket={ticket} />
         <Divider />
         <CardContent>
-          <Typography variant="body1">{ticket.body}</Typography>
+          {isOwner && (
+            <CardHeader
+              action={
+                <Fragment>
+                  <IconButton>
+                    <EditIcon />
+                  </IconButton>
+                </Fragment>
+              }
+            />
+          )}
+          <Typography
+            variant="body1"
+            style={{
+              whiteSpace: 'pre-wrap',
+              wordWrap: 'break-word',
+            }}
+          >
+            {ticket.body}
+          </Typography>
         </CardContent>
         <CardContent>
           <TicketTimelineSection ticket={ticket} />
