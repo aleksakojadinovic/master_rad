@@ -30,14 +30,14 @@ import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../domain/error
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { Ticket } from '../domain/entities/ticket.entity';
 import { UpdateCommentDTO } from './dto/update-comment.dto';
-import { TicketsCommentService } from '../domain/services/ticket-comment.service';
+import { TicketCommentService } from '../domain/services/ticket-comment.service';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
 export class TicketsController extends BaseController {
   constructor(
     private readonly ticketsService: TicketsService,
-    private readonly ticketsCommentService: TicketsCommentService,
+    private readonly ticketsCommentService: TicketCommentService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {
     super();

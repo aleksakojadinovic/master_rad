@@ -10,7 +10,7 @@ import { UsersModule } from 'src/app/users/users.module';
 import { TicketTagSystemModule } from '../ticket-tag-system/ticket-tag-system.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { TicketsRepository } from './infrastructure/tickets.repository';
-import { TicketsCommentService } from './domain/services/ticket-comment.service';
+import { TicketCommentService } from './domain/services/ticket-comment.service';
 import { TicketsRedactionService } from './domain/services/ticket-redacation.service';
 
 @Module({
@@ -24,7 +24,7 @@ import { TicketsRedactionService } from './domain/services/ticket-redacation.ser
   controllers: [TicketsController],
   providers: [
     TicketsService,
-    TicketsCommentService,
+    TicketCommentService,
     TicketsRedactionService,
     TicketsRepository,
   ],

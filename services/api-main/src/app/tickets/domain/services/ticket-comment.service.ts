@@ -11,7 +11,7 @@ import { Ticket } from '../entities/ticket.entity';
 import { TicketsRedactionService } from './ticket-redacation.service';
 
 @Injectable()
-export class TicketsCommentService extends BaseService {
+export class TicketCommentService extends BaseService {
   constructor(
     @InjectMapper() private readonly mapper: Mapper,
     private ticketRedactionService: TicketsRedactionService,
