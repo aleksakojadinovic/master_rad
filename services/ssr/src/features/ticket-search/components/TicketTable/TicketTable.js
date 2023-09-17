@@ -14,14 +14,11 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import { agentDashboardMessages } from '@/translations/agent-dashboard';
+import { formatDate } from '@/utils';
 
 export function TicketTable({ tickets, isEmpty = false }) {
   const intl = useIntl();
   const theme = useTheme();
-
-  const renderRowHeaderTitle = (title) => (
-    <Typography variant="body1">{title}</Typography>
-  );
 
   if (isEmpty) {
     return (
@@ -49,29 +46,34 @@ export function TicketTable({ tickets, isEmpty = false }) {
         <TableHead>
           <TableRow>
             <TableCell>
-              {renderRowHeaderTitle(
-                intl.formatMessage(ticketSearchMessages.titleCreatedBy),
-              )}
+              <Typography variant="body1">
+                {intl.formatMessage(ticketSearchMessages.titleCreatedBy)}
+              </Typography>
             </TableCell>
             <TableCell>
-              {renderRowHeaderTitle(
-                intl.formatMessage(ticketSearchMessages.titleTicketTitle),
-              )}
+              <Typography variant="body1">
+                {intl.formatMessage(ticketSearchMessages.titleTicketTitle)}
+              </Typography>
             </TableCell>
             <TableCell align="center">
-              {renderRowHeaderTitle(
-                intl.formatMessage(ticketSearchMessages.titleStatus),
-              )}
+              <Typography variant="body1">
+                {intl.formatMessage(ticketSearchMessages.titleStatus)}
+              </Typography>
             </TableCell>
             <TableCell align="center">
-              {renderRowHeaderTitle(
-                intl.formatMessage(ticketSearchMessages.titleActions),
-              )}
+              <Typography variant="body1">
+                {intl.formatMessage(ticketSearchMessages.titleActions)}
+              </Typography>
             </TableCell>
             <TableCell align="center">
-              {renderRowHeaderTitle(
-                intl.formatMessage(ticketSearchMessages.titleAssignees),
-              )}
+              <Typography variant="body1">
+                {intl.formatMessage(ticketSearchMessages.titleAssignees)}
+              </Typography>
+            </TableCell>
+            <TableCell align="center">
+              <Typography variant="body1">
+                {intl.formatMessage(ticketSearchMessages.titleDate)}
+              </Typography>
             </TableCell>
           </TableRow>
         </TableHead>
@@ -103,6 +105,11 @@ export function TicketTable({ tickets, isEmpty = false }) {
                     <UserChip user={user} />
                   </Box>
                 ))}
+              </TableCell>
+              <TableCell align="center">
+                <Typography variant="body1">
+                  {formatDate(ticket.createdAt, intl)}
+                </Typography>
               </TableCell>
             </TableRow>
           ))}
