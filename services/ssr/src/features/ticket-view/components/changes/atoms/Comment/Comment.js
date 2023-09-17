@@ -56,7 +56,12 @@ export default function Comment({ item: comment, ticket }) {
 
   const [
     deleteComment,
-    { isDeleteLoading, isDeleteSuccess, isDeleteError, deleteError },
+    {
+      isLoading: isDeleteLoading,
+      isSuccess: isDeleteSuccess,
+      isError: isDeleteError,
+      error: deleteError,
+    },
   ] = useDeleteCommentMutation();
 
   const handleDeleteComment = () => {
