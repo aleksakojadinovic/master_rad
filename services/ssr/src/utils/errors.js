@@ -5,5 +5,5 @@ export const resolveErrorMessage = (intl, error) => {
     return intl.formatMessage(apiErrorMessages.generic);
   }
 
-  return intl.formatMessage(apiErrorMessages[error.errorType]);
+  return intl.formatMessage(apiErrorMessages[error.errorType], error.payload);
 };

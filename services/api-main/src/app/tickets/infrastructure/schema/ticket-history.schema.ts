@@ -6,6 +6,8 @@ export enum TicketHistoryEntryType {
   BODY_CHANGED = 'BODY_CHANGED',
   STATUS_CHANGED = 'STATUS_CHANGED',
   COMMEND_ADDED = 'COMMEND_ADDED',
+  COMMENT_CHANGED = 'COMMENT_CHANGED',
+  COMMENT_DELETED = 'COMMENT_DELETED',
   ASSIGNEES_CHANGED = 'ASSIGNEES_CHANGED',
   TAGS_CHANGED = 'TAGS_CHANGED',
 }
@@ -49,6 +51,14 @@ export class TicketHistoryEntryTagsChanged {
   constructor(public tags: TicketTagDb[]) {}
 }
 
+export class TicketHistoryEntryCommentChanged {
+  constructor(public commentId: string, public body: string) {}
+}
+
+export class TicketHistoryEntryCommentDeleted {
+  constructor(public commentId: string) {}
+}
+
 export class TicketHistoryItem {
   timestamp: Date;
   initiator: UserDb;
@@ -60,7 +70,9 @@ export class TicketHistoryItem {
     | TicketHistoryEntryTitleChanged
     | TicketHistoryEntryBodyChanged
     | TicketHistoryEntryAssigneesChanged
-    | TicketHistoryEntryTagsChanged;
+    | TicketHistoryEntryTagsChanged
+    | TicketHistoryEntryCommentChanged
+    | TicketHistoryEntryCommentDeleted;
 }
 
 export const TicketHistoryItemSchemaType = {

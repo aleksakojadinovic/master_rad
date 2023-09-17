@@ -42,7 +42,7 @@ function Notification({ notification }) {
       <Card sx={cardStyles}>
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {formatDate(notification.createdAt)}
+            {formatDate(notification.createdAt, intl)}
           </Typography>
           <Typography variant="h5" component="div">
             {title}

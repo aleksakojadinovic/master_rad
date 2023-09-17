@@ -6,5 +6,6 @@ export class CommentDTO {
   user: UserDTO | string;
   body: string;
   timestamp: Date;
+  updatedAt: Date;
   isInternal: boolean;
 }

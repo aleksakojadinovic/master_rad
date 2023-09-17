@@ -12,7 +12,7 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import { TicketsService } from '../domain/services/tickets.service';
+import { TicketService } from '../domain/services/ticket.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -29,12 +29,15 @@ import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../domain/errors/NotAllowedToSearchOthersTicketsAsACustomer';
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { Ticket } from '../domain/entities/ticket.entity';
+import { UpdateCommentDTO } from './dto/update-comment.dto';
+import { TicketCommentService } from '../domain/services/ticket-comment.service';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
 export class TicketsController extends BaseController {
   constructor(
-    private readonly ticketsService: TicketsService,
+    private readonly ticketsService: TicketService,
+    private readonly ticketsCommentService: TicketCommentService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {
     super();
@@ -97,8 +100,36 @@ export class TicketsController extends BaseController {
     return this.mapper.map(ticket, Ticket, TicketDTO);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketsService.remove(+id);
+  @Patch(':id/comment/:commentId/update')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async updateComment(
+    @Param('id') ticketId: string,
+    @Param('commentId') commentId: string,
+    @Body() dto: UpdateCommentDTO,
+    @GetUserInfo() user: User,
+  ) {
+    const ticket = await this.ticketsCommentService.updateComment(
+      ticketId,
+      user,
+      commentId,
+      dto.body,
+    );
+
+    return this.mapper.map(ticket, Ticket, TicketDTO);
+  }
+
+  @Delete(':id/comment/:commentId/delete')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async deleteComment(
+    @Param('id') ticketId: string,
+    @Param('commentId') commentId: string,
+    @GetUserInfo() user: User,
+  ) {
+    const ticket = await this.ticketsCommentService.deleteComment(
+      ticketId,
+      user,
+      commentId,
+    );
+    return this.mapper.map(ticket, Ticket, TicketDTO);
   }
 }

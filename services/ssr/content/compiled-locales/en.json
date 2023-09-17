@@ -1,14 +1,98 @@
 {
+  "admin-link.metrics": [
+    {
+      "type": 0,
+      "value": "Metrics"
+    }
+  ],
+  "admin-links.home-page": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
+  "admin-links.tags": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "admin-links.tickets-search": [
+    {
+      "type": 0,
+      "value": "Search"
+    }
+  ],
+  "admin-links.users": [
+    {
+      "type": 0,
+      "value": "Users"
+    }
+  ],
+  "agent-dashboard.empty-state": [
+    {
+      "type": 0,
+      "value": "Nothing to see here"
+    }
+  ],
+  "agent-dashboard.my-in-progress": [
+    {
+      "type": 0,
+      "value": "In-progress tickets assigned to you"
+    }
+  ],
+  "agent-dashboard.my-open": [
+    {
+      "type": 0,
+      "value": "Open tickets assigned to you"
+    }
+  ],
+  "agent-dashboard.new-today": [
+    {
+      "type": 0,
+      "value": "New tickets today"
+    }
+  ],
+  "agent-dashboard.section-title-triage": [
+    {
+      "type": 0,
+      "value": "Triage - new tickets today"
+    }
+  ],
   "agent-dashboard.title": [
     {
       "type": 0,
-      "value": "Dashboard"
+      "value": "Agent Dashboard | STS"
+    }
+  ],
+  "agent-links.home-page": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
+  "agent-links.tickets-search": [
+    {
+      "type": 0,
+      "value": "Search"
     }
   ],
   "api-errors.cannot-assign-customer": [
     {
       "type": 0,
       "value": "You cannot assign a customer to a ticket."
+    }
+  ],
+  "api-errors.cannot-change-your-role": [
+    {
+      "type": 0,
+      "value": "You are not allowed to change your own role."
+    }
+  ],
+  "api-errors.cannot-change-your-status": [
+    {
+      "type": 0,
+      "value": "You are not allowed to change your own status."
     }
   ],
   "api-errors.duplicate-assignee": [
@@ -29,10 +113,46 @@
       "value": "A tag group with this name already exists."
     }
   ],
+  "api.errors.old-password-invalid": [
+    {
+      "type": 0,
+      "value": "Old password is incorrect."
+    }
+  ],
   "assign.form-title": [
     {
       "type": 0,
       "value": "Assign someone"
+    }
+  ],
+  "change-password.cta": [
+    {
+      "type": 0,
+      "value": "Confirm"
+    }
+  ],
+  "change-password.new-password-title": [
+    {
+      "type": 0,
+      "value": "New password"
+    }
+  ],
+  "change-password.old-password-title": [
+    {
+      "type": 0,
+      "value": "Old password"
+    }
+  ],
+  "change-password.repeat-password-title": [
+    {
+      "type": 0,
+      "value": "Repeat password"
+    }
+  ],
+  "change-password.successfully-changed": [
+    {
+      "type": 0,
+      "value": "Password successfully changed"
     }
   ],
   "click-here": [
@@ -41,10 +161,10 @@
       "value": "here"
     }
   ],
-  "comments.add-comment-placeholder": [
+  "create-ticket.page-head-title": [
     {
       "type": 0,
-      "value": "Add a comment."
+      "value": "Create a ticket | STS"
     }
   ],
   "create-ticket.success": [
@@ -73,6 +193,48 @@
       "value": "Title of your issue"
     }
   ],
+  "customer-dashboard.create-new": [
+    {
+      "type": 0,
+      "value": "Create a new ticket"
+    }
+  ],
+  "customer-dashboard.need-help": [
+    {
+      "type": 0,
+      "value": "Need help?"
+    }
+  ],
+  "customer-dashboard.page-head-title": [
+    {
+      "type": 0,
+      "value": "Customer dashboard | STS"
+    }
+  ],
+  "customer-dashboard.your-active-tickets": [
+    {
+      "type": 0,
+      "value": "Your active tickets"
+    }
+  ],
+  "customer-links.contact-us": [
+    {
+      "type": 0,
+      "value": "Contact us"
+    }
+  ],
+  "customer-links.home-page": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
+  "customer-links.new-ticket": [
+    {
+      "type": 0,
+      "value": "Create a new ticket"
+    }
+  ],
   "dialog.close": [
     {
       "type": 0,
@@ -97,6 +259,12 @@
       "value": "Operation successful"
     }
   ],
+  "forms.cancel": [
+    {
+      "type": 0,
+      "value": "Cancel"
+    }
+  ],
   "forms.page": [
     {
       "type": 0,
@@ -107,6 +275,18 @@
     {
       "type": 0,
       "value": "Per page"
+    }
+  ],
+  "forms.reset": [
+    {
+      "type": 0,
+      "value": "Reset all filters"
+    }
+  ],
+  "forms.save": [
+    {
+      "type": 0,
+      "value": "Save"
     }
   ],
   "forms.search": [
@@ -125,6 +305,12 @@
     {
       "type": 0,
       "value": "Cancel"
+    }
+  ],
+  "global.comment": [
+    {
+      "type": 0,
+      "value": "comment"
     }
   ],
   "global.delete": [
@@ -169,10 +355,22 @@
       "value": "Page not found | STS"
     }
   ],
+  "global.open": [
+    {
+      "type": 0,
+      "value": "Open"
+    }
+  ],
   "global.roles": [
     {
       "type": 0,
       "value": "Roles"
+    }
+  ],
+  "global.rows-per-page": [
+    {
+      "type": 0,
+      "value": "Per page"
     }
   ],
   "global.save": [
@@ -181,16 +379,56 @@
       "value": "Save"
     }
   ],
+  "global.search": [
+    {
+      "type": 0,
+      "value": "Search"
+    }
+  ],
+  "global.status": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "global.support-email": [
+    {
+      "type": 0,
+      "value": "support@example.com"
+    }
+  ],
   "global.ticket": [
     {
       "type": 0,
       "value": "ticket"
     }
   ],
+  "global.time-at": [
+    {
+      "type": 0,
+      "value": "at"
+    }
+  ],
   "global.title": [
     {
       "type": 0,
       "value": "Title"
+    }
+  ],
+  "global.user": [
+    {
+      "type": 0,
+      "value": "user"
+    }
+  ],
+  "global.welcome-back": [
+    {
+      "type": 0,
+      "value": "Welcome back, "
+    },
+    {
+      "type": 1,
+      "value": "user"
     }
   ],
   "global.yes": [
@@ -299,6 +537,142 @@
       "value": "Successfully updated tags!"
     }
   ],
+  "manage-users.actions-table-header": [
+    {
+      "type": 0,
+      "value": "Actions"
+    }
+  ],
+  "manage-users.change-role-are-you-sure": [
+    {
+      "type": 0,
+      "value": "Are you sure you want to change "
+    },
+    {
+      "type": 1,
+      "value": "name"
+    },
+    {
+      "type": 0,
+      "value": " from "
+    },
+    {
+      "type": 1,
+      "value": "OldRole"
+    },
+    {
+      "type": 0,
+      "value": " to "
+    },
+    {
+      "type": 1,
+      "value": "NewRole"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "manage-users.change-role-title": [
+    {
+      "type": 0,
+      "value": "Change role"
+    }
+  ],
+  "manage-users.change-role-wraning": [
+    {
+      "type": 0,
+      "value": "This may expose user to info that was previously considered private for them. You also may not be able to undo this action yourself depending on your role."
+    }
+  ],
+  "manage-users.change-roles-customer-note": [
+    {
+      "type": 0,
+      "value": "Customers cannot change their role for security reasons. If a customer became an agent please create a new account for them."
+    }
+  ],
+  "manage-users.change-roles-default-note": [
+    {
+      "type": 0,
+      "value": "No roles available for this type of user."
+    }
+  ],
+  "manage-users.change-status-are-you-sure": [
+    {
+      "type": 0,
+      "value": "Are you sure you want to change "
+    },
+    {
+      "type": 1,
+      "value": "name"
+    },
+    {
+      "type": 0,
+      "value": " from "
+    },
+    {
+      "type": 1,
+      "value": "OldStatus"
+    },
+    {
+      "type": 0,
+      "value": " to "
+    },
+    {
+      "type": 1,
+      "value": "NewStatus"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "manage-users.change-status-title": [
+    {
+      "type": 0,
+      "value": "Change status"
+    }
+  ],
+  "manage-users.change-status-wraning": [
+    {
+      "type": 0,
+      "value": "This may enable or disable the user to use some services."
+    }
+  ],
+  "manage-users.change-to": [
+    {
+      "type": 0,
+      "value": "Change to "
+    },
+    {
+      "type": 1,
+      "value": "what"
+    }
+  ],
+  "manage-users.full-name-table-header": [
+    {
+      "type": 0,
+      "value": "Full Name"
+    }
+  ],
+  "manage-users.page-title": [
+    {
+      "type": 0,
+      "value": "Manage Users | STS"
+    }
+  ],
+  "manage-users.role-table-header": [
+    {
+      "type": 0,
+      "value": "Role"
+    }
+  ],
+  "manage-users.status-table-header": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
   "nav.login-button-text": [
     {
       "type": 0,
@@ -377,10 +751,82 @@
       "value": "Preview not available"
     }
   ],
+  "profile.change-password-section-title": [
+    {
+      "type": 0,
+      "value": "Change your password"
+    }
+  ],
+  "profile.inactive-alert-title": [
+    {
+      "type": 0,
+      "value": "You account seems to be inactive. If you think this is a mistake, contact us at "
+    },
+    {
+      "type": 1,
+      "value": "ContactLink"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "profile.name-title": [
+    {
+      "type": 0,
+      "value": "Name"
+    }
+  ],
+  "profile.page-title": [
+    {
+      "type": 0,
+      "value": "Profile | STS"
+    }
+  ],
+  "profile.role-title": [
+    {
+      "type": 0,
+      "value": "Role"
+    }
+  ],
+  "profile.status-title": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "profile.user-info-section-title": [
+    {
+      "type": 0,
+      "value": "Your info"
+    }
+  ],
+  "profile.username": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
+  "query-status.delete-successful-x": [
+    {
+      "type": 0,
+      "value": "Successfuly deleted "
+    },
+    {
+      "type": 1,
+      "value": "x"
+    }
+  ],
   "query-status.error": [
     {
       "type": 0,
       "value": "An error has occurred"
+    }
+  ],
+  "query-status.loading": [
+    {
+      "type": 0,
+      "value": "Loading..."
     }
   ],
   "query-status.success": [
@@ -495,6 +941,86 @@
       "value": "Who can see these tags?"
     }
   ],
+  "ticket-search.any": [
+    {
+      "type": 0,
+      "value": "Any"
+    }
+  ],
+  "ticket-search.assigned-to-filter-title": [
+    {
+      "type": 0,
+      "value": "Assigned to "
+    },
+    {
+      "type": 1,
+      "value": "user"
+    }
+  ],
+  "ticket-search.created-by-filter-title": [
+    {
+      "type": 0,
+      "value": "Created by "
+    },
+    {
+      "type": 1,
+      "value": "user"
+    }
+  ],
+  "ticket-search.page-head-title": [
+    {
+      "type": 0,
+      "value": "Search tickets | STS"
+    }
+  ],
+  "ticket-search.page-title": [
+    {
+      "type": 0,
+      "value": "Search tickets"
+    }
+  ],
+  "ticket-search.ticket-status-filter-title": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "ticket-search.title-actions": [
+    {
+      "type": 0,
+      "value": "Actions"
+    }
+  ],
+  "ticket-search.title-assignees": [
+    {
+      "type": 0,
+      "value": "Assigned to"
+    }
+  ],
+  "ticket-search.title-creadted-by": [
+    {
+      "type": 0,
+      "value": "Created by"
+    }
+  ],
+  "ticket-search.title-status": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "ticket-search.title-ticket-title": [
+    {
+      "type": 0,
+      "value": "Title"
+    }
+  ],
+  "ticket-search.user-form-title": [
+    {
+      "type": 0,
+      "value": "Pick a user"
+    }
+  ],
   "ticket-status.closed": [
     {
       "type": 0,
@@ -549,6 +1075,200 @@
     {
       "type": 1,
       "value": "status"
+    }
+  ],
+  "ticket-view.add-comment-placeholder": [
+    {
+      "type": 0,
+      "value": "Add a comment."
+    }
+  ],
+  "ticket-view.add-internal-placeholder": [
+    {
+      "type": 0,
+      "value": "Add an internal comment."
+    }
+  ],
+  "ticket-view.are-you-sure-delete-comment": [
+    {
+      "type": 0,
+      "value": "This cannot be undone. Admins may still see this comment."
+    }
+  ],
+  "ticket-view.cannot-comment": [
+    {
+      "type": 0,
+      "value": "You cannot comment on this ticket"
+    }
+  ],
+  "ticket-view.date-on": [
+    {
+      "type": 0,
+      "value": "on"
+    }
+  ],
+  "ticket-view.edited-at-x": [
+    {
+      "type": 0,
+      "value": "Edited at "
+    },
+    {
+      "type": 1,
+      "value": "x"
+    }
+  ],
+  "ticket-view.go-to-bottom": [
+    {
+      "type": 0,
+      "value": "Go to bottom"
+    }
+  ],
+  "ticket-view.go-to-top": [
+    {
+      "type": 0,
+      "value": "Go to top"
+    }
+  ],
+  "ticket-view.has-assigned": [
+    {
+      "type": 0,
+      "value": "assigned"
+    }
+  ],
+  "ticket-view.has-unassigned": [
+    {
+      "type": 0,
+      "value": "unassigned"
+    }
+  ],
+  "ticket-view.internal-comment-button-text": [
+    {
+      "type": 0,
+      "value": "Internal"
+    }
+  ],
+  "ticket-view.internal-comment-note": [
+    {
+      "type": 0,
+      "value": "This is an internal comment, not visible to customer"
+    }
+  ],
+  "ticket-view.internal-label": [
+    {
+      "type": 0,
+      "value": "INTERNAL"
+    }
+  ],
+  "ticket-view.public-comment-button-text": [
+    {
+      "type": 0,
+      "value": "Public"
+    }
+  ],
+  "ticket-view.status-moved-from": [
+    {
+      "type": 0,
+      "value": "moved this from"
+    }
+  ],
+  "ticket-view.status-moved-on": [
+    {
+      "type": 0,
+      "value": "on"
+    }
+  ],
+  "ticket-view.status-moved-to": [
+    {
+      "type": 0,
+      "value": "to"
+    }
+  ],
+  "ticket-view.ticket-assignees-customer-note:": [
+    {
+      "type": 0,
+      "value": "Your ticket "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=0": {
+          "value": [
+            {
+              "type": 0,
+              "value": "is not assigned to anyone right now."
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "is assigned to:"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "user-status.active": [
+    {
+      "type": 0,
+      "value": "Active"
+    }
+  ],
+  "user-status.banned": [
+    {
+      "type": 0,
+      "value": "Banned"
+    }
+  ],
+  "user-status.registered": [
+    {
+      "type": 0,
+      "value": "Registered"
+    }
+  ],
+  "validation.field-required": [
+    {
+      "type": 0,
+      "value": "This field is required."
+    }
+  ],
+  "validation.max-x-characters": [
+    {
+      "type": 0,
+      "value": "Can be at most "
+    },
+    {
+      "type": 1,
+      "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " characters long."
+    }
+  ],
+  "validation.min-x-characters": [
+    {
+      "type": 0,
+      "value": "Must be at least "
+    },
+    {
+      "type": 1,
+      "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " characeters long."
+    }
+  ],
+  "validation.passwords-match": [
+    {
+      "type": 0,
+      "value": "Passwords must match"
     }
   ]
 }

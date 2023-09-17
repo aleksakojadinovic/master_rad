@@ -10,6 +10,8 @@ import {
   TicketHistoryEntryAssigneesChanged,
   TicketHistoryEntryBodyChanged,
   TicketHistoryEntryCommentAdded,
+  TicketHistoryEntryCommentChanged,
+  TicketHistoryEntryCommentDeleted,
   TicketHistoryEntryCreated,
   TicketHistoryEntryStatusChanged,
   TicketHistoryEntryTagsChanged,
@@ -19,6 +21,7 @@ import {
 } from './schema/ticket-history.schema';
 import { UserDb } from 'src/app/users/infrastructure/schema/user.schema';
 import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
+import { TicketComment } from '../domain/value-objects/ticket-comment';
 
 export type TicketsQuery = {
   page: number | null;
@@ -131,11 +134,9 @@ export class TicketsRepository {
   }
 
   async findMostRecentTicketByUserId(userId: string): Promise<Ticket | null> {
-    const result = await this.ticketModel.findOne(
-      { createdBy: userId },
-      {},
-      { sort: { createdAt: -1 } },
-    );
+    const result = await this.ticketModel
+      .findOne({ createdBy: userId }, {}, { sort: { createdAt: -1 } })
+      .populate(TicketsRepository.POPULATE);
 
     if (!result) {
       return null;
@@ -169,6 +170,35 @@ export class TicketsRepository {
     await document.save();
     await document.populate(TicketsRepository.POPULATE);
 
+    return this.mapper.map(document, TicketDb, Ticket);
+  }
+
+  async updateComment(ticket: Ticket, comment: TicketComment, user: User) {
+    const document = await this.ticketModel.findById(ticket.id);
+    const item = new TicketHistoryItem();
+    item.initiator = user.id as unknown as UserDb;
+    item.timestamp = new Date();
+    item.type = TicketHistoryEntryType.COMMENT_CHANGED;
+    item.payload = new TicketHistoryEntryCommentChanged(
+      comment.commentId,
+      comment.body,
+    );
+    document.history.push(item);
+    await document.save();
+    await document.populate(TicketsRepository.POPULATE);
+    return this.mapper.map(document, TicketDb, Ticket);
+  }
+
+  async deleteComment(ticket: Ticket, comment: TicketComment, user: User) {
+    const document = await this.ticketModel.findById(ticket.id);
+    const item = new TicketHistoryItem();
+    item.initiator = user.id as unknown as UserDb;
+    item.timestamp = new Date();
+    item.type = TicketHistoryEntryType.COMMENT_DELETED;
+    item.payload = new TicketHistoryEntryCommentDeleted(comment.commentId);
+    document.history.push(item);
+    await document.save();
+    await document.populate(TicketsRepository.POPULATE);
     return this.mapper.map(document, TicketDb, Ticket);
   }
 

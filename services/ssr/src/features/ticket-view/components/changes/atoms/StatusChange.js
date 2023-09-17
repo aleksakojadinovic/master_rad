@@ -40,7 +40,7 @@ export default function StatusChange({
           </Box>
           <Box>
             <Typography variant="caption" sx={{ color: 'text.disabled' }}>
-              {formatDate(timestamp)}
+              {formatDate(timestamp, intl)}
             </Typography>
           </Box>
         </Box>

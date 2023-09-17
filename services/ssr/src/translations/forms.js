@@ -21,6 +21,14 @@ export const formsMessages = defineMessages({
     id: 'forms.reset',
     defaultMessage: 'Reset all filters',
   },
+  save: {
+    id: 'forms.save',
+    defaultMessage: 'Save',
+  },
+  cancel: {
+    id: 'forms.cancel',
+    defaultMessage: 'Cancel',
+  },
 });
 
 export const validationMessages = defineMessages({

@@ -25,7 +25,7 @@ function TicketTimelineSection({ ticket }) {
 
   return timelineItems.map((item, index) => (
     <Box key={index} marginTop="12px">
-      <TicketChange item={item} />
+      <TicketChange item={item} ticket={ticket} />
     </Box>
   ));
 }

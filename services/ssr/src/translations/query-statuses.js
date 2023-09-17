@@ -13,6 +13,10 @@ export const queryStatusMessages = defineMessages({
     id: 'query-status.update-successful-x',
     defaultMessage: 'Successfuly updated {x}',
   },
+  deleteSuccessfulX: {
+    id: 'query-status.delete-successful-x',
+    defaultMessage: 'Successfuly deleted {x}',
+  },
   loading: {
     id: 'query-status.loading',
     defaultMessage: 'Loading...',

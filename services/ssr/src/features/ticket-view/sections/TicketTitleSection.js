@@ -2,8 +2,10 @@ import { formatDate } from '@/utils';
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import TicketStatusBadge from '../components/TicketStatusBadge';
+import { useIntl } from 'react-intl';
 
 function TicketTitleSection({ ticket }) {
+  const intl = useIntl();
   return (
     <Grid container>
       <Grid item xs={12} md={9}>
@@ -19,7 +21,7 @@ function TicketTitleSection({ ticket }) {
           height="100%"
         >
           <Typography component="div" sx={{ color: 'text.disabled' }}>
-            {formatDate(ticket.createdAt)}
+            {formatDate(ticket.createdAt, intl)}
           </Typography>
           <Typography component="div" sx={{ color: 'secondary.main' }}>
             by {ticket.createdBy.firstName} {ticket.createdBy.lastName}

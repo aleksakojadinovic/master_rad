@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TicketsService } from './domain/services/tickets.service';
+import { TicketService } from './domain/services/ticket.service';
 import { TicketsController } from './api/tickets.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
@@ -10,6 +10,8 @@ import { UsersModule } from 'src/app/users/users.module';
 import { TicketTagSystemModule } from '../ticket-tag-system/ticket-tag-system.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { TicketsRepository } from './infrastructure/tickets.repository';
+import { TicketCommentService } from './domain/services/ticket-comment.service';
+import { TicketRedactionService } from './domain/services/ticket-redacation.service';
 
 @Module({
   imports: [
@@ -20,6 +22,11 @@ import { TicketsRepository } from './infrastructure/tickets.repository';
   ],
 
   controllers: [TicketsController],
-  providers: [TicketsService, TicketsRepository],
+  providers: [
+    TicketService,
+    TicketCommentService,
+    TicketRedactionService,
+    TicketsRepository,
+  ],
 })
 export class TicketsModule {}

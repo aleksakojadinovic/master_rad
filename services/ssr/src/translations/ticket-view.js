@@ -47,7 +47,7 @@ export const ticketViewMessages = defineMessages({
     defaultMessage: 'assigned',
   },
   hasUnassigned: {
-    id: 'ticket-view.has-assigned',
+    id: 'ticket-view.has-unassigned',
     defaultMessage: 'unassigned',
   },
   dateOn: {
@@ -65,5 +65,17 @@ export const ticketViewMessages = defineMessages({
   movedOn: {
     id: 'ticket-view.status-moved-on',
     defaultMessage: 'on',
+  },
+  areYouSureDeleteCommentTitle: {
+    id: 'ticket-view.are-you-sure-delete-comment-title',
+    defaultMessage: 'Are you sure you want to delete this comment?',
+  },
+  areYouSureDeleteCommentBody: {
+    id: 'ticket-view.are-you-sure-delete-comment-body',
+    defaultMessage: 'This cannot be undone. Admins may still see this comment.',
+  },
+  editedAtX: {
+    id: 'ticket-view.edited-at-x',
+    defaultMessage: 'Edited at {x}',
   },
 });

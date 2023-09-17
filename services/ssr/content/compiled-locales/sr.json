@@ -1,8 +1,80 @@
 {
+  "admin-link.metrics": [
+    {
+      "type": 0,
+      "value": "Metrike"
+    }
+  ],
+  "admin-links.home-page": [
+    {
+      "type": 0,
+      "value": "Početna"
+    }
+  ],
+  "admin-links.tags": [
+    {
+      "type": 0,
+      "value": "Oznake"
+    }
+  ],
+  "admin-links.tickets-search": [
+    {
+      "type": 0,
+      "value": "Pretraga"
+    }
+  ],
+  "admin-links.users": [
+    {
+      "type": 0,
+      "value": "Korisnici"
+    }
+  ],
+  "agent-dashboard.empty-state": [
+    {
+      "type": 0,
+      "value": "Nema ničega za prikaz"
+    }
+  ],
+  "agent-dashboard.my-in-progress": [
+    {
+      "type": 0,
+      "value": "Trenutni tiketi koje ste vi zadužili"
+    }
+  ],
+  "agent-dashboard.my-open": [
+    {
+      "type": 0,
+      "value": "Otvoreni tiketi koje ste vi zadužili"
+    }
+  ],
+  "agent-dashboard.new-today": [
+    {
+      "type": 0,
+      "value": "Novi tiketi danas"
+    }
+  ],
+  "agent-dashboard.section-title-triage": [
+    {
+      "type": 0,
+      "value": "Triage - novi tiketi danas"
+    }
+  ],
   "agent-dashboard.title": [
     {
       "type": 0,
-      "value": "Kontrolna tabla"
+      "value": "Panel agenta | STS"
+    }
+  ],
+  "agent-links.home-page": [
+    {
+      "type": 0,
+      "value": "Početna"
+    }
+  ],
+  "agent-links.tickets-search": [
+    {
+      "type": 0,
+      "value": "Pretraga"
     }
   ],
   "api-errors.cannot-assign-customer": [
@@ -11,16 +83,28 @@
       "value": "Ne možete dodeliti korisnika tiketu."
     }
   ],
+  "api-errors.cannot-change-your-role": [
+    {
+      "type": 0,
+      "value": "Nemate dozvolu da promenite svoju ulogu."
+    }
+  ],
+  "api-errors.cannot-change-your-status": [
+    {
+      "type": 0,
+      "value": "Nemate dozvolu da promenite svoj status."
+    }
+  ],
   "api-errors.duplicate-assignee": [
     {
       "type": 0,
-      "value": "Ova osoba je već dodeljena ovom tiketu."
+      "value": "Ova osoba već je dodeljena ovom tiketu."
     }
   ],
   "api-errors.generic-error": [
     {
       "type": 0,
-      "value": "Došlo je do greške. Molimo kontaktirajte podršku."
+      "value": "Došlo je do greške. Molimo vas kontaktirajte podršku."
     }
   ],
   "api-errors.ticket-tag-group-name-duplicate-error": [
@@ -29,10 +113,46 @@
       "value": "Grupa oznaka sa ovim imenom već postoji."
     }
   ],
+  "api.errors.old-password-invalid": [
+    {
+      "type": 0,
+      "value": "Stara lozinka je netačna."
+    }
+  ],
   "assign.form-title": [
     {
       "type": 0,
-      "value": "Dodeli nekoga"
+      "value": "Dodeli nekome"
+    }
+  ],
+  "change-password.cta": [
+    {
+      "type": 0,
+      "value": "Potvrdi"
+    }
+  ],
+  "change-password.new-password-title": [
+    {
+      "type": 0,
+      "value": "Nova lozinka"
+    }
+  ],
+  "change-password.old-password-title": [
+    {
+      "type": 0,
+      "value": "Stara lozinka"
+    }
+  ],
+  "change-password.repeat-password-title": [
+    {
+      "type": 0,
+      "value": "Ponovite lozinku"
+    }
+  ],
+  "change-password.successfully-changed": [
+    {
+      "type": 0,
+      "value": "Lozinka uspešno promenjena"
     }
   ],
   "click-here": [
@@ -41,10 +161,10 @@
       "value": "ovde"
     }
   ],
-  "comments.add-comment-placeholder": [
+  "create-ticket.page-head-title": [
     {
       "type": 0,
-      "value": "Dodajte komentar."
+      "value": "Kreiraj tiket | STS"
     }
   ],
   "create-ticket.success": [
@@ -64,13 +184,55 @@
   "create-ticket.ticket-description-text": [
     {
       "type": 0,
-      "value": "Detaljno opišite svoj problem"
+      "value": "Opis vašeg problema u detaljima"
     }
   ],
   "create-ticket.ticket-title-text": [
     {
       "type": 0,
       "value": "Naslov vašeg problema"
+    }
+  ],
+  "customer-dashboard.create-new": [
+    {
+      "type": 0,
+      "value": "Kreiraj novi tiket"
+    }
+  ],
+  "customer-dashboard.need-help": [
+    {
+      "type": 0,
+      "value": "Potrebna vam je pomoć?"
+    }
+  ],
+  "customer-dashboard.page-head-title": [
+    {
+      "type": 0,
+      "value": "Panel korisnika | STS"
+    }
+  ],
+  "customer-dashboard.your-active-tickets": [
+    {
+      "type": 0,
+      "value": "Vaši aktivni tiketi"
+    }
+  ],
+  "customer-links.contact-us": [
+    {
+      "type": 0,
+      "value": "Kontaktirajte nas"
+    }
+  ],
+  "customer-links.home-page": [
+    {
+      "type": 0,
+      "value": "Početna"
+    }
+  ],
+  "customer-links.new-ticket": [
+    {
+      "type": 0,
+      "value": "Kreiraj novi tiket"
     }
   ],
   "dialog.close": [
@@ -97,6 +259,12 @@
       "value": "Operacija uspešna"
     }
   ],
+  "forms.cancel": [
+    {
+      "type": 0,
+      "value": "Otkaži"
+    }
+  ],
   "forms.page": [
     {
       "type": 0,
@@ -107,6 +275,18 @@
     {
       "type": 0,
       "value": "Po stranici"
+    }
+  ],
+  "forms.reset": [
+    {
+      "type": 0,
+      "value": "Resetuj sve filtere"
+    }
+  ],
+  "forms.save": [
+    {
+      "type": 0,
+      "value": "Sačuvaj"
     }
   ],
   "forms.search": [
@@ -125,6 +305,12 @@
     {
       "type": 0,
       "value": "Otkaži"
+    }
+  ],
+  "global.comment": [
+    {
+      "type": 0,
+      "value": "komentar"
     }
   ],
   "global.delete": [
@@ -169,10 +355,22 @@
       "value": "Stranica nije pronađena | STS"
     }
   ],
+  "global.open": [
+    {
+      "type": 0,
+      "value": "Otvori"
+    }
+  ],
   "global.roles": [
     {
       "type": 0,
       "value": "Uloge"
+    }
+  ],
+  "global.rows-per-page": [
+    {
+      "type": 0,
+      "value": "Po stranici"
     }
   ],
   "global.save": [
@@ -181,16 +379,56 @@
       "value": "Sačuvaj"
     }
   ],
+  "global.search": [
+    {
+      "type": 0,
+      "value": "Pretraga"
+    }
+  ],
+  "global.status": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "global.support-email": [
+    {
+      "type": 0,
+      "value": "support@example.com"
+    }
+  ],
   "global.ticket": [
     {
       "type": 0,
       "value": "tiket"
     }
   ],
+  "global.time-at": [
+    {
+      "type": 0,
+      "value": "u"
+    }
+  ],
   "global.title": [
     {
       "type": 0,
       "value": "Naslov"
+    }
+  ],
+  "global.user": [
+    {
+      "type": 0,
+      "value": "korisnik"
+    }
+  ],
+  "global.welcome-back": [
+    {
+      "type": 0,
+      "value": "Dobrodošli natrag, "
+    },
+    {
+      "type": 1,
+      "value": "user"
     }
   ],
   "global.yes": [
@@ -214,7 +452,7 @@
   "manage-tags.create-error": [
     {
       "type": 0,
-      "value": "Greška prilikom kreiranja oznaka!"
+      "value": "Greška pri kreiranju oznake!"
     }
   ],
   "manage-tags.create-success": [
@@ -232,7 +470,7 @@
   "manage-tags.edit-breadcrumb": [
     {
       "type": 0,
-      "value": "Uređivanje oznake „"
+      "value": "Izmena oznake „"
     },
     {
       "type": 1,
@@ -246,7 +484,7 @@
   "manage-tags.edit-single": [
     {
       "type": 0,
-      "value": "Uredi oznaku „"
+      "value": "Izmena oznake „"
     },
     {
       "type": 1,
@@ -260,7 +498,7 @@
   "manage-tags.home-breadcrumb": [
     {
       "type": 0,
-      "value": "Upravljaj oznakama"
+      "value": "Upravljanje oznakama"
     }
   ],
   "manage-tags.new-tag-group-placeholder": [
@@ -284,19 +522,155 @@
   "manage-tags.update-error": [
     {
       "type": 0,
-      "value": "Greška prilikom ažuriranja oznaka!"
+      "value": "Greška pri izmeni oznaka!"
     }
   ],
   "manage-tags.update-loading": [
     {
       "type": 0,
-      "value": "Ažuriranje oznaka..."
+      "value": "Izmena oznaka..."
     }
   ],
   "manage-tags.update-success": [
     {
       "type": 0,
-      "value": "Oznake uspešno ažurirane!"
+      "value": "Oznake uspešno izmenjene!"
+    }
+  ],
+  "manage-users.actions-table-header": [
+    {
+      "type": 0,
+      "value": "Akcije"
+    }
+  ],
+  "manage-users.change-role-are-you-sure": [
+    {
+      "type": 0,
+      "value": "Da li ste sigurni da želite promeniti ulogu korisnika "
+    },
+    {
+      "type": 1,
+      "value": "name"
+    },
+    {
+      "type": 0,
+      "value": " sa "
+    },
+    {
+      "type": 1,
+      "value": "OldRole"
+    },
+    {
+      "type": 0,
+      "value": " na "
+    },
+    {
+      "type": 1,
+      "value": "NewRole"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "manage-users.change-role-title": [
+    {
+      "type": 0,
+      "value": "Promeni ulogu"
+    }
+  ],
+  "manage-users.change-role-wraning": [
+    {
+      "type": 0,
+      "value": "Ovo može izložiti korisnika informacijama koje su ranije bile privatne. Takođe, možda nećete moći sami da poništite ovu akciju, zavisno o vašoj ulozi."
+    }
+  ],
+  "manage-users.change-roles-customer-note": [
+    {
+      "type": 0,
+      "value": "Korisnici iz bezbednosnih razloga ne mogu sami da menjaju svoju ulogu. Ako korisnik postane agent, molimo vas da kreirate novi nalog za njih."
+    }
+  ],
+  "manage-users.change-roles-default-note": [
+    {
+      "type": 0,
+      "value": "Za ovu vrstu korisnika nema dostupnih uloga."
+    }
+  ],
+  "manage-users.change-status-are-you-sure": [
+    {
+      "type": 0,
+      "value": "Da li ste sigurni da želite promeniti status korisnika "
+    },
+    {
+      "type": 1,
+      "value": "name"
+    },
+    {
+      "type": 0,
+      "value": " sa "
+    },
+    {
+      "type": 1,
+      "value": "OldStatus"
+    },
+    {
+      "type": 0,
+      "value": " na "
+    },
+    {
+      "type": 1,
+      "value": "NewStatus"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "manage-users.change-status-title": [
+    {
+      "type": 0,
+      "value": "Promeni status"
+    }
+  ],
+  "manage-users.change-status-wraning": [
+    {
+      "type": 0,
+      "value": "Ovo može omogućiti ili onemogućiti korisnika da koristi neke usluge."
+    }
+  ],
+  "manage-users.change-to": [
+    {
+      "type": 0,
+      "value": "Promeni na "
+    },
+    {
+      "type": 1,
+      "value": "what"
+    }
+  ],
+  "manage-users.full-name-table-header": [
+    {
+      "type": 0,
+      "value": "Puno ime"
+    }
+  ],
+  "manage-users.page-title": [
+    {
+      "type": 0,
+      "value": "Upravljanje korisnicima | STS"
+    }
+  ],
+  "manage-users.role-table-header": [
+    {
+      "type": 0,
+      "value": "Uloga"
+    }
+  ],
+  "manage-users.status-table-header": [
+    {
+      "type": 0,
+      "value": "Status"
     }
   ],
   "nav.login-button-text": [
@@ -326,7 +700,7 @@
   "notification-payloads.assigned-notification": [
     {
       "type": 0,
-      "value": "Dodeljeni ste za"
+      "value": "Dodeljeni ste"
     }
   ],
   "notifications-payloads.comment-added-notification.ticket": [
@@ -338,7 +712,7 @@
   "notifications-titles.assigned-notification": [
     {
       "type": 0,
-      "value": "Dodeljeno vama"
+      "value": "Dodeljeno vam je"
     }
   ],
   "notifications-titles.comment-added-notification": [
@@ -362,7 +736,7 @@
   "notifications.actions-mark-read": [
     {
       "type": 0,
-      "value": "Označi kao pročitano"
+      "value": "Obeleži kao pročitano"
     }
   ],
   "notifications.no-notifications": [
@@ -377,26 +751,98 @@
       "value": "Pregled nije dostupan"
     }
   ],
+  "profile.change-password-section-title": [
+    {
+      "type": 0,
+      "value": "Promenite svoju lozinku"
+    }
+  ],
+  "profile.inactive-alert-title": [
+    {
+      "type": 0,
+      "value": "Vaš nalog izgleda da je neaktivan. Ako mislite da je ovo greška, kontaktirajte nas na "
+    },
+    {
+      "type": 1,
+      "value": "ContactLink"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "profile.name-title": [
+    {
+      "type": 0,
+      "value": "Ime"
+    }
+  ],
+  "profile.page-title": [
+    {
+      "type": 0,
+      "value": "Profil | STS"
+    }
+  ],
+  "profile.role-title": [
+    {
+      "type": 0,
+      "value": "Uloga"
+    }
+  ],
+  "profile.status-title": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "profile.user-info-section-title": [
+    {
+      "type": 0,
+      "value": "Vaši podaci"
+    }
+  ],
+  "profile.username": [
+    {
+      "type": 0,
+      "value": "Korisničko ime"
+    }
+  ],
+  "query-status.delete-successful-x": [
+    {
+      "type": 1,
+      "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " uspešno obrisan"
+    }
+  ],
   "query-status.error": [
     {
       "type": 0,
       "value": "Došlo je do greške"
     }
   ],
+  "query-status.loading": [
+    {
+      "type": 0,
+      "value": "Učitavanje..."
+    }
+  ],
   "query-status.success": [
     {
       "type": 0,
-      "value": "Uspeh"
+      "value": "Uspešno"
     }
   ],
   "query-status.update-successful-x": [
     {
-      "type": 0,
-      "value": "Uspešno ažurirano "
-    },
-    {
       "type": 1,
       "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " uspešno ažuriran"
     }
   ],
   "roles.administrator": [
@@ -450,13 +896,13 @@
   "tags.tag-intl-key-text": [
     {
       "type": 0,
-      "value": "Intl ključ"
+      "value": "Međunarodni ključ"
     }
   ],
   "tags.tag-intl-keys-text": [
     {
       "type": 0,
-      "value": "Intl ključevi"
+      "value": "Međunarodni ključevi"
     }
   ],
   "tags.tag-name-text": [
@@ -486,13 +932,93 @@
   "tags.who-can-remove-text": [
     {
       "type": 0,
-      "value": "Ko može uklanjati ove oznake?"
+      "value": "Ko može ukloniti ove oznake?"
     }
   ],
   "tags.who-can-see-text": [
     {
       "type": 0,
       "value": "Ko može videti ove oznake?"
+    }
+  ],
+  "ticket-search.any": [
+    {
+      "type": 0,
+      "value": "Bilo koje"
+    }
+  ],
+  "ticket-search.assigned-to-filter-title": [
+    {
+      "type": 0,
+      "value": "Dodeljeno korisniku "
+    },
+    {
+      "type": 1,
+      "value": "user"
+    }
+  ],
+  "ticket-search.created-by-filter-title": [
+    {
+      "type": 0,
+      "value": "Kreirano od strane "
+    },
+    {
+      "type": 1,
+      "value": "user"
+    }
+  ],
+  "ticket-search.page-head-title": [
+    {
+      "type": 0,
+      "value": "Pretraga tiketa | STS"
+    }
+  ],
+  "ticket-search.page-title": [
+    {
+      "type": 0,
+      "value": "Pretraga tiketa"
+    }
+  ],
+  "ticket-search.ticket-status-filter-title": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "ticket-search.title-actions": [
+    {
+      "type": 0,
+      "value": "Akcije"
+    }
+  ],
+  "ticket-search.title-assignees": [
+    {
+      "type": 0,
+      "value": "Dodeljeno korisniku"
+    }
+  ],
+  "ticket-search.title-creadted-by": [
+    {
+      "type": 0,
+      "value": "Kreirano od strane"
+    }
+  ],
+  "ticket-search.title-status": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
+  "ticket-search.title-ticket-title": [
+    {
+      "type": 0,
+      "value": "Naslov"
+    }
+  ],
+  "ticket-search.user-form-title": [
+    {
+      "type": 0,
+      "value": "Izaberite korisnika"
     }
   ],
   "ticket-status.closed": [
@@ -544,11 +1070,205 @@
   "ticket-stauts.move-to-status": [
     {
       "type": 0,
-      "value": "Premesti u "
+      "value": "Prebaci na "
     },
     {
       "type": 1,
       "value": "status"
+    }
+  ],
+  "ticket-view.add-comment-placeholder": [
+    {
+      "type": 0,
+      "value": "Dodaj komentar."
+    }
+  ],
+  "ticket-view.add-internal-placeholder": [
+    {
+      "type": 0,
+      "value": "Dodaj interni komentar."
+    }
+  ],
+  "ticket-view.are-you-sure-delete-comment": [
+    {
+      "type": 0,
+      "value": "Ovo se ne može poništiti. Administratori mogu i dalje videti ovaj komentar."
+    }
+  ],
+  "ticket-view.cannot-comment": [
+    {
+      "type": 0,
+      "value": "Ne možete komentarisati ovaj tiket"
+    }
+  ],
+  "ticket-view.date-on": [
+    {
+      "type": 0,
+      "value": "na"
+    }
+  ],
+  "ticket-view.edited-at-x": [
+    {
+      "type": 0,
+      "value": "Izmenjeno u "
+    },
+    {
+      "type": 1,
+      "value": "x"
+    }
+  ],
+  "ticket-view.go-to-bottom": [
+    {
+      "type": 0,
+      "value": "Idi na dno"
+    }
+  ],
+  "ticket-view.go-to-top": [
+    {
+      "type": 0,
+      "value": "Idi na vrh"
+    }
+  ],
+  "ticket-view.has-assigned": [
+    {
+      "type": 0,
+      "value": "je dodelio ovaj tiket"
+    }
+  ],
+  "ticket-view.has-unassigned": [
+    {
+      "type": 0,
+      "value": "je sklonio ovaj tiket sa"
+    }
+  ],
+  "ticket-view.internal-comment-button-text": [
+    {
+      "type": 0,
+      "value": "Interni"
+    }
+  ],
+  "ticket-view.internal-comment-note": [
+    {
+      "type": 0,
+      "value": "Ovo je interni komentar, nije vidljiv korisnicima"
+    }
+  ],
+  "ticket-view.internal-label": [
+    {
+      "type": 0,
+      "value": "INTERNI"
+    }
+  ],
+  "ticket-view.public-comment-button-text": [
+    {
+      "type": 0,
+      "value": "Javni"
+    }
+  ],
+  "ticket-view.status-moved-from": [
+    {
+      "type": 0,
+      "value": "premešteno iz"
+    }
+  ],
+  "ticket-view.status-moved-on": [
+    {
+      "type": 0,
+      "value": "na"
+    }
+  ],
+  "ticket-view.status-moved-to": [
+    {
+      "type": 0,
+      "value": "na"
+    }
+  ],
+  "ticket-view.ticket-assignees-customer-note:": [
+    {
+      "type": 0,
+      "value": "Vaš tiket "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=0": {
+          "value": [
+            {
+              "type": 0,
+              "value": "trenutno nije dodeljen nikome."
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "je dodeljen:"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "user-status.active": [
+    {
+      "type": 0,
+      "value": "Aktivan"
+    }
+  ],
+  "user-status.banned": [
+    {
+      "type": 0,
+      "value": "Zabrana"
+    }
+  ],
+  "user-status.registered": [
+    {
+      "type": 0,
+      "value": "Registrovan"
+    }
+  ],
+  "validation.field-required": [
+    {
+      "type": 0,
+      "value": "Ovo polje je obavezno."
+    }
+  ],
+  "validation.max-x-characters": [
+    {
+      "type": 0,
+      "value": "Maksimalno može biti "
+    },
+    {
+      "type": 1,
+      "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " karaktera dugo."
+    }
+  ],
+  "validation.min-x-characters": [
+    {
+      "type": 0,
+      "value": "Mora biti najmanje "
+    },
+    {
+      "type": 1,
+      "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " karaktera dugo."
+    }
+  ],
+  "validation.passwords-match": [
+    {
+      "type": 0,
+      "value": "Lozinke se moraju poklapati"
     }
   ]
 }

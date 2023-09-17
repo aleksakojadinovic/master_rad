@@ -3,9 +3,15 @@ import { Box, Button, TextareaAutosize } from '@mui/material';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-function CommentEditor({ onSubmit, isSubmitDisabled, isSuccess, isInternal }) {
+function CommentEditor({
+  onSubmit,
+  isSubmitDisabled,
+  isSuccess,
+  isInternal,
+  initialValue = '',
+}) {
   const intl = useIntl();
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState(initialValue);
 
   const handleChange = (e) => setComment(e.target.value);
 
