@@ -47,7 +47,7 @@ export const ticketViewMessages = defineMessages({
     defaultMessage: 'assigned',
   },
   hasUnassigned: {
-    id: 'ticket-view.has-assigned',
+    id: 'ticket-view.has-unassigned',
     defaultMessage: 'unassigned',
   },
   dateOn: {
@@ -73,5 +73,9 @@ export const ticketViewMessages = defineMessages({
   areYouSureDeleteCommentBody: {
     id: 'ticket-view.are-you-sure-delete-comment',
     defaultMessage: 'This cannot be undone. Admins may still see this comment.',
+  },
+  editedAtX: {
+    id: 'ticket-view.edited-at-x',
+    defaultMessage: 'Edited at {x}',
   },
 });

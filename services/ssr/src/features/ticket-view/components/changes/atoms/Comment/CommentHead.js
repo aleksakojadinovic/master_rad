@@ -3,27 +3,33 @@ import { ticketViewMessages } from '@/translations/ticket-view';
 import { formatDate } from '@/utils';
 import { Box, Chip, Tooltip, Typography } from '@mui/material';
 import React from 'react';
+import { useIntl } from 'react-intl';
 
 function CommentHead({ comment }) {
+  const intl = useIntl();
   return (
-    <Box
-      display="flex"
-      sx={{
-        flexDirection: { xs: 'column', md: 'row' },
-        alignItems: { xs: 'normal', md: 'center' },
-      }}
-    >
+    <Box display="flex" flexWrap="wrap" gap="6px">
       <Box>
         <UserChip user={comment.user} includeRole />
       </Box>
-      <Box sx={{ marginLeft: { xs: 0, md: '12px' } }}>
+      <Box>
         <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          {formatDate(comment.timestamp)}
+          {formatDate(comment.timestamp, intl)}
         </Typography>
       </Box>
+      <Box>|</Box>
+      {comment.updatedAt && (
+        <Box sx={{ marginLeft: { xs: 0, md: '12px' } }}>
+          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+            {intl.formatMessage(ticketViewMessages.editedAtX, {
+              x: formatDate(comment.updatedAt, intl),
+            })}
+          </Typography>
+        </Box>
+      )}
       {comment.isInternal && (
         <Tooltip
-          title={Intl.formatMessage(ticketViewMessages.internalCommentNote)}
+          title={intl.formatMessage(ticketViewMessages.internalCommentNote)}
           placement="top"
         >
           <Box

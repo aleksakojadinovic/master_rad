@@ -89,4 +89,8 @@ export const globalMessages = defineMessages({
     id: 'global.comment',
     defaultMessage: 'comment',
   },
+  timeAt: {
+    id: 'global.time-at',
+    defaultMessage: 'at',
+  },
 });

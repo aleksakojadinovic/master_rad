@@ -7,7 +7,7 @@ import { useIntl } from 'react-intl';
 
 function AssigneeChange({ item: { added, removed, timestamp, user } }) {
   const intl = useIntl();
-  const dateFormatted = formatDate(timestamp);
+  const dateFormatted = formatDate(timestamp, intl);
 
   const renderChange = (isAdd) => {
     const users = isAdd ? added : removed;
