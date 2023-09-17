@@ -15,6 +15,22 @@ const lorem = new LoremIpsum({
 
 const url = `mongodb://${process.env.MAIN_DB_USERNAME}:${process.env.MAIN_DB_PWD}@maindb:27017`;
 
+/**
+ * Generates random amount of miliseconds between 10 minutes and 1 hour
+ */
+function generateRandomDelay() {
+  // Generate a random number between 0 and 1
+  const randomFraction = Math.random();
+
+  // Calculate the random time within the desired range
+  const minMilliseconds = 600000; // 10 minutes
+  const maxMilliseconds = 3600000; // 1 hour
+  const randomMilliseconds =
+    minMilliseconds + randomFraction * (maxMilliseconds - minMilliseconds);
+
+  return randomMilliseconds;
+}
+
 async function main() {
   let client = null;
   try {
@@ -44,62 +60,74 @@ async function main() {
   const tickets = [];
 
   for (let i = 0; i < 1000; i++) {
-    const createdBy = customers[Math.floor(Math.random() * customers.length)];
-    const randomAgent = agents[Math.floor(Math.random() * agents.length)];
+    const createdBy =
+      customers[Math.floor(Math.random() * customers.length)]._id;
+    const randomAgent = agents[Math.floor(Math.random() * agents.length)]._id;
+
+    const createdAt = new Date(
+      Date.now() - 30 * 24 * 60 * 60 * 1000 + (i * 24 * 60 * 60 * 1000) / 1000,
+    );
 
     const ticket = {
       title: lorem.generateWords(5),
       body: lorem.generateParagraphs(1),
-      createdAt: new Date(
-        Date.now() -
-          30 * 24 * 60 * 60 * 1000 +
-          (i * 24 * 60 * 60 * 1000) / 1000,
-      ),
-      createdBy: createdBy._id,
+      createdAt,
+      createdBy: createdBy,
       status: 'NEW',
       history: [],
     };
 
-    const history = [
-      {
-        timestamp: new Date(ticket.createdAt),
-        initiator: createdBy,
-        type: 'CREATED',
-        payload: {
-          title: ticket.title,
-          body: ticket.body,
-          status: 'NEW',
-        },
+    let currentTime = createdAt.getTime() + generateRandomDelay();
+
+    const history = [];
+    history.push({
+      timestamp: new Date(currentTime),
+      initiator: createdBy,
+      type: 'CREATED',
+      payload: {
+        title: ticket.title,
+        body: ticket.body,
+        status: 'NEW',
       },
-      {
-        timestamp: new Date(ticket.createdAt.getTime() + 60000),
-        initiator: randomAgent,
-        type: 'STATUS_CHANGED',
-        payload: {
-          status: 'OPEN',
-        },
+    });
+
+    currentTime += generateRandomDelay();
+
+    history.push({
+      timestamp: new Date(currentTime),
+      initiator: randomAgent,
+      type: 'STATUS_CHANGED',
+      payload: {
+        status: 'OPEN',
       },
-      {
-        timestamp: new Date(ticket.createdAt.getTime() + 120000),
-        initiator: randomAgent,
-        type: 'ASSIGNEES_CHANGED',
-        payload: {
-          assignees: [randomAgent],
-        },
+    });
+
+    currentTime += generateRandomDelay();
+
+    history.push({
+      timestamp: new Date(currentTime),
+      initiator: randomAgent,
+      type: 'ASSIGNEES_CHANGED',
+      payload: {
+        assignees: [randomAgent],
       },
-      {
-        timestamp: new Date(ticket.createdAt.getTime() + 180000),
-        initiator: randomAgent,
-        type: 'STATUS_CHANGED',
-        payload: {
-          status: 'IN_PROGRESS',
-        },
+    });
+
+    currentTime += generateRandomDelay();
+
+    history.push({
+      timestamp: new Date(currentTime),
+      initiator: randomAgent,
+      type: 'STATUS_CHANGED',
+      payload: {
+        status: 'IN_PROGRESS',
       },
-    ];
+    });
 
     for (let j = 0; j < 7; j++) {
+      currentTime += generateRandomDelay();
       history.push({
-        timestamp: new Date(ticket.createdAt.getTime() + (180000 + j * 60000)),
+        timestamp: new Date(currentTime),
         initiator: Math.random() < 0.5 ? randomAgent : createdBy,
         type: 'COMMENT_ADDED',
         payload: {
@@ -111,10 +139,11 @@ async function main() {
     }
 
     const finalStatus = Math.random() < 0.7 ? 'RESOLVED' : 'CLOSED';
+
+    currentTime += generateRandomDelay();
+
     history.push({
-      timestamp: new Date(
-        history[history.length - 1].timestamp.getTime() + 6000,
-      ),
+      timestamp: new Date(currentTime),
       initiator: randomAgent,
       type: 'STATUS_CHANGED',
       payload: {
@@ -124,6 +153,7 @@ async function main() {
 
     ticket.history = history;
     ticket.status = finalStatus;
+    ticket.assignees = [randomAgent];
     tickets.push(ticket);
   }
 
