@@ -40,11 +40,6 @@ export class ExtractUserInfoSilent implements CanActivate {
     const request = context.switchToHttp().getRequest();
     if (request.user) {
       const user = await this.userService.findOne(request.user._id);
-      if (user) {
-        request.userInfo = user;
-        request.isBanned = user.isBanned();
-        request.isRegistered = user.isRegistered();
-      }
     }
     return true;
   }
