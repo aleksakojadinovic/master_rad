@@ -30,12 +30,14 @@ import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../domain/error
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { Ticket } from '../domain/entities/ticket.entity';
 import { UpdateCommentDTO } from './dto/update-comment.dto';
+import { TicketsCommentService } from '../domain/services/ticket-comment.service';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
 export class TicketsController extends BaseController {
   constructor(
     private readonly ticketsService: TicketsService,
+    private readonly ticketsCommentService: TicketsCommentService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {
     super();
@@ -106,7 +108,7 @@ export class TicketsController extends BaseController {
     @Body() dto: UpdateCommentDTO,
     @GetUserInfo() user: User,
   ) {
-    const ticket = await this.ticketsService.updateComment(
+    const ticket = await this.ticketsCommentService.updateComment(
       ticketId,
       user,
       commentId,
@@ -116,16 +118,18 @@ export class TicketsController extends BaseController {
     return this.mapper.map(ticket, Ticket, TicketDTO);
   }
 
-  // @Patch(':id/comment/delete/:commentId')
-  // @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
-  // async deleteComment(
-  //   @Param('id') ticketId: string,
-  //   @Param('commentId') commentId: string,
-  //   @GetUserInfo() user: User,
-  // ) {}
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketsService.remove(+id);
+  @Delete(':id/comment/delete/:commentId')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async deleteComment(
+    @Param('id') ticketId: string,
+    @Param('commentId') commentId: string,
+    @GetUserInfo() user: User,
+  ) {
+    const ticket = await this.ticketsCommentService.deleteComment(
+      ticketId,
+      user,
+      commentId,
+    );
+    return this.mapper.map(ticket, Ticket, TicketDTO);
   }
 }

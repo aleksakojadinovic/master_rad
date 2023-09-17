@@ -146,44 +146,6 @@ export class TicketsService extends BaseService {
     return ticket;
   }
 
-  async updateComment(id: string, user: User, commentId: string, body: string) {
-    const ticket = await this.ticketsRepository.findById(id);
-
-    if (!ticket) {
-      throw new TicketNotFoundError(id);
-    }
-
-    const isOwner = ticket.createdBy.id === user.id;
-
-    if (user.isCustomer() && !isOwner) {
-      throw new TicketNotFoundError(id);
-    }
-
-    const comment = ticket.comments.find((c) => c.commentId === commentId);
-
-    if (!comment) {
-      throw new CommentNotFoundError();
-    }
-
-    if (comment.user.id !== user.id) {
-      throw new CannotUpdateOthersCommentsError();
-    }
-
-    if (comment.body === body) {
-      return ticket;
-    }
-
-    comment.body = body;
-
-    const updatedTicket = await this.ticketsRepository.updateComment(
-      ticket,
-      comment,
-      user,
-    );
-
-    return updatedTicket;
-  }
-
   async update(id: string, user: User, dto: UpdateTicketDto) {
     const isCustomer = user.isCustomer();
 
@@ -232,10 +194,6 @@ export class TicketsService extends BaseService {
     await this.notificationsService.emitNotifications(...notifications);
 
     return this.prepareTicketResponse(updatedTicket, user);
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} ticket`;
   }
 
   private stripTags(ticket: Ticket, user: User) {

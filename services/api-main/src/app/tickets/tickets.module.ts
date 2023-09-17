@@ -10,6 +10,7 @@ import { UsersModule } from 'src/app/users/users.module';
 import { TicketTagSystemModule } from '../ticket-tag-system/ticket-tag-system.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { TicketsRepository } from './infrastructure/tickets.repository';
+import { TicketsCommentService } from './domain/services/ticket-comment.service';
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { TicketsRepository } from './infrastructure/tickets.repository';
   ],
 
   controllers: [TicketsController],
-  providers: [TicketsService, TicketsRepository],
+  providers: [TicketsService, TicketsCommentService, TicketsRepository],
 })
 export class TicketsModule {}

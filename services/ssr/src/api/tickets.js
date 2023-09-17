@@ -41,6 +41,13 @@ export const ticketsSlice = api.injectEndpoints({
       }),
       invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
     }),
+    deleteComment: builder.mutation({
+      query: ({ id, commentId }) => ({
+        url: `/tickets/${id}/comment/${commentId}/delete`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
+    }),
   }),
   overrideExisting: true,
 });
