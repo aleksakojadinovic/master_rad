@@ -80,15 +80,21 @@ async function main() {
       {
         timestamp: new Date(ticket.createdAt.getTime() + 120000),
         initiator: randomAgent,
-        type: 'COMMENT_ADDED',
+        type: 'STATUS_CHANGED',
         payload: {
-          body: lorem.generateParagraphs(1),
-          commentId: uuid.v4(),
-          isInternal: false,
+          status: 'OPEN',
         },
       },
       {
         timestamp: new Date(ticket.createdAt.getTime() + 180000),
+        initiator: randomAgent,
+        type: 'ASSIGNEES_CHANGED',
+        payload: {
+          assignees: [randomAgent],
+        },
+      },
+      {
+        timestamp: new Date(ticket.createdAt.getTime() + 240000),
         initiator: randomAgent,
         type: 'STATUS_CHANGED',
         payload: {
