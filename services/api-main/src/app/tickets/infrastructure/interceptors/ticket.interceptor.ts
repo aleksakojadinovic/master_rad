@@ -1,3 +1,4 @@
+import { CannotChangeCommentsForTicketStatus } from './../../domain/errors/CannotChangeCommentsOfAClosedTicket';
 import {
   BadRequestException,
   CallHandler,
@@ -83,6 +84,10 @@ export class TicketInterceptor implements NestInterceptor {
 
         if (error instanceof CommentNotFoundError) {
           throw new NotFoundException(error.getPayload());
+        }
+
+        if (error instanceof CannotChangeCommentsForTicketStatus) {
+          throw new ConflictException(error.getPayload());
         }
 
         throw error;
