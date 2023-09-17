@@ -77,6 +77,7 @@ async function main() {
       lastName: capitalizeFirstLetter(username),
       passwordHash: bcrypt.hashSync(username, 10),
       role: 'administrator',
+      status: 'ACTIVE',
     }));
 
     try {
