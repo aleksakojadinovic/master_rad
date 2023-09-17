@@ -33,7 +33,7 @@ import { v4 as uuid } from 'uuid';
 import { TicketsRedactionService } from './ticket-redacation.service';
 
 @Injectable()
-export class TicketsService extends BaseService {
+export class TicketService extends BaseService {
   constructor(
     @InjectMapper() private readonly mapper: Mapper,
     private ticketRedactionService: TicketsRedactionService,

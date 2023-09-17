@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TicketsService } from './domain/services/tickets.service';
+import { TicketService } from './domain/services/tickets.service';
 import { TicketsController } from './api/tickets.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
@@ -23,7 +23,7 @@ import { TicketsRedactionService } from './domain/services/ticket-redacation.ser
 
   controllers: [TicketsController],
   providers: [
-    TicketsService,
+    TicketService,
     TicketCommentService,
     TicketsRedactionService,
     TicketsRepository,

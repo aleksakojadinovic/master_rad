@@ -12,7 +12,7 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import { TicketsService } from '../domain/services/tickets.service';
+import { TicketService } from '../domain/services/tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -36,7 +36,7 @@ import { TicketCommentService } from '../domain/services/ticket-comment.service'
 @Controller('tickets')
 export class TicketsController extends BaseController {
   constructor(
-    private readonly ticketsService: TicketsService,
+    private readonly ticketsService: TicketService,
     private readonly ticketsCommentService: TicketCommentService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {
