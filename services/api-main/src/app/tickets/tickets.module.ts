@@ -11,6 +11,7 @@ import { TicketTagSystemModule } from '../ticket-tag-system/ticket-tag-system.mo
 import { NotificationsModule } from '../notifications/notifications.module';
 import { TicketsRepository } from './infrastructure/tickets.repository';
 import { TicketsCommentService } from './domain/services/ticket-comment.service';
+import { TicketsRedactionService } from './domain/services/ticket-redacation.service';
 
 @Module({
   imports: [
@@ -21,6 +22,11 @@ import { TicketsCommentService } from './domain/services/ticket-comment.service'
   ],
 
   controllers: [TicketsController],
-  providers: [TicketsService, TicketsCommentService, TicketsRepository],
+  providers: [
+    TicketsService,
+    TicketsCommentService,
+    TicketsRedactionService,
+    TicketsRepository,
+  ],
 })
 export class TicketsModule {}

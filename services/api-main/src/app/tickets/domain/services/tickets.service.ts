@@ -30,13 +30,13 @@ import { TicketStatus } from '../value-objects/ticket-status';
 import { TicketComment } from '../value-objects/ticket-comment';
 import { Notification } from 'src/app/notifications/domain/entities/notification.entity';
 import { v4 as uuid } from 'uuid';
-import { CommentNotFoundError } from '../errors/CommentNotFound';
-import { CannotUpdateOthersCommentsError } from '../errors/CannotUpdateOthersComments';
+import { TicketsRedactionService } from './ticket-redacation.service';
 
 @Injectable()
 export class TicketsService extends BaseService {
   constructor(
     @InjectMapper() private readonly mapper: Mapper,
+    private ticketRedactionService: TicketsRedactionService,
     private ticketTagService: TicketTagService,
     private usersService: UsersService,
     private notificationsService: NotificationsService,
@@ -106,8 +106,10 @@ export class TicketsService extends BaseService {
       sortOrder,
       sortField,
     });
-
-    return tickets.map((ticket) => this.stripTags(ticket, user));
+    tickets.forEach((ticket) =>
+      this.ticketRedactionService.prepareTicketResponse(ticket, user),
+    );
+    return tickets;
   }
 
   async findOne(id: string, user: User) {
@@ -123,25 +125,7 @@ export class TicketsService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    return this.prepareTicketResponse(ticket, user);
-  }
-
-  async isTicketOwner(user: User, ticketId: string) {
-    let ticket: Ticket;
-    try {
-      ticket = await this.findOne(ticketId, user);
-    } catch (e) {
-      throw e;
-    }
-
-    const creatorId = ticket.createdBy.id.toString();
-
-    return user.id === creatorId.toString();
-  }
-
-  private prepareTicketResponse(ticket: Ticket, user: User): Ticket {
-    this.stripTags(ticket, user);
-    this.stripInternalComments(ticket, user);
+    this.ticketRedactionService.prepareTicketResponse(ticket, user);
 
     return ticket;
   }
@@ -193,12 +177,8 @@ export class TicketsService extends BaseService {
     const updatedTicket = await this.ticketsRepository.update(ticket, user);
     await this.notificationsService.emitNotifications(...notifications);
 
-    return this.prepareTicketResponse(updatedTicket, user);
-  }
-
-  private stripTags(ticket: Ticket, user: User) {
-    ticket.tags = ticket.tags.filter((tag) => tag.group.canSee(user));
-    return ticket;
+    this.ticketRedactionService.prepareTicketResponse(updatedTicket, user);
+    return updatedTicket;
   }
 
   private updateTicketStatus(ticket: Ticket, user: User, dto: UpdateTicketDto) {
@@ -383,12 +363,5 @@ export class TicketsService extends BaseService {
         ticket.tags.push(tag);
       });
     }
-  }
-
-  private stripInternalComments(ticket: Ticket, user: User) {
-    if (!user.isCustomer()) {
-      return;
-    }
-    ticket.comments = ticket.comments.filter((comment) => !comment.isInternal);
   }
 }
