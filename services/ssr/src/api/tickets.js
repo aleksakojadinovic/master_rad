@@ -58,6 +58,7 @@ export const {
   useGetTicketsQuery,
   useCreateTicketMutation,
   useUpdateCommentMutation,
+  useDeleteCommentMutation,
 } = ticketsSlice;
 
 const selectGetTicketQueryResult = createSelector(

@@ -7,7 +7,10 @@ import useUser from '@/hooks/useUser';
 import CommentHead from './CommentHead';
 import CommentBody from './CommentBody/CommentBody';
 import CommentActions from './CommentActions';
-import { useUpdateCommentMutation } from '@/api/tickets';
+import {
+  useDeleteCommentMutation,
+  useUpdateCommentMutation,
+} from '@/api/tickets';
 import ServerActionSnackbar from '@/components/ServerActionSnackbar/ServerActionSnackbar';
 import { useIntl } from 'react-intl';
 import { queryStatusMessages } from '@/translations/query-statuses';
@@ -27,14 +30,21 @@ export default function Comment({ item: comment, ticket }) {
     ? { backgroundColor: INTERNAL_TICKET_COLOR }
     : {};
 
-  const [updateComment, { isLoading, isSuccess, isError, error }] =
-    useUpdateCommentMutation();
+  const [
+    updateComment,
+    {
+      isLoading: isUpdateLoading,
+      isSuccess: isUpdateSuccess,
+      isError: isUpdateError,
+      error: updateError,
+    },
+  ] = useUpdateCommentMutation();
 
   useEffect(() => {
-    if (isSuccess || isError) {
+    if (isUpdateSuccess || isUpdateError) {
       setIsEditing(false);
     }
-  }, [isSuccess, isError]);
+  }, [isUpdateSuccess, isUpdateError]);
 
   const handleUpdateComment = (newBody) => {
     updateComment({
@@ -42,6 +52,16 @@ export default function Comment({ item: comment, ticket }) {
       commentId: comment.commentId,
       body: newBody,
     });
+  };
+
+  const [
+    deleteComment,
+    { isDeleteLoading, isDeleteSuccess, isDeleteError, deleteError },
+  ] = useDeleteCommentMutation();
+
+  const handleDeleteComment = () => {
+    setIsDeleting(false);
+    deleteComment({ id: ticket.id, commentId: comment.commentId });
   };
 
   return (
@@ -55,15 +75,25 @@ export default function Comment({ item: comment, ticket }) {
           ticketViewMessages.areYouSureDeleteCommentBody,
         )}
         onClose={() => setIsDeleting(false)}
-        onYes={() => {}}
+        onYes={() => handleDeleteComment()}
       />
       <ServerActionSnackbar
-        error={error}
-        isLoading={isLoading}
-        isError={isError}
-        isSuccess={isSuccess}
+        error={updateError}
+        isLoading={isUpdateLoading}
+        isError={isUpdateError}
+        isSuccess={isUpdateSuccess}
         successMessage={intl.formatMessage(
           queryStatusMessages.updateSuccessfulX,
+          { x: intl.formatMessage(globalMessages.comment) },
+        )}
+      />
+      <ServerActionSnackbar
+        error={deleteError}
+        isLoading={isDeleteLoading}
+        isError={isDeleteError}
+        isSuccess={isDeleteSuccess}
+        successMessage={intl.formatMessage(
+          queryStatusMessages.deleteSuccessfulX,
           { x: intl.formatMessage(globalMessages.comment) },
         )}
       />

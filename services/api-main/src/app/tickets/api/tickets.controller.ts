@@ -118,7 +118,7 @@ export class TicketsController extends BaseController {
     return this.mapper.map(ticket, Ticket, TicketDTO);
   }
 
-  @Delete(':id/comment/delete/:commentId')
+  @Delete(':id/comment/:commentId/delete')
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async deleteComment(
     @Param('id') ticketId: string,
