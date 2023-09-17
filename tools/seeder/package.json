@@ -10,10 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "dayjs": "^1.11.9",
     "faker": "^5.5.3",
     "lorem-ipsum": "^2.0.8",
     "mongodb": "^5.3.0",
-    "mongoose": "^7.1.0"
+    "mongoose": "^7.1.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "babel-node": "^0.0.1-security",

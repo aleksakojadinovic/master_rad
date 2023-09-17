@@ -16,12 +16,14 @@ export class ExtractUserInfo implements CanActivate {
     if (request.user) {
       const user = await this.userService.findOne(request.user._id);
 
-      if (user.isBanned()) {
-        throw new UnauthorizedException({ status: UserStatus.BANNED });
-      }
+      if (user) {
+        if (user.isBanned()) {
+          throw new UnauthorizedException({ status: UserStatus.BANNED });
+        }
 
-      if (user.isRegistered()) {
-        throw new UnauthorizedException({ status: UserStatus.REGISTERED });
+        if (user.isRegistered()) {
+          throw new UnauthorizedException({ status: UserStatus.REGISTERED });
+        }
       }
 
       request.userInfo = user;

@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const LoremIpsum = require('lorem-ipsum').LoremIpsum;
+const uuid = require('uuid');
 
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
@@ -12,100 +13,7 @@ const lorem = new LoremIpsum({
   },
 });
 
-function capitalizeFirstLetter(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
 const url = `mongodb://${process.env.MAIN_DB_USERNAME}:${process.env.MAIN_DB_PWD}@maindb:27017`;
-
-const MIN_TICKET_TITLE_LENGTH = 4;
-const MAX_TICKET_TITLE_LENGTH = 10;
-
-const MIN_TICKET_BODY_LENGTH = 40;
-const MAX_TICKET_BODY_LENGTH = 200;
-
-const MIN_COMMENTS = 2;
-const MAX_COMMENTS = 7;
-
-const MIN_COMMENT_LENGTH = 10;
-const MAX_COMMENT_LENGTH = 30;
-
-const MIN_STATUS_CHANGES = 1;
-const MAX_STATUS_CHANGES = 4;
-
-const STATUSES = ['NEW', 'OPEN', 'CLOSED'];
-
-function capitalizeFirstLetter(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function getRandomTicketTitleLength() {
-  return getRandomInt(MIN_TICKET_TITLE_LENGTH, MAX_TICKET_TITLE_LENGTH);
-}
-
-function getRandomTicketBodyLength() {
-  return getRandomInt(MIN_TICKET_BODY_LENGTH, MAX_TICKET_BODY_LENGTH);
-}
-
-function getRandomTicketCommentLength() {
-  return getRandomInt(MIN_COMMENT_LENGTH, MAX_COMMENT_LENGTH);
-}
-
-function getRandomNumberOfComments() {
-  return getRandomInt(MIN_COMMENTS, MAX_COMMENTS);
-}
-
-function getRandomNumberOfStatusChanges() {
-  return getRandomInt(MIN_STATUS_CHANGES, MAX_STATUS_CHANGES);
-}
-
-function generateTicketTitle() {
-  const length = getRandomTicketTitleLength();
-  return capitalizeFirstLetter(lorem.generateWords(length));
-}
-
-function generateTicketBody() {
-  const length = getRandomTicketBodyLength();
-  return capitalizeFirstLetter(lorem.generateWords(length));
-}
-
-function generateComment() {
-  const length = getRandomTicketCommentLength();
-  return { body: capitalizeFirstLetter(lorem.generateWords(length)) };
-}
-
-function generateComments() {
-  const length = getRandomNumberOfComments();
-  return Array.from(Array(length)).map(generateComment);
-}
-
-function generateStatusChange() {
-  return { status: STATUSES[getRandomInt(0, 2)] };
-}
-
-function generateStatusChanges() {
-  const length = getRandomNumberOfStatusChanges();
-  return Array.from(Array(length)).map(generateStatusChange);
-}
-
-async function getCustomers(db) {
-  const result = await db
-    .collection('users')
-    .find({ role: 'customer' })
-    .toArray();
-  return result;
-}
-
-async function getAgents(db) {
-  const result = await db.collection('users').find({ role: 'agent' }).toArray();
-  return result;
-}
-
-const NUMBER_OF_TICKETS = 1000;
 
 async function main() {
   let client = null;
@@ -121,59 +29,106 @@ async function main() {
 
   const db = client.db('sts_db');
 
-  const customers = await getCustomers(db);
-  const agents = await getAgents(db);
+  const customers = await db
+    .collection('users')
+    .find({ role: 'customer' })
+    .toArray();
+  const agents = await db.collection('users').find({ role: 'agent' }).toArray();
+
+  // Drop existing tickets
+  await db.collection('tickets').drop();
+  console.log('Dropped tickets.');
 
   const tickets = [];
 
-  for (let i = 0; i < NUMBER_OF_TICKETS; i++) {
-    const title = generateTicketTitle();
-    const body = generateTicketBody();
+  for (let i = 0; i < 1000; i++) {
     const createdBy = customers[Math.floor(Math.random() * customers.length)];
-    const createdAt = new Date();
+    const randomAgent = agents[Math.floor(Math.random() * agents.length)];
 
-    const comments = generateComments();
-    const statusChanges = generateStatusChanges();
-
-    // const mixed = [...(comments.map((comment) => ({ ...comment, type: 'comment' }))), ...(statusChanges.map((statusChange) => ({ ...statusChange, type: 'statusChange' })))];
-    const mixed = [...comments, ...statusChanges];
-    mixed.sort(() => Math.random() - 0.5);
-    const history = mixed.map((entry) => ({
-      groupId: Math.floor(Math.random() * 1000),
-      timestamp: new Date(),
-      initiator: [
-        ...agents,
-        ...Array.from(Array(2 * agents.length).keys()).map(() => createdBy),
-      ][Math.floor(Math.random() * (3 * customers.length))]._id,
-      note: '',
-      entryType: entry.status != undefined ? 3 : 4,
-      entry,
-    }));
-
-    const scs = history.filter(({ entryType }) => {
-      return entryType === 3;
-    });
-    const status = scs[scs.length - 1].entry.status;
     const ticket = {
-      title,
-      body,
+      title: lorem.generateWords(5),
+      body: lorem.generateParagraphs(1),
+      createdAt: new Date(
+        Date.now() -
+          30 * 24 * 60 * 60 * 1000 +
+          (i * 24 * 60 * 60 * 1000) / 1000,
+      ),
       createdBy: createdBy._id,
-      createdAt,
-      status,
-      history,
+      status: 'NEW',
+      history: [],
     };
+
+    const history = [
+      {
+        timestamp: new Date(ticket.createdAt),
+        initiator: createdBy,
+        type: 'CREATED',
+        payload: {
+          title: ticket.title,
+          body: ticket.body,
+          status: 'NEW',
+        },
+      },
+      {
+        timestamp: new Date(ticket.createdAt.getTime() + 60000),
+        initiator: randomAgent,
+        type: 'STATUS_CHANGED',
+        payload: {
+          status: 'OPEN',
+        },
+      },
+      {
+        timestamp: new Date(ticket.createdAt.getTime() + 120000),
+        initiator: randomAgent,
+        type: 'COMMENT_ADDED',
+        payload: {
+          body: lorem.generateParagraphs(1),
+          commentId: uuid.v4(),
+          isInternal: false,
+        },
+      },
+      {
+        timestamp: new Date(ticket.createdAt.getTime() + 180000),
+        initiator: randomAgent,
+        type: 'STATUS_CHANGED',
+        payload: {
+          status: 'IN_PROGRESS',
+        },
+      },
+    ];
+
+    for (let j = 0; j < 3; j++) {
+      history.push({
+        timestamp: new Date(ticket.createdAt.getTime() + (240000 + j * 60000)),
+        initiator: randomAgent,
+        type: 'COMMENT_ADDED',
+        payload: {
+          body: lorem.generateParagraphs(1),
+          commentId: uuid.v4(),
+          isInternal: false,
+        },
+      });
+    }
+
+    const finalStatus = Math.random() < 0.7 ? 'RESOLVED' : 'CLOSED';
+    history.push({
+      timestamp: new Date(ticket.createdAt.getTime() + 300000),
+      initiator: randomAgent,
+      type: 'STATUS_CHANGED',
+      payload: {
+        status: finalStatus,
+      },
+    });
+
+    ticket.history = history;
+    ticket.status = finalStatus;
     tickets.push(ticket);
   }
 
-  await db.collection('tickets').drop();
+  await db.collection('tickets').insertMany(tickets);
+  console.log(`Inserted ${tickets.length} tickets.`);
 
-  console.log('Dropped tickets.');
-
-  const result = await db.collection('tickets').insertMany(tickets);
-
-  console.log(`Inserted ${result.insertedCount} tickets`);
-
-  process.exit(0);
+  await client.close();
 }
 
 main();

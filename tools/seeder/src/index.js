@@ -34,6 +34,26 @@ const predefinedCustomers = [
   { firstName: 'Samantha', lastName: 'Davis' },
   { firstName: 'Christopher', lastName: 'Carter' },
   { firstName: 'Olivia', lastName: 'Reynolds' },
+  { firstName: 'Emma', lastName: 'Walker' },
+  { firstName: 'Benjamin', lastName: 'Turner' },
+  { firstName: 'Mia', lastName: 'Roberts' },
+  { firstName: 'Elijah', lastName: 'Parker' },
+  { firstName: 'Grace', lastName: 'Miller' },
+  { firstName: 'Samuel', lastName: 'White' },
+  { firstName: 'Ava', lastName: 'Harris' },
+  { firstName: 'Henry', lastName: 'King' },
+  { firstName: 'Lily', lastName: 'Carter' },
+  { firstName: 'Daniel', lastName: 'Foster' },
+  { firstName: 'Harper', lastName: 'Adams' },
+  { firstName: 'Mason', lastName: 'Bennett' },
+  { firstName: 'Chloe', lastName: 'Scott' },
+  { firstName: 'Logan', lastName: 'Green' },
+  { firstName: 'Sofia', lastName: 'Wright' },
+  { firstName: 'Jackson', lastName: 'Hall' },
+  { firstName: 'Scarlett', lastName: 'Taylor' },
+  { firstName: 'Liam', lastName: 'Murphy' },
+  { firstName: 'Zoey', lastName: 'Lewis' },
+  { firstName: 'Caleb', lastName: 'Clark' },
 ];
 
 async function main() {
@@ -87,6 +107,7 @@ async function main() {
         lastName,
         passwordHash: bcrypt.hashSync(firstName.toLowerCase(), 10),
         role: 'agent',
+        status: 'ACTIVE',
       }));
 
       const result = await db.collection('users').insertMany(agents);
@@ -105,6 +126,7 @@ async function main() {
         lastName,
         passwordHash: bcrypt.hashSync(firstName.toLowerCase(), 10),
         role: 'customer',
+        status: 'ACTIVE',
       }));
 
       const result = await db.collection('users').insertMany(customers);
