@@ -66,4 +66,12 @@ export const ticketViewMessages = defineMessages({
     id: 'ticket-view.status-moved-on',
     defaultMessage: 'on',
   },
+  areYouSureDeleteCommentTitle: {
+    id: 'ticket-view.are-you-sure-delete-comment',
+    defaultMessage: 'Are you sure you want to delete this comment?',
+  },
+  areYouSureDeleteCommentBody: {
+    id: 'ticket-view.are-you-sure-delete-comment',
+    defaultMessage: 'This cannot be undone. Admins may still see this comment.',
+  },
 });

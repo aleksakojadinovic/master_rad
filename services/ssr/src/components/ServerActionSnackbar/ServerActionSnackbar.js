@@ -17,9 +17,7 @@ function ServerActionSnackbar({
     error,
   });
 
-  console.log({ successMessage });
-
-  const handleClose = (event, reason) => {
+  const handleClose = (_event, reason) => {
     if (reason === 'clickaway') {
       return;
     }

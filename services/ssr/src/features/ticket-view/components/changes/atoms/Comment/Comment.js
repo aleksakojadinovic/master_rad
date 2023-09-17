@@ -12,6 +12,8 @@ import ServerActionSnackbar from '@/components/ServerActionSnackbar/ServerAction
 import { useIntl } from 'react-intl';
 import { queryStatusMessages } from '@/translations/query-statuses';
 import { globalMessages } from '@/translations/global';
+import AreYouSureDialog from '@/components/AreYouSure/AreYouSureDialog';
+import { ticketViewMessages } from '@/translations/ticket-view';
 
 export default function Comment({ item: comment, ticket }) {
   const intl = useIntl();
@@ -19,19 +21,20 @@ export default function Comment({ item: comment, ticket }) {
   const isCommentOwner = id === comment.user.id;
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const styleProp = comment.isInternal
     ? { backgroundColor: INTERNAL_TICKET_COLOR }
     : {};
 
-  const [updateComment, { isLoading, isSuccess, isError, error, reset }] =
+  const [updateComment, { isLoading, isSuccess, isError, error }] =
     useUpdateCommentMutation();
 
   useEffect(() => {
     if (isSuccess || isError) {
       setIsEditing(false);
     }
-  }, [isSuccess, isError, reset]);
+  }, [isSuccess, isError]);
 
   const handleUpdateComment = (newBody) => {
     updateComment({
@@ -43,6 +46,17 @@ export default function Comment({ item: comment, ticket }) {
 
   return (
     <div id={comment.commentId ?? ''} style={styleProp}>
+      <AreYouSureDialog
+        open={isDeleting}
+        title={intl.formatMessage(
+          ticketViewMessages.areYouSureDeleteCommentTitle,
+        )}
+        body={intl.formatMessage(
+          ticketViewMessages.areYouSureDeleteCommentBody,
+        )}
+        onClose={() => setIsDeleting(false)}
+        onYes={() => {}}
+      />
       <ServerActionSnackbar
         error={error}
         isLoading={isLoading}
@@ -57,7 +71,7 @@ export default function Comment({ item: comment, ticket }) {
         {isCommentOwner && (
           <CommentActions
             onEditClick={() => setIsEditing(true)}
-            onDeleteClick={() => {}}
+            onDeleteClick={() => setIsDeleting(true)}
           />
         )}
         <CardContent>
