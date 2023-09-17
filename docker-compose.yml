@@ -59,10 +59,10 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  analytics:
-    container_name: analytics-local
+  etl:
+    container_name: etl-local
     build:
-      context: ./services/analytics
+      context: ./services/etl
       dockerfile: ./docker/Dockerfile
     environment:
       MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
@@ -70,7 +70,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ./services/analytics/scripts:/app/scripts
+      - ./services/etl/scripts:/app/scripts
 
   seeder:
     container_name: seeder
