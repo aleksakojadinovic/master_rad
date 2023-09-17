@@ -9,6 +9,10 @@ export const manageTagsMessages = defineMessages({
     id: 'manage-tags.title',
     defaultMessage: 'Manage Tags | STS',
   },
+  createTagTitle: {
+    id: 'manage-tags.create',
+    defaultMessage: 'Create a tag group | STS',
+  },
   tagNameText: {
     id: 'tags.tag-name-text',
     defaultMessage: 'Name',

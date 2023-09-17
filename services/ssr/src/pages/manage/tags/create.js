@@ -2,13 +2,20 @@ import ManageTagsLayout from '@/features/manage-tags/Layout';
 import CreateOrEditTagGroups from '@/features/manage-tags/components/CreateOrEditTag';
 import { wrapper } from '@/redux/store';
 import api from '@/services/api';
-import React from 'react';
+import { manageTagsMessages } from '@/translations/tags';
+import Head from 'next/head';
+import React, { Fragment } from 'react';
+import { useIntl } from 'react-intl';
 
 function CreateTagRoute() {
+  const intl = useIntl();
   return (
-    <div>
+    <Fragment>
+      <Head>
+        <title>{intl.formatMessage(manageTagsMessages.createTagTitle)}</title>
+      </Head>
       <CreateOrEditTagGroups isCreate />
-    </div>
+    </Fragment>
   );
 }
 
