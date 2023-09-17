@@ -36,8 +36,10 @@ async function main() {
   const agents = await db.collection('users').find({ role: 'agent' }).toArray();
 
   // Drop existing tickets
-  await db.collection('tickets').drop();
-  console.log('Dropped tickets.');
+  try {
+    await db.collection('tickets').drop();
+    console.log('Dropped tickets.');
+  } catch (e) {}
 
   const tickets = [];
 
@@ -80,21 +82,13 @@ async function main() {
       {
         timestamp: new Date(ticket.createdAt.getTime() + 120000),
         initiator: randomAgent,
-        type: 'STATUS_CHANGED',
-        payload: {
-          status: 'OPEN',
-        },
-      },
-      {
-        timestamp: new Date(ticket.createdAt.getTime() + 180000),
-        initiator: randomAgent,
         type: 'ASSIGNEES_CHANGED',
         payload: {
           assignees: [randomAgent],
         },
       },
       {
-        timestamp: new Date(ticket.createdAt.getTime() + 240000),
+        timestamp: new Date(ticket.createdAt.getTime() + 180000),
         initiator: randomAgent,
         type: 'STATUS_CHANGED',
         payload: {
@@ -103,10 +97,10 @@ async function main() {
       },
     ];
 
-    for (let j = 0; j < 3; j++) {
+    for (let j = 0; j < 7; j++) {
       history.push({
-        timestamp: new Date(ticket.createdAt.getTime() + (240000 + j * 60000)),
-        initiator: randomAgent,
+        timestamp: new Date(ticket.createdAt.getTime() + (180000 + j * 60000)),
+        initiator: Math.random() < 0.5 ? randomAgent : createdBy,
         type: 'COMMENT_ADDED',
         payload: {
           body: lorem.generateParagraphs(1),
@@ -118,7 +112,9 @@ async function main() {
 
     const finalStatus = Math.random() < 0.7 ? 'RESOLVED' : 'CLOSED';
     history.push({
-      timestamp: new Date(ticket.createdAt.getTime() + 300000),
+      timestamp: new Date(
+        history[history.length - 1].timestamp.getTime() + 6000,
+      ),
       initiator: randomAgent,
       type: 'STATUS_CHANGED',
       payload: {
