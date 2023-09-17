@@ -1132,13 +1132,13 @@
   "ticket-view.has-assigned": [
     {
       "type": 0,
-      "value": "dodeljen"
+      "value": "je dodelio ovaj tiket"
     }
   ],
   "ticket-view.has-unassigned": [
     {
       "type": 0,
-      "value": "nije dodeljen"
+      "value": "je sklonio ovaj tiket sa"
     }
   ],
   "ticket-view.internal-comment-button-text": [
