@@ -90,7 +90,7 @@ export class TicketEntityProfile extends AutomapperProfile {
                 const deletes = source.history.filter(
                   (deleteItem) =>
                     deleteItem.type ===
-                      TicketHistoryEntryType.COMMENT_CHANGED &&
+                      TicketHistoryEntryType.COMMENT_DELETED &&
                     (deleteItem.payload as TicketHistoryEntryCommentChanged)
                       .commentId === payload.commentId,
                 );
