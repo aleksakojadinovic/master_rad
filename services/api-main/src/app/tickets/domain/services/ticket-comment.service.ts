@@ -20,7 +20,17 @@ export class TicketCommentService extends BaseService {
     super();
   }
 
-  private findAndProtectComment(ticket: Ticket, user: User, commentId: string) {
+  private async findAndProtect(
+    ticketId: string,
+    user: User,
+    commentId: string,
+  ) {
+    const ticket = await this.ticketsRepository.findById(ticketId);
+
+    if (!ticket) {
+      throw new TicketNotFoundError(ticketId);
+    }
+
     const isOwner = ticket.createdBy.id === user.id;
 
     if (user.isCustomer() && !isOwner) {
@@ -37,17 +47,11 @@ export class TicketCommentService extends BaseService {
       throw new CannotUpdateOthersCommentsError();
     }
 
-    return comment;
+    return { comment, ticket };
   }
 
   async updateComment(id: string, user: User, commentId: string, body: string) {
-    const ticket = await this.ticketsRepository.findById(id);
-
-    if (!ticket) {
-      throw new TicketNotFoundError(id);
-    }
-
-    const comment = this.findAndProtectComment(ticket, user, commentId);
+    const { ticket, comment } = await this.findAndProtect(id, user, commentId);
 
     comment.body = body;
 
@@ -62,13 +66,7 @@ export class TicketCommentService extends BaseService {
   }
 
   async deleteComment(id: string, user: User, commentId: string) {
-    const ticket = await this.ticketsRepository.findById(id);
-
-    if (!ticket) {
-      throw new TicketNotFoundError(id);
-    }
-
-    const comment = this.findAndProtectComment(ticket, user, commentId);
+    const { ticket, comment } = await this.findAndProtect(id, user, commentId);
 
     const updatedTicket = await this.ticketsRepository.deleteComment(
       ticket,
