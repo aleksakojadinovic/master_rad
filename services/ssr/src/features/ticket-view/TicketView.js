@@ -22,7 +22,6 @@ import { globalMessages } from '@/translations/global';
 import StickyPanel from './components/StickyPanel/StickyPanel';
 
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import useUser from '@/hooks/useUser';
 
 export default function TicketView({ ticket }) {
