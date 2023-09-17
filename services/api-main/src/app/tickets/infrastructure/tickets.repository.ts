@@ -247,7 +247,7 @@ export class TicketsRepository {
       const item = new TicketHistoryItem();
       item.initiator = user.id as unknown as UserDb;
       item.timestamp = timestamp;
-      item.type = TicketHistoryEntryType.COMMEND_ADDED;
+      item.type = TicketHistoryEntryType.COMMENT_ADDED;
       item.payload = new TicketHistoryEntryCommentAdded(
         comment.body,
         comment.commentId,

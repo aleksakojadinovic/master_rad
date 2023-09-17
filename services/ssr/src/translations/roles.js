@@ -9,10 +9,6 @@ export const rolesMessages = defineMessages({
     id: 'roles.agent',
     defaultMessage: 'Agent',
   },
-  superadministrator: {
-    id: 'roles.superadministrator',
-    defaultMessage: 'Superadministrator',
-  },
   customer: {
     id: 'roles.customer',
     defaultMessage: 'Customer',

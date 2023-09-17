@@ -16,7 +16,6 @@ import { INTERNAL_TICKET_COLOR } from '../constants';
 function TicketCommentSection({ ticket }) {
   const { isCustomer } = useUser();
   const intl = useIntl();
-  const { isSuperAdministrator } = useUser();
 
   const [isInternal, setIsInternal] = useState(false);
 
@@ -24,8 +23,11 @@ function TicketCommentSection({ ticket }) {
 
   // TODO: this needs BE support
   const canAddComment = useMemo(() => {
-    return ticket.status !== TicketStatus.CLOSED && !isSuperAdministrator;
-  }, [ticket, isSuperAdministrator]);
+    return (
+      ticket.status !== TicketStatus.CLOSED &&
+      ticket.status !== TicketStatus.RESOLVED
+    );
+  }, [ticket]);
 
   const [updateTicket, { isLoading, isSuccess }] = useUpdateTicketMutation({
     fixedCacheKey: 'ticket-view-page',

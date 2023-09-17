@@ -75,11 +75,10 @@ export class TicketEntityProfile extends AutomapperProfile {
           (destination) => destination.comments,
           mapFrom((source) => {
             const commentItems = source.history.filter(
-              (item) => item.type === TicketHistoryEntryType.COMMEND_ADDED,
+              (item) => item.type === TicketHistoryEntryType.COMMENT_ADDED,
             );
 
             if (commentItems.length === 0) {
-              console.log('no comments');
               return [];
             }
 
