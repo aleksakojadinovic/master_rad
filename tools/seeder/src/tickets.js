@@ -15,6 +15,10 @@ const lorem = new LoremIpsum({
 
 const url = `mongodb://${process.env.MAIN_DB_USERNAME}:${process.env.MAIN_DB_PWD}@maindb:27017`;
 
+function capitalizeFirstLetter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 /**
  * Generates random amount of miliseconds between 10 minutes and 1 hour
  */
@@ -64,13 +68,14 @@ async function main() {
       customers[Math.floor(Math.random() * customers.length)]._id;
     const randomAgent = agents[Math.floor(Math.random() * agents.length)]._id;
 
+    const increment = (30 * 24 * 60 * 60 * 1000) / 1000;
     const createdAt = new Date(
-      Date.now() - 30 * 24 * 60 * 60 * 1000 + (i * 24 * 60 * 60 * 1000) / 1000,
+      Date.now() - 30 * 24 * 60 * 60 * 1000 + i * increment,
     );
 
     const ticket = {
-      title: lorem.generateWords(5),
-      body: lorem.generateParagraphs(1),
+      title: capitalizeFirstLetter(lorem.generateWords(5)),
+      body: capitalizeFirstLetter(lorem.generateParagraphs(1)),
       createdAt,
       createdBy: createdBy,
       status: 'NEW',
