@@ -32,7 +32,7 @@ export class AuthController {
   @Header('content-type', 'application/json')
   @UseGuards(AuthGuard('jwt'), ExtractUserInfoSilent)
   async me(@GetUserInfo() user: User) {
-    if (user.isBanned) {
+    if (user.isBanned()) {
       throw new UnauthorizedException();
     }
 
