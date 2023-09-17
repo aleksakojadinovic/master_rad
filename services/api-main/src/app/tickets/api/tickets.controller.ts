@@ -12,7 +12,7 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import { TicketService } from '../domain/services/tickets.service';
+import { TicketService } from '../domain/services/ticket.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { AuthGuard } from '@nestjs/passport';
