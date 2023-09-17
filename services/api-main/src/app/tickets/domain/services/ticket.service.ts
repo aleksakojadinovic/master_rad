@@ -30,13 +30,13 @@ import { TicketStatus } from '../value-objects/ticket-status';
 import { TicketComment } from '../value-objects/ticket-comment';
 import { Notification } from 'src/app/notifications/domain/entities/notification.entity';
 import { v4 as uuid } from 'uuid';
-import { TicketsRedactionService } from './ticket-redacation.service';
+import { TicketRedactionService } from './ticket-redacation.service';
 
 @Injectable()
 export class TicketService extends BaseService {
   constructor(
     @InjectMapper() private readonly mapper: Mapper,
-    private ticketRedactionService: TicketsRedactionService,
+    private ticketRedactionService: TicketRedactionService,
     private ticketTagService: TicketTagService,
     private usersService: UsersService,
     private notificationsService: NotificationsService,

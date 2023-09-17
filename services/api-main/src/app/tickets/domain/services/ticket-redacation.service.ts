@@ -4,7 +4,7 @@ import { Ticket } from '../entities/ticket.entity';
 import { User } from 'src/app/users/domain/entities/user.entity';
 
 @Injectable()
-export class TicketsRedactionService extends BaseService {
+export class TicketRedactionService extends BaseService {
   private stripTags(ticket: Ticket, user: User) {
     ticket.tags = ticket.tags.filter((tag) => tag.group.canSee(user));
     return ticket;

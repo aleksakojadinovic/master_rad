@@ -11,7 +11,7 @@ import { TicketTagSystemModule } from '../ticket-tag-system/ticket-tag-system.mo
 import { NotificationsModule } from '../notifications/notifications.module';
 import { TicketsRepository } from './infrastructure/tickets.repository';
 import { TicketCommentService } from './domain/services/ticket-comment.service';
-import { TicketsRedactionService } from './domain/services/ticket-redacation.service';
+import { TicketRedactionService } from './domain/services/ticket-redacation.service';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { TicketsRedactionService } from './domain/services/ticket-redacation.ser
   providers: [
     TicketService,
     TicketCommentService,
-    TicketsRedactionService,
+    TicketRedactionService,
     TicketsRepository,
   ],
 })

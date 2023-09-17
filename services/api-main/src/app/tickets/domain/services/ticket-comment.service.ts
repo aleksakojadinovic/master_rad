@@ -8,13 +8,13 @@ import { CommentNotFoundError } from '../errors/CommentNotFound';
 import { CannotUpdateOthersCommentsError } from '../errors/CannotUpdateOthersComments';
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { Ticket } from '../entities/ticket.entity';
-import { TicketsRedactionService } from './ticket-redacation.service';
+import { TicketRedactionService } from './ticket-redacation.service';
 
 @Injectable()
 export class TicketCommentService extends BaseService {
   constructor(
     @InjectMapper() private readonly mapper: Mapper,
-    private ticketRedactionService: TicketsRedactionService,
+    private ticketRedactionService: TicketRedactionService,
     private ticketsRepository: TicketsRepository,
   ) {
     super();
