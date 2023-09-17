@@ -33,6 +33,14 @@ export const ticketsSlice = api.injectEndpoints({
         params,
       }),
     }),
+    updateComment: builder.mutation({
+      query: ({ id, commentId, body }) => ({
+        url: `/tickets/${id}/comment/${commentId}/update`,
+        method: 'PATCH',
+        body: { body },
+      }),
+      invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
+    }),
   }),
   overrideExisting: true,
 });
@@ -42,6 +50,7 @@ export const {
   useUpdateTicketMutation,
   useGetTicketsQuery,
   useCreateTicketMutation,
+  useUpdateCommentMutation,
 } = ticketsSlice;
 
 const selectGetTicketQueryResult = createSelector(

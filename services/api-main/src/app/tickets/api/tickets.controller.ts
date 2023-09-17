@@ -29,6 +29,7 @@ import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../domain/errors/NotAllowedToSearchOthersTicketsAsACustomer';
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { Ticket } from '../domain/entities/ticket.entity';
+import { UpdateCommentDTO } from './dto/update-comment.dto';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
@@ -96,6 +97,32 @@ export class TicketsController extends BaseController {
 
     return this.mapper.map(ticket, Ticket, TicketDTO);
   }
+
+  @Patch(':id/comment/:commentId/update')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async updateComment(
+    @Param('id') ticketId: string,
+    @Param('commentId') commentId: string,
+    @Body() dto: UpdateCommentDTO,
+    @GetUserInfo() user: User,
+  ) {
+    const ticket = await this.ticketsService.updateComment(
+      ticketId,
+      user,
+      commentId,
+      dto.body,
+    );
+
+    return this.mapper.map(ticket, Ticket, TicketDTO);
+  }
+
+  // @Patch(':id/comment/delete/:commentId')
+  // @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  // async deleteComment(
+  //   @Param('id') ticketId: string,
+  //   @Param('commentId') commentId: string,
+  //   @GetUserInfo() user: User,
+  // ) {}
 
   @Delete(':id')
   remove(@Param('id') id: string) {

@@ -116,6 +116,7 @@ export class TicketDTOProfile extends AutomapperProfile {
                 ? mapper.map(comment.user, User, UserDTO)
                 : comment.user.id;
               dto.body = comment.body;
+              dto.updatedAt = comment.dateUpdated;
               return dto;
             });
           }),

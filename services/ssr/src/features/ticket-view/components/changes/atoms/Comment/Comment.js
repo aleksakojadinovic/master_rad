@@ -1,60 +1,75 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Box, Chip, Tooltip, Typography } from '@mui/material';
-import UserChip from '../../../../../../components/User/UserChip';
-import { formatDate } from '@/utils';
+import { Box } from '@mui/material';
 import { INTERNAL_TICKET_COLOR } from '@/features/ticket-view/constants';
+import useUser from '@/hooks/useUser';
+import CommentHead from './CommentHead';
+import CommentBody from './CommentBody/CommentBody';
+import CommentActions from './CommentActions';
+import { useUpdateCommentMutation } from '@/api/tickets';
+import ServerActionSnackbar from '@/components/ServerActionSnackbar/ServerActionSnackbar';
 import { useIntl } from 'react-intl';
-import { ticketViewMessages } from '@/translations/ticket-view';
+import { queryStatusMessages } from '@/translations/query-statuses';
+import { globalMessages } from '@/translations/global';
 
-export default function Comment({ item }) {
+export default function Comment({ item: comment, ticket }) {
   const intl = useIntl();
+  const { id } = useUser();
+  const isCommentOwner = id === comment.user.id;
 
-  const styleProp = item.isInternal
+  const [isEditing, setIsEditing] = useState(false);
+
+  const styleProp = comment.isInternal
     ? { backgroundColor: INTERNAL_TICKET_COLOR }
     : {};
 
+  const [updateComment, { isLoading, isSuccess, isError, error, reset }] =
+    useUpdateCommentMutation();
+
+  useEffect(() => {
+    if (isSuccess || isError) {
+      setIsEditing(false);
+    }
+  }, [isSuccess, isError, reset]);
+
+  const handleUpdateComment = (newBody) => {
+    updateComment({
+      id: ticket.id,
+      commentId: comment.commentId,
+      body: newBody,
+    });
+  };
+
   return (
-    <div id={item.commentId ?? ''} style={styleProp}>
+    <div id={comment.commentId ?? ''} style={styleProp}>
+      <ServerActionSnackbar
+        error={error}
+        isLoading={isLoading}
+        isError={isError}
+        isSuccess={isSuccess}
+        successMessage={intl.formatMessage(
+          queryStatusMessages.updateSuccessfulX,
+          { x: intl.formatMessage(globalMessages.comment) },
+        )}
+      />
       <Card sx={styleProp}>
+        {isCommentOwner && (
+          <CommentActions
+            onEditClick={() => setIsEditing(true)}
+            onDeleteClick={() => {}}
+          />
+        )}
         <CardContent>
-          <Box
-            display="flex"
-            sx={{
-              flexDirection: { xs: 'column', md: 'row' },
-              alignItems: { xs: 'normal', md: 'center' },
-            }}
-          >
-            <Box>
-              <UserChip user={item.user} includeRole />
-            </Box>
-            <Box sx={{ marginLeft: { xs: 0, md: '12px' } }}>
-              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                {formatDate(item.timestamp)}
-              </Typography>
-            </Box>
-            {item.isInternal && (
-              <Tooltip
-                title={intl.formatMessage(
-                  ticketViewMessages.internalCommentNote,
-                )}
-                placement="top"
-              >
-                <Box
-                  sx={{
-                    marginLeft: { xs: 0, md: '12px' },
-                    display: 'inline-block',
-                  }}
-                >
-                  <Chip label="INTERNAL" color="warning" />
-                </Box>
-              </Tooltip>
-            )}
-          </Box>
+          <CommentHead comment={comment} />
 
           <Box marginTop="12px">
-            <Typography variant="body2">{item.body}</Typography>
+            <CommentBody
+              comment={comment}
+              isEditing={isEditing}
+              onSave={handleUpdateComment}
+              onCancel={() => setIsEditing(false)}
+            />
           </Box>
         </CardContent>
       </Card>

@@ -22,6 +22,7 @@ import { NotAllowedToChangeToThisStatusError } from '../../domain/errors/NotAllo
 import { CustomerCannotAddInternalCommmentError } from '../../domain/errors/CustomerCannotAddInternalComment';
 import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../../domain/errors/NotAllowedToSearchOthersTicketsAsACustomer';
 import { BadTicketFiltersError } from '../../domain/errors/BadTicketFilters';
+import { CommentNotFoundError } from '../../domain/errors/CommentNotFound';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {
@@ -78,6 +79,10 @@ export class TicketInterceptor implements NestInterceptor {
 
         if (error instanceof BadTicketFiltersError) {
           throw new BadRequestException(error.getPayload());
+        }
+
+        if (error instanceof CommentNotFoundError) {
+          throw new NotFoundException(error.getPayload());
         }
 
         throw error;

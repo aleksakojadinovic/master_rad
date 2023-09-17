@@ -30,6 +30,8 @@ import { TicketStatus } from '../value-objects/ticket-status';
 import { TicketComment } from '../value-objects/ticket-comment';
 import { Notification } from 'src/app/notifications/domain/entities/notification.entity';
 import { v4 as uuid } from 'uuid';
+import { CommentNotFoundError } from '../errors/CommentNotFound';
+import { CannotUpdateOthersCommentsError } from '../errors/CannotUpdateOthersComments';
 
 @Injectable()
 export class TicketsService extends BaseService {
@@ -142,6 +144,44 @@ export class TicketsService extends BaseService {
     this.stripInternalComments(ticket, user);
 
     return ticket;
+  }
+
+  async updateComment(id: string, user: User, commentId: string, body: string) {
+    const ticket = await this.ticketsRepository.findById(id);
+
+    if (!ticket) {
+      throw new TicketNotFoundError(id);
+    }
+
+    const isOwner = ticket.createdBy.id === user.id;
+
+    if (user.isCustomer() && !isOwner) {
+      throw new TicketNotFoundError(id);
+    }
+
+    const comment = ticket.comments.find((c) => c.commentId === commentId);
+
+    if (!comment) {
+      throw new CommentNotFoundError();
+    }
+
+    if (comment.user.id !== user.id) {
+      throw new CannotUpdateOthersCommentsError();
+    }
+
+    if (comment.body === body) {
+      return ticket;
+    }
+
+    comment.body = body;
+
+    const updatedTicket = await this.ticketsRepository.updateComment(
+      ticket,
+      comment,
+      user,
+    );
+
+    return updatedTicket;
   }
 
   async update(id: string, user: User, dto: UpdateTicketDto) {

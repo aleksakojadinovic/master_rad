@@ -85,4 +85,8 @@ export const globalMessages = defineMessages({
     id: 'global.rows-per-page',
     defaultMessage: 'Per page',
   },
+  comment: {
+    id: 'global.comment',
+    defaultMessage: 'comment',
+  },
 });

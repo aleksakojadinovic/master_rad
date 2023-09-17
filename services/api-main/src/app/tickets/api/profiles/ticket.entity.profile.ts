@@ -1,6 +1,7 @@
 import {
   TicketHistoryEntryAssigneesChanged,
   TicketHistoryEntryCommentAdded,
+  TicketHistoryEntryCommentChanged,
   TicketHistoryEntryCreated,
   TicketHistoryEntryStatusChanged,
 } from './../../infrastructure/schema/ticket-history.schema';
@@ -73,26 +74,40 @@ export class TicketEntityProfile extends AutomapperProfile {
         forMember(
           (destination) => destination.comments,
           mapFrom((source) => {
-            const commentItems = source.history
-              .map((item, index) => ({ item, index }))
-              .filter(
-                ({ item }) =>
-                  item.type === TicketHistoryEntryType.COMMEND_ADDED,
-              );
+            const commentItems = source.history.filter(
+              (item) => item.type === TicketHistoryEntryType.COMMEND_ADDED,
+            );
 
             if (commentItems.length === 0) {
+              console.log('no comments');
               return [];
             }
 
-            return commentItems.map(({ item, index }) => {
-              const comment = new TicketComment();
+            return commentItems.map((item) => {
               const payload = item.payload as TicketHistoryEntryCommentAdded;
-              comment.changeIndex = index;
-              comment.body = payload.body;
+
+              const changes = source.history.filter(
+                (changeItem) =>
+                  changeItem.type === TicketHistoryEntryType.COMMENT_CHANGED &&
+                  (changeItem.payload as TicketHistoryEntryCommentChanged)
+                    .commentId === payload.commentId,
+              );
+
+              const comment = new TicketComment();
+
+              const lastChange =
+                changes.length > 0 ? changes[changes.length - 1] : null;
+
+              const lastChangePayload = lastChange
+                ? (lastChange.payload as TicketHistoryEntryCommentChanged)
+                : null;
+
+              comment.body = lastChange ? lastChangePayload.body : payload.body;
               comment.commentId = payload.commentId;
               comment.isInternal = payload.isInternal;
               comment.user = mapper.map(item.initiator, UserDb, User);
               comment.timestamp = item.timestamp;
+              comment.dateUpdated = lastChange ? lastChange.timestamp : null;
               return comment;
             });
           }),
