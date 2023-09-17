@@ -31,6 +31,7 @@ import { TicketComment } from '../value-objects/ticket-comment';
 import { Notification } from 'src/app/notifications/domain/entities/notification.entity';
 import { v4 as uuid } from 'uuid';
 import { TicketRedactionService } from './ticket-redacation.service';
+import { CannotChangeCommentsForTicketStatus } from '../errors/CannotChangeCommentsOfAClosedTicket';
 
 @Injectable()
 export class TicketService extends BaseService {
@@ -223,6 +224,10 @@ export class TicketService extends BaseService {
   ): Notification[] | null {
     if (dto.comment == null || dto.comment.length === 0) {
       return null;
+    }
+
+    if ([TicketStatus.CLOSED, TicketStatus.RESOLVED].includes(ticket.status)) {
+      throw new CannotChangeCommentsForTicketStatus(ticket.status);
     }
 
     if (user.isCustomer() && dto.isCommentInternal) {
