@@ -19,9 +19,7 @@ function RolePicker({ roles, onSelect, inputSize = 'small' }) {
       getOptionLabel={({ label }) => label}
       renderInput={(props) => <TextField {...props} size={inputSize} />}
       onChange={(_e, val) => {
-        const selectedRole = roles.find(
-          (role) => role === val.label.toLowerCase(),
-        );
+        const selectedRole = roles[val.id];
         if (!selectedRole) {
           return;
         }
