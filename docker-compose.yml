@@ -59,6 +59,19 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  analytics:
+    container_name: analytics-local
+    build:
+      context: ./services/analytics
+      dockerfile: ./docker/Dockerfile
+    environment:
+      MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
+      MAIN_DB_PWD: ${MAIN_DB_PWD}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./services/analytics/scripts:/app/scripts:ro
+
   seeder:
     container_name: seeder
     build:
