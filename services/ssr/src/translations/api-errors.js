@@ -32,6 +32,6 @@ export const apiErrorMessages = defineMessages({
   CannotChangeCommentsForTicketStatus: {
     id: 'api.errors.cannot-change-comments-when-this-status',
     defaultMessage:
-      'You cannot modify comments on this ticket as it is {status}. Consider re-opening.',
+      'You cannot modify comments on a ticket in this status. Consider re-opening.',
   },
 });
