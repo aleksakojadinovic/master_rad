@@ -4,8 +4,8 @@ from datetime import datetime
 from api import calculate_average_first_response_time, calculate_average_pickup_time, calculate_average_resolution_time
 
 
-st.set_page_config(layout="wide")
-st.title('STS analytics dashboard')
+st.set_page_config(page_title='Metrics | STS')
+st.title('STS metrics dashboard')
 
 average_resolution_time = calculate_average_resolution_time()
 average_pickup_time = calculate_average_pickup_time()
