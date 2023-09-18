@@ -46,7 +46,7 @@ const ADMIN_LINKS_CONFIGURATION = [
   },
   {
     id: 'admin-config-metrics',
-    href: '/metrics',
+    href: 'https://metrics.sts.com',
     translation: messages.metrics,
   },
 ];
