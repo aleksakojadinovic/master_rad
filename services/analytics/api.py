@@ -36,7 +36,10 @@ def get_average_metric(start, end, metric):
             }
         }
     ]
+
     result = list(tickets.aggregate(pipeline))
+    if not result:
+        return None
     average_result = result[0]["average_result"]
     return round(average_result / 60, 2)
 
