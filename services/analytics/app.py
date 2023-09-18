@@ -11,15 +11,19 @@ average_resolution_time = calculate_average_resolution_time()
 average_pickup_time = calculate_average_pickup_time()
 average_first_response_time = calculate_average_first_response_time()
 
-d_from = st.date_input("From")
-d_to = st.date_input("To")
+tickets_tab, agents_tab, customers_tab = st.tabs(
+    ['Tickets', 'Agents', 'Customers'])
 
 
-st.metric(label="Average resolution time",
-          value=f"{average_resolution_time} h")
+with tickets_tab:
+    d_from = st.date_input("From")
+    d_to = st.date_input("To")
 
-st.metric(label="Average pickup time",
-          value=f"{average_pickup_time} h")
+    st.metric(label="Average resolution time",
+              value=f"{average_resolution_time} h")
 
-st.metric(label="Average first response time",
-          value=f"{average_first_response_time} h")
+    st.metric(label="Average pickup time",
+              value=f"{average_pickup_time} h")
+
+    st.metric(label="Average first response time",
+              value=f"{average_first_response_time} h")
