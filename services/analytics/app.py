@@ -29,12 +29,18 @@ with tickets_tab:
     average_pickup_time = calculate_average_pickup_time(d_from, d_to)
     average_first_response_time = calculate_average_first_response_time(
         d_from, d_to)
+    
+    col1, col2, col3 = st.columns(3)
 
-    st.metric(label="Average resolution time",
-              value=format_metric(average_resolution_time))
-
-    st.metric(label="Average pickup time",
-              value=format_metric(average_pickup_time))
-
-    st.metric(label="Average first response time",
-              value=format_metric(average_first_response_time))
+    with col1:
+        st.metric(label="Average resolution time",
+                value=format_metric(average_resolution_time))
+        
+    with col2:
+        st.metric(label="Average pickup time",
+                value=format_metric(average_pickup_time))
+    with col3:
+        st.metric(label="Average first response time",
+                value=format_metric(average_first_response_time))
+        
+    st.markdown("""---""")
