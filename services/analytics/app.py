@@ -53,9 +53,9 @@ with tickets_tab:
                   value=total_resolved_tickets)
 
     with ticket_count_col2:
-        total_closed_tickets = get_picked_up_count(start=d_from, end=d_to)
+        total_picked_up = get_picked_up_count(start=d_from, end=d_to)
         st.metric(label="Total picked up",
-                  value=total_resolved_tickets)
+                  value=total_picked_up)
     # with ticket_count_col2:
     #     st.metric(label="Average pickup time",
     #             value=format_metric(average_pickup_time))
