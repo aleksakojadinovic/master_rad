@@ -1,7 +1,6 @@
 import os
 import pymongo
 from pymongo import MongoClient
-# from datetime import datetime, timedelta
 
 DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss'
 
@@ -19,7 +18,7 @@ def calculate_resolution_time(ticket):
     resolution_time = (
         resolved_time - created_at).total_seconds() / 60 if resolved_time else None
 
-    return resolution_time
+    return resolution_time, resolved_time
 
 
 def calculate_pickup_time(ticket):
@@ -35,7 +34,7 @@ def calculate_pickup_time(ticket):
     pickup_time = (
         assignees_changed_time - created_at).total_seconds() / 60 if assignees_changed_time else None
 
-    return pickup_time
+    return pickup_time, assignees_changed_time
 
 
 def calculate_first_response_time(ticket):
@@ -51,16 +50,26 @@ def calculate_first_response_time(ticket):
     first_response_time = (
         first_comment_time - created_at).total_seconds() / 60 if first_comment_time else None
 
-    return first_response_time
+    return first_response_time, first_comment_time
 
 
 def transform_data(ticket):
     created_at = ticket.get('createdAt')
-    resolution_time = calculate_resolution_time(ticket)
-    pickup_time = calculate_pickup_time(ticket)
-    first_response_time = calculate_first_response_time(ticket)
+    resolution_time, resolution_timestamp = calculate_resolution_time(ticket)
+    pickup_time, pickup_timestamp = calculate_pickup_time(ticket)
+    first_response_time, first_response_timestamp = calculate_first_response_time(
+        ticket)
+    status = ticket.get('status')
 
-    return {"_id": ticket.get('_id'), "timestamp": created_at, "resolution_time": resolution_time, "pickup_time": pickup_time, "first_response_time": first_response_time}
+    return {"_id": ticket.get('_id'),
+            "timestamp": created_at,
+            "resolution_time": resolution_time,
+            "resolved_at": resolution_timestamp,
+            "pickup_time": pickup_time,
+            "picked_up_at": pickup_timestamp,
+            "first_response_time": first_response_time,
+            "first_responded_at": first_response_timestamp,
+            "status": status}
 
 
 def main():

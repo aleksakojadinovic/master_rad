@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import datetime
 
-from api import calculate_average_first_response_time, calculate_average_pickup_time, calculate_average_resolution_time, DEFAULT_END, DEFAULT_START
+from api import calculate_average_first_response_time, calculate_average_pickup_time, calculate_average_resolution_time, get_resolved_count, get_picked_up_count, DEFAULT_END, DEFAULT_START
 
 
 st.set_page_config(page_title='Metrics | STS')
@@ -29,18 +29,37 @@ with tickets_tab:
     average_pickup_time = calculate_average_pickup_time(d_from, d_to)
     average_first_response_time = calculate_average_first_response_time(
         d_from, d_to)
-    
-    col1, col2, col3 = st.columns(3)
 
-    with col1:
+    ticket_metric_col1, ticket_metric_col2, ticket_metric_col3 = st.columns(3)
+
+    with ticket_metric_col1:
         st.metric(label="Average resolution time",
-                value=format_metric(average_resolution_time))
-        
-    with col2:
+                  value=format_metric(average_resolution_time))
+
+    with ticket_metric_col2:
         st.metric(label="Average pickup time",
-                value=format_metric(average_pickup_time))
-    with col3:
+                  value=format_metric(average_pickup_time))
+    with ticket_metric_col3:
         st.metric(label="Average first response time",
-                value=format_metric(average_first_response_time))
-        
+                  value=format_metric(average_first_response_time))
+
     st.markdown("""---""")
+
+    ticket_count_col1, ticket_count_col2, ticket_count_col3 = st.columns(3)
+
+    with ticket_count_col1:
+        total_resolved_tickets = get_resolved_count(start=d_from, end=d_to)
+        st.metric(label="Total resolved",
+                  value=total_resolved_tickets)
+
+    with ticket_count_col2:
+        total_closed_tickets = get_picked_up_count(start=d_from, end=d_to)
+        st.metric(label="Total picked up",
+                  value=total_resolved_tickets)
+    # with ticket_count_col2:
+    #     st.metric(label="Average pickup time",
+    #             value=format_metric(average_pickup_time))
+
+    # with ticket_count_col3:
+    #     st.metric(label="Average first response time",
+    #             value=format_metric(average_first_response_time))

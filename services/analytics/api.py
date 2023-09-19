@@ -54,3 +54,25 @@ def calculate_average_pickup_time(start=DEFAULT_START, end=DEFAULT_END):
 
 def calculate_average_first_response_time(start=DEFAULT_START, end=DEFAULT_END):
     return get_average_metric(start, end, 'first_response_time')
+
+
+DEFAULT_STATUS_TIME_END = datetime.now()
+DEFAULT_START_TIME_START = (datetime.now() - timedelta(days=1))
+
+
+def get_resolved_count(start=DEFAULT_START_TIME_START, end=DEFAULT_STATUS_TIME_END):
+    return tickets.count_documents({
+        "$and": [
+            {"resolved_at": {"$ne": None}},
+            {"resolved_at": {"$gte": start, "$lte": end}},
+        ]
+    })
+
+
+def get_picked_up_count(start=DEFAULT_START_TIME_START, end=DEFAULT_STATUS_TIME_END):
+    return tickets.count_documents({
+        "$and": [
+            {"picked_up_at": {"$ne": None}},
+            {"picked_up_at": {"$gte": start, "$lte": end}},
+        ]
+    })
