@@ -111,3 +111,5 @@ dist
 .vscode/
 
 sts-firebase-key.json
+
+__pycache__/
