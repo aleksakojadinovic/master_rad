@@ -7,4 +7,8 @@ export class TicketComment {
   dateUpdated: Date;
   user: User;
   isInternal: boolean;
+
+  isOwner(user: User) {
+    return this.user.id === user.id;
+  }
 }

@@ -8,7 +8,6 @@ import { CommentNotFoundError } from '../errors/CommentNotFound';
 import { CannotUpdateOthersCommentsError } from '../errors/CannotUpdateOthersComments';
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { TicketRedactionService } from './ticket-redacation.service';
-import { TicketStatus } from '../value-objects/ticket-status';
 import { CannotChangeCommentsForTicketStatus } from '../errors/CannotChangeCommentsOfAClosedTicket';
 
 @Injectable()
@@ -32,13 +31,11 @@ export class TicketCommentService extends BaseService {
       throw new TicketNotFoundError(ticketId);
     }
 
-    if ([TicketStatus.RESOLVED, TicketStatus.CLOSED].includes(ticket.status)) {
+    if (ticket.isFinalStatus()) {
       throw new CannotChangeCommentsForTicketStatus(ticket.status);
     }
 
-    const isOwner = ticket.createdBy.id === user.id;
-
-    if (user.isCustomer() && !isOwner) {
+    if (user.isCustomer() && !ticket.isOwner(user)) {
       throw new TicketNotFoundError(ticket.id);
     }
 
@@ -48,7 +45,7 @@ export class TicketCommentService extends BaseService {
       throw new CommentNotFoundError();
     }
 
-    if (comment.user.id !== user.id) {
+    if (!comment.isOwner(user)) {
       throw new CannotUpdateOthersCommentsError();
     }
 

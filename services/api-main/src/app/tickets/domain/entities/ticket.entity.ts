@@ -27,4 +27,12 @@ export class Ticket {
   statusChanges: TicketStatusChange[];
 
   assigneeChanges: TicketAssigneeChange[];
+
+  isFinalStatus() {
+    return [TicketStatus.CLOSED, TicketStatus.RESOLVED].includes(this.status);
+  }
+
+  isOwner(user: User) {
+    return this.createdBy.id === user.id;
+  }
 }

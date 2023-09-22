@@ -120,9 +120,7 @@ export class TicketService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    const isTicketOwner = ticket.createdBy.id === user.id;
-
-    if (user.isCustomer() && !isTicketOwner) {
+    if (user.isCustomer() && !ticket.isOwner(user)) {
       throw new TicketNotFoundError(id);
     }
 
@@ -140,9 +138,7 @@ export class TicketService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    const isTicketOwner = ticket.createdBy.id === user.id;
-
-    if (isCustomer && !isTicketOwner) {
+    if (isCustomer && !ticket.isOwner(user)) {
       throw new TicketNotFoundError(id);
     }
 
@@ -226,7 +222,7 @@ export class TicketService extends BaseService {
       return null;
     }
 
-    if ([TicketStatus.CLOSED, TicketStatus.RESOLVED].includes(ticket.status)) {
+    if (ticket.isFinalStatus()) {
       throw new CannotChangeCommentsForTicketStatus(ticket.status);
     }
 
@@ -241,7 +237,7 @@ export class TicketService extends BaseService {
 
     // First condition prevents self-notifications
     // Second condition prevents notifying customers of internal comments
-    if (user.id !== ticket.createdBy.id && !dto.isCommentInternal) {
+    if (!ticket.isOwner(user) && !dto.isCommentInternal) {
       usersToNotify.push(ticket.createdBy);
     }
 
