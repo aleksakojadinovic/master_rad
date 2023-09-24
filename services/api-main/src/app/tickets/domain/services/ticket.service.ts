@@ -7,7 +7,6 @@ import { TicketQueryDTO } from '../../api/dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
 import { CannotAssignCustomerError } from '../errors/CannotAssignCustomer';
-import { TicketTagService } from '../../../ticket-tag-system/domain/services/ticket-tag.service';
 import { AssigneeNotFoundError } from '../errors/AssigneeNotFound';
 import { DuplicateAssigneeError } from '../errors/DuplicateAssignee';
 import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
@@ -27,7 +26,6 @@ import { TicketRedactionService } from './ticket-redacation.service';
 export class TicketService extends BaseService {
   constructor(
     private ticketRedactionService: TicketRedactionService,
-    private ticketTagService: TicketTagService,
     private usersService: UsersService,
     private notificationsService: NotificationsService,
     private ticketsRepository: TicketsRepository,
