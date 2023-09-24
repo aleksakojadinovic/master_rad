@@ -35,4 +35,17 @@ export class Ticket {
   isOwner(user: User) {
     return this.createdBy.id === user.id;
   }
+
+  hasTag(tag: TicketTag) {
+    return this.tags.map((t) => t.id).includes(tag.id);
+  }
+
+  addTags(tags: TicketTag[]) {
+    this.tags.push(...tags);
+  }
+
+  removeTags(tags: TicketTag[]) {
+    const ids = tags.map((tag) => tag.id);
+    this.tags = this.tags.filter((tag) => !ids.includes(tag.id));
+  }
 }

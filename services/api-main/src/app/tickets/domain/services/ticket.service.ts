@@ -3,8 +3,6 @@ import { CreateTicketDto } from '../../api/dto/create-ticket.dto';
 import { UpdateTicketDto } from '../../api/dto/update-ticket.dto';
 import { UsersService } from 'src/app/users/domain/users.service';
 import * as moment from 'moment';
-import { InjectMapper } from '@automapper/nestjs';
-import { Mapper } from '@automapper/core';
 import { TicketQueryDTO } from '../../api/dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
@@ -36,7 +34,6 @@ import { CannotChangeCommentsForTicketStatus } from '../errors/CannotChangeComme
 @Injectable()
 export class TicketService extends BaseService {
   constructor(
-    @InjectMapper() private readonly mapper: Mapper,
     private ticketRedactionService: TicketRedactionService,
     private ticketTagService: TicketTagService,
     private usersService: UsersService,

@@ -31,6 +31,9 @@ import { User } from 'src/app/users/domain/entities/user.entity';
 import { Ticket } from '../domain/entities/ticket.entity';
 import { UpdateCommentDTO } from './dto/update-comment.dto';
 import { TicketCommentService } from '../domain/services/ticket-comment.service';
+import { AddTicketTagsDTO } from './dto/add-ticket-tags.dto';
+import { TicketTagUpdateService } from '../domain/services/ticket-tag-update.service';
+import { RemoveTicketTagsDTO } from './dto/remove-ticket-tags.dto';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
@@ -38,6 +41,7 @@ export class TicketsController extends BaseController {
   constructor(
     private readonly ticketsService: TicketService,
     private readonly ticketsCommentService: TicketCommentService,
+    private readonly ticketTagUpdateService: TicketTagUpdateService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {
     super();
@@ -130,6 +134,38 @@ export class TicketsController extends BaseController {
       user,
       commentId,
     );
+    return this.mapper.map(ticket, Ticket, TicketDTO);
+  }
+
+  @Patch(':id/tags/add')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async addTags(
+    @Param('id') ticketId: string,
+    @Body(new ValidationPipe()) dto: AddTicketTagsDTO,
+    @GetUserInfo() user: User,
+  ) {
+    const ticket = await this.ticketTagUpdateService.addTags(
+      ticketId,
+      user,
+      dto,
+    );
+
+    return this.mapper.map(ticket, Ticket, TicketDTO);
+  }
+
+  @Patch(':id/tags/remove')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async removeTags(
+    @Param('id') ticketId: string,
+    @Body(new ValidationPipe()) dto: RemoveTicketTagsDTO,
+    @GetUserInfo() user: User,
+  ) {
+    const ticket = await this.ticketTagUpdateService.removeTags(
+      ticketId,
+      user,
+      dto,
+    );
+
     return this.mapper.map(ticket, Ticket, TicketDTO);
   }
 }

@@ -12,6 +12,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
 import { TicketsRepository } from './infrastructure/tickets.repository';
 import { TicketCommentService } from './domain/services/ticket-comment.service';
 import { TicketRedactionService } from './domain/services/ticket-redacation.service';
+import { TicketTagUpdateService } from './domain/services/ticket-tag-update.service';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { TicketRedactionService } from './domain/services/ticket-redacation.serv
     TicketService,
     TicketCommentService,
     TicketRedactionService,
+    TicketTagUpdateService,
     TicketsRepository,
   ],
 })
