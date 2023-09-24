@@ -158,7 +158,6 @@ export class TicketService extends BaseService {
     );
 
     this.updateTicketRemoveAssignees(ticket, dto);
-    await this.updateTicketTags(ticket, user, dto);
 
     if (commentNotifications) {
       notifications.push(...commentNotifications);
@@ -319,47 +318,6 @@ export class TicketService extends BaseService {
       ticket.assignees = ticket.assignees.filter(
         (user) => !dto.removeAssignees.includes(user.id),
       );
-    }
-  }
-
-  private async updateTicketTags(
-    ticket: Ticket,
-    user: User,
-    dto: UpdateTicketDto,
-  ) {
-    const addTags = dto.addTags || [];
-    const removeTags = dto.removeTags || [];
-
-    if (addTags.some((addId) => removeTags.includes(addId))) {
-      throw new OverlapInTagIdsError();
-    }
-
-    if (removeTags.length > 0) {
-      const tagsToRemove = await this.ticketTagService.findByIds(removeTags);
-      tagsToRemove.forEach((tag) => {
-        if (!tag.group.canRemove(user)) {
-          throw new NotAllowedToRemoveThisTagError();
-        }
-      });
-      ticket.tags = ticket.tags.filter((tag) => !removeTags.includes(tag.id));
-    }
-
-    if (addTags.length > 0) {
-      const tagsToAdd = await this.ticketTagService.findByIds(addTags);
-      tagsToAdd.forEach((tag) => {
-        if (!tag.group.canAdd(user)) {
-          throw new NotAllowedToAddThisTagError();
-        }
-
-        if (
-          ticket.tags.find((currentTagId) => {
-            return currentTagId.toString() === tag.id;
-          })
-        ) {
-          throw new DuplicateTagError();
-        }
-        ticket.tags.push(tag);
-      });
     }
   }
 }
