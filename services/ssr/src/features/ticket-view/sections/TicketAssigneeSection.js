@@ -4,7 +4,6 @@ import TicketAssignees from '../components/TicketAssignees';
 import {
   useAddAssigneesMutation,
   useRemoveAssigneesMutation,
-  useUpdateTicketMutation,
 } from '@/api/tickets';
 import { useIntl } from 'react-intl';
 import { assignMessages } from '@/translations/assign';
