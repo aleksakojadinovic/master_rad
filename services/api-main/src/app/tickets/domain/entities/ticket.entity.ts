@@ -49,9 +49,16 @@ export class Ticket {
     this.tags = this.tags.filter((tag) => !ids.includes(tag.id));
   }
 
-  addComment(user: User, body: string, isInternal: boolean, timestamp: Date) {
+  addComment(
+    commentId: string,
+    user: User,
+    body: string,
+    isInternal: boolean,
+    timestamp: Date,
+  ) {
     const comment = new TicketComment();
 
+    comment.commentId = commentId;
     comment.user = user;
     comment.body = body;
     comment.timestamp = timestamp;

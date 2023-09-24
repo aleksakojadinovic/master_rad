@@ -5,8 +5,6 @@ import { TicketStatus } from '../../domain/value-objects/ticket-status';
 export class UpdateTicketDto {
   status?: TicketStatus;
   body?: string;
-  comment?: string;
-  isCommentInternal?: boolean;
   title?: string;
 
   @Validate(isValidObjectId, { each: true })
@@ -18,14 +16,4 @@ export class UpdateTicketDto {
   @IsOptional()
   @IsArray()
   removeAssignees?: string[];
-
-  @Validate(isValidObjectId, { each: true })
-  @IsOptional()
-  @IsArray()
-  addTags?: string[];
-
-  @Validate(isValidObjectId, { each: true })
-  @IsOptional()
-  @IsArray()
-  removeTags?: string[];
 }

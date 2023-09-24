@@ -16,16 +16,12 @@ import { NotificationsService } from '../../../notifications/domain/notification
 import { TICKET_STATUS_GRAPH } from '../value-objects/ticket-status.map';
 import { NotAllowedToChangeToThisStatusError } from '../errors/NotAllowedToChangeToThisStatus';
 import { TicketsRepository } from '../../infrastructure/tickets.repository';
-import { CustomerCannotAddInternalCommmentError } from '../errors/CustomerCannotAddInternalComment';
 import { BadTicketFiltersError } from '../errors/BadTicketFilters';
 import { User } from '../../../users/domain/entities/user.entity';
 import { Ticket } from '../entities/ticket.entity';
 import { TicketStatus } from '../value-objects/ticket-status';
-import { TicketComment } from '../value-objects/ticket-comment';
 import { Notification } from 'src/app/notifications/domain/entities/notification.entity';
-import { v4 as uuid } from 'uuid';
 import { TicketRedactionService } from './ticket-redacation.service';
-import { CannotChangeCommentsForTicketStatus } from '../errors/CannotChangeCommentsOfAClosedTicket';
 
 @Injectable()
 export class TicketService extends BaseService {
@@ -143,8 +139,6 @@ export class TicketService extends BaseService {
 
     this.updateTicketStatus(ticket, user, dto);
     this.updateTicketBody(ticket, dto);
-    const commentNotifications = this.updateTicketAddComment(ticket, user, dto);
-
     this.updateTicketTitle(ticket, dto);
 
     const addAssigneeNotifications = await this.updateTicketAddAssignees(
@@ -154,10 +148,6 @@ export class TicketService extends BaseService {
     );
 
     this.updateTicketRemoveAssignees(ticket, dto);
-
-    if (commentNotifications) {
-      notifications.push(...commentNotifications);
-    }
 
     if (addAssigneeNotifications) {
       notifications.push(...addAssigneeNotifications);
@@ -203,59 +193,6 @@ export class TicketService extends BaseService {
     if (dto.title != null) {
       ticket.title = dto.title;
     }
-  }
-
-  private updateTicketAddComment(
-    ticket: Ticket,
-    user: User,
-    dto: UpdateTicketDto,
-  ): Notification[] | null {
-    if (dto.comment == null || dto.comment.length === 0) {
-      return null;
-    }
-
-    if (ticket.isFinalStatus()) {
-      throw new CannotChangeCommentsForTicketStatus(ticket.status);
-    }
-
-    if (user.isCustomer() && dto.isCommentInternal) {
-      throw new CustomerCannotAddInternalCommmentError();
-    }
-
-    const usersToNotify: User[] = [];
-    usersToNotify.push(
-      ...ticket.assignees.filter((assignee) => assignee.id !== user.id),
-    );
-
-    // First condition prevents self-notifications
-    // Second condition prevents notifying customers of internal comments
-    if (!ticket.isOwner(user) && !dto.isCommentInternal) {
-      usersToNotify.push(ticket.createdBy);
-    }
-
-    const comment = new TicketComment();
-    comment.commentId = uuid();
-    comment.body = dto.comment;
-    comment.isInternal = dto.isCommentInternal;
-    comment.timestamp = new Date();
-    comment.user = user;
-
-    ticket.comments.push(comment);
-
-    const notifications = usersToNotify.map((userToNotify) => {
-      return NotificationFactory.create((builder) =>
-        builder
-          .forUser(userToNotify)
-          .hasPayload('comment_added', (commentBuilder) =>
-            commentBuilder
-              .atTicket(ticket)
-              .byUser(user)
-              .hasCommentId(comment.commentId),
-          ),
-      );
-    });
-
-    return notifications;
   }
 
   private async updateTicketAddAssignees(

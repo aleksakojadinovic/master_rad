@@ -12,6 +12,9 @@ import { CannotChangeCommentsForTicketStatus } from '../errors/CannotChangeComme
 import { AddCommentDTO } from '../../api/dto/add-comment.dto';
 import { UpdateCommentDTO } from '../../api/dto/update-comment.dto';
 import { CustomerCannotAddInternalCommmentError } from '../errors/CustomerCannotAddInternalComment';
+import { NotificationFactory } from 'src/app/notifications/domain/factory/notification.factory';
+import { v4 as uuid } from 'uuid';
+import { NotificationsService } from 'src/app/notifications/domain/notifications.service';
 
 @Injectable()
 export class TicketCommentService extends BaseService {
@@ -19,6 +22,7 @@ export class TicketCommentService extends BaseService {
     @InjectMapper() private readonly mapper: Mapper,
     private ticketRedactionService: TicketRedactionService,
     private ticketsRepository: TicketsRepository,
+    private notificationsService: NotificationsService,
   ) {
     super();
   }
@@ -74,9 +78,44 @@ export class TicketCommentService extends BaseService {
       throw new CustomerCannotAddInternalCommmentError();
     }
 
-    ticket.addComment(user, dto.body, dto.isInternal, new Date());
+    const usersToNotify: User[] = [];
+    usersToNotify.push(
+      ...ticket.assignees.filter((assignee) => assignee.id !== user.id),
+    );
 
-    const updatedTicket = await this.ticketsRepository.update(ticket, user);
+    if (!ticket.isOwner(user) && !dto.isInternal) {
+      usersToNotify.push(ticket.createdBy);
+    }
+
+    console.log(usersToNotify.map((u) => u.fullName));
+
+    const commentId = uuid();
+
+    ticket.addComment(commentId, user, dto.body, dto.isInternal, new Date());
+
+    const notifications = usersToNotify.map((userToNotify) => {
+      return NotificationFactory.create((builder) =>
+        builder
+          .forUser(userToNotify)
+          .hasPayload('comment_added', (commentBuilder) =>
+            commentBuilder
+              .atTicket(ticket)
+              .byUser(user)
+              .hasCommentId(commentId),
+          ),
+      );
+    });
+
+    const updatedTicketPromise = this.ticketsRepository.update(ticket, user);
+    const notificationsPromise = this.notificationsService.emitNotifications(
+      ...notifications,
+    );
+
+    const [updatedTicket] = await Promise.all([
+      updatedTicketPromise,
+      notificationsPromise,
+    ]);
+
     this.ticketRedactionService.prepareTicketResponse(updatedTicket, user);
 
     return updatedTicket;
