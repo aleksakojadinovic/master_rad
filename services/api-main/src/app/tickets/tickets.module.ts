@@ -13,6 +13,7 @@ import { TicketsRepository } from './infrastructure/tickets.repository';
 import { TicketCommentService } from './domain/services/ticket-comment.service';
 import { TicketRedactionService } from './domain/services/ticket-redacation.service';
 import { TicketTagUpdateService } from './domain/services/ticket-tag-update.service';
+import { TicketAssigneesService } from './domain/services/ticket-assignees.service';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TicketTagUpdateService } from './domain/services/ticket-tag-update.serv
     TicketCommentService,
     TicketRedactionService,
     TicketTagUpdateService,
+    TicketAssigneesService,
     TicketsRepository,
   ],
 })

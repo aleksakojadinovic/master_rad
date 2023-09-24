@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectMapper } from '@automapper/nestjs';
-import { Mapper } from '@automapper/core';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketsRepository } from '../../infrastructure/tickets.repository';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
@@ -8,7 +6,7 @@ import { CommentNotFoundError } from '../errors/CommentNotFound';
 import { CannotUpdateOthersCommentsError } from '../errors/CannotUpdateOthersComments';
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { TicketRedactionService } from './ticket-redacation.service';
-import { CannotChangeCommentsForTicketStatus } from '../errors/CannotChangeCommentsOfAClosedTicket';
+import { CannotChangeCommentsForTicketStatusError } from '../errors/CannotChangeCommentsOfAClosedTicket';
 import { AddCommentDTO } from '../../api/dto/add-comment.dto';
 import { UpdateCommentDTO } from '../../api/dto/update-comment.dto';
 import { CustomerCannotAddInternalCommmentError } from '../errors/CustomerCannotAddInternalComment';
@@ -19,7 +17,6 @@ import { NotificationsService } from 'src/app/notifications/domain/notifications
 @Injectable()
 export class TicketCommentService extends BaseService {
   constructor(
-    @InjectMapper() private readonly mapper: Mapper,
     private ticketRedactionService: TicketRedactionService,
     private ticketsRepository: TicketsRepository,
     private notificationsService: NotificationsService,
@@ -39,7 +36,7 @@ export class TicketCommentService extends BaseService {
     }
 
     if (ticket.isFinalStatus()) {
-      throw new CannotChangeCommentsForTicketStatus(ticket.status);
+      throw new CannotChangeCommentsForTicketStatusError(ticket.status);
     }
 
     if (user.isCustomer() && !ticket.isOwner(user)) {
@@ -67,7 +64,7 @@ export class TicketCommentService extends BaseService {
     }
 
     if (ticket.isFinalStatus()) {
-      throw new CannotChangeCommentsForTicketStatus(ticket.status);
+      throw new CannotChangeCommentsForTicketStatusError(ticket.status);
     }
 
     if (user.isCustomer() && !ticket.isOwner(user)) {

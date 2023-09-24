@@ -66,4 +66,17 @@ export class Ticket {
 
     this.comments.push(comment);
   }
+
+  isAssigned(user: User) {
+    return this.assignees.map((u) => u.id).includes(user.id);
+  }
+
+  assign(users: User[]) {
+    this.assignees.push(...users);
+  }
+
+  unassign(users: User[]) {
+    const ids = users.map((u) => u.id);
+    this.assignees = this.assignees.filter((u) => !ids.includes(u.id));
+  }
 }

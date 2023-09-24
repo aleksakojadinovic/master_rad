@@ -1,4 +1,4 @@
-import { CannotChangeCommentsForTicketStatus } from './../../domain/errors/CannotChangeCommentsOfAClosedTicket';
+import { CannotChangeCommentsForTicketStatusError } from './../../domain/errors/CannotChangeCommentsOfAClosedTicket';
 import {
   BadRequestException,
   CallHandler,
@@ -24,6 +24,7 @@ import { CustomerCannotAddInternalCommmentError } from '../../domain/errors/Cust
 import { NotAllowedToSearchOthersTicketsAsACustomerError } from '../../domain/errors/NotAllowedToSearchOthersTicketsAsACustomer';
 import { BadTicketFiltersError } from '../../domain/errors/BadTicketFilters';
 import { CommentNotFoundError } from '../../domain/errors/CommentNotFound';
+import { NotAllowedToAssignError } from '../../domain/errors/NotAllowedToAssign';
 
 @Injectable()
 export class TicketInterceptor implements NestInterceptor {
@@ -86,8 +87,12 @@ export class TicketInterceptor implements NestInterceptor {
           throw new NotFoundException(error.getPayload());
         }
 
-        if (error instanceof CannotChangeCommentsForTicketStatus) {
+        if (error instanceof CannotChangeCommentsForTicketStatusError) {
           throw new ConflictException(error.getPayload());
+        }
+
+        if (error instanceof NotAllowedToAssignError) {
+          throw new ForbiddenException(error.getPayload());
         }
 
         throw error;

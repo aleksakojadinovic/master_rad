@@ -1,7 +1,11 @@
 import { Box, Button, Typography } from '@mui/material';
 import React, { Fragment, useState } from 'react';
 import TicketAssignees from '../components/TicketAssignees';
-import { useUpdateTicketMutation } from '@/api/tickets';
+import {
+  useAddAssigneesMutation,
+  useRemoveAssigneesMutation,
+  useUpdateTicketMutation,
+} from '@/api/tickets';
 import { useIntl } from 'react-intl';
 import { assignMessages } from '@/translations/assign';
 import UserPicker from '../components/UserPicker';
@@ -14,16 +18,21 @@ function TicketAssigneeSection({ ticket }) {
 
   const [isVisible, setIsVisible] = useState(false);
 
-  const [updateTicket] = useUpdateTicketMutation({
-    fixedCacheKey: 'ticket-view-page',
-  });
+  // const [updateTicket] = useUpdateTicketMutation({
+  //   fixedCacheKey: 'ticket-view-page',
+  // });
+
+  const [addAssignees] = useAddAssigneesMutation();
+  const [removeAssignees] = useRemoveAssigneesMutation();
 
   const handleUnassignUser = (assignedUser) => {
-    updateTicket({ id: ticket.id, removeAssignees: [assignedUser.id] });
+    removeAssignees({ id: ticket.id, assigneeIds: [assignedUser.id] });
+    // updateTicket({ id: ticket.id, removeAssignees: [assignedUser.id] });
   };
 
   const handleAssignUser = (newUser) => {
-    updateTicket({ id: ticket.id, addAssignees: [newUser.id] });
+    addAssignees({ id: ticket.id, assigneeIds: [newUser.id] });
+    // updateTicket({ id: ticket.id, addAssignees: [newUser.id] });
   };
 
   return (
