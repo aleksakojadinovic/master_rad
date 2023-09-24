@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTicketDto } from '../../api/dto/create-ticket.dto';
 import { UpdateTicketDto } from '../../api/dto/update-ticket.dto';
-import { UsersService } from 'src/app/users/domain/users.service';
 import * as moment from 'moment';
 import { TicketQueryDTO } from '../../api/dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
@@ -22,7 +21,6 @@ import { TicketRedactionService } from './ticket-redacation.service';
 export class TicketService extends BaseService {
   constructor(
     private ticketRedactionService: TicketRedactionService,
-    private usersService: UsersService,
     private notificationsService: NotificationsService,
     private ticketsRepository: TicketsRepository,
   ) {
