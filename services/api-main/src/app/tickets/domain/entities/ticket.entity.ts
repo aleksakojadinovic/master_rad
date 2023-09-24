@@ -48,4 +48,15 @@ export class Ticket {
     const ids = tags.map((tag) => tag.id);
     this.tags = this.tags.filter((tag) => !ids.includes(tag.id));
   }
+
+  addComment(user: User, body: string, isInternal: boolean, timestamp: Date) {
+    const comment = new TicketComment();
+
+    comment.user = user;
+    comment.body = body;
+    comment.timestamp = timestamp;
+    comment.isInternal = isInternal;
+
+    this.comments.push(comment);
+  }
 }

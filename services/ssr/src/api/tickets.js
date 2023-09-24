@@ -33,6 +33,14 @@ export const ticketsSlice = api.injectEndpoints({
         params,
       }),
     }),
+    addComment: builder.mutation({
+      query: ({ id, body, isInternal }) => ({
+        url: `/tickets/${id}/comment/add`,
+        method: 'PATCH',
+        body: { body, isInternal },
+      }),
+      invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
+    }),
     updateComment: builder.mutation({
       query: ({ id, commentId, body }) => ({
         url: `/tickets/${id}/comment/${commentId}/update`,
@@ -73,6 +81,7 @@ export const {
   useUpdateTicketMutation,
   useGetTicketsQuery,
   useCreateTicketMutation,
+  useAddCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
   useAddTagsMutation,

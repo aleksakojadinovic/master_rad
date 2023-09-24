@@ -9,6 +9,9 @@ import { CannotUpdateOthersCommentsError } from '../errors/CannotUpdateOthersCom
 import { User } from 'src/app/users/domain/entities/user.entity';
 import { TicketRedactionService } from './ticket-redacation.service';
 import { CannotChangeCommentsForTicketStatus } from '../errors/CannotChangeCommentsOfAClosedTicket';
+import { AddCommentDTO } from '../../api/dto/add-comment.dto';
+import { UpdateCommentDTO } from '../../api/dto/update-comment.dto';
+import { CustomerCannotAddInternalCommmentError } from '../errors/CustomerCannotAddInternalComment';
 
 @Injectable()
 export class TicketCommentService extends BaseService {
@@ -52,10 +55,42 @@ export class TicketCommentService extends BaseService {
     return { comment, ticket };
   }
 
-  async updateComment(id: string, user: User, commentId: string, body: string) {
+  async addComment(id: string, user: User, dto: AddCommentDTO) {
+    const ticket = await this.ticketsRepository.findById(id);
+
+    if (!ticket) {
+      throw new TicketNotFoundError(id);
+    }
+
+    if (ticket.isFinalStatus()) {
+      throw new CannotChangeCommentsForTicketStatus(ticket.status);
+    }
+
+    if (user.isCustomer() && !ticket.isOwner(user)) {
+      throw new TicketNotFoundError(ticket.id);
+    }
+
+    if (user.isCustomer() && dto.isInternal) {
+      throw new CustomerCannotAddInternalCommmentError();
+    }
+
+    ticket.addComment(user, dto.body, dto.isInternal, new Date());
+
+    const updatedTicket = await this.ticketsRepository.update(ticket, user);
+    this.ticketRedactionService.prepareTicketResponse(updatedTicket, user);
+
+    return updatedTicket;
+  }
+
+  async updateComment(
+    id: string,
+    user: User,
+    commentId: string,
+    dto: UpdateCommentDTO,
+  ) {
     const { ticket, comment } = await this.findAndProtect(id, user, commentId);
 
-    comment.body = body;
+    comment.body = dto.body;
 
     const updatedTicket = await this.ticketsRepository.updateComment(
       ticket,
@@ -63,7 +98,7 @@ export class TicketCommentService extends BaseService {
       user,
     );
 
-    this.ticketRedactionService.prepareTicketResponse(ticket, user);
+    this.ticketRedactionService.prepareTicketResponse(updatedTicket, user);
     return updatedTicket;
   }
 

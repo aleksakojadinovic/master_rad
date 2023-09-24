@@ -34,6 +34,7 @@ import { TicketCommentService } from '../domain/services/ticket-comment.service'
 import { AddTicketTagsDTO } from './dto/add-ticket-tags.dto';
 import { TicketTagUpdateService } from '../domain/services/ticket-tag-update.service';
 import { RemoveTicketTagsDTO } from './dto/remove-ticket-tags.dto';
+import { AddCommentDTO } from './dto/add-comment.dto';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
@@ -104,6 +105,22 @@ export class TicketsController extends BaseController {
     return this.mapper.map(ticket, Ticket, TicketDTO);
   }
 
+  @Patch(':id/comment/add')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async addComment(
+    @Param('id') ticketId: string,
+    @Body() dto: AddCommentDTO,
+    @GetUserInfo() user: User,
+  ) {
+    const ticket = await this.ticketsCommentService.addComment(
+      ticketId,
+      user,
+      dto,
+    );
+
+    return this.mapper.map(ticket, Ticket, TicketDTO);
+  }
+
   @Patch(':id/comment/:commentId/update')
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async updateComment(
@@ -116,7 +133,7 @@ export class TicketsController extends BaseController {
       ticketId,
       user,
       commentId,
-      dto.body,
+      dto,
     );
 
     return this.mapper.map(ticket, Ticket, TicketDTO);

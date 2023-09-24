@@ -8,12 +8,14 @@ import { NotAllowedToRemoveThisTagError } from '../errors/NotAllowedToRemoveThis
 import { RemoveTicketTagsDTO } from '../../api/dto/remove-ticket-tags.dto';
 import { DuplicateTagError } from '../errors/DuplicateTag';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
+import { TicketRedactionService } from './ticket-redacation.service';
 
 @Injectable()
 export class TicketTagUpdateService {
   constructor(
     private ticketsRepository: TicketsRepository,
     private ticketTagService: TicketTagService,
+    private ticketRedactionService: TicketRedactionService,
   ) {}
 
   private async processData(user: User, tagIds: string[], adding: boolean) {
@@ -60,6 +62,7 @@ export class TicketTagUpdateService {
     ticket.addTags(tags);
 
     const updatedTicket = await this.ticketsRepository.update(ticket, user);
+    this.ticketRedactionService.prepareTicketResponse(updatedTicket, user);
     return updatedTicket;
   }
 
@@ -84,6 +87,7 @@ export class TicketTagUpdateService {
     ticket.removeTags(tags);
 
     const updatedTicket = await this.ticketsRepository.update(ticket, user);
+    this.ticketRedactionService.prepareTicketResponse(updatedTicket, user);
     return updatedTicket;
   }
 }

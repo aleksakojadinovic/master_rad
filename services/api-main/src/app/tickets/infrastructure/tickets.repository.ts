@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { TicketDb } from 'src/app/tickets/infrastructure/schema/ticket.schema';
-import { Model, SortOrder } from 'mongoose';
+import { Model, SortOrder, Types } from 'mongoose';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { Ticket } from '../domain/entities/ticket.entity';
@@ -250,7 +250,7 @@ export class TicketsRepository {
       item.type = TicketHistoryEntryType.COMMENT_ADDED;
       item.payload = new TicketHistoryEntryCommentAdded(
         comment.body,
-        comment.commentId,
+        comment.commentId ?? new Types.ObjectId().toString(),
         comment.isInternal,
       );
       document.history.push(item);
