@@ -4,13 +4,10 @@ import camelize from 'camelize';
 import Cookies from 'js-cookie';
 
 const parseCookie = (str) =>
-  (str ?? '')
+  str
     .split(';')
     .map((v) => v.split('='))
     .reduce((acc, v) => {
-      if (!v || !v[0]) {
-        return acc;
-      }
       acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
       return acc;
     }, {});
@@ -22,15 +19,9 @@ const baseQuery = fetchBaseQuery({
       ? parseCookie(api?.extra?.ctx?.req?.headers?.cookie).accessToken ?? ''
       : Cookies.get('accessToken');
 
-    const languageCode =
-      (isServer()
-        ? parseCookie(api?.extra?.ctx?.req?.headers?.cookie).language_code ?? ''
-        : Cookies.get('language_code')) ?? 'en';
-
     headers.set('Authorization', `Bearer ${accessToken}`);
     headers.set('X-Requested-With', 'XMLHttpRequest');
     headers.set('Access-Control-Allow-Origin', '*');
-    headers.set('Accept-Language', languageCode);
     return headers;
   },
 });
@@ -46,14 +37,7 @@ export default createApi({
     }
     return result;
   },
-  keepUnusedFor: 100000,
+  keepUnusedFor: 1000,
   endpoints: () => ({}),
-  refetchOnFocus: true,
-  tagTypes: [
-    'getTicket',
-    'ticket-tag-groups',
-    'ticket-tag-group',
-    'notifications',
-    'USERS_TAG',
-  ],
+  tagTypes: ['getTicket'],
 });

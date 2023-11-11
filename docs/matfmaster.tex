@@ -162,7 +162,6 @@
 % Strana sa podacima o mentoru i članovima komisije
 \komisija
 % Strana sa posvetom (u odabranom pismu)
-\posveta{Samom sebi}
 % Strana sa podacima o disertaciji na srpskom jeziku
 \apstrakt
 % Sadržaj teze
@@ -278,7 +277,7 @@ DDD razaznaje četiri sloja, s tim što u ovom pogavlju razmatramo prva tri, dok
 
 \section{Okruženje Nest.js}
 
-NestJS \cite{nestjsdocs} je Node.js okruženje za razvoj serverskih aplikacija. Izgrađen je nad bibliotekom \textit{express} \cite{expressjsdocs} koja je i danas popularan izbor za izradu manjih serverskih aplikacija, kao i za edukativne svrhe. blabla još malo nalupam o Nest-u, mrzi me sad da čitam docs. U srž ovog okruženja ugrađeni su koncepti modula, servisa i umetanja zavistnosti (\textit{eng} Dependency Injection - u daljem tekstu \textbf{DI}), što ga čini idealnim za konstrukciju aplikacije zasnovane na DDD principima.
+NestJS \cite{nestjsdocs} je Node.js okruženje za razvoj serverskih aplikacija. Izgrađen je nad bibliotekom \textit{express} \cite{expressjsdocs} koja je i danas popularan izbor za izradu manjih serverskih aplikacija, kao i za edukativne svrhe.  U srž ovog okruženja ugrađeni su koncepti modula, servisa i umetanja zavistnosti (\textit{eng} Dependency Injection - u daljem tekstu \textbf{DI}), što ga čini idealnim za konstrukciju aplikacije zasnovane na DDD principima. Ovde pokazem ukratko kako izgleda Nest.js aplikacija i kako to odgovara DDD-u, nmg sad
 
 \section{Sloj infrastrukture}
 
@@ -286,7 +285,7 @@ Sloj infrastrukture ima više uloga u DDD sistemu, ali zajednička osobina je od
 
 
 \subsection{Repozitorijumi}
-Apstrakcija koju pruža sloj repozitorijuma ogleda se upravo u načinu na koji on obrađuje podatke pre vraćanja u više slojeve, tačnije služi se \textbf{šablonom preslikavanja podataka} (\textit{eng Data mapper pattern} - stavi referencu). Uloga mapiranja podataka uglavnom je, u praksi, delegirana konkretnoj biblioteci ili okruženju koja upravlja pristupom bazi putem softverskog segmenta iz klase Objetno-relacionih ili Objektno-domenskih mapera (\textit{eng Object Relational Mapper - ORM, Object Document Mapper - ODM}). Iako ti sistemi često u potpunosti zadovoljavaju potrebe mapiranja podataka, u ovom radu je mapiranje urađeno manuelno, tako da se objekti dobijeni ODM slojem, odnosno bibliotekom \textit{mongoose - dodaj referency}, preslikavaju u entitete koristeći biblioteku \textit{@automapper/js, dodaj referencu}.
+Apstrakcija koju pruža sloj repozitorijuma ogleda se upravo u načinu na koji on obrađuje podatke pre vraćanja u više slojeve, tačnije služi se \textbf{šablonom preslikavanja podataka} (\textit{eng Data mapper pattern} - stavi referencu). Uloga mapiranja podataka uglavnom je, u praksi, delegirana konkretnoj biblioteci ili okruženju koja upravlja pristupom bazi putem softverskog segmenta iz klase Objetno-relacionih ili Objektno-dokumentnih preslikavača (\textit{eng Object Relational Mapper - ORM, Object Document Mapper - ODM}). Iako ti sistemi često u potpunosti zadovoljavaju potrebe mapiranja podataka, u ovom radu je mapiranje urađeno manuelno, tako da se objekti dobijeni ODM slojem, odnosno bibliotekom \textit{mongoose - dodaj referency}, preslikavaju u entitete koristeći biblioteku \textit{@automapper/js, dodaj referencu}.
 
 \begin{figure}[h]
   \centering
@@ -297,15 +296,13 @@ Apstrakcija koju pruža sloj repozitorijuma ogleda se upravo u načinu na koji o
 
 Prirodno se nameće pitanje dohvatanja povezanih entiteta, ili konkretnije rad sa agregatima. U ovom radu implementiran je sistem \textbf{pohlepnog učitavanja} (\textit{eng Eager loading}), kojim se svi povezani entiteti zahtevanog entiteta dohvataju odmah prilikom zahteva ka glavnom entitetu. U nekim sistemima ovakav izbor ne bi bio idealan, međutim takva odluka je doneta u ovoj situaciji usled činjenice da je dizajn baze podataka relativno jednostavan, i lakoća implementacije i korišćenja nadmašuje cene u performansama, koje su minimalne. Kombinacija $populate$ metode biblioteke \textit{mongoose} i rekurzivne prirode biblioteke \textit{automapper/js} ovo se lako postiže.
 
-U nastavku su primeri k\^{o}da iz repozitorijumske klase za pristup tiketima, odnosno glavnim entitetima datog sistema.
-
 Na sledećem isečku vidimo zaglavlje klase \textit{TicketsRepository}. Kao i sve ostale repozitorijumske klase, oslanjaju se na model klase dobijene od strane biblioteke \textit{mongoose}, i deklarišu niz koji predstavlja sve putanje koje treba popuniti zarad implementacije pohlepnog učitavanja.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Fajl \textit{tickets.repository.ts}, konstrukcija i niz POPULATE}]
 export class TicketsRepository {
   constructor(
-    @InjectModel(TicketDb.name) private ticketModel: Model<TicketDb>,
+    @InjectModel() private ticketModel: Model<TicketDb>,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
@@ -325,14 +322,6 @@ export class TicketsRepository {
       populate: { path: 'group', model: 'TicketTagGroupDb' },
     },
     { path: 'assignees', model: 'UserDb' },
-    {
-      path: 'history.payload.tags',
-      model: 'TicketTagDb',
-      populate: {
-        path: 'group',
-        model: 'TicketTagGroupDb',
-      },
-    },
   ];
 \end{lstlisting}
 \end{figure}
@@ -357,11 +346,75 @@ async findById(id: string): Promise<Ticket | null> {
 \end{figure}
 
 \newpage
-\subsection{Sheme i mutacije podataka, šablon Event Sourcing}
+\subsection{Sheme, mutacije podataka, šablon Event Sourcing}
 Osim repozitorijuma, sloj infrastrukture prirodno sadrži i definicije shema biblioteke \textit{mongoose}. Iz ugla programera, ovi objekti su najbliža pristupna tačka bazi podataka, i podržavaju operacije upita i mutacija nad realnim podacima u bazi. Takav jedan upit viđen je na isečku 2.4 u prethodnoj sekciji.
 
-Na ovom mestu prikazujemo primer mutacije podataka, i to baš tiketa. Osim prikaza rada sa mutiranjem podacima kroz biblioteku \textit{mongoose}, ovaj primer služi da ilustruje dualnu prirodu tiketa kao entiteta, i njegovu potpunu različitost u strukturi između sloja infrastruktura i sloja domena. Naime, kao što će biti prikazano u sledećem poglavlju, tiket u sloju domena je jednostavna klasa koja sadrži sve podatke o datom tiketu. Ipak, u sloju infrastrukture, radi veće fleksibilnosti i mogućnosti praćenja istorije, upotrebljena je varijanta šablona \textit{Event Sourcing}. Osnovno načelo ovog šablona je da umesto čuvanja eksplicitnog stanja objekta čuvamo istoriju njegovih promena.
-Ovde cu da pokazem ukratko kako se tiket mutira, kako dodajemo u istoriju stvari, i kako se to persistuje i pri mapiranju vraca u sloj domena, jako me mrzi to sad da radim pa ostavljam za posle
+Na ovom mestu bavimo se mutacijama podataka, i to baš tiketa. Osim prikaza rada sa mutiranjem podataka kroz biblioteku \textit{mongoose}, ovaj primer služi da ilustruje dualnu prirodu tiketa kao entiteta, i njegovu potpunu različitost u strukturi između sloja infrastruktura i sloja domena. Naime, kao što će biti prikazano u sledećem poglavlju, tiket u sloju domena je jednostavna klasa koja sadrži sve podatke o datom tiketu. Ipak, u sloju infrastrukture, radi veće fleksibilnosti i mogućnosti praćenja istorije, upotrebljena je varijanta šablona \textit{Event Sourcing}. Osnovno načelo ovog šablona je da umesto čuvanja eksplicitnog stanja objekta čuvamo istoriju njegovih promena.
+
+Na sledećem isečku vidimo deo klase koja predstavlja shemu za rad sa tiketima.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={Fajl \textit{ticket.schema.ts}}]
+@Schema({ collection: "tickets" })
+export class TicketDb extends Document {
+  _id: string;
+
+  @Prop({ type: Date })
+  createdAt: Date;
+
+  @Prop({ type: String })
+  title: string;
+
+  @Prop({ type: String })
+  body: string;
+
+  @Prop({ type: String })
+  status: TicketStatus;
+
+ // ...
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.Mixed }] })
+  history: TicketHistoryItem[];
+}
+\end{lstlisting}
+\end{figure}
+
+
+\newpage
+Niz \textit{history} predstavlja promene primenjene na datom tiketu, na osnovu kojih se može izvesti trenutno stanje tiketa. Ipak, prirodno se postavlja pitanje zašto se, osim istorije promena, čuvaju i eksplicitna polja kao što su \textit{Status}, \textit{title}, \textit{body} i drugi, kad se ti podaci mogu izvući putem istorije. Razlog leži u performanse pretrage. Ukoliko bismo čuvali samo listu promena, a ne sliku trenutnog stanja (\textit{eng snapshot}), svaka pretraga bi bila linearne vremenske složenosti u odnosu na dužinu istorije, što bi rezultovalo lošim performansama.
+
+Sa ovakvom postavkom, mutacije nad tiketom postižu se diferencijacijom prosleđenog entiteta, i entiteta iz baze podataka.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={Fajl \textit{ticket.repository.ts}}]
+  async update(newTicket: Ticket, user: User) {
+    const document = await this.ticketModel
+      .findById(newTicket.id)
+      .populate(TicketsRepository.POPULATE); 
+
+    const timestamp = new Date();
+
+    // Trenutno stanje tiketa
+    const ticket = this.mapper.map(document, TicketDb, Ticket);
+
+    // Primer diferencijacije nad poljem title
+    if (newTicket.title !== ticket.title) {
+      const item = new TicketHistoryItem();
+      item.initiator = user.id as unknown as UserDb;
+      item.timestamp = timestamp;
+      item.type = TicketHistoryEntryType.TITLE_CHANGED;
+
+      // Dodajemo novu stavku u istoriju
+      item.payload = 
+         new TicketHistoryEntryTitleChanged(newTicket.title);
+         
+      document.history.push(item);
+      // Menjamo snapshot stanje
+      document.title = newTicket.title;
+    }
+\end{lstlisting}
+\end{figure}
+
 
 
 \newpage

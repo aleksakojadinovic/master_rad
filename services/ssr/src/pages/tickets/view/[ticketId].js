@@ -4,7 +4,7 @@ import {
   ticketsSlice,
   useGetTicketQuery,
 } from '@/api/tickets';
-import TicketView from '@/features/ticket-view/TicketView';
+import Ticket from '@/components/Ticket/Ticket';
 import { wrapper } from '@/redux/store';
 import { getTicketViewQueryParams } from '@/utils/params';
 import Head from 'next/head';
@@ -12,7 +12,8 @@ import { useRouter } from 'next/router';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
-function TicketViewPage() {
+function TicketViewPage(props) {
+  wrapper.useHydration(props);
   const router = useRouter();
   const id = router.query.ticketId;
 
@@ -40,7 +41,7 @@ function TicketViewPage() {
       <Head>
         <title>{title}</title>
       </Head>
-      <TicketView ticket={ticket} />
+      <Ticket ticket={ticket} />
     </Fragment>
   );
 }
@@ -61,13 +62,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
       store.dispatch(ticketsSlice.util.getRunningQueriesThunk()),
     );
 
-    const indicators = selectGetTicketQueryIndicators(store.getState(), {
-      id: ticketId,
-      ...getTicketViewQueryParams(),
-    });
+    const { isError } = selectGetTicketQueryIndicators(
+      store.getState(),
+      ticketId,
+    );
 
     // TOOD: This doesnt work for some reason
-    if (indicators.isError) {
+    if (isError) {
       return {
         redirect: {
           destination: '/404',

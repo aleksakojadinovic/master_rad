@@ -1,18 +1,7 @@
-import { globalMessages } from '@/translations/global';
-import Head from 'next/head';
-import React, { Fragment } from 'react';
-import { useIntl } from 'react-intl';
+import React from 'react';
 
 function NotFound() {
-  const intl = useIntl();
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage(globalMessages.notFound)}</title>
-      </Head>
-      <div>NotFound</div>
-    </Fragment>
-  );
+  return <div>NotFound</div>;
 }
 
 export default NotFound;

@@ -1,10 +1,6 @@
 import { defineMessages } from 'react-intl';
 
 export const createTicketMessages = defineMessages({
-  pageHeadTitle: {
-    id: 'create-ticket.page-head-title',
-    defaultMessage: 'Create a ticket | STS',
-  },
   success: {
     id: 'create-ticket.success',
     defaultMessage:

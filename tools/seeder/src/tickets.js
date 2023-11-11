@@ -1,6 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
 const LoremIpsum = require('lorem-ipsum').LoremIpsum;
-const uuid = require('uuid');
 
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
@@ -13,27 +12,107 @@ const lorem = new LoremIpsum({
   },
 });
 
+function capitalizeFirstLetter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 const url = `mongodb://${process.env.MAIN_DB_USERNAME}:${process.env.MAIN_DB_PWD}@maindb:27017`;
+
+const MIN_TICKET_TITLE_LENGTH = 4;
+const MAX_TICKET_TITLE_LENGTH = 10;
+
+const MIN_TICKET_BODY_LENGTH = 40;
+const MAX_TICKET_BODY_LENGTH = 200;
+
+const MIN_COMMENTS = 2;
+const MAX_COMMENTS = 7;
+
+const MIN_COMMENT_LENGTH = 10;
+const MAX_COMMENT_LENGTH = 30;
+
+const MIN_STATUS_CHANGES = 1;
+const MAX_STATUS_CHANGES = 4;
+
+const STATUSES = ['NEW', 'OPEN', 'CLOSED'];
 
 function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-/**
- * Generates random amount of miliseconds between 10 minutes and 1 hour
- */
-function generateRandomDelay() {
-  // Generate a random number between 0 and 1
-  const randomFraction = Math.random();
-
-  // Calculate the random time within the desired range
-  const minMilliseconds = 600000; // 10 minutes
-  const maxMilliseconds = 3600000; // 1 hour
-  const randomMilliseconds =
-    minMilliseconds + randomFraction * (maxMilliseconds - minMilliseconds);
-
-  return randomMilliseconds;
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+function getRandomTicketTitleLength() {
+  return getRandomInt(MIN_TICKET_TITLE_LENGTH, MAX_TICKET_TITLE_LENGTH);
+}
+
+function getRandomTicketBodyLength() {
+  return getRandomInt(MIN_TICKET_BODY_LENGTH, MAX_TICKET_BODY_LENGTH);
+}
+
+function getRandomTicketCommentLength() {
+  return getRandomInt(MIN_COMMENT_LENGTH, MAX_COMMENT_LENGTH);
+}
+
+function getRandomNumberOfComments() {
+  return getRandomInt(MIN_COMMENTS, MAX_COMMENTS);
+}
+
+function getRandomNumberOfStatusChanges() {
+  return getRandomInt(MIN_STATUS_CHANGES, MAX_STATUS_CHANGES);
+}
+
+function generateTicketTitle() {
+  const length = getRandomTicketTitleLength();
+  return capitalizeFirstLetter(lorem.generateWords(length));
+}
+
+function generateTicketBody() {
+  const length = getRandomTicketBodyLength();
+  return capitalizeFirstLetter(lorem.generateWords(length));
+}
+
+function generateComment() {
+  const length = getRandomTicketCommentLength();
+  return { body: capitalizeFirstLetter(lorem.generateWords(length)) };
+}
+
+function generateComments() {
+  const length = getRandomNumberOfComments();
+  return Array.from(Array(length)).map(generateComment);
+}
+
+function generateStatusChange() {
+  return { status: STATUSES[getRandomInt(0, 2)] };
+}
+
+function generateStatusChanges() {
+  const length = getRandomNumberOfStatusChanges();
+  return Array.from(Array(length)).map(generateStatusChange);
+}
+
+async function getRoles(db) {
+  return await db.collection('roles').find().toArray();
+}
+
+async function getCustomers(db, customerRoleId) {
+  const result = await db
+    .collection('users')
+    .find({ roles: customerRoleId })
+    .toArray();
+  return result;
+}
+
+async function getAgents(db, adminRoleId) {
+  const result = await db
+    .collection('users')
+    .find({ roles: adminRoleId })
+    .toArray();
+  return result;
+}
+
+const NUMBER_OF_TICKETS = 1000;
 
 async function main() {
   let client = null;
@@ -49,123 +128,64 @@ async function main() {
 
   const db = client.db('sts_db');
 
-  const customers = await db
-    .collection('users')
-    .find({ role: 'customer' })
-    .toArray();
-  const agents = await db.collection('users').find({ role: 'agent' }).toArray();
+  const roles = await getRoles(db);
 
-  // Drop existing tickets
-  try {
-    await db.collection('tickets').drop();
-    console.log('Dropped tickets.');
-  } catch (e) {}
+  const customerRoleId = roles.find(({ name }) => name === 'customer')._id;
+  const agentRoleId = roles.find(({ name }) => name === 'agent')._id;
+
+  const customers = await getCustomers(db, customerRoleId);
+  const agents = await getAgents(db, agentRoleId);
 
   const tickets = [];
 
-  for (let i = 0; i < 1000; i++) {
-    const createdBy =
-      customers[Math.floor(Math.random() * customers.length)]._id;
-    const randomAgent = agents[Math.floor(Math.random() * agents.length)]._id;
+  for (let i = 0; i < NUMBER_OF_TICKETS; i++) {
+    const title = generateTicketTitle();
+    const body = generateTicketBody();
+    const createdBy = customers[Math.floor(Math.random() * customers.length)];
+    const createdAt = new Date();
 
-    const increment = (30 * 24 * 60 * 60 * 1000) / 1000;
-    const createdAt = new Date(
-      Date.now() - 30 * 24 * 60 * 60 * 1000 + i * increment,
-    );
+    const comments = generateComments();
+    const statusChanges = generateStatusChanges();
 
+    // const mixed = [...(comments.map((comment) => ({ ...comment, type: 'comment' }))), ...(statusChanges.map((statusChange) => ({ ...statusChange, type: 'statusChange' })))];
+    const mixed = [...comments, ...statusChanges];
+    mixed.sort(() => Math.random() - 0.5);
+    const history = mixed.map((entry) => ({
+      groupId: Math.floor(Math.random() * 1000),
+      timestamp: new Date(),
+      initiator: [
+        ...agents,
+        ...Array.from(Array(2 * agents.length).keys()).map(() => createdBy),
+      ][Math.floor(Math.random() * (3 * customers.length))]._id,
+      note: '',
+      entryType: entry.status != undefined ? 3 : 4,
+      entry,
+    }));
+
+    const scs = history.filter(({ entryType }) => {
+      return entryType === 3;
+    });
+    const status = scs[scs.length - 1].entry.status;
     const ticket = {
-      title: capitalizeFirstLetter(lorem.generateWords(5)),
-      body: capitalizeFirstLetter(lorem.generateParagraphs(1)),
+      title,
+      body,
+      createdBy: createdBy._id,
       createdAt,
-      createdBy: createdBy,
-      status: 'NEW',
-      history: [],
+      status,
+      history,
     };
-
-    let currentTime = createdAt.getTime() + generateRandomDelay();
-
-    const history = [];
-    history.push({
-      timestamp: new Date(currentTime),
-      initiator: createdBy,
-      type: 'CREATED',
-      payload: {
-        title: ticket.title,
-        body: ticket.body,
-        status: 'NEW',
-      },
-    });
-
-    currentTime += generateRandomDelay();
-
-    history.push({
-      timestamp: new Date(currentTime),
-      initiator: randomAgent,
-      type: 'STATUS_CHANGED',
-      payload: {
-        status: 'OPEN',
-      },
-    });
-
-    currentTime += generateRandomDelay();
-
-    history.push({
-      timestamp: new Date(currentTime),
-      initiator: randomAgent,
-      type: 'ASSIGNEES_CHANGED',
-      payload: {
-        assignees: [randomAgent],
-      },
-    });
-
-    currentTime += generateRandomDelay();
-
-    history.push({
-      timestamp: new Date(currentTime),
-      initiator: randomAgent,
-      type: 'STATUS_CHANGED',
-      payload: {
-        status: 'IN_PROGRESS',
-      },
-    });
-
-    for (let j = 0; j < 7; j++) {
-      currentTime += generateRandomDelay();
-      history.push({
-        timestamp: new Date(currentTime),
-        initiator: Math.random() < 0.5 ? randomAgent : createdBy,
-        type: 'COMMENT_ADDED',
-        payload: {
-          body: lorem.generateParagraphs(1),
-          commentId: uuid.v4(),
-          isInternal: false,
-        },
-      });
-    }
-
-    const finalStatus = Math.random() < 0.7 ? 'RESOLVED' : 'CLOSED';
-
-    currentTime += generateRandomDelay();
-
-    history.push({
-      timestamp: new Date(currentTime),
-      initiator: randomAgent,
-      type: 'STATUS_CHANGED',
-      payload: {
-        status: finalStatus,
-      },
-    });
-
-    ticket.history = history;
-    ticket.status = finalStatus;
-    ticket.assignees = [randomAgent];
     tickets.push(ticket);
   }
 
-  await db.collection('tickets').insertMany(tickets);
-  console.log(`Inserted ${tickets.length} tickets.`);
+  await db.collection('tickets').drop();
 
-  await client.close();
+  console.log('Dropped tickets.');
+
+  const result = await db.collection('tickets').insertMany(tickets);
+
+  console.log(`Inserted ${result.insertedCount} tickets`);
+
+  process.exit(0);
 }
 
 main();
