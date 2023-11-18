@@ -35,6 +35,10 @@ export class UsersService {
     });
   }
 
+  findByIds(ids: string[]) {
+    return this.usersRepository.findByIds(ids);
+  }
+
   async findByUsername(username: string, includePassword = false) {
     return this.usersRepository.findByUsername(username, includePassword);
   }

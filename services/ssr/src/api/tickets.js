@@ -33,6 +33,14 @@ export const ticketsSlice = api.injectEndpoints({
         params,
       }),
     }),
+    addComment: builder.mutation({
+      query: ({ id, body, isInternal }) => ({
+        url: `/tickets/${id}/comment/add`,
+        method: 'PATCH',
+        body: { body, isInternal },
+      }),
+      invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
+    }),
     updateComment: builder.mutation({
       query: ({ id, commentId, body }) => ({
         url: `/tickets/${id}/comment/${commentId}/update`,
@@ -48,6 +56,38 @@ export const ticketsSlice = api.injectEndpoints({
       }),
       invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
     }),
+    addTags: builder.mutation({
+      query: ({ id, tagIds }) => ({
+        url: `/tickets/${id}/tags/add`,
+        method: 'PATCH',
+        body: { tags: tagIds },
+      }),
+      invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
+    }),
+    removeTags: builder.mutation({
+      query: ({ id, tagIds }) => ({
+        url: `/tickets/${id}/tags/remove`,
+        method: 'PATCH',
+        body: { tags: tagIds },
+      }),
+      invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
+    }),
+    addAssignees: builder.mutation({
+      query: ({ id, assigneeIds }) => ({
+        url: `/tickets/${id}/assignees/add`,
+        method: 'PATCH',
+        body: { assignees: assigneeIds },
+      }),
+      invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
+    }),
+    removeAssignees: builder.mutation({
+      query: ({ id, assigneeIds }) => ({
+        url: `/tickets/${id}/assignees/remove`,
+        method: 'PATCH',
+        body: { assignees: assigneeIds },
+      }),
+      invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
+    }),
   }),
   overrideExisting: true,
 });
@@ -57,8 +97,13 @@ export const {
   useUpdateTicketMutation,
   useGetTicketsQuery,
   useCreateTicketMutation,
+  useAddCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
+  useAddTagsMutation,
+  useRemoveTagsMutation,
+  useAddAssigneesMutation,
+  useRemoveAssigneesMutation,
 } = ticketsSlice;
 
 const selectGetTicketQueryResult = createSelector(

@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo, useState } from 'react';
 import CommentEditor from '../components/CommentEditor';
-import { useUpdateTicketMutation } from '@/api/tickets';
+import { useAddCommentMutation } from '@/api/tickets';
 import { TicketStatus } from '@/enums/tickets';
 import useUser from '@/hooks/useUser';
 import {
@@ -29,12 +29,15 @@ function TicketCommentSection({ ticket }) {
     );
   }, [ticket]);
 
-  const [updateTicket, { isLoading, isSuccess }] = useUpdateTicketMutation({
-    fixedCacheKey: 'ticket-view-page',
-  });
+  // const [updateTicket, { isLoading, isSuccess }] = useUpdateTicketMutation({
+  //   fixedCacheKey: 'ticket-view-page',
+  // });
+
+  const [addComment, { isLoading, isSuccess }] = useAddCommentMutation();
 
   const handleSubmitComment = (comment) => {
-    updateTicket({ id: ticket.id, comment, isCommentInternal: isInternal });
+    addComment({ id: ticket.id, body: comment, isInternal });
+    // updateTicket({ id: ticket.id, comment, isCommentInternal: isInternal });
   };
 
   const sectionStyle = useMemo(() => {

@@ -22,6 +22,7 @@ import {
 import { UserDb } from 'src/app/users/infrastructure/schema/user.schema';
 import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
 import { TicketComment } from '../domain/value-objects/ticket-comment';
+import { v4 as uuid } from 'uuid';
 
 export type TicketsQuery = {
   page: number | null;
@@ -250,7 +251,7 @@ export class TicketsRepository {
       item.type = TicketHistoryEntryType.COMMENT_ADDED;
       item.payload = new TicketHistoryEntryCommentAdded(
         comment.body,
-        comment.commentId,
+        comment.commentId ?? uuid(),
         comment.isInternal,
       );
       document.history.push(item);

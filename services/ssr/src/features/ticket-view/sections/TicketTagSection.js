@@ -1,19 +1,18 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import TagForm from '../components/TagForm';
-import { useUpdateTicketMutation } from '@/api/tickets';
+import { useAddTagsMutation, useRemoveTagsMutation } from '@/api/tickets';
 
 function TicketTagSection({ ticket }) {
-  const [updateTicket] = useUpdateTicketMutation({
-    fixedCacheKey: 'ticket-view-page',
-  });
+  const [addTags] = useAddTagsMutation();
+  const [removeTags] = useRemoveTagsMutation();
 
   const handleAddTag = (tagId) => {
-    updateTicket({ id: ticket.id, addTags: [tagId] });
+    addTags({ id: ticket.id, tagIds: [tagId] });
   };
 
   const handleDeleteTag = (tagId) => {
-    updateTicket({ id: ticket.id, removeTags: [tagId] });
+    removeTags({ id: ticket.id, tagIds: [tagId] });
   };
 
   return (

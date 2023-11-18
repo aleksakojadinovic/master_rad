@@ -8,7 +8,6 @@ import {
   BadRequestException,
   UseInterceptors,
   Query,
-  Headers,
   Req,
   ValidationPipe,
   UseGuards,
@@ -71,7 +70,6 @@ export class TicketTagGroupController {
   @Get()
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findAll(
-    @Headers('accept-language') acceptLanguage: any,
     @Query(new ValidationPipe({ transform: true })) queryDTO: EntityQueryDTO,
     @Req() req: Request,
     @GetUserInfo() user: User,

@@ -155,4 +155,12 @@ export class UsersRepository {
     const hash = await bcrypt.hash(newPassword, 10);
     await this.userModel.updateOne({ _id: id }, { passwordHash: hash });
   }
+
+  async findByIds(ids: string[]) {
+    const users = await this.userModel
+      .find({ _id: { $in: ids } })
+      .populate(UsersRepository.POPULATE);
+
+    return this.mapper.mapArray(users, UserDb, User);
+  }
 }

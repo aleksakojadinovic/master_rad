@@ -1,7 +1,7 @@
 import { BaseError } from 'src/codebase/errors/BaseError';
 import { TicketStatus } from '../value-objects/ticket-status';
 
-export class CannotChangeCommentsForTicketStatus extends BaseError {
+export class CannotChangeCommentsForTicketStatusError extends BaseError {
   status: TicketStatus;
 
   constructor(status: TicketStatus) {
