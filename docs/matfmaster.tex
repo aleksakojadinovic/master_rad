@@ -46,7 +46,7 @@
 \usepackage{cmsrb}
 
 % Ostali paketi koji se koriste u dokumentu
-\usepackage{listings} % listing programskog koda
+\usepackage{listings} 
 
 \lstdefinelanguage{JavaScript}{
   morekeywords=[1]{break, continue, delete, else, for, function, if, in,
@@ -186,18 +186,19 @@
 % ------------------------------------------------------------------------------
 Kod velikog broja softverskih sistema, serverski deo aplikacije (bekend) može se uopšteno shvatiti kao aplikacija koja apstrahuje pristup podacima na udaljenom serveru. Podaci se skoro uvek čuvaju u nekoj vrsti baze podataka, dok se pristup i manipulacija podacima dodatno apstrahuje aplikativnim\footnote{Opštosti radi, izbegnuti su pojmovi \textbf{veb server} i \textbf{http server}. Veb server predstavlja server za dostavljanje statičkog sadržaja na vebu, i često kada govorimo o bekend aplikacijama ne mislimo na ovaj tip servera (nginx, apache2). HTTP server takođe ne bi bio ispravan pojam usled postojanja drugih protokola komunikacije na vebu} serverom.
 
-Navedeni gradivni delovi - baza podataka i aplikativni server - tehnički su dovoljni za implementaciju bekend dela aplikacije. Mnogi kursevi razvoja veb aplikacija, pogotovu oni zasnovani na MEAN i MERN\footnote{Mongo, Angular ili React, Express, Node.js, dve popularne kombinacije veb tehnologija} okruženjima, upravo ovakve primere i prikazuju. Tu neretko srećemo arhitekturu od samo dva sloja - sloj aplikativnog programskog interfejsa (\textit{eng API - Application Programming Interface}) i sloja pristupa bazi podatka. Međutim, za izgradnju složene aplikacije koja uzima u obzir čistoću koda, razdvajanje odgovornosti, održivost, i iskustvo programera (\textit{eng Developer Experience} - DX) potrebno je dodatno raslojiti aplikaciju i pratiti neke ustanovljene principe.
+Navedeni gradivni delovi - baza podataka i aplikativni server - tehnički su dovoljni za implementaciju bekend dela aplikacije. Mnogi kursevi razvoja veb aplikacija, pogotovu oni zasnovani na MEAN i MERN\footnote{Mongo, Angular ili React, Express, Node.js, dve popularne kombinacije veb tehnologija} okruženjima, upravo ovakve primere i prikazuju. Tu neretko srećemo arhitekturu od samo dva sloja - sloj aplikativnog programskog interfejsa (\textit{eng API - Application Programming Interface}) i sloja pristupa bazi podatka. Međutim, za izgradnju složene aplikacije koja uzima u obzir čistoću k\^{o}da, razdvajanje odgovornosti, održivost, i iskustvo programera (\textit{eng Developer Experience} - DX) potrebno je dodatno raslojiti aplikaciju i pratiti neke ustanovljene principe.
 
 
 \section{DDD}
 Jedan od najpopularnijih pristupa za dizajn i modelovanje softvera jeste dizajn zasnovan na domenu (\textit{eng Domain Driven Design} - DDD). Ukratko, DDD zagovara detaljno upoznavanje svih učesnika razvoja softvera sa domenom koji dati softverski sistem predstavlja. Programeri u saradnji sa domenskim stručnjacima razvijaju zajednički jezik\footnote{mora neki bolji prevod za ovo} (\textit{eng \textbf{ubiquitous language}}) kako bi se prevazišla barijera različitog rečnika svih strana. \cite{dddq}
 
 \subsection{Korišćenje domenskog jezika u programskom k\^{o}du}
-Nakon uspostavljanja, taj jezik postaje sastavni deo komunikacije programera i domenskih stručnjaka (i svih ostalih učesnika razvoja), ali isto tako i programskog koda. Naime, programski k\^{o}d koji nastaje kao produkt modelovanja principa DDD-a postaje jasniji i dostiže viši stepen samodokumentovanosti. U takvom k\^{o}du sama imena klasa, metoda i promenljivih mogu biti dovoljna da programeru daju jasnu sliku šta koja celina k\^{o}da radi. Upravo zbog ovoga, primena DDD-a nije ograničena samo na velike kompanije ili velike timove, i ne služi samo kao sredstvo prevazilaženja "jezičkih" barijera, već doprinosi čistoći k\^{o}da i arhitekture i u manjim timovima, čak i jednočlanim. U sledeća dva primera prikazan je deo metode koja vrši ažuriranje komentara na tiketu. Primer 2.1 prikazuje ovu metodu pisanu ne uzimajuću domenski jezik u obzir.
+\label{sec:dddukodu}
+Nakon uspostavljanja, taj jezik postaje sastavni deo komunikacije programera i domenskih stručnjaka (i svih ostalih učesnika razvoja), ali isto tako i programskog k\^{o}da. Naime, programski k\^{o}d koji nastaje kao produkt modelovanja principa DDD-a postaje jasniji i dostiže viši stepen samodokumentovanosti. U takvom k\^{o}du sama imena klasa, metoda i promenljivih mogu biti dovoljna da programeru daju jasnu sliku šta koja celina k\^{o}da radi. Upravo zbog ovoga, primena DDD-a nije ograničena samo na velike kompanije ili velike timove, i ne služi samo kao sredstvo prevazilaženja "jezičkih" barijera, već doprinosi čistoći k\^{o}da i arhitekture i u manjim timovima, čak i jednočlanim. U sledeća dva primera prikazan je deo metode koja vrši ažuriranje komentara na tiketu. Primer 2.1 prikazuje ovu metodu pisanu ne uzimajuću domenski jezik u obzir.
 
 
 \begin{figure}[h]
-\begin{lstlisting}[language=JavaScript, style=ES6, caption={Kod koji nije na domenskom jeziku}]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={K\^{o}d koji nije na domenskom jeziku}]
 function updateComment(...){
   const ticket = //...
   
@@ -415,7 +416,7 @@ Sa ovakvom postavkom, mutacije nad tiketom postižu se diferencijacijom prosleđ
 \end{lstlisting}
 \end{figure}
 
-Za kraj, na primeru komentara nad tiketom, prikazujemo uprošćenu verziju mapiranja iz oblika u sloju infrastrukture u domenski entitet, dok se puna verzija nalazi u izvornom kodu u fajlu \textit{ticket.entity-profile.ts}.
+Za kraj, na primeru komentara nad tiketom, prikazujemo uprošćenu verziju mapiranja iz oblika u sloju infrastrukture u domenski entitet, dok se puna verzija nalazi u izvornom k\^{o}du u fajlu \textit{ticket.entity-profile.ts}.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Mapiranje komentara tiketa}]
@@ -456,6 +457,168 @@ Za kraj, na primeru komentara nad tiketom, prikazujemo uprošćenu verziju mapir
 \section{Sloj domena}
 
 Takođe poznat kao srce poslovnog softvera, sloj domena sadrži glavnu poslovnu logiku i operacije koje direktno oslikavaju dešavanja u svetu koji softver module. Iz ugla implementacije, svoje mogućnosti pružaju putem apstrakcije koju često nazivamo servisima, što koristimo i kao sufiks u nazivima njihovih klasa, iako se mogu koristiti i druge konvencije\footnote{Nekad se umesto sufiksa \textit{Service} koriste reči koje direktno oslikavaju namenu datog servisa. Na primer umesto \textit{GetUserService} koristi se naziv \textit{UserProvider} i sl.}.
+
+\subsection{Tok podataka kroz domenskih sloj}
+
+Usled činjenice da obuhvata sve poslovne operacije, nije lako definisati opštu namenu domenskog sloja. Na slici 2.3 prikazan je uopšten primer toka podataka kroz ovaj sloj, i njemu susedne slojeve.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{docs/images/ch_2/domain.png} 
+  \caption{Uopšteni tok obrade podataka kroz domenski sloj}
+  \label{fig:sample}
+\end{figure}
+
+Ipak, operacije unutar servisa (korake 2-4) ćemo konkretizovati za potrebe sistema kojim se bavimo, jer se mogu svesti na sledeći šablon, gde redosled ne mora nužno biti ispraćen u k\^{o}du usled prirode jezika\footnote{Zbog asinhrone prirode okruženja Node.js, radi postizanja maksimalnih performansi, neke operacije pokrećemo paralelno a zatim čekamo koristeći funkciju $Promise.all$, što može naizgled delovati kao mešanje koraka.}.:
+
+\begin{enumerate}
+  \item Dohvatanje odgovarajućeg entiteta
+  \item Provera domenskih prava pristupa i domenskih grešaka
+  \item Obrada entiteta
+  \item Komunikacija sa drugim servisima
+  \item Osiguravanje trajnosti podataka
+  \item Priprema i vraćanje odgovarajućeg odgovora
+\end{enumerate}
+
+Na sledećem primeru operacije dodeljivanja tiketa agentima prikazujemo prethodne korake, redom.
+
+\newpage
+\textbf{Dohvatanje entiteta}
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={dohvatanje tiketa}]
+async addAssignees(ticketId: string, user: User, dto: AssignDTO) {
+  const ticket = await this.ticketsRepository.findById(ticketId);
+  if (!ticket) {
+    throw new TicketNotFoundError(ticket.id);
+  }
+\end{lstlisting}
+\end{figure}
+
+\textbf{Provera domenskih prava pristupa i domenskih grešaka}
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={domenska prava pristupa i greške}]
+  // Domensko pravo pristupa - korisnicima nije dozvoljeno
+  // dodeljivanje tiketa
+  if (user.isCustomer()) {
+    throw new NotAllowedToAssignError();
+  }
+  const assignees: User[] = await Promise.all(
+    dto.assignees.map((id) => this.usersService.findOne(id)),
+  );
+
+  for (const assigneeUser of assignees) {
+    // Greske domenskog karatkera
+    if (!assigneeUser) {
+      throw new AssigneeNotFoundError();
+    }
+    if (assigneeUser.isCustomer()) {
+      throw new CannotAssignCustomerError(assigneeUser.id);
+    }
+    if (ticket.isAssigned(assigneeUser)) {
+      throw new DuplicateAssigneeError(assigneeUser.id);
+    }
+}
+\end{lstlisting}
+\end{figure}
+
+\newpage
+\textbf{Obrada entiteta}
+
+U ovom slučaju obrada je jednolinijska, zbog pogodne definicije klase Ticket.
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={obrada entiteta}]
+ticket.assign(assignees);
+\end{lstlisting}
+\end{figure}
+
+\textbf{Komunikacija sa drugim servisima}
+
+Konstruišemo niz obaveštenja koja je potrebno poslati, slanje delegiramo odgovarajućem servisu.
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={drugi servisi}]
+const usersToNotify = assignees.filter(
+  (assignee) => assignee.id !== user.id,
+);
+const notifications = usersToNotify.map((userToNotify) =>
+  NotificationFactory.create((builder) =>
+    builder
+      .forUser(userToNotify)
+      .hasPayload('assigned', (assignBuilder) =>
+        assignBuilder.atTicket(ticket).byUser(user),
+      ),
+  ),
+);
+const promise = this.notificationsService.emitNotifications(
+  ...notifications,
+);
+\end{lstlisting}
+\end{figure}
+
+\textbf{Osiguravanje trajnosti podataka}
+
+Čuvamo načinjene promene u bazi podataka.
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={trajnost}]
+// ...
+this.ticketsRepository.update(ticket, user);
+\end{lstlisting}
+\end{figure}
+
+\newpage
+\textbf{Priprema i vraćanje odgovarajućeg odgovora}
+
+Gde pritom koristimo servis \textit{TicketRedactionService} kako bismo otklonili podatke koje dati tip korisnika ne bi trebalo da vidi.
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={odgovor}]
+this.ticketRedactionService.prepareResponse(updatedTicket, user);
+return updatedTicket;
+\end{lstlisting}
+\end{figure}
+
+\newpage
+\subsection{Obrada grešaka}
+
+U prethodnom primeru toka podataka primećujemo intenzivan rad sa greškama. Ovom delu posvećena je posebna pažnja jer je obrada grešaka jedno od centralnih pitanja dizajna kompleksnog softverskog sistema, i bitno je od početka dizajnirati ga korektno kako bi kasniji rad bio znatno olakšan.
+
+Naime, programer koji se bavi implementacijom odgovarajuće domenske funkcionalnosti pre ili kasnije susrešće se sa potrebom da obrađuje greške. Čak i najjednostavniji zahtev, kao što je, recimo, dohvatanje jednog tiketa, zahteva rad sa greškama na svakom od nivoa slojevite arhitekture. Manuelno orkestriranje grešaka pri svakoj implementaciji neke funkcionalnosti dovelo bi do usporenog rada i nekonzistentnog sistema bez jasnih standarda. 
+
+Stoga pravimo jasnu podelu između grešaka domenskog nivoa i grešaka aplikativnog nivoa (HTTP grešaka), i u domenskom sloju držimo se isključivo grešaka domenskog nivoa. Sve domenske greške nasleđuju sledeću baznu klasu.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={BaseError.ts}]
+export class BaseError {
+  constructor(public message: string = 'An error occurred') {}
+
+  public getName() {
+    return this.constructor.name;
+  }
+
+  public getPayload(): any {
+    return {
+      message: this.message,
+      errorType: this.getName(),
+    };
+  }
+}
+\end{lstlisting}
+\end{figure}
+
+Na ovaj način imamo uniforman interfejs kako svaka greška treba da izgleda, sa dovoljno fleksibilnosti da pokrije sve domenske situacije. U k\^{o}du možemo primetiti sve od jednostavnih grešaka koje predstavljaju nepostojanje - primer \textit{TicketNotFound}, do grešaka koje ukazuju na kompleksnu sitaciju - primer \textit{CannotChangeCommentsOfAClosedTicket}. Na ovakav sistem mogu se uložiti nekoliko kritika, koje ćemo razjasniti.
+
+\textbf{Repetitivnost.}  
+Sve greške koje se odnose na nepostajanje entiteta imaju identičan oblik, pa se može uložiti primedba na ponavljanje k\^{o}da, i sugerisati kreiranje dodatnih apstrakcija. U ovom radu izbegli smo takav pristup iz dva razloga
+\begin{itemize}
+    \item \textbf{Bespotrebne apstrakcije}. Iako je tehnički moguće apstrahovati greške nepostajanja entiteta u neki tip višeg nivoa - recimo \textit{EntityNotFoundError}, ovo uvodi previše jezičke kompleksnosti u domenski sloj, i na duge staze ne doprinosi ni čitljivosti ni razumevanju.
+    \item \textbf{Fleksibilnost}. Ukoliko svaki entitet ima priliku da definiše svoje greške bez ograničenja međuapstrakcija, postiže se maksimalna fleksibilnost u okviru datog entiteta. Može se argumentovati da ovakav pristup olakšava potencijalni prelaz na mikroservisnu arhitekturu, po potrebi.
+\end{itemize}
+\textbf{Preterana ekspresivnost.} Na ovom mestu konkretno govorimo o dužini naziva nekih klasa, koje se mogu smatrati nečitljivim. Ipak, ako se podsetimo dela \ref{sec:dddukodu}, jasno nam je da dobitak na razumljivosti domena kroz k\^{o}d nadmašuje strah od dugačkih imena klasa.
+
+Ostaje pitanje transformacije ovakvih grešaka u HTTP oblik. Jedno izrazito elegantno rešenje, koje nam pružaju mogućnosti okruženja NestJs, biće prikazano u sledećem pogavlju.
+  
+
+
+
 
 % ------------------------------------------------------------------------------
 \chapter{Frontend}
