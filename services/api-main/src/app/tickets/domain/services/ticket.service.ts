@@ -111,19 +111,13 @@ export class TicketService extends BaseService {
   }
 
   async update(id: string, user: User, dto: UpdateTicketDto) {
-    const isCustomer = user.isCustomer();
-
     const ticket = await this.ticketsRepository.findById(id);
 
     if (!ticket) {
       throw new TicketNotFoundError(id);
     }
 
-    if (isCustomer && !ticket.isOwner(user)) {
-      throw new TicketNotFoundError(id);
-    }
-
-    if (!ticket) {
+    if (user.isCustomer() && !ticket.isOwner(user)) {
       throw new TicketNotFoundError(id);
     }
 
