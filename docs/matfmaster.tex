@@ -381,7 +381,7 @@ export class TicketDb extends Document {
 
 
 \newpage
-Niz \textit{history} predstavlja promene primenjene na datom tiketu, na osnovu kojih se može izvesti trenutno stanje tiketa. Ipak, prirodno se postavlja pitanje zašto se, osim istorije promena, čuvaju i eksplicitna polja kao što su \textit{Status}, \textit{title}, \textit{body} i drugi, kad se ti podaci mogu izvući putem istorije. Razlog leži u performanse pretrage. Ukoliko bismo čuvali samo listu promena, a ne sliku trenutnog stanja (\textit{eng snapshot}), svaka pretraga bi bila linearne vremenske složenosti u odnosu na dužinu istorije, što bi rezultovalo lošim performansama.
+Niz \textit{history} predstavlja promene primenjene na datom tiketu, na osnovu kojih se može izvesti trenutno stanje tiketa. Ipak, prirodno se postavlja pitanje zašto se, osim istorije promena, čuvaju i eksplicitna polja kao što su \textit{status}, \textit{title}, \textit{body} i drugi, kad se ti podaci mogu izvući putem istorije. Razlog leži u performansama pretrage. Ukoliko bismo čuvali samo listu promena, a ne sliku trenutnog stanja (\textit{eng snapshot}), svaka pretraga bi bila linearne vremenske složenosti u odnosu na dužinu istorije, što bi rezultovalo lošim performansama.
 
 Sa ovakvom postavkom, mutacije nad tiketom postižu se diferencijacijom prosleđenog entiteta, i entiteta iz baze podataka.
 
@@ -414,6 +414,41 @@ Sa ovakvom postavkom, mutacije nad tiketom postižu se diferencijacijom prosleđ
     }
 \end{lstlisting}
 \end{figure}
+
+Za kraj, na primeru komentara nad tiketom, prikazujemo uprošćenu verziju mapiranja iz oblika u sloju infrastrukture u domenski entitet, dok se puna verzija nalazi u izvornom kodu u fajlu \textit{ticket.entity-profile.ts}.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={Mapiranje komentara tiketa}]
+  forMember((destination) => destination.comments,
+    mapFrom((source) => {
+      const commentItems = source.history.filter(
+        (item) => item.type === COMMENT_ADDED,
+      );
+
+      return commentItems
+        .map((item) => {
+          // pretrzujemo sve komentare u istoriji
+          const payload = item.payload as CommentAdded;
+          // proveravamo da li su kasnije bili obrisani
+          const deletes = source.history.filter(
+            (deleteItem) => deleteItem.type === COMMENT_DELETED 
+            && (deleteItem.payload as CommentDeleted)
+                .commentId === payload.commentId,
+            );
+          
+          const wasDeleted = deletes.length > 0;
+
+          if (wasDeleted) {
+            return null;
+          }
+
+          // ... mapiranje samog komentara u domenski oblik...
+
+          return comment;
+
+\end{lstlisting}
+\end{figure}
+
 
 
 
