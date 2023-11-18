@@ -29,7 +29,7 @@ export const apiErrorMessages = defineMessages({
     id: 'api.errors.old-password-invalid',
     defaultMessage: 'Old password is incorrect.',
   },
-  CannotChangeCommentsForTicketStatus: {
+  CannotChangeCommentsForTicketStatusError: {
     id: 'api.errors.cannot-change-comments-when-this-status',
     defaultMessage:
       'You cannot modify comments on a ticket in this status. Consider re-opening.',
