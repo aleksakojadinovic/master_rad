@@ -14,7 +14,6 @@ import { BadTicketFiltersError } from '../errors/BadTicketFilters';
 import { User } from '../../../users/domain/entities/user.entity';
 import { Ticket } from '../entities/ticket.entity';
 import { TicketStatus } from '../value-objects/ticket-status';
-import { Notification } from 'src/app/notifications/domain/entities/notification.entity';
 import { TicketRedactionService } from './ticket-redacation.service';
 
 @Injectable()
@@ -121,14 +120,11 @@ export class TicketService extends BaseService {
       throw new TicketNotFoundError(id);
     }
 
-    const notifications: Notification[] = [];
-
     this.updateTicketStatus(ticket, user, dto);
     this.updateTicketBody(ticket, dto);
     this.updateTicketTitle(ticket, dto);
 
     const updatedTicket = await this.ticketsRepository.update(ticket, user);
-    await this.notificationsService.emitNotifications(...notifications);
 
     this.ticketRedactionService.prepareTicketResponse(updatedTicket, user);
     return updatedTicket;
