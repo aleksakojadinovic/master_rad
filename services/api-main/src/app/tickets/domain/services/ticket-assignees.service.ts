@@ -35,19 +35,20 @@ export class TicketAssigneesService extends BaseService {
       throw new TicketNotFoundError(ticket.id);
     }
 
-    const assignees: User[] = [];
-    for (const assigneeId of dto.assignees) {
-      const assigneeUser = await this.usersService.findOne(assigneeId);
+    const assignees: User[] = await Promise.all(
+      dto.assignees.map((id) => this.usersService.findOne(id)),
+    );
+
+    for (const assigneeUser of assignees) {
       if (!assigneeUser) {
         throw new AssigneeNotFoundError();
       }
       if (assigneeUser.isCustomer()) {
-        throw new CannotAssignCustomerError(assigneeId);
+        throw new CannotAssignCustomerError(assigneeUser.id);
       }
       if (ticket.isAssigned(assigneeUser)) {
-        throw new DuplicateAssigneeError(assigneeId);
+        throw new DuplicateAssigneeError(assigneeUser.id);
       }
-      assignees.push(assigneeUser);
     }
 
     ticket.assign(assignees);
