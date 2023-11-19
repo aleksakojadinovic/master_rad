@@ -76,7 +76,7 @@ export class TicketService extends BaseService {
       sortField,
     } = queryDTO;
 
-    const tickets = await this.ticketsRepository.findAll({
+    const ticketsResponse = await this.ticketsRepository.findAll({
       page,
       perPage,
       statuses,
@@ -87,10 +87,12 @@ export class TicketService extends BaseService {
       sortOrder,
       sortField,
     });
-    tickets.forEach((ticket) =>
+
+    ticketsResponse.entities.forEach((ticket) =>
       this.ticketRedactionService.prepareTicketResponse(ticket, user),
     );
-    return tickets;
+
+    return ticketsResponse;
   }
 
   async findOne(id: string, user: User) {
