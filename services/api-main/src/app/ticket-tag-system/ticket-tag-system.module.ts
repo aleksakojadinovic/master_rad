@@ -6,7 +6,10 @@ import {
   TicketTagGroupDb,
   TicketTagGroupSchema,
 } from './infrastructure/schema/ticket-tag-group.schema';
-import { TicketTagDb, TicketTagSchema } from './infrastructure/schema/ticket-tag.schema';
+import {
+  TicketTagDb,
+  TicketTagSchema,
+} from './infrastructure/schema/ticket-tag.schema';
 import { UsersModule } from '../users/users.module';
 import { TicketTagService } from './domain/services/ticket-tag.service';
 import { TicketTagController } from './api/controllers/ticket-tag.controller';
