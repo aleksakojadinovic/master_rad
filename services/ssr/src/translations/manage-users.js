@@ -70,3 +70,23 @@ export const cannotChangeRoleNotesMessages = defineMessages({
     defaultMessage: 'No roles available for this type of user.',
   },
 });
+
+export const createUserMessages = defineMessages({
+  pageTitle: {
+    id: 'create-user.page-title',
+    defaultMessage: 'Create User | STS',
+  },
+  createUserTitle: {
+    id: 'create-user.create-user-title',
+    defaultMessage: 'Create a new user',
+  },
+  createUserAlertText: {
+    id: 'create-user.create-user-alert-text',
+    defaultMessage:
+      'This action will create a new inactive user in the system. You will be able to change their role and status later.',
+  },
+  createUserHeading: {
+    id: 'create-user.create-user-heading',
+    defaultMessage: 'Create a new user',
+  },
+});

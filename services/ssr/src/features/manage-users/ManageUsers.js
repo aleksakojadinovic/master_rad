@@ -36,6 +36,10 @@ function ManageUsers({ queryParams }) {
     handleParamsChange(newQueryParams);
   };
 
+  const handleCreateUser = () => {
+    router.push('/manage/users/create');
+  };
+
   const DEFAULT_VALUE = {
     entities: [],
     page: 0,
@@ -50,7 +54,7 @@ function ManageUsers({ queryParams }) {
         <title>{intl.formatMessage(manageUsersMessages.pageTitle)}</title>
       </Head>
       <Box marginBottom="12px">
-        <Button onClick={() => {}} variant="contained">
+        <Button onClick={handleCreateUser} variant="contained">
           {intl.formatMessage(manageUsersMessages.createNewUserButtonText)}
         </Button>
       </Box>
