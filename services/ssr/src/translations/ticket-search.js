@@ -53,4 +53,16 @@ export const ticketSearchMessages = defineMessages({
     id: 'ticket-search.user-form-title',
     defaultMessage: 'Pick a user',
   },
+  dateAscending: {
+    id: 'ticket-search.date-ascending',
+    defaultMessage: 'Date created ascending',
+  },
+  dateDescending: {
+    id: 'ticket-search.date-descending',
+    defaultMessage: 'Date created descending',
+  },
+  sortBy: {
+    id: 'ticket-search.sort-by',
+    defaultMessage: 'Sort by',
+  },
 });

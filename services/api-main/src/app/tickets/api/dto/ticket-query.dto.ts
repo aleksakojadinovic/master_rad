@@ -38,12 +38,4 @@ export class TicketQueryDTO extends EntityQueryDTO {
   @IsOptional()
   @Transform(({ value }) => value || null)
   createdBy: string | null = null;
-
-  @IsOptional()
-  @Transform(({ value }) => value || 1)
-  page = 1;
-
-  @IsOptional()
-  @Transform(({ value }) => value || 10)
-  perPage = 10;
 }

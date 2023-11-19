@@ -32,7 +32,6 @@ export default function TicketSearch({ page, perPage, filters }) {
   };
 
   const handlePerPageChange = (newPerPage) => {
-    console.log({ newPerPage });
     resolveNewQueryParams(page, newPerPage, filters);
   };
 

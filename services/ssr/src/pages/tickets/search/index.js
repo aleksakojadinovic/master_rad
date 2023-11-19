@@ -51,7 +51,18 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const statuses =
       filters.statuses == null ? null : filters.statuses.split(',');
 
-    const resolvedFilters = { page, perPage, assignee, createdBy, statuses };
+    const sortField = filters.sortField || 'createdAt';
+    const sortOrder = parseInt(filters.sortOrder, 10) || -1;
+
+    const resolvedFilters = {
+      page,
+      perPage,
+      assignee,
+      createdBy,
+      statuses,
+      sortField,
+      sortOrder,
+    };
 
     if (assignee == null) {
       delete resolvedFilters.assignee;

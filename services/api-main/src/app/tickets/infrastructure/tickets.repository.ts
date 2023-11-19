@@ -136,7 +136,6 @@ export class TicketsRepository {
 
     if (sortField !== null) {
       query.sort([[sortField, sortOrder as SortOrder]]);
-      countQuery.sort([[sortField, sortOrder as SortOrder]]);
     }
 
     query.skip((page - 1) * perPage).limit(perPage);

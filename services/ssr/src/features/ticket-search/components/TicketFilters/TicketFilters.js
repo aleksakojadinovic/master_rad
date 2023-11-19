@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 import { formsMessages } from '@/translations/forms';
 import TicketUserFilter from './TicketUserFilter';
 import { ticketSearchMessages } from '@/translations/ticket-search';
+import TicketSort from '../TicketSort';
 
 function TicketFilters({ filters, onChange }) {
   const intl = useIntl();
@@ -18,6 +19,10 @@ function TicketFilters({ filters, onChange }) {
       return;
     }
     onChange({ ...filters, [key]: value });
+  };
+
+  const handleSortChange = ({ sortField, sortOrder }) => {
+    onChange({ ...filters, sortField, sortOrder });
   };
 
   const handleReset = () => {
@@ -56,6 +61,15 @@ function TicketFilters({ filters, onChange }) {
             }
             value={filters.createdBy ?? null}
             onChange={(userId) => handleChange('createdBy', userId)}
+          />
+        </Box>
+        <Box marginBottom="12px" marginLeft="6px">
+          <TicketSort
+            value={{
+              sortField: filters.sortField,
+              sortOrder: filters.sortOrder,
+            }}
+            onChange={handleSortChange}
           />
         </Box>
       </Box>
