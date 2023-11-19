@@ -50,7 +50,6 @@ function CreateUser() {
   };
 
   useEffect(() => {
-    debugger;
     if (isSuccess) {
       router.replace(
         `/manage/users/create/success?password=${initialPassword}&id=${data.id}`,
