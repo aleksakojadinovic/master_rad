@@ -1,9 +1,15 @@
 import { useStoreUser } from '@/api/auth';
+import { useAuthModal } from '@/features/auth/context/AuthModalContext';
 import { wrapper } from '@/redux/store';
-import React from 'react';
+import { useEffect } from 'react';
 
 function IndexPage() {
-  return <div>TODO: unlogged users</div>;
+  const { setIsOpen } = useAuthModal();
+
+  useEffect(() => {
+    setIsOpen(true);
+  }, [setIsOpen]);
+  return null;
 }
 
 export default IndexPage;

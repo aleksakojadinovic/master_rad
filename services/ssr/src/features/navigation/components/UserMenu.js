@@ -1,23 +1,19 @@
 import { useGetMeQuery } from '@/api/auth';
+import { useAuthModal } from '@/features/auth/context/AuthModalContext';
 import useUser from '@/hooks/useUser';
 import { navMessages } from '@/translations/nav';
 import { Button, Menu, MenuItem } from '@mui/material';
 import Cookies from 'js-cookie';
-import dynamic from 'next/dynamic';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-const AuthenticationModal = dynamic(() =>
-  import('../../auth/AuthenticationModal/AuthenticationModal'),
-);
-
 function UserMenu() {
+  const { setIsOpen: setIsAuthModalOpen } = useAuthModal();
   useGetMeQuery();
 
   const intl = useIntl();
   const { isLoggedIn, initials } = useUser();
 
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [menuAnchorRef, setMenuAnchorRef] = useState(null);
   const [shouldRenderMenu, setShouldRenderMenu] = useState(false);
 
@@ -63,9 +59,6 @@ function UserMenu() {
 
   return (
     <Fragment>
-      {isAuthModalOpen && (
-        <AuthenticationModal onClose={() => setIsAuthModalOpen(false)} />
-      )}
       <div>
         <Button ref={menuAnchorRef} onClick={handleMenuButtonClick}>
           {!isLoggedIn

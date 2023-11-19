@@ -20,8 +20,10 @@ import React, { useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import * as Yup from 'yup';
+import { useAuthModal } from '../context/AuthModalContext';
 
-function AuthenticationModal({ onClose }) {
+function AuthenticationModal() {
+  const { setIsOpen } = useAuthModal();
   const intl = useIntl();
   const validationSchema = useMemo(() => {
     return Yup.object({
@@ -53,8 +55,12 @@ function AuthenticationModal({ onClose }) {
     login({ username, password });
   };
 
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <Dialog open onClose={onClose}>
+    <Dialog open onClose={handleClose}>
       <Formik
         initialValues={{ username: '', password: '' }}
         validationSchema={validationSchema}
