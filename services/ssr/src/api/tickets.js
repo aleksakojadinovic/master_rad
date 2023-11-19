@@ -88,6 +88,14 @@ export const ticketsSlice = api.injectEndpoints({
       }),
       invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
     }),
+    editTitle: builder.mutation({
+      query: ({ id, title }) => ({
+        url: `/tickets/${id}/title`,
+        method: 'PATCH',
+        body: { title },
+      }),
+      invalidatesTags: ({ id }) => [{ type: 'getTicket', id }],
+    }),
   }),
   overrideExisting: true,
 });
@@ -104,6 +112,7 @@ export const {
   useRemoveTagsMutation,
   useAddAssigneesMutation,
   useRemoveAssigneesMutation,
+  useEditTitleMutation,
 } = ticketsSlice;
 
 const selectGetTicketQueryResult = createSelector(

@@ -4,9 +4,14 @@ import React from 'react';
 import TicketStatusBadge from '../components/TicketStatusBadge';
 import { useIntl } from 'react-intl';
 import { globalMessages } from '@/translations/global';
+import useUser from '@/hooks/useUser';
 
 function TicketTitleSection({ ticket }) {
   const intl = useIntl();
+
+  const { id } = useUser();
+  const isOwner = id === ticket.createdBy.id;
+
   return (
     <Grid container>
       <Grid item xs={12} md={9}>

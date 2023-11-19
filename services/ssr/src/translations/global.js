@@ -101,4 +101,8 @@ export const globalMessages = defineMessages({
     id: 'global.by',
     defaultMessage: 'by',
   },
+  discard: {
+    id: 'global.discard',
+    defaultMessage: 'Discard',
+  },
 });
