@@ -97,4 +97,8 @@ export const globalMessages = defineMessages({
     id: 'global.generic-page-title',
     defaultMessage: 'STS',
   },
+  by: {
+    id: 'global.by',
+    defaultMessage: 'by',
+  },
 });

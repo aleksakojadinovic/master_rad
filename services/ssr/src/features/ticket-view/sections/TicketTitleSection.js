@@ -3,6 +3,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import TicketStatusBadge from '../components/TicketStatusBadge';
 import { useIntl } from 'react-intl';
+import { globalMessages } from '@/translations/global';
 
 function TicketTitleSection({ ticket }) {
   const intl = useIntl();
@@ -24,7 +25,7 @@ function TicketTitleSection({ ticket }) {
             {formatDate(ticket.createdAt, intl)}
           </Typography>
           <Typography component="div" sx={{ color: 'secondary.main' }}>
-            by {ticket.createdBy.firstName} {ticket.createdBy.lastName}
+            {intl.formatMessage(globalMessages.by)} {ticket.createdBy.fullName}
           </Typography>
           <TicketStatusBadge status={ticket.status} />
         </Box>
