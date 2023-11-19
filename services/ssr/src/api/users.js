@@ -55,10 +55,10 @@ export const usersSlice = api.injectEndpoints({
       }),
     }),
     createUser: builder.mutation({
-      query: ({ username, password }) => ({
+      query: ({ username, password, firstName, lastName }) => ({
         method: 'POST',
         url: '/users',
-        body: { username, password },
+        body: { username, firstName, lastName, password },
       }),
       invalidatesTags: 'USERS_TAG',
     }),

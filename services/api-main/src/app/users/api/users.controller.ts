@@ -25,6 +25,7 @@ import { User } from '../domain/entities/user.entity';
 import { createPaginatedResponse } from 'src/codebase/utils';
 import { ROLE_VALUES } from '../domain/value-objects/role';
 import { USER_STATUS_VALUES } from '../domain/value-objects/user-status';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @UseInterceptors(UsersInterceptor)
 @Controller('users')
@@ -60,7 +61,6 @@ export class UsersController {
     return this.mapper.map(user, User, UserDTO);
   }
 
-  // TODO: Rework this
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async update(
@@ -121,11 +121,16 @@ export class UsersController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
-  async create(@Body() body: any, @GetUserInfo() user: User) {
+  async create(
+    @Body(new ValidationPipe()) dto: CreateUserDto,
+    @GetUserInfo() user: User,
+  ) {
     if (!user.isAdministrator()) {
       throw new UnauthorizedException();
     }
 
-    return {};
+    const newUser = await this.usersService.create(dto);
+
+    return this.mapper.map(newUser, User, UserDTO);
   }
 }

@@ -43,8 +43,8 @@ function CreateUser() {
   const [createUser, { isLoading, isSuccess, isError, error }] =
     useCreateUserMutation();
 
-  const handleSubmit = ({ username, password }) => {
-    createUser({ username, password });
+  const handleSubmit = ({ username, firstName, lastName, password }) => {
+    createUser({ username, firstName, lastName, password });
   };
 
   return (
