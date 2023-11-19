@@ -45,7 +45,7 @@ function CreateUser() {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ errors, touched, onSubmit }) => (
+          {({ errors, touched, onSubmit, isValid }) => (
             <Form>
               <label htmlFor="username">
                 <Typography variant="caption">
@@ -72,8 +72,8 @@ function CreateUser() {
                 </Alert>
               </Box>
 
-              <Button type="submit" onSubmit={onSubmit}>
-                Create the user
+              <Button type="submit" onSubmit={onSubmit} disabled={!isValid}>
+                {intl.formatMessage(createUserMessages.createUserCTA)}
               </Button>
             </Form>
           )}

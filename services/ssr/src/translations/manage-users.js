@@ -89,4 +89,8 @@ export const createUserMessages = defineMessages({
     id: 'create-user.create-user-heading',
     defaultMessage: 'Create a new user',
   },
+  createUserCTA: {
+    id: 'create-user.create-user-cta',
+    defaultMessage: 'Create the user',
+  },
 });
