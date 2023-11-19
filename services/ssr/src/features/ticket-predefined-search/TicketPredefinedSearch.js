@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useGetTicketsQuery } from '@/api/tickets';
 import { TicketTable } from '../ticket-search/components/TicketTable/TicketTable';
 import { TicketPagination } from '../ticket-search/components/TicketTable/TicketPagination';
+import FullPageSpinner from '@/components/FullPageSpinner/FullPageSpinner';
 
 function TicketPredefinedSearch({ initialFilters }) {
   const [filters, setFilters] = useState(() => ({
@@ -14,15 +15,15 @@ function TicketPredefinedSearch({ initialFilters }) {
     setFilters((prev) => ({ ...prev, page: newPage }));
   };
 
-  const {
-    data: { entities: tickets, totalEntities },
-    isSuccess,
-  } = useGetTicketsQuery(filters);
+  const { data, isSuccess, isLoading } = useGetTicketsQuery(filters);
+
+  const { entities: tickets = [], totalEntities = 0 } = data ?? {};
 
   const isEmpty = isSuccess && filters.page === 1 && tickets.length === 0;
 
   return (
     <Box>
+      <FullPageSpinner open={isLoading} />
       <Box marginTop="24px">
         <TicketTable tickets={tickets ?? []} isEmpty={isEmpty} />
       </Box>
