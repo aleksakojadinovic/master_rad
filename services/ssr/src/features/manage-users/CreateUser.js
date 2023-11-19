@@ -1,7 +1,7 @@
 import { validationMessages } from '@/translations/forms';
 import { Alert, Box, Button, TextField, Typography } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import * as Yup from 'yup';
@@ -12,11 +12,13 @@ import { profileMessages } from '@/translations/profile';
 import { useCreateUserMutation } from '@/api/users';
 import ServerActionSnackbar from '@/components/ServerActionSnackbar/ServerActionSnackbar';
 import { queryStatusMessages } from '@/translations/query-statuses';
+import { useRouter } from 'next/router';
 
 const FormTextField = (props) => <TextField fullWidth {...props} />;
 
 function CreateUser() {
   const intl = useIntl();
+  const router = useRouter();
 
   const validationSchema = useMemo(() => {
     return Yup.object({
@@ -40,12 +42,21 @@ function CreateUser() {
 
   const initialPassword = useMemo(() => generateRandomPassword(), []);
 
-  const [createUser, { isLoading, isSuccess, isError, error }] =
+  const [createUser, { isLoading, isSuccess, isError, error, data }] =
     useCreateUserMutation();
 
   const handleSubmit = ({ username, firstName, lastName, password }) => {
     createUser({ username, firstName, lastName, password });
   };
+
+  useEffect(() => {
+    debugger;
+    if (isSuccess) {
+      router.replace(
+        `/manage/users/create/success?password=${initialPassword}&id=${data.id}`,
+      );
+    }
+  }, [isSuccess, data, router, initialPassword]);
 
   return (
     <Box marginTop="24px">

@@ -10,7 +10,8 @@ import ProfileUserInfo from './components/ProfileUserInfo/ProfileUserInfo';
 
 function Profile() {
   const intl = useIntl();
-  const { isActive } = useUser();
+  const user = useUser();
+  const { isActive } = user;
 
   return (
     <Fragment>
@@ -25,7 +26,7 @@ function Profile() {
               <Typography variant="body1" marginBottom="12px">
                 {intl.formatMessage(profileMessages.userInfoSectionTitle)}
               </Typography>
-              <ProfileUserInfo />
+              <ProfileUserInfo user={user} />
             </CardContent>
           </Card>
         </Grid>

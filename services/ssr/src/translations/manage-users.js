@@ -97,4 +97,17 @@ export const createUserMessages = defineMessages({
     id: 'create-user.auto-generated',
     defaultMessage: 'auto-generated',
   },
+  createUserSuccessText: {
+    id: 'create-user.create-user-success-text',
+    defaultMessage: 'You have successfully created the following user:',
+  },
+  theirPasswordHint: {
+    id: 'create-user.their-password-hint',
+    defaultMessage: 'Their password is the following:',
+  },
+  notifyThem: {
+    id: 'create-user.notify-them',
+    defaultMessage:
+      'Please notify them about this account creation, and let them know that password change is suggested',
+  },
 });
