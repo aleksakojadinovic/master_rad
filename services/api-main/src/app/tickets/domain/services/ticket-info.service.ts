@@ -1,3 +1,4 @@
+import { EditBodyDTO } from './../../api/dto/edit-body.dto';
 import { Injectable } from '@nestjs/common';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketsRepository } from '../../infrastructure/tickets.repository';
@@ -40,10 +41,10 @@ export class TicketInfoService extends BaseService {
     return newTicket;
   }
 
-  async editBody(id: string, user: User, dto: EditTitleDTO) {
+  async editBody(id: string, user: User, dto: EditBodyDTO) {
     const ticket = await this.findAndProtect(id, user);
 
-    ticket.body = dto.title;
+    ticket.body = dto.body;
 
     const newTicket = await this.ticketsRepository.update(ticket, user);
     this.ticketRedactionService.prepareTicketResponse(newTicket, user);

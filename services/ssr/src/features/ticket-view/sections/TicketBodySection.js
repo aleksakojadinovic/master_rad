@@ -8,10 +8,11 @@ import {
   TextareaAutosize,
   Typography,
 } from '@mui/material';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { useIntl } from 'react-intl';
 import { globalMessages } from '@/translations/global';
+import { useEditBodyMutation } from '@/api/tickets';
 
 function TicketBodySection({ ticket }) {
   const intl = useIntl();
@@ -21,7 +22,19 @@ function TicketBodySection({ ticket }) {
   const [body, setBody] = useState(null);
   const isEditing = body !== null;
 
-  const handleSubmitEdit = () => {};
+  const [editBody, { isSuccess }] = useEditBodyMutation();
+
+  const handleSubmitEdit = () => {
+    editBody({ id: ticket.id, body });
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setBody(null);
+    }
+  }, [isSuccess]);
+
+  const isBodyValid = body?.length >= 20;
 
   return (
     <CardContent>
@@ -57,7 +70,11 @@ function TicketBodySection({ ticket }) {
       )}
       {isEditing && (
         <Box display="flex" gap="6px">
-          <Button variant="contained" onClick={handleSubmitEdit}>
+          <Button
+            variant="contained"
+            onClick={handleSubmitEdit}
+            disabled={!isBodyValid || body === ticket.body}
+          >
             {intl.formatMessage(globalMessages.save)}
           </Button>
           <Button color="error" onClick={() => setBody(null)}>
