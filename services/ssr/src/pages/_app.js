@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import { LanguageProvider } from '@/context/LanguageContext';
 import api from '@/services/api';
 import { Router } from 'next/router';
+import { AuthModalProvider } from '@/features/auth/context/AuthModalContext';
 
 function MyApp({ Component, pageProps, languageCode }) {
   const store = wrapper.useStore();
@@ -30,9 +31,11 @@ function MyApp({ Component, pageProps, languageCode }) {
     <IntlProvider messages={messages} locale={languageCode} onError={() => {}}>
       <LanguageProvider value={languageCode}>
         <Provider store={store}>
-          <PageContainer>
-            <AppWrapper Component={Component} pageProps={pageProps} />
-          </PageContainer>
+          <AuthModalProvider>
+            <PageContainer>
+              <AppWrapper Component={Component} pageProps={pageProps} />
+            </PageContainer>
+          </AuthModalProvider>
         </Provider>
       </LanguageProvider>
     </IntlProvider>
