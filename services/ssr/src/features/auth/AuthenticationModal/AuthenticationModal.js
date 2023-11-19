@@ -1,10 +1,12 @@
 import { useLoginMutation } from '@/api/auth';
 import { FormTextField } from '@/components/FormTextField';
 import FormErrorMessage from '@/features/create-ticket/components/FormErrorMessage';
+import useServerMessage from '@/hooks/useServerMessage';
 import { authModalMessages } from '@/translations/auth-modal';
 import { validationMessages } from '@/translations/forms';
 import { profileMessages } from '@/translations/profile';
 import {
+  Alert,
   Box,
   Button,
   Dialog,
@@ -32,7 +34,14 @@ function AuthenticationModal({ onClose }) {
     });
   }, [intl]);
 
-  const [login, { isLoading, isSuccess, isError }] = useLoginMutation();
+  const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation();
+
+  const { errorMessage } = useServerMessage({
+    error,
+    isSuccess,
+    isError,
+    successMessage: '',
+  });
 
   useEffect(() => {
     if (isSuccess) {
@@ -53,8 +62,13 @@ function AuthenticationModal({ onClose }) {
       >
         {({ errors, touched }) => (
           <Form>
-            <DialogTitle>Log in</DialogTitle>
+            <DialogTitle>
+              {intl.formatMessage(authModalMessages.modalTitle)}
+            </DialogTitle>
             <DialogContent>
+              <Alert severity="info">
+                {intl.formatMessage(authModalMessages.loginDetails)}
+              </Alert>
               <label htmlFor="username">
                 <Typography variant="caption">
                   {intl.formatMessage(profileMessages.usernameTitle)}
@@ -76,6 +90,8 @@ function AuthenticationModal({ onClose }) {
                   <FormErrorMessage text={errors.lastName} />
                 )}
               </Box>
+
+              {isError && <Alert severity="error">{errorMessage}</Alert>}
             </DialogContent>
             <DialogActions>
               <Button
