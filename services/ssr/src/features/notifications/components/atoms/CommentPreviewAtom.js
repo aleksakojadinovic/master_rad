@@ -8,7 +8,7 @@ function CommentPreviewAtom({ ticket, commentId }) {
   const intl = useIntl();
 
   const comment = ticket.comments.find(({ commentId: id }) => id === commentId);
-  const commentContent = comment.body;
+  const commentContent = comment?.body;
 
   const commentPreview = commentContent
     ? getStringPreview(commentContent)
