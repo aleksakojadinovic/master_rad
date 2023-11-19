@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import * as Yup from 'yup';
@@ -33,6 +33,12 @@ function AuthenticationModal({ onClose }) {
   }, [intl]);
 
   const [login, { isLoading, isSuccess, isError }] = useLoginMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      window.location.reload();
+    }
+  }, [isSuccess]);
 
   const handleSubmit = ({ username, password }) => {
     login({ username, password });
@@ -72,8 +78,17 @@ function AuthenticationModal({ onClose }) {
               </Box>
             </DialogContent>
             <DialogActions>
-              <Button variant="contained" type="submit" onSubmit={handleSubmit}>
-                {intl.formatMessage(authModalMessages.loginButtonCTA)}
+              <Button
+                variant="contained"
+                type="submit"
+                onSubmit={handleSubmit}
+                disabled={isLoading || isSuccess}
+              >
+                {intl.formatMessage(
+                  isLoading || isSuccess
+                    ? authModalMessages.loginButtonLoadingCTA
+                    : authModalMessages.loginButtonCTA,
+                )}
               </Button>
             </DialogActions>
           </Form>
