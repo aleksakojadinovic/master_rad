@@ -1,10 +1,9 @@
 import { selectGetTicketsQueryResponse } from '@/api/tickets';
-import SelectPerPage from '@/components/SelectPerPage/SelectPerPage';
 import TicketFilters from '@/features/ticket-search/components/TicketFilters/TicketFilters';
 import { TicketPagination } from '@/features/ticket-search/components/TicketTable/TicketPagination';
 import { TicketTable } from '@/features/ticket-search/components/TicketTable/TicketTable';
 import { getTicketSearchTicketsParams } from '@/utils/params';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
@@ -21,7 +20,7 @@ export default function TicketSearch({ page, perPage, filters }) {
     router.push(`/tickets/search?${sp.toString()}`);
   };
 
-  const tickets = useSelector((state) =>
+  const { entities: tickets, totalEntities } = useSelector((state) =>
     selectGetTicketsQueryResponse(
       state,
       getTicketSearchTicketsParams(page, perPage, filters),
@@ -51,18 +50,14 @@ export default function TicketSearch({ page, perPage, filters }) {
       </Box>
 
       <Box width="100%" display="flex" justifyContent="center" marginTop="12px">
-        <Grid container>
-          <Grid item xs={6}>
-            <TicketPagination
-              page={page}
-              onPageChange={handlePageChange}
-              hasData={tickets?.length > 0}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <SelectPerPage value={perPage} onChange={handlePerPageChange} />
-          </Grid>
-        </Grid>
+        <TicketPagination
+          page={page}
+          perPage={perPage}
+          onPageChange={handlePageChange}
+          onRowsPerPageChange={handlePerPageChange}
+          hasData={tickets?.length > 0}
+          totalEntities={totalEntities}
+        />
       </Box>
     </Box>
   );

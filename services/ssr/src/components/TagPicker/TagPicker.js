@@ -1,10 +1,7 @@
-import { manageTagsMessages } from '@/translations/tags';
 import { Autocomplete, TextField } from '@mui/material';
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
 
-function TagPicker({ tags, onSelect }) {
-  const intl = useIntl();
+function TagPicker({ tags, onSelect, title }) {
   const [key, setKey] = useState(1);
 
   return (
@@ -15,13 +12,9 @@ function TagPicker({ tags, onSelect }) {
       options={tags}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       getOptionLabel={({ name }) => name}
-      groupBy={(option) => option.groupName}
+      groupBy={(option) => option.groupName || option.group.name || 'N/A'}
       renderInput={(props) => (
-        <TextField
-          {...props}
-          size="small"
-          placeholder={intl.formatMessage(manageTagsMessages.addATag)}
-        />
+        <TextField {...props} size="small" placeholder={title} />
       )}
       onChange={(_e, val) => {
         const selectedTag = tags.find((tag) => tag.id === val.id);

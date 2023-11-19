@@ -22,7 +22,10 @@ import { TicketDTO } from './dto/ticket.dto';
 import { BaseController } from 'src/codebase/BaseController';
 import { TicketQueryDTO } from './dto/ticket-query.dto';
 import { TicketInterceptor } from '../infrastructure/interceptors/ticket.interceptor';
-import { resolveLanguageCode } from 'src/codebase/utils';
+import {
+  createPaginatedResponse,
+  resolveLanguageCode,
+} from 'src/codebase/utils';
 import { Request } from 'express';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
@@ -74,11 +77,17 @@ export class TicketsController extends BaseController {
       }
     }
 
-    const tickets = await this.ticketsService.findAll(user, dto);
-
-    return this.mapper.mapArray(tickets, Ticket, TicketDTO, {
+    const results = await this.ticketsService.findAll(user, dto);
+    const tickets = this.mapper.mapArray(results.entities, Ticket, TicketDTO, {
       extraArgs: () => ({ include: dto.includes }),
     });
+
+    return createPaginatedResponse(
+      tickets,
+      results.page,
+      results.perPage,
+      results.totalEntities,
+    );
   }
 
   @Get(':id')

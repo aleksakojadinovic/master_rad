@@ -14,7 +14,10 @@ function TicketPredefinedSearch({ initialFilters }) {
     setFilters((prev) => ({ ...prev, page: newPage }));
   };
 
-  const { data: tickets, isSuccess } = useGetTicketsQuery(filters);
+  const {
+    data: { entities: tickets, totalEntities },
+    isSuccess,
+  } = useGetTicketsQuery(filters);
 
   const isEmpty = isSuccess && filters.page === 1 && tickets.length === 0;
 
@@ -33,8 +36,9 @@ function TicketPredefinedSearch({ initialFilters }) {
         >
           <TicketPagination
             page={filters.page}
+            perPage={5}
+            totalEntities={totalEntities}
             onPageChange={handlePageChange}
-            hasData={tickets?.length > 0}
           />
         </Box>
       )}

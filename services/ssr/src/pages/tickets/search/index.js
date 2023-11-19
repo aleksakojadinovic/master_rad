@@ -50,8 +50,21 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const createdBy = filters.createdBy || null;
     const statuses =
       filters.statuses == null ? null : filters.statuses.split(',');
+    const tags = filters.tags == null ? null : filters.tags.split(',');
 
-    const resolvedFilters = { page, perPage, assignee, createdBy, statuses };
+    const sortField = filters.sortField || 'createdAt';
+    const sortOrder = parseInt(filters.sortOrder, 10) || -1;
+
+    const resolvedFilters = {
+      page,
+      perPage,
+      assignee,
+      createdBy,
+      statuses,
+      sortField,
+      sortOrder,
+      tags,
+    };
 
     if (assignee == null) {
       delete resolvedFilters.assignee;
@@ -63,6 +76,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     if (statuses == null) {
       delete resolvedFilters.statuses;
+    }
+
+    if (tags == null) {
+      delete resolvedFilters.tags;
     }
 
     const { isLoggedIn, isAdministrator, isAgent } = useStoreUser(store);

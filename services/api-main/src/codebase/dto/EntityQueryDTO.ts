@@ -37,16 +37,18 @@ export class EntityQueryDTO {
   @Transform(({ value }) => value ?? null)
   sortField: string | null = null;
 
-  @Transform(({ value }) => {
-    if (value == null) {
+  @Transform(({ value: inputValue }) => {
+    if (inputValue == null) {
       return 1;
     }
 
-    if (value !== -1 && value !== 1) {
+    const parsedInputValue = parseInt(inputValue, 10);
+
+    if (parsedInputValue !== -1 && parsedInputValue !== 1) {
       return 1;
     }
 
-    return value;
+    return parsedInputValue;
   })
   sortOrder: 1 | -1;
 }

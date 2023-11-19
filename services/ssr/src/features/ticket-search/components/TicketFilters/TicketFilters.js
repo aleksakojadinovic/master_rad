@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, Divider } from '@mui/material';
 import TicketStatusFilter from './TicketStatusFilter';
 
 import React, { Fragment, useMemo } from 'react';
@@ -6,6 +6,8 @@ import { useIntl } from 'react-intl';
 import { formsMessages } from '@/translations/forms';
 import TicketUserFilter from './TicketUserFilter';
 import { ticketSearchMessages } from '@/translations/ticket-search';
+import TicketSort from '../TicketSort';
+import TicketTagFilter from './TicketTagFilter';
 
 function TicketFilters({ filters, onChange }) {
   const intl = useIntl();
@@ -20,6 +22,10 @@ function TicketFilters({ filters, onChange }) {
     onChange({ ...filters, [key]: value });
   };
 
+  const handleSortChange = ({ sortField, sortOrder }) => {
+    onChange({ ...filters, sortField, sortOrder });
+  };
+
   const handleReset = () => {
     onChange({});
   };
@@ -31,8 +37,8 @@ function TicketFilters({ filters, onChange }) {
 
   return (
     <Fragment>
-      <Box display="flex" flexWrap="wrap">
-        <Box marginBottom="12px" marginLeft="6px">
+      <Box display="flex" flexWrap="wrap" gap="6px">
+        <Box>
           <TicketStatusFilter
             value={filters.statuses ?? ''}
             onChange={(status) => {
@@ -40,7 +46,7 @@ function TicketFilters({ filters, onChange }) {
             }}
           />
         </Box>
-        <Box marginBottom="12px" marginLeft="6px">
+        <Box>
           <TicketUserFilter
             buttonTranslation={
               ticketSearchMessages.ticketSearchAssignedToFilterTitle
@@ -49,7 +55,7 @@ function TicketFilters({ filters, onChange }) {
             onChange={(userId) => handleChange('assignee', userId)}
           />
         </Box>
-        <Box marginBottom="12px" marginLeft="6px">
+        <Box>
           <TicketUserFilter
             buttonTranslation={
               ticketSearchMessages.ticketSearchCreatedByFilterTitle
@@ -58,8 +64,26 @@ function TicketFilters({ filters, onChange }) {
             onChange={(userId) => handleChange('createdBy', userId)}
           />
         </Box>
+        <Box>
+          <TicketSort
+            value={{
+              sortField: filters.sortField,
+              sortOrder: filters.sortOrder,
+            }}
+            onChange={handleSortChange}
+          />
+        </Box>
+        <Box>
+          <TicketTagFilter
+            value={filters.tags || []}
+            onChange={(newTagIds) => handleChange('tags', newTagIds.join(','))}
+          />
+        </Box>
       </Box>
-      <Box marginBottom="12px" marginLeft="6px" alignItems="center">
+      <Box marginTop="12px">
+        <Divider />
+      </Box>
+      <Box marginTop="12px" alignItems="center">
         <Button
           variant="contained"
           size="small"

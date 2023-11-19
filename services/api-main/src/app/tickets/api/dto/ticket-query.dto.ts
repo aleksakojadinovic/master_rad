@@ -38,4 +38,16 @@ export class TicketQueryDTO extends EntityQueryDTO {
   @IsOptional()
   @Transform(({ value }) => value || null)
   createdBy: string | null = null;
+
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      return value.split(',');
+    }
+    if (value == null) {
+      return null;
+    }
+
+    return value as string[];
+  })
+  tags: string[] | null = null;
 }

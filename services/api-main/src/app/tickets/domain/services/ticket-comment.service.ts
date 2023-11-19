@@ -84,8 +84,6 @@ export class TicketCommentService extends BaseService {
       usersToNotify.push(ticket.createdBy);
     }
 
-    console.log(usersToNotify.map((u) => u.fullName));
-
     const commentId = uuid();
 
     ticket.addComment(commentId, user, dto.body, dto.isInternal, new Date());

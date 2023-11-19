@@ -23,6 +23,8 @@ import { UserDb } from 'src/app/users/infrastructure/schema/user.schema';
 import { TicketTagDb } from 'src/app/ticket-tag-system/infrastructure/schema/ticket-tag.schema';
 import { TicketComment } from '../domain/value-objects/ticket-comment';
 import { v4 as uuid } from 'uuid';
+import { createPaginatedResponse } from 'src/codebase/utils';
+import { PaginatedValue } from 'src/codebase/types/PaginatedValue';
 
 export type TicketsQuery = {
   page: number | null;
@@ -34,6 +36,7 @@ export type TicketsQuery = {
   unassigned: boolean | null;
   sortOrder: SortOrder;
   sortField: string | null;
+  tags: string[] | null;
 };
 
 @Injectable()
@@ -91,23 +94,29 @@ export class TicketsRepository {
     unassigned = null,
     sortOrder = 1,
     sortField = null,
-  }: TicketsQuery): Promise<Ticket[]> {
+    tags = null,
+  }: TicketsQuery): Promise<PaginatedValue<Ticket>> {
     const query = this.ticketModel.find({});
+    const countQuery = this.ticketModel.find({});
 
     if (statuses !== null) {
       query.where('status', { $in: statuses });
+      countQuery.where('status', { $in: statuses });
     }
 
     if (notStatuses !== null) {
       query.where('status', { $nin: notStatuses });
+      countQuery.where('status', { $nin: notStatuses });
     }
 
     if (assignee !== null) {
       query.where('assignees', { $in: [assignee] });
+      countQuery.where('assignees', { $in: [assignee] });
     }
 
     if (createdBy !== null) {
       query.where('createdBy', createdBy);
+      countQuery.where('createdBy', createdBy);
     }
 
     if (unassigned !== null) {
@@ -116,10 +125,20 @@ export class TicketsRepository {
           { assignees: { $size: 0 } },
           { assignees: { $exists: false } },
         ]);
+        countQuery.or([
+          { assignees: { $size: 0 } },
+          { assignees: { $exists: false } },
+        ]);
       }
       if (!unassigned) {
         query.where('assignees', { $ne: [] });
+        countQuery.where('assignees', { $ne: [] });
       }
+    }
+
+    if (tags !== null) {
+      query.where('tags', { $in: tags });
+      countQuery.where('tags', { $in: tags });
     }
 
     if (sortField !== null) {
@@ -129,9 +148,14 @@ export class TicketsRepository {
     query.skip((page - 1) * perPage).limit(perPage);
     query.populate(TicketsRepository.POPULATE);
 
-    const result = await query.exec();
+    const [result, count] = await Promise.all([
+      query.exec(),
+      countQuery.countDocuments(),
+    ]);
 
-    return this.mapper.mapArray(result, TicketDb, Ticket);
+    const tickets = this.mapper.mapArray(result, TicketDb, Ticket);
+
+    return createPaginatedResponse(tickets, page, perPage, count);
   }
 
   async findMostRecentTicketByUserId(userId: string): Promise<Ticket | null> {
