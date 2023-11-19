@@ -53,6 +53,10 @@ export const manageUsersMessages = defineMessages({
     id: 'manage-users.change-status-wraning',
     defaultMessage: 'This may enable or disable the user to use some services.',
   },
+  createNewUserButtonText: {
+    id: 'manage-users.create-new-user-button-text',
+    defaultMessage: 'Create new user',
+  },
 });
 
 export const cannotChangeRoleNotesMessages = defineMessages({
