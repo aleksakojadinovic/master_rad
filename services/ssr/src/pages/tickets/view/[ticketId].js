@@ -69,9 +69,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     // TOOD: This doesnt work for some reason
     if (indicators.isError) {
       return {
-        redirect: {
-          notFound: true,
-        },
+        notFound: true,
       };
     }
 

@@ -32,9 +32,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     if (!isCustomer) {
       return {
-        redirect: {
-          notFound: true,
-        },
+        notFound: true,
       };
     }
 

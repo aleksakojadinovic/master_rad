@@ -25,9 +25,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => () => {
 
   if (!isLoggedIn) {
     return {
-      redirect: {
-        notFound: true,
-      },
+      notFound: true,
     };
   }
 });
