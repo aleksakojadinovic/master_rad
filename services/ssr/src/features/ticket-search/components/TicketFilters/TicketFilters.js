@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import TicketStatusFilter from './TicketStatusFilter';
 
 import React, { Fragment, useMemo } from 'react';
@@ -32,12 +32,6 @@ function TicketFilters({ filters, onChange }) {
   return (
     <Fragment>
       <Box display="flex" flexWrap="wrap">
-        <Box marginBottom="12px">
-          <TextField
-            size="small"
-            placeholder={intl.formatMessage(formsMessages.search)}
-          />
-        </Box>
         <Box marginBottom="12px" marginLeft="6px">
           <TicketStatusFilter
             value={filters.statuses ?? ''}

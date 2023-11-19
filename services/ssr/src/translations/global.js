@@ -93,4 +93,8 @@ export const globalMessages = defineMessages({
     id: 'global.time-at',
     defaultMessage: 'at',
   },
+  genericPageTitle: {
+    id: 'global.generic-page-title',
+    defaultMessage: 'STS',
+  },
 });
