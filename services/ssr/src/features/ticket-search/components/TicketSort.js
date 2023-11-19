@@ -31,8 +31,6 @@ function TicketSort({ value, onChange }) {
     return option?.selectValue ?? '';
   }, [options, value]);
 
-  console.log({ value, currentSelectValue });
-
   const handleChange = (e) => {
     const sortField = e.target.value.split('_')[0];
     const sortOrder = parseInt(e.target.value.split('_')[1], 10);
