@@ -69,9 +69,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     if (!isLoggedIn) {
       return {
-        redirect: {
-          notFound: true,
-        },
+        notFound: true,
       };
     }
 
@@ -79,9 +77,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     if (!isAuthorized) {
       return {
-        redirect: {
-          notFound: true,
-        },
+        notFound: true,
       };
     }
 

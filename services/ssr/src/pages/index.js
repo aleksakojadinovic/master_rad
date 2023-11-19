@@ -1,15 +1,24 @@
 import { useStoreUser } from '@/api/auth';
 import { useAuthModal } from '@/features/auth/context/AuthModalContext';
 import { wrapper } from '@/redux/store';
+import { globalMessages } from '@/translations/global';
+import Head from 'next/head';
 import { useEffect } from 'react';
+import { useIntl } from 'react-intl';
 
 function IndexPage() {
+  const intl = useIntl();
   const { setIsOpen } = useAuthModal();
 
   useEffect(() => {
     setIsOpen(true);
   }, [setIsOpen]);
-  return null;
+
+  return (
+    <Head>
+      <title>{intl.formatMessage(globalMessages.genericPageTitle)}</title>
+    </Head>
+  );
 }
 
 export default IndexPage;

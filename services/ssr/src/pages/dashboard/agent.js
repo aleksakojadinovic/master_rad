@@ -29,9 +29,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     if (!isAgent && !isAdministrator) {
       return {
-        redirect: {
-          notFound: true,
-        },
+        notFound: true,
       };
     }
 

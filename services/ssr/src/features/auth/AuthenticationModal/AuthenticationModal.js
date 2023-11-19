@@ -85,7 +85,7 @@ function AuthenticationModal() {
                 <FormErrorMessage text={errors.username} />
               )}
 
-              <Box maginTop="12px">
+              <Box marginTop="12px">
                 <label htmlFor="password">
                   <Typography variant="caption">
                     {intl.formatMessage(profileMessages.passwordTitle)}

@@ -31,9 +31,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const { isAdministrator } = useStoreUser(store);
     if (!isAdministrator) {
       return {
-        redirect: {
-          notFound: true,
-        },
+        notFound: true,
       };
     }
 
