@@ -70,7 +70,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (!isLoggedIn) {
       return {
         redirect: {
-          destination: '/404',
+          notFound: true,
         },
       };
     }
@@ -80,7 +80,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (!isAuthorized) {
       return {
         redirect: {
-          destination: '/404',
+          notFound: true,
         },
       };
     }

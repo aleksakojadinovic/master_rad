@@ -33,7 +33,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (!isCustomer) {
       return {
         redirect: {
-          destination: '/404',
+          notFound: true,
         },
       };
     }

@@ -13,9 +13,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => () => {
 
   if (!isAdministrator) {
     return {
-      redirect: {
-        destination: '/404',
-      },
+      notFound: true,
     };
   }
 

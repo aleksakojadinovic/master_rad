@@ -70,7 +70,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (indicators.isError) {
       return {
         redirect: {
-          destination: '/404',
+          notFound: true,
         },
       };
     }
