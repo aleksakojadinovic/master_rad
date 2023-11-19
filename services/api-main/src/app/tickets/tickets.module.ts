@@ -14,6 +14,7 @@ import { TicketCommentService } from './domain/services/ticket-comment.service';
 import { TicketRedactionService } from './domain/services/ticket-redacation.service';
 import { TicketTagUpdateService } from './domain/services/ticket-tag-update.service';
 import { TicketAssigneesService } from './domain/services/ticket-assignees.service';
+import { TicketInfoService } from './domain/services/ticket-info.service';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { TicketAssigneesService } from './domain/services/ticket-assignees.servi
     TicketRedactionService,
     TicketTagUpdateService,
     TicketAssigneesService,
+    TicketInfoService,
     TicketsRepository,
   ],
 })

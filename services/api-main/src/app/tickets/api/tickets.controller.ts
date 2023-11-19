@@ -41,6 +41,9 @@ import { AddCommentDTO } from './dto/add-comment.dto';
 import { TicketAssigneesService } from '../domain/services/ticket-assignees.service';
 import { AddAssigneesDTO } from './dto/add-assignees.dto';
 import { RemoveAssigneesDTO } from './dto/remove-assignees.dto';
+import { EditTitleDTO } from './dto/edit-title.dto';
+import { TicketInfoService } from '../domain/services/ticket-info.service';
+import { EditBodyDTO } from './dto/edit-body.dto';
 
 @UseInterceptors(TicketInterceptor)
 @Controller('tickets')
@@ -50,6 +53,7 @@ export class TicketsController extends BaseController {
     private readonly ticketsCommentService: TicketCommentService,
     private readonly ticketTagUpdateService: TicketTagUpdateService,
     private readonly ticketAssigneesService: TicketAssigneesService,
+    private readonly ticketInfoService: TicketInfoService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {
     super();
@@ -227,6 +231,30 @@ export class TicketsController extends BaseController {
       user,
       dto,
     );
+
+    return this.mapper.map(ticket, Ticket, TicketDTO);
+  }
+
+  @Patch(':id/title')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async editTitle(
+    @Param('id') ticketId: string,
+    @Body(new ValidationPipe()) dto: EditTitleDTO,
+    @GetUserInfo() user: User,
+  ) {
+    const ticket = await this.ticketInfoService.editTitle(ticketId, user, dto);
+
+    return this.mapper.map(ticket, Ticket, TicketDTO);
+  }
+
+  @Patch(':id/body')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async editBody(
+    @Param('id') ticketId: string,
+    @Body(new ValidationPipe()) dto: EditBodyDTO,
+    @GetUserInfo() user: User,
+  ) {
+    const ticket = await this.ticketInfoService.editBody(ticketId, user, dto);
 
     return this.mapper.map(ticket, Ticket, TicketDTO);
   }
