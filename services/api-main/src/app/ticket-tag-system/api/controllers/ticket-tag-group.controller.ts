@@ -38,6 +38,7 @@ export class TicketTagGroupController {
   ) {}
 
   @Post()
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async create(
     @Body() createTicketTagGroupDTO: CreateTicketTagGroupDTO,
     @Req() req: Request,
@@ -53,8 +54,8 @@ export class TicketTagGroupController {
     });
   }
 
-  // TODO: proteccc
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async findOne(
     @Param('id') id: string,
     @Query(new ValidationPipe({ transform: true })) queryDTO: EntityQueryDTO,
@@ -92,12 +93,8 @@ export class TicketTagGroupController {
     );
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return null;
-  // }
-
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
   async update(
     @Param('id') id: string,
     @Body(new ValidationPipe())
