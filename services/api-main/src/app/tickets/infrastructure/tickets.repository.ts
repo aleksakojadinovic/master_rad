@@ -36,6 +36,7 @@ export type TicketsQuery = {
   unassigned: boolean | null;
   sortOrder: SortOrder;
   sortField: string | null;
+  tags: string[] | null;
 };
 
 @Injectable()
@@ -93,6 +94,7 @@ export class TicketsRepository {
     unassigned = null,
     sortOrder = 1,
     sortField = null,
+    tags = null,
   }: TicketsQuery): Promise<PaginatedValue<Ticket>> {
     const query = this.ticketModel.find({});
     const countQuery = this.ticketModel.find({});
@@ -132,6 +134,11 @@ export class TicketsRepository {
         query.where('assignees', { $ne: [] });
         countQuery.where('assignees', { $ne: [] });
       }
+    }
+
+    if (tags !== null) {
+      query.where('tags', { $in: tags });
+      countQuery.where('tags', { $in: tags });
     }
 
     if (sortField !== null) {

@@ -6,7 +6,6 @@ import { TicketQueryDTO } from '../../api/dto/ticket-query.dto';
 import { BaseService } from 'src/codebase/BaseService';
 import { TicketNotFoundError } from '../errors/TicketNotFound';
 import { TooSoonToCreateAnotherTicketError } from '../errors/TooSoonToCreateAnotherTicket';
-import { NotificationsService } from '../../../notifications/domain/notifications.service';
 import { TICKET_STATUS_GRAPH } from '../value-objects/ticket-status.map';
 import { NotAllowedToChangeToThisStatusError } from '../errors/NotAllowedToChangeToThisStatus';
 import { TicketsRepository } from '../../infrastructure/tickets.repository';
@@ -20,7 +19,6 @@ import { TicketRedactionService } from './ticket-redacation.service';
 export class TicketService extends BaseService {
   constructor(
     private ticketRedactionService: TicketRedactionService,
-    private notificationsService: NotificationsService,
     private ticketsRepository: TicketsRepository,
   ) {
     super();
@@ -74,6 +72,7 @@ export class TicketService extends BaseService {
       unassigned,
       sortOrder,
       sortField,
+      tags,
     } = queryDTO;
 
     const ticketsResponse = await this.ticketsRepository.findAll({
@@ -86,6 +85,7 @@ export class TicketService extends BaseService {
       unassigned,
       sortOrder,
       sortField,
+      tags,
     });
 
     ticketsResponse.entities.forEach((ticket) =>

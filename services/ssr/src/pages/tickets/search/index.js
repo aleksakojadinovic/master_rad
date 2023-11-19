@@ -78,6 +78,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
       delete resolvedFilters.statuses;
     }
 
+    if (tags == null) {
+      delete resolvedFilters.tags;
+    }
+
     const { isLoggedIn, isAdministrator, isAgent } = useStoreUser(store);
 
     if (!isLoggedIn) {
