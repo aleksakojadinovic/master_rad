@@ -1,99 +1,116 @@
 import { useLoginMutation } from '@/api/auth';
-import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { FormTextField } from '@/components/FormTextField';
+import FormErrorMessage from '@/features/create-ticket/components/FormErrorMessage';
+import useServerMessage from '@/hooks/useServerMessage';
+import { authModalMessages } from '@/translations/auth-modal';
+import { validationMessages } from '@/translations/forms';
+import { profileMessages } from '@/translations/profile';
+import {
+  Alert,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from '@mui/material';
+import { Field, Form, Formik } from 'formik';
+import React, { useEffect, useMemo } from 'react';
+import { useIntl } from 'react-intl';
 
-const modalStyles = {
-  top: '50%',
-  left: '50%',
-  right: 'auto',
-  bottom: 'auto',
-  marginRight: '-50%',
-  transform: 'translate(-50%, -50%)',
-};
-
-const modalContentStyles = {
-  backgroundColor: 'white',
-  border: '1px solid #ccc',
-  borderRadius: '5px',
-  width: '300px',
-};
+import * as Yup from 'yup';
 
 function AuthenticationModal({ onClose }) {
-  const [username, setUsername] = useState('ethan');
-  const [password, setPassowrd] = useState('ethan');
+  const intl = useIntl();
+  const validationSchema = useMemo(() => {
+    return Yup.object({
+      username: Yup.string().required(
+        intl.formatMessage(validationMessages.errorFieldRequired),
+      ),
+      password: Yup.string().required(
+        intl.formatMessage(validationMessages.errorFieldRequired),
+      ),
+    });
+  }, [intl]);
 
-  const [triggerLogin, { data, isSuccess, isLoading }] = useLoginMutation();
+  const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation();
 
-  const router = useRouter();
-
-  const handleLogin = () => {
-    triggerLogin({ username, password });
-  };
+  const { errorMessage } = useServerMessage({
+    error,
+    isSuccess,
+    isError,
+    successMessage: '',
+  });
 
   useEffect(() => {
-    if (!isSuccess) {
-      return;
-    }
-    const { accessToken } = data;
-    Cookies.set('accessToken', accessToken, { expires: 7 });
-
-    if (router.pathname === '/404') {
-      window.location = '/';
-    } else {
+    if (isSuccess) {
       window.location.reload();
     }
-  }, [isSuccess, data, router]);
+  }, [isSuccess]);
+
+  const handleSubmit = ({ username, password }) => {
+    login({ username, password });
+  };
 
   return (
-    <Modal sx={modalStyles} open keepMounted onClose={onClose}>
-      <Box sx={modalContentStyles}>
-        <Box
-          display="flex"
-          justifyContent="center"
-          marginBottom="20px"
-          position="relative"
-        >
-          <Typography variant="h6" component="h2">
-            Login
-          </Typography>
-          <Box position="absolute" top="0" right="5px">
-            <Button onClick={onClose}>X</Button>
-          </Box>
-        </Box>
+    <Dialog open onClose={onClose}>
+      <Formik
+        initialValues={{ username: '', password: '' }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ errors, touched }) => (
+          <Form>
+            <DialogTitle>
+              {intl.formatMessage(authModalMessages.modalTitle)}
+            </DialogTitle>
+            <DialogContent>
+              <Alert severity="info">
+                {intl.formatMessage(authModalMessages.loginDetails)}
+              </Alert>
+              <label htmlFor="username">
+                <Typography variant="caption">
+                  {intl.formatMessage(profileMessages.usernameTitle)}
+                </Typography>
+              </label>
+              <Field name="username" as={FormTextField} />
+              {touched.username && errors.username && (
+                <FormErrorMessage text={errors.username} />
+              )}
 
-        <Box display="flex" justifyContent="center">
-          <form>
-            <TextField
-              label="Username"
-              variant="outlined"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <Box marginTop="12px">
-              <TextField
-                label="Password"
-                variant="outlined"
-                type="password"
-                value={password}
-                onChange={(e) => setPassowrd(e.target.value)}
-              />
-            </Box>
-            <Box marginTop="12px" marginBottom="20px">
+              <Box maginTop="12px">
+                <label htmlFor="password">
+                  <Typography variant="caption">
+                    {intl.formatMessage(profileMessages.passwordTitle)}
+                  </Typography>
+                </label>
+                <Field name="password" as={FormTextField} type="password" />
+                {touched.lastName && errors.lastName && (
+                  <FormErrorMessage text={errors.lastName} />
+                )}
+              </Box>
+
+              {isError && <Alert severity="error">{errorMessage}</Alert>}
+            </DialogContent>
+            <DialogActions>
               <Button
-                fullWidth
                 variant="contained"
-                disabled={isLoading}
-                onClick={handleLogin}
+                type="submit"
+                onSubmit={handleSubmit}
+                disabled={isLoading || isSuccess}
               >
-                {isLoading ? 'Logging in...' : 'Login'}
+                {intl.formatMessage(
+                  isLoading || isSuccess
+                    ? authModalMessages.loginButtonLoadingCTA
+                    : authModalMessages.loginButtonCTA,
+                )}
               </Button>
-            </Box>
-          </form>
-        </Box>
-      </Box>
-    </Modal>
+            </DialogActions>
+          </Form>
+        )}
+      </Formik>
+    </Dialog>
   );
 }
 

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useMemo, useRef } from 'react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
-import { Button, TextField, Typography, Box } from '@mui/material';
+import { Button, Typography, Box } from '@mui/material';
 import { useIntl } from 'react-intl';
 import { validationMessages } from '@/translations/forms';
 import FormErrorMessage from '@/features/create-ticket/components/FormErrorMessage';
@@ -9,8 +9,7 @@ import { changePasswordMessages } from '@/translations/profile';
 import { useChangePasswordMutation } from '@/api/users';
 import useUser from '@/hooks/useUser';
 import ServerActionDialog from '@/components/ServerActionDialog/ServerActionDialog';
-
-const FormTextField = (props) => <TextField fullWidth {...props} />;
+import { FormTextField } from '@/components/FormTextField';
 
 function ChangePassword() {
   const intl = useIntl();

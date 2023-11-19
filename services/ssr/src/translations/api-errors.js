@@ -38,6 +38,11 @@ export const apiErrorMessages = defineMessages({
     id: 'api.errors.username-taken',
     defaultMessage: 'This username is already taken.',
   },
+  UsernameOrPasswordNotValidError: {
+    id: 'api.errors.username-or-password-not-valid',
+    defaultMessage:
+      'Username or password is not valid. Please review and try again.',
+  },
   genericValidationError: {
     id: 'api-errors.generic-validation-error',
     defaultMessage: 'Some provided fields are not valid.',

@@ -7,7 +7,6 @@ import {
   AlertTitle,
   Box,
   Button,
-  TextField,
   TextareaAutosize,
   Typography,
 } from '@mui/material';
@@ -23,8 +22,8 @@ import {
   TICKET_TITLE_MIN_LENGTH,
 } from '@/constants/forms';
 import FormErrorMessage from './components/FormErrorMessage';
+import { FormTextField } from '@/components/FormTextField';
 
-const FormTextField = (props) => <TextField fullWidth {...props} />;
 const FormTextArea = (props) => (
   <TextareaAutosize minRows={10} style={{ width: '100%' }} {...props} />
 );

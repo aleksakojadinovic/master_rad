@@ -68,7 +68,6 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
     const isProfilePage = context.ctx.pathname === '/profile';
 
     if (isLoggedIn && !isActive && !(isErrorPage || isProfilePage)) {
-      console.log('i wanna redirect u');
       redirect(context.ctx, '/profile');
       return;
     }

@@ -14,7 +14,7 @@ export class ExtractUserInfo implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     if (request.user) {
-      const user = await this.userService.findOne(request.user._id);
+      const user = await this.userService.findOne(request.user.id);
 
       if (user) {
         if (user.isBanned()) {
@@ -41,8 +41,9 @@ export class ExtractUserInfoSilent implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    if (request.user) {
-      const user = await this.userService.findOne(request.user._id);
+
+    if (request.user && request.user.id) {
+      const user = await this.userService.findOne(request.user.id);
       if (user) {
         request.userInfo = user;
         request.isBanned = user.isBanned();

@@ -63,7 +63,9 @@ function UserMenu() {
 
   return (
     <Fragment>
-      {isAuthModalOpen && <AuthenticationModal />}
+      {isAuthModalOpen && (
+        <AuthenticationModal onClose={() => setIsAuthModalOpen(false)} />
+      )}
       <div>
         <Button ref={menuAnchorRef} onClick={handleMenuButtonClick}>
           {!isLoggedIn
