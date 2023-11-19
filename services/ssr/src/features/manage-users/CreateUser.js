@@ -35,7 +35,7 @@ function CreateUser() {
   const handleSubmit = () => {};
 
   return (
-    <Box marginTop="24px" width="80%">
+    <Box marginTop="24px">
       <Box width="100%" height="100%">
         <Typography variant="h5">
           {intl.formatMessage(createUserMessages.createUserHeading)}
