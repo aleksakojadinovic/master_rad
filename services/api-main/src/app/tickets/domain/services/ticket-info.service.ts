@@ -39,4 +39,15 @@ export class TicketInfoService extends BaseService {
 
     return newTicket;
   }
+
+  async editBody(id: string, user: User, dto: EditTitleDTO) {
+    const ticket = await this.findAndProtect(id, user);
+
+    ticket.body = dto.title;
+
+    const newTicket = await this.ticketsRepository.update(ticket, user);
+    this.ticketRedactionService.prepareTicketResponse(newTicket, user);
+
+    return newTicket;
+  }
 }
