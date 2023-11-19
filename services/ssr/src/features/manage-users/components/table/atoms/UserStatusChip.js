@@ -6,7 +6,9 @@ import { useIntl } from 'react-intl';
 
 export default function UserStatusChip({ status }) {
   const intl = useIntl();
-  const label = intl.formatMessage(userStatusMessages[status]);
+  const label = userStatusMessages[status]
+    ? intl.formatMessage(userStatusMessages[status])
+    : '/';
 
   return (
     <Chip

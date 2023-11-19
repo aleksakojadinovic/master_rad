@@ -21,7 +21,10 @@ export class ExtractUserInfo implements CanActivate {
           throw new UnauthorizedException({ status: UserStatus.BANNED });
         }
 
-        if (user.isRegistered()) {
+        if (
+          user.isRegistered() &&
+          !request.route.path.includes('/api/users/:id')
+        ) {
           throw new UnauthorizedException({ status: UserStatus.REGISTERED });
         }
       }

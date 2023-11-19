@@ -163,4 +163,18 @@ export class UsersRepository {
 
     return this.mapper.mapArray(users, UserDb, User);
   }
+
+  async create(user: User) {
+    const createdUser = new this.userModel({
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+      passwordHash: user.passwordHash,
+      status: user.status,
+    });
+
+    await createdUser.save();
+    return this.mapper.map(createdUser, UserDb, User);
+  }
 }

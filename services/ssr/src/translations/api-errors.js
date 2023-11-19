@@ -34,4 +34,12 @@ export const apiErrorMessages = defineMessages({
     defaultMessage:
       'You cannot modify comments on a ticket in this status. Consider re-opening.',
   },
+  UsernameTakenError: {
+    id: 'api.errors.username-taken',
+    defaultMessage: 'This username is already taken.',
+  },
+  genericValidationError: {
+    id: 'api-errors.generic-validation-error',
+    defaultMessage: 'Some provided fields are not valid.',
+  },
 });

@@ -54,6 +54,14 @@ export const usersSlice = api.injectEndpoints({
         body: { action: 'change_password', oldPassword, newPassword },
       }),
     }),
+    createUser: builder.mutation({
+      query: ({ username, password, firstName, lastName }) => ({
+        method: 'POST',
+        url: '/users',
+        body: { username, firstName, lastName, password },
+      }),
+      invalidatesTags: 'USERS_TAG',
+    }),
   }),
   overrideExisting: true,
 });
@@ -65,6 +73,7 @@ export const {
   useChangeRoleMutation,
   useChangeStatusMutation,
   useChangePasswordMutation,
+  useCreateUserMutation,
 } = usersSlice;
 
 const selectGetUsersQueryResult = createSelector(

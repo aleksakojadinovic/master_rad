@@ -1,6 +1,8 @@
+import { UsernameTakenError } from './../../domain/errors/UsernameTaken';
 import { CannotChangeYourStatusError } from './../../domain/errors/CannotChangeYourStatus';
 import {
   CallHandler,
+  ConflictException,
   ExecutionContext,
   ForbiddenException,
   Injectable,
@@ -50,6 +52,10 @@ export class UsersInterceptor implements NestInterceptor {
 
         if (error instanceof OldPasswordInvalidError) {
           throw new ForbiddenException(error.getPayload());
+        }
+
+        if (error instanceof UsernameTakenError) {
+          throw new ConflictException(error.getPayload());
         }
 
         throw error;

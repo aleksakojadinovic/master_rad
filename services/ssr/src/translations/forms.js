@@ -48,4 +48,8 @@ export const validationMessages = defineMessages({
     id: 'validation.passwords-match',
     defaultMessage: 'Passwords must match',
   },
+  emailInvalid: {
+    id: 'validation.email-invalid',
+    defaultMessage: 'Email is invalid',
+  },
 });

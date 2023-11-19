@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 import UsersTable from './components/table/UsersTable';
 import { useRouter } from 'next/router';
 import UserFilters from './components/filters/UserFilters';
+import { Box, Button } from '@mui/material';
 
 function ManageUsers({ queryParams }) {
   const intl = useIntl();
@@ -35,6 +36,10 @@ function ManageUsers({ queryParams }) {
     handleParamsChange(newQueryParams);
   };
 
+  const handleCreateUser = () => {
+    router.push('/manage/users/create');
+  };
+
   const DEFAULT_VALUE = {
     entities: [],
     page: 0,
@@ -48,7 +53,11 @@ function ManageUsers({ queryParams }) {
       <Head>
         <title>{intl.formatMessage(manageUsersMessages.pageTitle)}</title>
       </Head>
-
+      <Box marginBottom="12px">
+        <Button onClick={handleCreateUser} variant="contained">
+          {intl.formatMessage(manageUsersMessages.createNewUserButtonText)}
+        </Button>
+      </Box>
       <UserFilters value={queryParams} onChange={handleParamsChange} />
       <UsersTable
         data={data ?? DEFAULT_VALUE}

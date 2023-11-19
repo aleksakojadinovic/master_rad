@@ -14,6 +14,9 @@ import { CannotChangeYourStatusError } from './errors/CannotChangeYourStatus';
 import { CannotChangeSomeoneElsesPasswordError } from './errors/CannotChangeSomeoneElsesPassword';
 import * as bcrypt from 'bcrypt';
 import { OldPasswordInvalidError } from './errors/OldPasswordInvalid';
+import { CreateUserDto } from '../api/dto/create-user.dto';
+import { UsernameTakenError } from './errors/UsernameTaken';
+import { UserFactory } from './factories/user.factory';
 
 @Injectable()
 export class UsersService {
@@ -104,5 +107,30 @@ export class UsersService {
     }
 
     await this.usersRepository.changePassword(id, newPassword);
+  }
+
+  async create(dto: CreateUserDto) {
+    const existingUser = await this.usersRepository.findByUsername(
+      dto.username,
+    );
+
+    if (existingUser) {
+      throw new UsernameTakenError();
+    }
+
+    const passwordHash = await bcrypt.hash(dto.password, 10);
+
+    const newUser = UserFactory.create((builder) =>
+      builder
+        .hasUsername(dto.username)
+        .hasFirstName(dto.firstName)
+        .hasLastName(dto.lastName)
+        .hasPasswordHash(passwordHash)
+        .hasRole(Role.CUSTOMER),
+    );
+
+    const createdUser = await this.usersRepository.create(newUser);
+
+    return createdUser;
   }
 }

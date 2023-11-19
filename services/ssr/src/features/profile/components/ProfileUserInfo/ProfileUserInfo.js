@@ -1,4 +1,3 @@
-import useUser from '@/hooks/useUser';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 import UserStatusChip from '@/features/manage-users/components/table/atoms/UserStatusChip';
@@ -6,9 +5,9 @@ import RoleChip from '@/features/manage-users/components/table/atoms/RoleChip';
 import { useIntl } from 'react-intl';
 import { profileMessages } from '@/translations/profile';
 
-function ProfileUserInfo() {
+function ProfileUserInfo({ user }) {
   const intl = useIntl();
-  const { role, username, fullName, status } = useUser();
+  const { role, username, fullName, status } = user;
 
   return (
     <Box display="flex" width="100%" flexDirection="column" gap="12px">

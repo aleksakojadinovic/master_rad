@@ -34,6 +34,18 @@ export const profileMessages = defineMessages({
     id: 'profile.role-title',
     defaultMessage: 'Role',
   },
+  passwordTitle: {
+    id: 'profile.password-title',
+    defaultMessage: 'Password',
+  },
+  firstNameTitle: {
+    id: 'profile.first-name-title',
+    defaultMessage: 'First name',
+  },
+  lastNameTitle: {
+    id: 'profile.last-name-title',
+    defaultMessage: 'Last name',
+  },
 });
 
 export const changePasswordMessages = defineMessages({
