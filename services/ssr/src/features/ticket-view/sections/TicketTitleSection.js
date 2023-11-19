@@ -47,7 +47,7 @@ function TicketTitleSection({ ticket }) {
           gap="12px"
           flexWrap="wrap"
         >
-          {!isEditing && (
+          {!isEditing && isOwner && (
             <Fragment>
               <Typography variant="h4">
                 {ticket.title}
