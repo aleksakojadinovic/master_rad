@@ -11,6 +11,7 @@ import {
   ValidationPipe,
   UseInterceptors,
   BadRequestException,
+  Post,
 } from '@nestjs/common';
 import { UsersService } from '../domain/users.service';
 import { InjectMapper } from '@automapper/nestjs';
@@ -116,5 +117,15 @@ export class UsersController {
       default:
         throw new BadRequestException('Unknown action');
     }
+  }
+
+  @Post()
+  @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
+  async create(@Body() body: any, @GetUserInfo() user: User) {
+    if (!user.isAdministrator()) {
+      throw new UnauthorizedException();
+    }
+
+    return {};
   }
 }
