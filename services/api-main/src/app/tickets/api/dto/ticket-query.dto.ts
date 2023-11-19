@@ -40,7 +40,6 @@ export class TicketQueryDTO extends EntityQueryDTO {
   createdBy: string | null = null;
 
   @Transform(({ value }) => {
-    console.log({ value });
     if (typeof value === 'string') {
       return value.split(',');
     }
