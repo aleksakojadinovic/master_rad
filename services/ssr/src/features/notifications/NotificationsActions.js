@@ -17,7 +17,12 @@ function NotificationsActions({ notification }) {
         );
         break;
       case NOTIFICATION_TYPES.ASSIGNED:
-        arr.push(<OpenTicketAtom id={notification.payload.ticket.id} />);
+        arr.push(
+          <OpenTicketAtom
+            id={notification.payload.ticket.id}
+            notification={notification}
+          />,
+        );
         break;
       default:
         return arr;
