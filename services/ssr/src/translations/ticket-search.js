@@ -65,4 +65,8 @@ export const ticketSearchMessages = defineMessages({
     id: 'ticket-search.sort-by',
     defaultMessage: 'Sort by',
   },
+  hasTag: {
+    id: 'ticket-search.has-tag',
+    defaultMessage: 'Has (any of) tags',
+  },
 });

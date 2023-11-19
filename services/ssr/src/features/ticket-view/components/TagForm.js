@@ -4,8 +4,11 @@ import { useGetTicketTagsQuery } from '@/api/ticket-tag-system';
 import { Box, Typography } from '@mui/material';
 import TagChip from '../../../components/TagChip/TagChip';
 import useUser from '@/hooks/useUser';
+import { useIntl } from 'react-intl';
+import { manageTagsMessages } from '@/translations/tags';
 
 function TagForm({ ticketTags, onSelect, onDelete }) {
+  const intl = useIntl();
   const { role } = useUser();
 
   const { data: tags } = useGetTicketTagsQuery({ includes: 'group' });
@@ -87,7 +90,11 @@ function TagForm({ ticketTags, onSelect, onDelete }) {
         </Box>
       ))}
 
-      <TagPicker tags={resolvedTags} onSelect={onSelect} />
+      <TagPicker
+        tags={resolvedTags}
+        onSelect={onSelect}
+        title={intl.formatMessage(manageTagsMessages.addATag)}
+      />
     </Box>
   );
 }
