@@ -72,7 +72,7 @@ function AuthenticationModal({ onClose }) {
               </Box>
             </DialogContent>
             <DialogActions>
-              <Button variant="contained" onClick={handleSubmit}>
+              <Button variant="contained" type="submit" onSubmit={handleSubmit}>
                 {intl.formatMessage(authModalMessages.loginButtonCTA)}
               </Button>
             </DialogActions>
@@ -84,7 +84,3 @@ function AuthenticationModal({ onClose }) {
 }
 
 export default AuthenticationModal;
-
-{
-  /*  */
-}

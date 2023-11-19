@@ -1,7 +1,6 @@
 import { apiErrorMessages } from '@/translations/api-errors';
 
 export const resolveErrorMessage = (intl, error) => {
-  console.log(error);
   if (error && error.type && error.type === 'ValidationError') {
     return intl.formatMessage(apiErrorMessages.genericValidationError);
   }
