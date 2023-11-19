@@ -1,5 +1,5 @@
 import { validationMessages } from '@/translations/forms';
-import { Alert, Box, Button, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Typography } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
 import React, { useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
@@ -13,8 +13,7 @@ import { useCreateUserMutation } from '@/api/users';
 import ServerActionSnackbar from '@/components/ServerActionSnackbar/ServerActionSnackbar';
 import { queryStatusMessages } from '@/translations/query-statuses';
 import { useRouter } from 'next/router';
-
-const FormTextField = (props) => <TextField fullWidth {...props} />;
+import { FormTextField } from '@/components/FormTextField';
 
 function CreateUser() {
   const intl = useIntl();
