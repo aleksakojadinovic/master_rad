@@ -9,6 +9,9 @@ import FormErrorMessage from '../create-ticket/components/FormErrorMessage';
 import { createUserMessages } from '@/translations/manage-users';
 import { generateRandomPassword } from './utils';
 import { profileMessages } from '@/translations/profile';
+import { useCreateUserMutation } from '@/api/users';
+import ServerActionSnackbar from '@/components/ServerActionSnackbar/ServerActionSnackbar';
+import { queryStatusMessages } from '@/translations/query-statuses';
 
 const FormTextField = (props) => <TextField fullWidth {...props} />;
 
@@ -32,10 +35,22 @@ function CreateUser() {
 
   const initialPassword = useMemo(() => generateRandomPassword(), []);
 
-  const handleSubmit = () => {};
+  const [createUser, { isLoading, isSuccess, isError, error }] =
+    useCreateUserMutation();
+
+  const handleSubmit = ({ username, password }) => {
+    createUser({ username, password });
+  };
 
   return (
     <Box marginTop="24px">
+      <ServerActionSnackbar
+        error={error}
+        isError={isError}
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        successMessage={queryStatusMessages.success}
+      />
       <Box width="100%" height="100%">
         <Typography variant="h5">
           {intl.formatMessage(createUserMessages.createUserHeading)}
