@@ -7,7 +7,6 @@ import { Role } from './value-objects/role';
 import { CannotChangeYourRoleError } from './errors/CannotChangeYourRole';
 import { CannotUpdateSomeoneElsesFirebaseTokenError } from './errors/CannotUpdateSomeoneElsesFirebaseToken';
 import { OnlyAdminsCanChangeRolesError } from './errors/OnlyAdminsCanChangeRoles';
-import { CannotChangeCustomersRoleError } from './errors/CannotChangeCustomersRole';
 import { UserStatus } from './value-objects/user-status';
 import { OnlyAdminsCanChangeStatusError } from './errors/OnlyAdminsCanChangeStatus';
 import { CannotChangeYourStatusError } from './errors/CannotChangeYourStatus';
