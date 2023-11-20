@@ -71,11 +71,6 @@ export class UsersService {
       throw new CannotChangeYourRoleError();
     }
 
-    const targetUser = await this.usersRepository.findById(userId);
-    if (targetUser.isCustomer()) {
-      throw new CannotChangeCustomersRoleError();
-    }
-
     return this.usersRepository.updateRole(userId, role);
   }
 

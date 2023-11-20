@@ -6,7 +6,6 @@ import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 function TicketTagFilter({ value, onChange }) {
-  console.log({ value });
   const intl = useIntl();
 
   const { data: tags, isSuccess } = useGetTicketTagsQuery({

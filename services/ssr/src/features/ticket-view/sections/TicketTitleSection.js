@@ -47,13 +47,15 @@ function TicketTitleSection({ ticket }) {
           gap="12px"
           flexWrap="wrap"
         >
-          {!isEditing && isOwner && (
+          {!isEditing && (
             <Fragment>
               <Typography variant="h4">
                 {ticket.title}
-                <IconButton onClick={() => setTitle(ticket.title)}>
-                  <EditIcon />
-                </IconButton>
+                {isOwner && (
+                  <IconButton onClick={() => setTitle(ticket.title)}>
+                    <EditIcon />
+                  </IconButton>
+                )}
               </Typography>
             </Fragment>
           )}
