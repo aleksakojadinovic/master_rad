@@ -181,21 +181,21 @@
 % \pangrami
 
 \section{Veb platforme}
-\section{Sistem STS}
+\section{Sistem STS iz ugla korisnika}
 
 Svaki biznis koji neku vrstu usluge pruža korisnicima neizostavno mora imati korisničku podršku u nekom obiku. Pre razvoja veb tehnologija telefonski sistemi bili su jedini način direktne podrške koju korisnik može da dobije. Razvoj i pristupčanost veba doveli su do evolucije vrlo sofisticiranih onlajn proizvoda koji rešavaju problem korisničke podrške, kako putem pisanih rasprava u vidu tiketa, tako i dalje putem tradicionalnih telefonskih linija uz određenu integraciju\footnote{\href{http://zendesk.com}{Zendesk}, \href{https://www.8x8.com/}{8x8}, \href{https://www.atlassian.com/software/jira/service-management}{Jira Service Management}}.
 
 Sistem STS\footnote{Skraćeno od eng. Simple Ticket Service, jednostavan servis za tikete}, razvijan za potrebe ovog rada, obuhvata osvnovnu funkcionalnost za pružanje podrške u vidu tiketa. Tiket predstavlja jednu tekstualnu korisničku žalbu ili zahtev, na kojoj se može pokrenuti diskusija, a sve sa ciljem asinhronog\footnote{pod asinhronošću podrazumevano suprotnost u odnosu na telefonski sistem gde korisnik i agent podrške vode komunikaciju u realnom vremenu.} razrešenja korisničkog problema. Glavni akteri sistema su:
 
 \begin{itemize}
-    \item \textbf{Mušterije} - koje mogu postavljati tikete u cilju dobijanja podrške
+    \item \textbf{Klijenti} - koji mogu postavljati tikete u cilju dobijanja podrške
     \item \textbf{Agenti} - koji su zaduženi da odgovaraju na tikete, upravljaju njihovim statusima, i rešavaju probleme
     \item \textbf{Administratori} - zaduženi za podešavanje sistema, dodeljivanje uloga korisnicima, zabranu pristupa korisnicima, ili uopšteno bavljenje kompleksnim problemima 
 \end{itemize}
 
 \subsection{Osnovne funkcionalnosti, prikaz tiketa, statusi}
 
-Osnovni pojam sistema, kao što je pomnuto, jeste tiket. Na slici možemo videti primer zaglavlja jednog tiketa. Sastoji se primarno iz naslova i opisa, dok se takođe može videti i ime mušterije, i trenutno zaduženog agenta.
+Osnovni pojam sistema, kao što je pomenuto, jeste tiket. Na slici možemo videti primer zaglavlja jednog tiketa. Sastoji se primarno iz naslova i opisa, dok se takođe može videti i ime klijenta, i trenutno zaduženog agenta.
 
 \begin{figure}[h]
   \centering
@@ -248,6 +248,104 @@ Administratori poseduju mogućnost upravljanja korisnicima sajta, putem kontroln
   \caption{Upravljanje korisnicima.}
 \end{figure}
 
+\newpage
+\subsection{Postavljanje tiketa}
+
+Na kraju, stranica na kojoj klijenti mogu postavljati nove tikete je jednostavan obrazac koji se sastoji iz naslova i tela tiketa.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{docs/images/ch_1/ticket-new.png} 
+  \caption{Kreiranje tiketa.}
+\end{figure}
+
+\newpage
+\section{Entiteti i njihovi odnosi, ER dijagram}
+
+ER model\footnote{eng. Entity-relationship model - model entiteta i odnosa} predstavlja jedan vid konceptualnog modelovanja podataka u softverskom sistemu \cite{dbmodelinganddesign}. Sam po sebi je apstraktan pojam bez vidljive reprezentacije, s tim što se često positovećuje sa pojmom \textit{ER dijagrama} koji je notaciono sredstvo za prikaz modela nastalog ER modelovanjem.
+
+Naime, sastoji se od nekoliko vrsta elemenata:
+\begin{itemize}
+    \item \textbf{Entiteti} predstavljaju stvari iz realnog sveta koje modelujemo. Jedna pojedinačna pojava entieta naziva se \textit{instanca entiteta} \cite{dbmodelinganddesign}. ER dijagram koristi pravougaonike za oznaku entiteta
+    \item \textbf{Odnosi} predstavljaju asocijacije između entiteta u najopštijem smislu. Odnose takođe karakteriše brojnost koja predstavlja koliko instanci svakog entiteta učestvuje u datom odnosu. Ovo je veoma poznato i u modelovanju relacionih baza pod nazivima "1 na 1", "1 ka više" i "više ka više". ER dijagram koristi kvadrat za označavanje odnosa.
+    \item \textbf{Atributi} jesu karakteristike entiteta ili odnosa koje pružaju dodatne detalje o njima. Atributi mogu biti ključni, u kom slučaju učestuvju u identifikaciji entiteta ili odnosa, ili deskriptivni, kada se odnose na nejedinstvene osobine \cite{dbmodelinganddesign}. Prikazuju se elipsama koje su strelicama povezane za entitet ili odnos kom pripadaju, dok se imena ključnih atributa podvlače.
+\end{itemize}
+
+ER modelovanje neretko se dovodi u vezu sa modelovanjem relacionih baza podataka, međutim sam po sebi model nije ograničen na vrstu baze podataka, tako da ga koristimo i ovde uprkos tome što je baza sistema nerelaciona - konkretno MongoDB. Štaviše, proces transformacije ER modela u dokumentni model dodatno je olakšan, jer za određene asocijacije nije potrebno praviti dodatne tabele/dokumente, usled mogućnosti čuvanja kompleksnih polja u dokumentima. Na narednom dijagramu prikazan je uprošćen\footnote{neki atributi nisu prikazani zbog kompaktnosti, neki odnosi korisnika i tiketa nisu prikazani jer su jednostavni (promena naslova, promena tela)} ER dijagram sistema STS.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{docs/images/ch_1/rdiagram.png} 
+  \caption{ER dijagram sistema STS.}
+\end{figure}
+
+\newpage
+\subsection{Odnos tiketa i korisnika, složeni odnosi}
+Primećujemo da dva glavna entiteta - tiket i korisnik - mogu biti u više različitih odnosa:
+\begin{itemize}
+    \item Korisnik može kreirati više tiketa (odnos \textit{creates}), dok tiket može biti kreiran od strane samo jednog korisnika.
+    \item Korisnik može komentarisati na tiket (odnos \textit{comments}). Primećujemo da ovaj odnos sadrži dodatne podatke, kao što su identifikator, telo i vreme komentara.
+    \item Korisnik može biti dodeljen tiketu (odnos \textit{is\_assigned\_to}), i tu dodelu može izvršiti drugi korisnik, označen atributom \textit{initiator}.
+    \item Korisnik može menjati status tiketa (odnos \textit{changes\_status}).
+\end{itemize}
+
+Kompleksni odnosi, kao što su komentarisanje i dodeljivanje, u relacionoj bazi podataka morali bi biti izvedeni odgovarajućim zasebnim veznim relacijama. Na primer, u slučaju komentarisanja, ako bi korisnik i tiket bili predstavljani sledećim relacijama (koristimo relacionu notaciju):
+
+\begin{center}
+\textbf{Ticket}(\underline{id}, title, body, status, creator\_id)    
+\end{center}
+
+\begin{center}
+\textbf{User}(\underline{id}, username, role)    
+\end{center}
+
+tada bi nam za komentar bila potrebna dodatna relacija koja sadrži identifikator tiketa i korisnika:
+
+\begin{center}
+\textbf{Comment}(\underline{comment\_id}, user\_id, ticket\_id, body, timestamp)    
+\end{center}
+
+Kako koristimo MongoDB i dokumentni model podataka, imamo mogućnost da komentare čuvamo direkt u okviru dokumenta tiketa. Tačnije, u sloju baze podataka, ovi komentari se ne čuvaju eksplicitno, već kroz sistem istorije tiketa. Ukratko, svaka promena nad tiketom se pamti kao jedan događaj u nizu \textit{history}, uz odgovarajući tip promene i neophodne podatke.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={Tip podataka istorije tiketa}]
+export class TicketHistoryItem {
+  timestamp: Date;
+  initiator: UserDb;
+  type: TicketHistoryEntryType;
+  payload:
+    | TicketHistoryEntryCreated
+    | TicketHistoryEntryStatusChanged
+    | TicketHistoryEntryCommentAdded
+    | TicketHistoryEntryTitleChanged
+    | TicketHistoryEntryBodyChanged
+    | TicketHistoryEntryAssigneesChanged
+    | TicketHistoryEntryTagsChanged
+    | TicketHistoryEntryCommentChanged
+    | TicketHistoryEntryCommentDeleted;
+}
+\end{lstlisting}
+\end{figure}
+
+O ovom sistemu iz domenskog ugla biće više reči u sekciji \ref{sec:eventsourcing}. Svakako, ER model sam po sebi ne propisuje način realizacije odnosa, jer sam po sebi nije vezan ni za jedan model baze podataka.
+
+\subsection{Oznake i grupe oznaka, slabi entiteti}
+
+Kao što je pomenuto u prethodnoj sekciji, uveden je fleksibilan sistem oznaka takav da je moguće upravljati samim sistemom bez intervencije programera. Oznake se mogu dodeljivati tiketu, a same mogu pripadati grupi oznaka. Jedan očigledan primer upotrebe ovog sistema je označavanje koliko je dati tiket hitan - grupa oznaka bila bi \textbf{hitnost}, dok bi konkretne oznake bile, primera radi, \textbf{veoma hitno}, \textbf{umereno hitno} i \textbf{nije hitno}.
+
+Dodatni nivo fleksibilnosti postiže se ograničavanjem ko može koju akciju da vrši nad kojom grupom oznaka. Na primer, klijent koji postavlja tiket može videti kojom hitnošću je označeno njeogovo pitanje, ali ne može sam označiti hitnost usled činjenice da se ne može smatrati objektivnim po tom pitanju. Ovim uvodimo još jedan element ER modela, prikazan na dijagramu pravougaonikom sa duplim ivicama, koji nazivamo \textbf{slab entitet}\footnote{eng. weak entity}. Uglavnom nastaju od kompleksnih atributa, odnosno atributa koji se ne mogu izraziti jednom vrednošću\footnote{Knjiški primer slabog entiteta je adresa - sastoji se ulice i broja. Ipak, postoje situacije gde adresa može biti i (jak) entitet.} i odlikuje ih nedostatak sopstvenog identiteta - identitet slabog entiteta je "pozajmljen" od strane jakog entiteta kome pripada \cite{dbmodelinganddesign}. U ovom slučaju, slab entitet \textbf{dozvola} (eng. permissions) sastoji se od sledećih podataka:
+\begin{itemize}
+    \item lista uloga korisnika koji mogu da vide oznake iz date grupe
+    \item lista uloga korisnika koji mogu da dodaju oznake iz date grupe
+    \item lista uloga korisnika koji mogu da uklanjaju oznake iz date grupe
+\end{itemize}
+
+U domenskom sloju softverskog sistema, o kome će biti reči u sekciji \ref{sec:dddsection}, slabi entiteti se najčešće preslikavaju u pojam \textit{vrednosnih objekata}\footnote{eng. value objects}, dok se u k\^{o}du realizuju putem običnih klasa\footnote{u praksi postoji konvencija nazivanja takvih objekata kao \textit{Plain Old} (stari dobri) objekti. Tako u slučaju jezika Javascript nazivaju se POJO (Plain old Javascript Object), POPO u slučaju jezika PHP, i sl.}.
+
+\newpage
+\subsection{Notifikacije}
+
+STS dolazi uz implementiran sistem notifikacija u realnom vremenu, o čijim će specifičnostima biti reči kasnije. Svakako, iz ugla ER modela, notifikacije su jednostavan entitet koji se vezuje za korisnika i tiket, stoga mu na ovom mestu ne posvećujemo previše pažnje\footnote{interesantni aspekti sistema notifikacija nalaze se na frontend delu aplikacije, o čemu će biti reči kasnije}.
 
 
 \newpage
@@ -262,6 +360,7 @@ Navedeni gradivni delovi - baza podataka i aplikativni server - tehnički su dov
 
 
 \section{DDD}
+\label{sec:dddsection}
 Jedan od najpopularnijih pristupa za dizajn i modelovanje softvera jeste dizajn zasnovan na domenu (eng. Domain Driven Design - DDD). Ukratko, DDD zagovara detaljno upoznavanje svih učesnika razvoja softvera sa domenom koji dati softverski sistem predstavlja. Programeri u saradnji sa domenskim stručnjacima razvijaju zajednički, sveprisutan jezik (eng. ubiquitous language) kako bi se prevazišla barijera različitog rečnika svih strana. \cite{dddq}
 
 \subsection{Korišćenje domenskog jezika u programskom k\^{o}du}
@@ -469,6 +568,7 @@ async findById(id: string): Promise<Ticket | null> {
 
 \newpage
 \subsection{Sheme, mutacije podataka, šablon Event Sourcing}
+\label{sec:eventsourcing}
 Osim repozitorijuma, sloj infrastrukture prirodno sadrži i definicije shema biblioteke \textit{mongoose}. Iz ugla programera, ovi objekti su najbliža pristupna tačka bazi podataka i podržavaju operacije upita i mutacija nad realnim podacima u bazi. Takav jedan upit viđen je na isečku 2.4 u prethodnoj sekciji.
 
 Na ovom mestu bavimo se mutacijama podataka, i to baš tiketa. Osim prikaza rada sa mutiranjem podataka kroz biblioteku \textit{mongoose}, ovaj primer služi da ilustruje dualnu prirodu tiketa kao entiteta i njegovu potpunu različitost u strukturi između sloja infrastruktura i sloja domena. Naime, kao što će biti prikazano u sledećem poglavlju, tiket u sloju domena je jednostavna klasa koja sadrži sve podatke o datom tiketu. Ipak, u sloju infrastrukture, radi veće fleksibilnosti i mogućnosti praćenja istorije, upotrebljena je varijanta šablona \textit{Event Sourcing}. Osnovno načelo ovog šablona je da umesto čuvanja eksplicitnog stanja objekta čuvamo istoriju njegovih promena.
