@@ -48,6 +48,9 @@
 % Ostali paketi koji se koriste u dokumentu
 \usepackage{listings} 
 
+\renewcommand{\lstlistingname}{Primer}
+
+
 \lstdefinelanguage{JavaScript}{
   morekeywords=[1]{break, continue, delete, else, for, function, if, in,
     new, return, this, typeof, var, void, while, with},
@@ -177,7 +180,30 @@
 
 % ------------------------------------------------------------------------------
 \chapter{Uvod}
-\section{Veb platforme}
+
+Prilikom razvoja bilo kakvog poslovnog softvera namenjenog za korišćenje od strane velikog broja zaposlenih neke kompanije, u današnje vreme, pribegava se implementaciji datog sistema kao jedne kompleksne veb platforme. Razlozi za izbor veba su mnogobrojni, uključujući:
+
+\begin{itemize}
+    \item \textbf{Univerzalnost veb pregledača kao platforme na kojoj se izvršava aplikacija.} U kontekstu vizuelnog dela aplikacije, prilikom razvoja tradicionalnih desktop aplikacija potrebno je voditi računa o mogućnosti pokretanja na različitim platformama i arhitekturama, kao i restrikcija pojedinih sistema. Razlike između veb pregledača, iako postoje, jesu umanjene\footnote{I u situacijama kada su značajne postoje alati za njihovo prevazilaženje, kao što je \textit{corejs}.}. 
+    \item \textbf{Lakše ažuriranje aplikacije.} Ažuriranje desktop aplikacije često zahteva korisničku akciju u vidu neke instalacije, i implementacija ovakvog sistema nije trivijalna. U slučaju veba ovo je značajno olakšano zbog same prirode klijent-server ahitekture.
+    \item \textbf{Integracije sa eksternim servisima.} Uveliko ustanovljeni veb standardi, kao što je REST API\footnote{O ćemu će biti reč u sekciji \ref{sec:restapi}} doveli su do olakšane međusobne integracije veb platformi.
+\end{itemize}
+
+Veb je od svog originalnog oblika, koji se zasnivao na prikazivanju i povezivanju statičkih HTML stranica, evoluirao do kompleksne platforme za razvoj softvera. Iz tog razloga vremenom se pojavljivala potreba za formalizovanje principa razvoja softvera za veb, baš kao i za tradicionalne aplikacije \cite{web_evolution}. Za ove potrebe nastali su mnogi standardi i okviri za uspešan razvoj veb aplikacija, koji se vremenom pokazuju kao dobre prakse uprkos konstantnom menjaju konkretnih tehnologija i trendova.
+
+Ovaj rad predstaviće razvoj kompleksne veb platforme za upravljanje korisničkim žalbama i zahtevima. Pod kompleksnošću platforme primarno podrazumevamo tehničku kompleksnost - mogućnosti sistema iz ugla korisnika su ograničene, ali način na koji je sistem dizajniran omogućava njegovo lako proširenje. Dobri standardi i prakse razvoja veb aplikacija često se vezuju za tradicionalne platforme, međutim cilj ovog rada jeste da predstavi njihovu upotrebljivost i u modernim bibliotekama i okruženjima.
+
+Poglavlje 2 najpre će prikazati sistem STS iz ugla korisnika, kako bi problematika realnog sveta koju rešavamo bila jasna, dok se naredni deo bavi projektovanjem sistema putem modela entiteta i odnosa. 
+
+Treće poglavlje bavi se serverskim delom aplikacije, odnosno bekendom, primenom domenskog dizajna i pregledom svakog od slojeva serverske aplikacije.
+
+U poglavlju 4 fokus se prebacuje na klijentski deo aplikacije, gde se osim prikaza rada aplikacije osvrćemo na kratak istorijat primene jezika Javascript, kao i neke druge aspekte razvoja klijentskih aplikacija.
+
+Naredno poglavlje prikazuje implementaciju minimalnog sistema za analitiku, uz propratne ETL procese i vizuelizaciju.
+
+Pretposlednje poglavlje uvodi nas u postavku infrastrukture za razvoj, koncept veb servera i proksija, kao i kratak prikaz sistema Docker, kao neizostavnog alata za moderan veb razvoj.
+
+Poglavlje 7 posvećeno je zaključku rada.
 
 \chapter{Sistem STS}
 Svaki biznis koji neku vrstu usluge pruža korisnicima neizostavno mora imati korisničku podršku u nekom obliku. Pre razvoja veb tehnologija telefonski sistemi bili su jedini način direktne podrške koju korisnik može da dobije. Razvoj i pristupčanost veba doveli su do evolucije vrlo sofisticiranih onlajn proizvoda koji rešavaju problem korisničke podrške, kako putem pisanih rasprava u vidu tiketa, tako i dalje putem tradicionalnih telefonskih linija uz određenu integraciju\footnote{\href{http://zendesk.com}{Zendesk}, \href{https://www.8x8.com/}{8x8}, \href{https://www.atlassian.com/software/jira/service-management}{Jira Service Management}}.
@@ -341,13 +367,6 @@ Dodatni nivo fleksibilnosti postiže se ograničavanjem ko može koju akciju da 
 
 U domenskom sloju softverskog sistema, o kome će biti reči u sekciji \ref{sec:dddsection}, slabi entiteti se najčešće preslikavaju u pojam \textit{vrednosnih objekata}\footnote{eng. value objects}, dok se u k\^{o}du realizuju putem običnih klasa\footnote{u praksi postoji konvencija nazivanja takvih objekata kao \textit{Plain Old} (stari dobri) objekti. Tako u slučaju jezika Javascript nazivaju se POJO (Plain old Javascript Object), POPO u slučaju jezika PHP, i sl.}.
 
-\newpage
-\subsection{Notifikacije}
-
-STS dolazi uz implementiran sistem notifikacija u realnom vremenu, o čijim će specifičnostima biti reči kasnije. Svakako, iz ugla ER modela, notifikacije su jednostavan entitet koji se vezuje za korisnika i tiket, stoga mu na ovom mestu ne posvećujemo previše pažnje\footnote{interesantni aspekti sistema notifikacija nalaze se na frontend delu aplikacije, o čemu će biti reči kasnije}.
-
-
-
 
 % ------------------------------------------------------------------------------
 \chapter{Bekend}
@@ -477,7 +496,7 @@ export class TicketsModule {}
 \end{lstlisting}
 \end{figure}
 
-Kao što vidimo sa primera, NestJs se jako oslanja na metaprogramiranje i mogućnosti jezika \textit{typescript} u vidu dekoratora. Prilikom pokretanja NestJS aplikacije vrši se korak poznat kao \textbf{bootstrap}, odnosno priprema aplikacije za rad. U tom koraku se razrešavaju sve međuzavisnosti modula i servisa i instanciraju sve klase kojima se upravlja putem umetanja zavisnosti.
+Kao što vidimo sa primera, NestJS se jako oslanja na metaprogramiranje i mogućnosti jezika \textit{typescript} u vidu dekoratora. Prilikom pokretanja NestJS aplikacije vrši se korak poznat kao \textbf{bootstrap}, odnosno priprema aplikacije za rad. U tom koraku se razrešavaju sve međuzavisnosti modula i servisa i instanciraju sve klase kojima se upravlja putem umetanja zavisnosti.
 
 Što se tiče strukture direktorijuma i fajlova u okviru projekta, korišćen je hibrid između mnogo sistema viđenih u praktičnom radu, a takav da najbolje odgovara i zahtevima okruženja, i sistema koji modelujemo. Primer strukture prikazan je u nastavku.
 
@@ -833,7 +852,7 @@ Sve greške koje se odnose na nepostajanje entiteta imaju identičan oblik, pa s
 \end{itemize}
 \textbf{Preterana ekspresivnost.} Na ovom mestu konkretno govorimo o dužini naziva nekih klasa, koje se mogu smatrati nečitljivim. Ipak, ako se podsetimo dela \ref{sec:dddukodu}, jasno nam je da dobitak na razumljivosti domena kroz k\^{o}d nadmašuje strah od dugačkih imena klasa.
 
-Ostaje pitanje transformacije ovakvih grešaka u HTTP oblik. Jedno izrazito elegantno rešenje, koje nam pružaju mogućnosti okruženja NestJs, biće prikazano u sledećem pogavlju.
+Ostaje pitanje transformacije ovakvih grešaka u HTTP oblik. Jedno izrazito elegantno rešenje, koje nam pružaju mogućnosti okruženja NestJS, biće prikazano u sledećem pogavlju.
 
 \subsection{Integracije sa eksternim servisima}
 
@@ -842,6 +861,7 @@ Ostaje pitanje transformacije ovakvih grešaka u HTTP oblik. Jedno izrazito eleg
 Sve do sad razmatrane slojeve i delove sistema možemo smatrati internim u smislu mogućnosti spoljnjeg pristupa - sloj domena bavi se poslovnom logikom, uz podršku sloja infrastrukture. Kako bi domenski sistem mogao da se koristi od strane grafičkih veb aplikacija, mobilnih aplikacija ili uopšteno bilo kojih drugih softverskih sistema, potebno je da svoju funkcionalnost eksponira spoljašnjem svetu. 
 
 \subsection{REST API, svojstva}
+\label{sec:restapi}
 
 Ovo se postiže slojem aplikacije, tankim slojem bez poslovnog znanja čija glavna uloga jeste primanje zahteva i njihova delegacija na domenski sloj \cite{dddfull}. U ovom radu, za potrebe implementacije aplikativnog sloja, bavimo se najpoznatijim arhitekturalnim stilom poznatim kao REST (\textit{\textbf{RE}presentational \textbf{S}tate \textbf{T}ransfer}). Kompletna specifikacija ovog protokola je ogromna, i pokriva sve aspekte korišćenja HTTP-a kao transportnog sloja veb aplikacija, tako da pominjemo samo neke od najvažnijih:
 
@@ -1021,7 +1041,7 @@ Kao što je pomenuto u prethodnoj sekciji, React (a tako i Next.js) prepuštaju 
     \item \textbf{Stanja učitavanja i grešaka.} Potrebno je imati ugrađenu podršku za stanja učitavanja (eng. loading state) i stanja grešaka (eng. error state), kako bi programer mogao da se fokusira na pisanja logike stranice u zavisnosti od tih stanja, a ne da ih manuelno prati i ažurira.
 \end{itemize}
 
-Za ovaj rad izabrana je biblioteka Redux Toolkit sa svojim podmodulom Query, koji zajedno čine naziv koji se češće upotrebljava u svom skraćenom obliku - RTKQ \cite{rtkqdocs}. Ova biblioteka zapravo je nadogradnja na veoma poznatu biblioteku za upravljanjem stanjem\footnote{eng. state management library} Redux, koja je dugo vremena bila neizostavan deo React ekosistema. Ipak, u ovom radu ne koristimo upravljanje stanjem u pravom smislu te reči, tako da upotreba biblioteke RTKQ ostaje ograničena isključivo na dohvatanje podataka.  
+Za ovaj rad izabrana je biblioteka Redux Toolkit sa svojim podmodulom Query, koji zajedno čine naziv koji se češće upotrebljava u svom skraćenom obliku - RTKQ \cite{rtkqdocs}. Ova biblioteka zapravo je nadogradnja na veoma poznatu biblioteku za upravljanjem stanjem\footnote{eng. state management library} Redux, koja je dugo vremena bila neizostavan deo React ekosistema. Ipak, u ovom radu ne koristimo upravljanje stanjem u pravom smislu te reči, tako da upotreba biblioteke RTKQ ostaje ograničena isključivo na dohvatanje podataka.
 
 
 
