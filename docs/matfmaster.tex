@@ -177,13 +177,12 @@
 
 % ------------------------------------------------------------------------------
 \chapter{Uvod}
-% ------------------------------------------------------------------------------
-% \pangrami
-
 \section{Veb platforme}
-\section{Sistem STS iz ugla korisnika}
 
-Svaki biznis koji neku vrstu usluge pruža korisnicima neizostavno mora imati korisničku podršku u nekom obiku. Pre razvoja veb tehnologija telefonski sistemi bili su jedini način direktne podrške koju korisnik može da dobije. Razvoj i pristupčanost veba doveli su do evolucije vrlo sofisticiranih onlajn proizvoda koji rešavaju problem korisničke podrške, kako putem pisanih rasprava u vidu tiketa, tako i dalje putem tradicionalnih telefonskih linija uz određenu integraciju\footnote{\href{http://zendesk.com}{Zendesk}, \href{https://www.8x8.com/}{8x8}, \href{https://www.atlassian.com/software/jira/service-management}{Jira Service Management}}.
+\chapter{Sistem STS}
+Svaki biznis koji neku vrstu usluge pruža korisnicima neizostavno mora imati korisničku podršku u nekom obliku. Pre razvoja veb tehnologija telefonski sistemi bili su jedini način direktne podrške koju korisnik može da dobije. Razvoj i pristupčanost veba doveli su do evolucije vrlo sofisticiranih onlajn proizvoda koji rešavaju problem korisničke podrške, kako putem pisanih rasprava u vidu tiketa, tako i dalje putem tradicionalnih telefonskih linija uz određenu integraciju\footnote{\href{http://zendesk.com}{Zendesk}, \href{https://www.8x8.com/}{8x8}, \href{https://www.atlassian.com/software/jira/service-management}{Jira Service Management}}.
+
+\section{Sistem STS iz ugla korisnika}
 
 Sistem STS\footnote{Skraćeno od eng. Simple Ticket Service, jednostavan servis za tikete}, razvijan za potrebe ovog rada, obuhvata osvnovnu funkcionalnost za pružanje podrške u vidu tiketa. Tiket predstavlja jednu tekstualnu korisničku žalbu ili zahtev, na kojoj se može pokrenuti diskusija, a sve sa ciljem asinhronog\footnote{pod asinhronošću podrazumevano suprotnost u odnosu na telefonski sistem gde korisnik i agent podrške vode komunikaciju u realnom vremenu.} razrešenja korisničkog problema. Glavni akteri sistema su:
 
@@ -327,7 +326,7 @@ export class TicketHistoryItem {
 \end{lstlisting}
 \end{figure}
 
-O ovom sistemu iz domenskog ugla biće više reči u sekciji \ref{sec:eventsourcing}. Svakako, ER model sam po sebi ne propisuje način realizacije odnosa, jer sam po sebi nije vezan ni za jedan model baze podataka.
+O ovom sistemu iz domenskog ugla biće više reči u sekciji \ref{sec:eventsourcing}. Svakako, ER model sam po sebi ne propisuje način realizacije odnosa, jer nije vezan ni za jedan model baze podataka.
 
 \subsection{Oznake i grupe oznaka, slabi entiteti}
 
@@ -348,8 +347,7 @@ U domenskom sloju softverskog sistema, o kome će biti reči u sekciji \ref{sec:
 STS dolazi uz implementiran sistem notifikacija u realnom vremenu, o čijim će specifičnostima biti reči kasnije. Svakako, iz ugla ER modela, notifikacije su jednostavan entitet koji se vezuje za korisnika i tiket, stoga mu na ovom mestu ne posvećujemo previše pažnje\footnote{interesantni aspekti sistema notifikacija nalaze se na frontend delu aplikacije, o čemu će biti reči kasnije}.
 
 
-\newpage
-\section{Višeservisno okruženje}
+
 
 % ------------------------------------------------------------------------------
 \chapter{Bekend}
@@ -933,10 +931,105 @@ export class AddTicketTagsDTO {
 
 % ------------------------------------------------------------------------------
 \chapter{Frontend}
-\section{Okruženje Next.js, serversko renderovanje React komponenti}
-\section{Upravljanje stanjem aplikacije}
-\section{Internacionalizacija}
+
+Ukoliko bi tražili jedan programski jezik koji može da pokrije najširi spektar platformi i aplikacija - to bi u današnje vreme definitivno bio Javascript. Uprkos velikom broju platformi koje mogu pokretati Javascript k\^{o}d (veb pregledači, Node.js, Deno, Bun, itd), glavno okruženje koje diktira njegov razvoj jeste upravo i originalno - veb. Pod ovim se misli na podudaranje između Javascript-a definisanog prema TC39\footnote{eng. Technical committee 39 - tehnički komitet zadužen za standardizovanje jezika} standardu i Javascript-a koji se izvršava u veb pregledačima \cite{ydkjs}. Postojanje tolikog broja okruženja prirodno je dovelo do alata, ili čak kompletnih okruženja za razvoj, koji imaju za cilj da apstrahuju sistem nad kojim se izvršava i da k\^{o}d učine što univerzalnijim.
+
+
+\section{Kratak pregled evolucije jezika Javascript i frontend razvoja}
+
+\subsection{Statički sajtovi}
+Prvi oblik veb sajtova bio je veoma jednostavan - zasnivao se na konceptu dostavljanja statičkih HTML i CSS fajlova, preko kojih bi korisnik mogao da pregleda neki sadržaj. Navigacija se vršila kroz hiperlinkove, tako što bi upućivali na druge adrese, gde bi klijent zahtevao neke druge statičke fajlove, čime bi proces počinjao ponovo.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{docs/images/ch_4/frontend-dev-phase0.png} 
+  \caption{Dostavljanje statičkih HTML sajtova}
+  \label{fig:sample}
+\end{figure}
+
+\subsection{Dodavanje klijentske interaktivnosti}
+
+Problem koji se javlja sa prethodnim sistemom jeste nedostatak klijentske interaktivnosti - za svaku promenu sadržaja stranice potrebno je učitati celu stranicu od početka \footnote{Najbolji primer koji ilustruje probleme nedostatka interaktivnosti jesu veliki formulari i njihova validacija. Na modernim veb sajtovima prilikom prilikom popunjavanja velikih formulara korisnik konstantno ima povratnu informaciju da li je neko polje pogrešno popunjeno, dok pre Javascript-a to se saznaje tek nakon podnošenja.}. Uvođenje klijentskih skripti jezikom Javascript omogućuje se manipulacija HTML elemenata sa klijentske strane, upravljanje događajima, i slično.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{docs/images/ch_4/frontend-dev-phase1.png} 
+  \caption{Dostavljanje statičkih HTML sajtova i propratnih skripti}
+  \label{fig:sample}
+\end{figure}
+
+\newpage
+\subsection{Jednostranične aplikacije - SPA}
+
+Sledeći veliki zaokret dešava se uvođenjem koncepta jednostraničnih aplikacija (eng. Single Page Application - SPA). Ove aplikacije odlikuje potpuno prebacivanje logike generisanja korisničkog interfejsa na frontend deo aplikacije. Ukratko, server bi poslao samo skelet HTML-a, i skriptu koja bi se zatim "nakačila" na taj HTML i preuzela dalji prikaz elemenata. Dohvatanje podataka za prikaz na stranici vršili bi se putem API-a, tako da ovaj sistem podseća na način na koji rade mobilne aplikacije - potpuno razdvajanje odgovornosti prikaza korisničkog interfejsa i dohvatanja podataka. Originalne mane ovakvog sistemu zasnivale su se na lošijem rangiranju stranica od strane sistema za pretragu, usled manjka početnog sadržaja koji se prikazuje\footnote{U današnje vreme skoro svi moderni pretraživači uspešno indeksiraju i SPA sajtove, tako da je ovaj problem praktično eleminisan.}. Prednost je u korisničkom iskustvu - navigacija se vrši potpuno klijentski tako da korisnik ima osećaj jako brze navigacije, kao na desktop aplikaciji. Najpopularnija i najuticajnija biblioteka za razvoj SPA jeste React.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{docs/images/ch_4/frontend-dev-phase2.png} 
+  \caption{SPA}
+  \label{fig:sample}
+\end{figure}
+
+\subsection{Hibridna okruženja}
+
+Prethodni način generisanja korisničkog interfejsa često se naziva klijentsko renderovanje (eng. CSR - Client side rendering), dok se tradicionalni sistemi zasnivaju na serverskom renderovanju (eng. SSR - Server side rendering). Okruženja kao što su Next.js\cite{nextjsdocs}, Remix\cite{remixdocs}, SvelteKit\cite{sveltekitdocs} i druga imaju cilj za implementaciju "najboljeg od oba sveta". Naime, omogućavaju razvoj jednostraničnih aplikacija uz podršku za serversko renderovanje, tako da otklanjaju mane u nedostatku prvobitnog prikaza HTML-a. Način njhovog rada biće prikazan u nastavku, sa izborom okruženja Next.js.
+
+\newpage
+\section{React i Next.js}
+Da sumiramo, problemi koje želimo da izbegnemo kod tradicionalnih jednostraničnih aplikacija jesu sledeći:
+\begin{enumerate}
+    \item \textbf{Prvobitni HTML je minimalan.} Usled činjenice da se klijentske skripte bave prikazom korisničkog interfejsa, konkretno u React-u koristeći sistem komponenti i JSX-a \cite{reactdocscomponents}, inicijalni HTML koji se prikazuje korisniku je prazan, i postoji vreme koje je potrebno dok veb pregledač izvrši skriptu.
+    \item \textbf{Potrebno je dohvatiti podatke s klijenta.} Čak i nakon prikazivanja početnog korisničkog interejsa, najčešći je slučaj da je potrebno dohvatiti neke podatke preko API-a koje treba prikazati. Pošto je sva odgovornost na klijentu, ti podaci se tek mogu dohvatati u ovoj fazi, tako da postoji dodatno vreme gde neke sekcije sajta sadrže simbolične prikaze sadržaja koji se učitava\footnote{ustanovljen naziv u frontend svetu za ove elemente jeste \textit{content loader}, i postoji veliki broj biblioteka koje olakšavaju njihovo generisanje.}, dok se u pozadini vrši dohvatanje podataka.
+\end{enumerate}
+
+\subsection{React kao biblioteka i okruženje}
+
+U ekosistemu React-a postoje nesuglasice da li predstavlja biblioteku ili okruženje za razvoj. Argument u korist biblioteke zasniva se na činjenici da React ne poseduje striktnu strukturu direktorijuma, ne nalaže kako se vrši dohvatanje podataka, ne sadrži ugrađen sistem za rutiranje, i slično. Uzevši to u ozbir zaista deluje da je React ništa više nego biblioteka za razvoj interaktivnih korisničkih interfejsa. S druge strane, vremenom su evoluiorali šabloni koji su opšteprihvaćeni kao dobre prakse, čime se može argumentovati i da je React kompletno okruženje za razvoj. Ovo je dovelo do evolucije još jednog termina koji se može sresti u onlajn zajednicama frontend inženjera, a to je metaokruženje (eng. metaframework); neretko se upravom ovom klasom softverskih sistema naziva upravo Next.js.
+
+\subsection{Next.js i šabloni renderovanja korisničkih interfejsa}
+
+Izuzimajući prethodnu diskusiju, i koristeći se što opštijim terminima, možemo reći da je Next.js moderno okruženje za razvoj veb aplikacija, izgrađeno nad React-om, koje podržava više šablona renderovanja korisničkih interfejsa. U trenutku pisanja ovog rada, šabloni renderovanja korisničkih interfejsa (eng. rendering patterns) su čest predmet diskusija onlajn zajednica inženjera, i najveća okruženja i biblioteke se utrkuju sa implementacijom svih šablona kako bi bili konkurentan izbor modernih frontend proizvoda. Next.js, predvođen kompanijom Vercel, definitivno je među prvima kada je u pitanju razvoj veb aplikacija. Od pomenutih šablona Next.js podržava sledeće \cite{nextjsdocs}:
+\begin{itemize}
+    \item \textbf{Klijentsko renderovanje - CSR.} Klasično SPA ponašanje podržano je samom činjenicom da se u osnovi nalazi React.
+    \item \textbf{Serversko renderovanje - SSR.} Omogućeno je dohvatanje eksternih podataka na serveru pre renderovanja stabla React komponenti.
+    \item \textbf{Generisanje statičkih sajtova - SSG\footnote{eng. Static Site Generation}.} Moguće je određene stranice u potpunosti renderovati u vremenu kompajliranja aplikacije (eng. build time), tako da gotov HTML bude spreman i pre nego što se aplikacija pokrene. Ovakve stranice po pravilu su najbrže.
+    \item \textbf{Inkrementalno regenerisanje statičkih stranica - ISG\footnote{eng. Incremental Static Regeneration}.} SSG stranice jesu brze, ali mana im je što podaci mogu zastareti. Next.js omogućava periodično osvežavanje tih stranica na određen vremenski interval kako bi sadržaj bio ažuriran.
+    \item \textbf{Strimovanje korisničkog interfejsa\footnote{eng. Streaming SSR}} Tokom pisanja rada pojavila se React verzija 18 koja uvodi koncept serverskih komponenti (eng. server components), koje Next.js usvaja u verziji 13 i proglašava kao novi pravac. U ovom radu ne bavimo se ovim sistemom, jer u trenutku pisanja je i dalje u eksperimentalnoj fazi.
+\end{itemize}
+
+\section{SSR i tok jednog zahteva}
+
+SSG i ISR jesu dobar izbor prilikom generisanja sajtova koji ne menjaju svoj sadržaj često i ne bave se intenzivnom manipulacijom podataka\footnote{Dobar primer sajtova pogodnih za SSG i ISR jesu personalni blogovi.}. Ipak, sistem za tikete koji pravimo u ovom radu je kompleksniji i temljno se zasniva na dohvatanju i manipulaciji podataka sa eksternog API-a. Iz tog razloga glavni iskorišćen šablon upravo je serversko renderovanje. Na sledećem dijagramu prikazan je primer toka jednog zahteva ka stranici za prikaz tiketa.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{docs/images/ch_4/nextjs_flow.png} 
+  \caption{Tok jednog SSR zahteva}
+  \label{fig:sample}
+\end{figure}
+
+Proces u kom stranica postaje interaktivna, odnosno korak 7 sa dijagrama, naziva se \textbf{hidracija} \cite{reactdocscomponents}. Ovaj naziv ima smisla i može se nerformalno shvatili ako stablo React komponenti zamislimo kao sistem praznih cevi koje su međusobno povezane, koje onda na vrhu prikačimo na izvor vode, koja je u ovoj analogiji Javascript.
+
+\newpage
+\section{Dohvatanje podataka, upravljanje stanjem, biblioteka RTK}
+
+Kao što je pomenuto u prethodnoj sekciji, React (a tako i Next.js) prepuštaju programeru izbor načina na koji će da vrši dohvatanje podataka sa eksternih servisa. Iako to može zvučati trivijalno, dohvatanje podataka (eng. data fetching) jedan je od najsloženijih zadataka modernih frontend sistema, i očekivano je da React ekosistem nudi veliki broj biblioteka koji rešavaju ovaj problem. Problemi koji se očekuju da budu rešeni od strane modernih biblioteka za dohvatanje podataka uključuju
+
+\begin{itemize}
+    \item \textbf{Keširanje i deduplikacija.} Želimo mogućnost da dohvatamo iste podatake u različitim delovima stabla aplikacije, a da pritom ne pozivamo API svaki put, već da se podaci keširaju i iskoriste ponovo.
+    \item \textbf{Deklarativnost.} Želimo da se oslobodimo pisanja proceduralne logike za dohvatanje podataka, već da to izvršimo na deklarativan način pisanjem odgovarajuće konfiguracije.
+    \item \textbf{Stanja učitavanja i grešaka.} Potrebno je imati ugrađenu podršku za stanja učitavanja (eng. loading state) i stanja grešaka (eng. error state), kako bi programer mogao da se fokusira na pisanja logike stranice u zavisnosti od tih stanja, a ne da ih manuelno prati i ažurira.
+\end{itemize}
+
+Za ovaj rad izabrana je biblioteka Redux Toolkit sa svojim podmodulom Query, koji zajedno čine naziv koji se češće upotrebljava u svom skraćenom obliku - RTKQ \cite{rtkqdocs}. Ova biblioteka zapravo je nadogradnja na veoma poznatu biblioteku za upravljanjem stanjem\footnote{eng. state management library} Redux, koja je dugo vremena bila neizostavan deo React ekosistema. Ipak, u ovom radu ne koristimo upravljanje stanjem u pravom smislu te reči, tako da upotreba biblioteke RTKQ ostaje ograničena isključivo na dohvatanje podataka.  
+
+
+
+
 \label{sec:intl}
+\section{Internacionalizacija}
+
+
 
 % ------------------------------------------------------------------------------
 
