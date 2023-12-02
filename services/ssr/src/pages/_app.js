@@ -55,7 +55,7 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
   (store) => async (context) => {
     let languageCode = isServer()
       ? context.ctx?.req?.cookies.language_code ?? 'en'
-      : Cookies.get('accessToken');
+      : Cookies.get('language_code');
 
     if (!['en', 'sr'].includes(languageCode)) {
       languageCode = 'en';
