@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SERVICES=( "api" "ssr" "etl" )
+SERVICES=( "api" "ssr" "etl" "analytics" )
 
 if [[ ! " ${SERVICES[*]} " =~ " $1 " ]]; then
     echo "next: Service $1 is not defined."
@@ -27,3 +27,8 @@ then
     exit 0
 fi
 
+if [ "$1" == "analytics" ];
+then
+    docker build -f ./services/analytics/Dockerfile.production -t sts-analytics:latest ./services/analytics
+    exit 0
+fi

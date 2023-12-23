@@ -62,5 +62,16 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  analytics:
+    container_name: analytics-prod
+    image: sts-analytics:latest
+    ports:
+      - "3004:8501"
+    environment:
+      MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
+      MAIN_DB_PWD: ${MAIN_DB_PWD}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
 volumes:
   main-db-data:
