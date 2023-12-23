@@ -31,7 +31,7 @@ services:
 
   api_main:
     container_name: api-main-prod
-    image: sts-api-main:latest
+    image: aleksakojadinovic/sts:api-latest
     environment:
       MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
       MAIN_DB_PWD: ${MAIN_DB_PWD}
@@ -43,7 +43,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ssr:
-    container_name: ssr-prod
+    container_name: aleksakojadinovic/sts:ssr-latest
     image: sts-ssr:latest
     ports:
       - "3003:3000"
@@ -55,7 +55,7 @@ services:
 
   etl:
     container_name: etl-prod
-    image: sts-etl:latest
+    image: aleksakojadinovic/sts:etl-latest
     environment:
       MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
       MAIN_DB_PWD: ${MAIN_DB_PWD}
@@ -64,7 +64,7 @@ services:
 
   analytics:
     container_name: analytics-prod
-    image: sts-analytics:latest
+    image: aleksakojadinovic/sts:analytics-latest
     ports:
       - "3004:8501"
     environment:
