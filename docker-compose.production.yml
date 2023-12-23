@@ -41,10 +41,10 @@ services:
       - "3001:3000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
+  
   ssr:
-    container_name: aleksakojadinovic/sts:ssr-latest
-    image: sts-ssr:latest
+    container_name: ssr-prod
+    image: aleksakojadinovic/sts:ssr-latest
     ports:
       - "3003:3000"
     environment:
