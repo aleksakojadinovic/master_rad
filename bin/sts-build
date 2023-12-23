@@ -1,0 +1,43 @@
+#!/bin/sh
+
+SERVICES=( "api" "ssr" "etl" "analytics" "all" )
+
+if [[ ! " ${SERVICES[*]} " =~ " $1 " ]]; then
+    echo "next: Service $1 is not defined."
+    exit 1
+fi
+
+
+if [ "$1" == "api" ];
+then
+    docker build -f ./services/api-main/docker/Dockerfile.production -t aleksakojadinovic/sts:api-latest ./services/api-main
+    exit 0
+fi
+
+
+if [ "$1" == "ssr" ];
+then
+    docker build -f ./services/ssr/docker/Dockerfile.production -t aleksakojadinovic/sts:ssr-latest ./services/ssr
+    exit 0
+fi
+
+if [ "$1" == "etl" ];
+then
+    docker build -f ./services/etl/docker/Dockerfile -t aleksakojadinovic/sts:etl-latest ./services/etl
+    exit 0
+fi
+
+if [ "$1" == "analytics" ];
+then
+    docker build -f ./services/analytics/Dockerfile.production -t aleksakojadinovic/sts:analytics-latest ./services/analytics
+    exit 0
+fi
+
+if [ "$1" == "all" ];
+then
+    sts-build api
+    sts-build ssr
+    sts-build etl
+    sts-build analytics
+    exit 0
+fi

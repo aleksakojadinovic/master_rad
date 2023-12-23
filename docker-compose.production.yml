@@ -1,0 +1,77 @@
+services:
+  proxy:
+    container_name: proxy-prod
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./services/proxy/development/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./services/proxy/development/sites-enabled:/etc/nginx/sites-enabled:ro"
+      - "./services/proxy/development/certificates:/var/www/dev.sts.com/certificates:ro"
+      - "./services/proxy/development/certificates:/var/www/metrics.sts.com/certificates:ro"
+      - "./services/proxy/development/passwd/passwd_file:/etc/nginx/.htpasswd"
+      - "./images:/usr/share/nginx/html/images:ro"
+      - "./services/service-worker/firebase-messaging-sw.js:/var/www/dev.sts.com/firebase-messaging-sw.js:ro"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  maindb:
+    container_name: main-db-prod
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MAIN_DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MAIN_DB_PWD}
+    ports:
+      - 27017:27017
+    volumes:
+      - main-db-data:/data/db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  api_main:
+    container_name: api-main-prod
+    image: aleksakojadinovic/sts:api-latest
+    environment:
+      MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
+      MAIN_DB_PWD: ${MAIN_DB_PWD}
+      JWT_SECRET: ${JWT_SECRET}
+      FIREBASE_KEY_PATH: "/app/certificates/sts-firebase-key.json"
+    ports:
+      - "3001:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  
+  ssr:
+    container_name: ssr-prod
+    image: aleksakojadinovic/sts:ssr-latest
+    ports:
+      - "3003:3000"
+    environment:
+      NODE_ENV: "production"
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  etl:
+    container_name: etl-prod
+    image: aleksakojadinovic/sts:etl-latest
+    environment:
+      MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
+      MAIN_DB_PWD: ${MAIN_DB_PWD}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  analytics:
+    container_name: analytics-prod
+    image: aleksakojadinovic/sts:analytics-latest
+    ports:
+      - "3004:8501"
+    environment:
+      MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
+      MAIN_DB_PWD: ${MAIN_DB_PWD}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  main-db-data:
