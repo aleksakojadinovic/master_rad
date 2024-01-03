@@ -76,6 +76,51 @@
   morestring=[b]` % Interpolation strings.
 }
 
+\lstdefinelanguage{docker}{
+  keywords={FROM, RUN, COPY, ADD, ENTRYPOINT, CMD,  ENV, ARG, WORKDIR, EXPOSE, LABEL, USER, VOLUME, STOPSIGNAL, ONBUILD, MAINTAINER, HEALTHCHECK},
+  keywordstyle=\color{blue}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{docker-compose}{
+  keywords={image, environment, ports, container_name, ports, volumes, links},
+  keywordstyle=\color{blue}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+\lstdefinelanguage{docker-compose-2}{
+  keywords={version, volumes, services},
+  keywordstyle=\color{blue}\bfseries,
+  keywords=[2]{image, environment, ports, container_name, ports, links, build},
+  keywordstyle=[2]\color{olive}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue},
+  inputencoding=utf8,
+  extendedchars=true
+}
+
 % Requires package: color.
 \definecolor{mediumgray}{rgb}{0.3, 0.4, 0.4}
 \definecolor{mediumblue}{rgb}{0.0, 0.0, 0.8}
@@ -237,6 +282,7 @@ Tiket može prolaziti kroz više statusa. Promene tih statusa vidljive su kako a
 \end{figure}
 
 \subsection{Sistem oznaka, konfigurabilnost}
+\label{sec:tagsystem}
 
 Često postoji potreba klasifikacije tiketa po raznim kriterijumima - departman unutar firme koji se bavi tiketom, hitnost, prioritetnost, i slično. Kako bi se postigla maksimalna fleksibilnost uveden je sistem oznaka (eng. tags). Oznaka se može nakačiti na dati tiket i može dati brzu informaciju o nekim njegovim aspektima. Ovaj sistem u potpunosti je konfigurabilan od strane korisnika (u ovom slučaju administratora), tako da nije potrebna intervencija programera prilikom dodavanja novih ili promene postojećih oznaka.
 
@@ -370,6 +416,7 @@ U domenskom sloju softverskog sistema, o kome će biti reči u sekciji \ref{sec:
 
 % ------------------------------------------------------------------------------
 \chapter{Bekend}
+\label{sec:backend}
 % ------------------------------------------------------------------------------
 Kod velikog broja softverskih sistema, serverski deo aplikacije (bekend) može se uopšteno shvatiti kao aplikacija koja apstrahuje pristup podacima na udaljenom serveru. Podaci se skoro uvek čuvaju u nekoj vrsti baze podataka, dok se pristup i manipulacija podacima dodatno apstrahuje aplikativnim\footnote{Opštosti radi, izbegnuti su pojmovi \textbf{veb server} i \textbf{http server}. Veb server predstavlja server za dostavljanje statičkog sadržaja na vebu, i često kada govorimo o bekend aplikacijama ne mislimo na ovaj tip servera (nginx, apache2). HTTP server takođe ne bi bio ispravan pojam usled postojanja drugih protokola komunikacije na vebu.} serverom.
 
@@ -952,7 +999,7 @@ export class AddTicketTagsDTO {
 % ------------------------------------------------------------------------------
 \chapter{Frontend}
 
-Ukoliko bi tražili jedan programski jezik koji može da pokrije najširi spektar platformi i aplikacija - to bi u današnje vreme definitivno bio Javascript. Uprkos velikom broju platformi koje mogu pokretati Javascript k\^{o}d (veb pregledači, Node.js, Deno, Bun, itd), glavno okruženje koje diktira njegov razvoj jeste upravo i originalno - veb. Pod ovim se misli na podudaranje između Javascript-a definisanog prema TC39\footnote{eng. Technical committee 39 - tehnički komitet zadužen za standardizovanje jezika} standardu i Javascript-a koji se izvršava u veb pregledačima \cite{ydkjs}. Postojanje tolikog broja okruženja prirodno je dovelo do alata, ili čak kompletnih okruženja za razvoj, sa ciljem da apstrahuju sistem nad kojim se izvršava i da k\^{o}d učine što univerzalnijim.
+Ukoliko bi tražili jedan programski jezik koji može da pokrije najširi spektar platformi i aplikacija - to bi u današnje vreme definitivno bio Javascript. Uprkos velikom broju platformi koje mogu pokretati Javascript k\^{o}d (veb pregledači, Node.js, Deno, Bun, itd), glavno okruženje koje diktira njegov razvoj jeste upravo i originalno - veb. Pod ovim se misli na podudaranje između Javascript-a definisanog prema TC39\footnote{eng. Technical committee 39 - tehnički komitet zadužen za standardizovanje jezika.} standardu i Javascript-a koji se izvršava u veb pregledačima \cite{ydkjs}. Postojanje tolikog broja okruženja prirodno je dovelo do alata, ili čak kompletnih okruženja za razvoj, sa ciljem da apstrahuju sistem nad kojim se izvršava i da k\^{o}d učine što univerzalnijim.
 
 
 \section{Kratak pregled evolucije jezika Javascript i frontend razvoja}
@@ -973,7 +1020,7 @@ Problem koji se javlja sa prethodnim sistemom jeste nedostatak klijentske intera
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=1\textwidth]{docs/images/ch_4/frontend-dev-phase1.png} 
+  \includegraphics[width=0.7\textwidth]{docs/images/ch_4/frontend-dev-phase1.png} 
   \caption{Dostavljanje statičkih HTML sajtova i propratnih skripti}
   \label{fig:sample}
 \end{figure}
@@ -990,6 +1037,7 @@ Sledeći veliki zaokret dešava se uvođenjem koncepta jednostraničnih aplikaci
   \label{fig:sample}
 \end{figure}
 
+\newpage
 \subsection{Hibridna okruženja}
 
 Prethodni način generisanja korisničkog interfejsa često se naziva klijentsko renderovanje (eng. CSR - Client side rendering), dok se tradicionalni sistemi zasnivaju na serverskom renderovanju (eng. SSR - Server side rendering). Okruženja kao što su Next.js\cite{nextjsdocs}, Remix\cite{remixdocs}, SvelteKit\cite{sveltekitdocs} i druga, imaju cilj za implementaciju "najboljeg od oba sveta". Naime, omogućavaju razvoj jednostraničnih aplikacija uz podršku za serversko renderovanje, tako da otklanjaju mane u nedostatku prvobitnog prikaza HTML-a. Način njhovog rada biće prikazan u nastavku, sa izborom okruženja Next.js.
@@ -1004,7 +1052,7 @@ Da sumiramo, problemi koje želimo da izbegnemo kod tradicionalnih jednostranič
 
 \subsection{React kao biblioteka i okruženje}
 
-U ekosistemu React-a postoje nesuglasice da li predstavlja biblioteku ili okruženje za razvoj. Argument koji ide u korist biblioteke zasniva se na činjenici da React ne poseduje striktnu strukturu direktorijuma, ne nalaže kako se vrši dohvatanje podataka, ne sadrži ugrađen sistem za rutiranje, i slično. Uzevši to u ozbir zaista deluje da je React ništa više nego biblioteka za razvoj interaktivnih korisničkih interfejsa. S druge strane, vremenom su evoluiorali šabloni koji su opšteprihvaćeni kao dobre prakse, čime se može argumentovati i da je React kompletno okruženje za razvoj. Ovo je dovelo do evolucije još jednog termina koji se može sresti u onlajn zajednicama frontend inženjera, a to je metaokruženje (eng. metaframework); neretko se upravom ovom klasom softverskih sistema naziva upravo Next.js.
+U ekosistemu React-a postoje nesuglasice da li predstavlja biblioteku ili okruženje za razvoj. Argument koji ide u korist biblioteke zasniva se na činjenici da React ne poseduje striktnu strukturu direktorijuma, ne nalaže kako se vrši dohvatanje podataka, ne sadrži ugrađen sistem za rutiranje, i slično. Uzevši to u ozbir zaista deluje da je React ništa više nego biblioteka za razvoj interaktivnih korisničkih interfejsa. S druge strane, vremenom su evoluiorali šabloni koji su opšteprihvaćeni kao dobre prakse, čime se može argumentovati i da je React kompletno okruženje za razvoj. Ovo je dovelo do evolucije još jednog termina koji se može sresti u onlajn zajednicama frontend inženjera, a to je metaokruženje (eng. metaframework); neretko se upravo ovom klasom softverskih sistema naziva Next.js.
 
 \subsection{Next.js i šabloni renderovanja korisničkih interfejsa}
 
@@ -1017,7 +1065,7 @@ Izuzimajući prethodnu diskusiju, i koristeći se što opštijim terminima, mož
     \item \textbf{Strimovanje korisničkog interfejsa\footnote{eng. Streaming SSR}} Tokom pisanja rada pojavila se React verzija 18 koja uvodi koncept serverskih komponenti (eng. server components), koje Next.js usvaja u verziji 13 i proglašava kao novi pravac. U ovom radu ne bavimo se ovim sistemom, jer u trenutku pisanja je i dalje u eksperimentalnoj fazi.
 \end{itemize}
 
-\section{SSR i tok jednog zahteva}
+\subsection{SSR i tok jednog zahteva}
 
 SSG i ISR jesu dobar izbor prilikom generisanja sajtova koji ne menjaju svoj sadržaj često i ne bave se intenzivnom manipulacijom podataka\footnote{Dobar primer sajtova pogodnih za SSG i ISR jesu personalni blogovi.}. Ipak, sistem za tikete koji pravimo u ovom radu je kompleksniji i temljno se zasniva na dohvatanju i manipulaciji podataka sa eksternog API-a. Iz tog razloga glavni iskorišćen šablon upravo je serversko renderovanje. Na sledećem dijagramu prikazan je primer toka jednog zahteva ka stranici za prikaz tiketa.
 
@@ -1031,10 +1079,11 @@ SSG i ISR jesu dobar izbor prilikom generisanja sajtova koji ne menjaju svoj sad
 Proces u kom stranica postaje interaktivna, odnosno korak 7 sa dijagrama, naziva se \textbf{hidracija} \cite{reactdocscomponents}. Ovaj naziv ima smisla i može se nerformalno shvatili ako stablo React komponenti zamislimo kao sistem međusobno povezanih praznih cevi, koje onda na vrhu prikačimo na izvor vode - u ovoj analogiji Javascript.
 
 \newpage
+\label{sec:datafetchingandconfiguration}
 \section{Dohvatanje podataka, upravljanje stanjem, biblioteka RTK}
 
 Kao što je pomenuto u prethodnoj sekciji, React (a tako i Next.js) prepuštaju programeru izbor načina na koji će da vrši dohvatanje podataka sa eksternih servisa. Iako to može zvučati trivijalno, dohvatanje podataka (eng. data fetching) jedan je od najsloženijih zadataka modernih frontend sistema i očekivano je da React ekosistem nudi veliki broj biblioteka koji rešavaju ovaj problem. Problemi koji se očekuju da budu rešeni od strane modernih biblioteka za dohvatanje podataka uključuju:
-
+w
 \begin{itemize}
     \item \textbf{Keširanje i deduplikacija.} Želimo mogućnost da dohvatamo iste podatake u različitim delovima stabla aplikacije, a da pritom ne pozivamo API svaki put, već da se podaci keširaju i iskoriste ponovo.
     \item \textbf{Deklarativnost.} Želimo da se oslobodimo pisanja proceduralne logike za dohvatanje podataka, tako što to izvršimo na deklarativan način pisanjem odgovarajuće konfiguracije.
@@ -1103,22 +1152,412 @@ export const getServerSideProps = wrapper.getServerSideProps(
 \end{lstlisting}
 \end{figure}
 
-S druge strane, podacima se u komponentama može pristupiti odgovarajućim React udicama (eng. hooks) \cite{reactdocshooks}  koje se takođe automatski generišu.
+S druge strane, podacima se u komponentama može pristupiti odgovarajućim React udicama (eng. hooks) \cite{reactdocshooks}  koje se takođe automatski generišu. Pozivanje odgovarajućeg hook-a izaziva dohvatanja podataka klijentski ukoliko ti podaci već ne postoje u skladištu (ukoliko već nisu dohvaćeni serverski). Hook-ovi ispoljavaju, između ostalog, stanja učitavanja, greške ili uspeha.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={Korišćenje RTKQ hook-ova.}]
+function TicketViewPage() {
+  const router = useRouter();
+  const id = router.query.ticketId;
+
+  const { isLoading, isFetching, isError } = useGetTicketQuery({
+    id,
+    ...getTicketViewQueryParams(),
+  });
+\end{lstlisting}
+\end{figure}
+
+\newpage
+\subsection{Mutacije podataka}
+
+Mutacije podataka pomenute su ukratko u \ref{sec:datafetchingandconfiguration} i prikazana je njihova konfiguracija u propratnom primeru k\^{o}da. Mutacije se skoro po pravilu koriste isključivo klijentski\footnote{Nema previše smisla izazivati mutacije podataka sa serverske strane, jer se uvek dešavaju na zahtev korisnika.}, tako da za njih RTKQ obezbeđuje hook-ove isto kao i za obično dohvatanje podataka.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={Korišćenje RTKQ mutacija na primeru dodavanja komentara na tiket.}]
+function TicketViewPage() {
+  const [addComment,
+        { isLoading, isSuccess }] = useAddCommentMutation();
+
+  const handleSubmitComment = (comment) => {
+    addComment({ id: ticket.id, body: comment, isInternal });
+  };
+\end{lstlisting}
+\end{figure}
 
 
+\section{Internacionalizacija}
+\label{sec:intl}
+
+Frontend kao deo aplikacije koji je direktno zadužen za prikaz grafičkog korisničkog interfejsa prirodno nosi pitanja koja se odnose na način prikazivanja sadržaja neke vrste. 
+
+Definicija internacionalizacije je veoma opšteg karaktera, i na osnovu \cite{i18n} svodi se na dizajn i razvoj sadržaja prozivoda, aplikacije ili dokumenta koji omogućava lako prilagođavanje kulturi, regionu ili jeziku. U užem smislu, iz ugla frontend razvoja, razmatraju se uglavnom sadržaji sledećeg tipa:
+
+\begin{itemize}
+    \item \textbf{Tekstualni sadržaj.} Skoro svaki deo korisničkog interjsa sadrži neki tekstualni sadržaj. Iako je moguće takav sadržaj zapisati direktno u k\^{o}du (eng. hardcode) ipak je bolje imati sistem koji tekstualne sadržaje drži izdvojeno, i po potrebi omogućava višejezičnost - kada korisnik promeni željeni jezik menjaju se i svi tekstualni sadržaji bez ikakve specijalne izmene u k\^{o}du.
+    \item \textbf{Formati datuma i vremena.} Način zapisa datuma i vremena zavisi od regiona, tako da bi bilo dobro imati sistem takav da se takve vrednosti automatski prilagođavaju korisničkom regionu.
+    \item \textbf{Formati valuta.} Moguće je koristiti komponente koji automatksi konvertuju novčane iznose iz jedne valute u drugu.
+\end{itemize}
+
+
+
+U ovom radu urađena je samo prva stavka - podržani su srpski i engleksi jezik. Za potrebe čuvanja trenutnog jezika koristi se \textit{Accept-Language} HTTP zaglavlje (eng. HTTP header) u kombinaciji sa odgovarajućom vrednošću \textit{language\_code} kolačića (eng. cookie). na klijentskoj strani.
+
+U sekciji \ref{sec:tagsystem} pomenuto je kako sistem oznaka koristi internacionalizaciju za nazive i opise oznaka. Upravo podešavanje \textit{Accept-Language} zaglavlja omogućuju da nam API vrati podatke na odgovarajućem jeziku.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={Postavljanje Accept-Language zaglavlja u RTKQ prilikom API zahteva.}]
+const baseQuery = fetchBaseQuery({
+  baseUrl: '...',
+  prepareHeaders: (headers, api) => {
+    // ...
+    const ctx = api?.extra?.ctx;
+    const languageCode =
+      (isServer()
+        ? parseCookie(ctx?.req?.headers?.cookie).language_code ?? ''
+        : Cookies.get('language_code')) ?? 'en';
+
+    headers.set('Accept-Language', languageCode);
+    return headers;
+  },
+});
+\end{lstlisting}
+\end{figure}
+
+Sa druge strane, za kontrolu prikaza sadržaja na grafičkom korisničkom interfejsu koristi se kombinacija biblioteka \textit{react-intl} i \textit{formatjs} \cite{formatjsdocs}. Naime, tekstualni sadržaji koje želimo da internacionalizujemo na sajtu nazivaju se \textit{poruke} (eng. messages) i definišu se odgovarajućim funkcijama u k\^{o}du, zajedno sa svojim podrazumevanim vrednostima. Primer \ref{lst:definingmessages} prikazuje definisanje nekih poruka za stranicu koja prikazuje tiket.
+
+Pokretanjem komande \verb|npm run i18n|, definisane kao skripte u okviru fajla $package.json$ vrše se \textit{ekstrakcija} i \textit{kompilacija} poruka. Ekstrakcija predstavlja proces izvlačenja svih poruka iz fajlova koji definišu poruke na način prikazan u primeru \ref{lst:definingmessages} u odgovarajuće JSON fajlove. Kompajliranje prevodi te fajlove u oblik prikladan korišćenju u produkciji. Delovi tih fajlova prikazani su u primeru \ref{lst:messagsjsonfiles}.
+
+Na kraju, poruke se koriste odgovarajućin hook-ovima ili komponentama biblioteke react-intl, kao što prikazuje primer \ref{lst:messagesusage}
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={Definisanje poruka.}, label={lst:definingmessages}]
+export const ticketViewMessages = defineMessages({
+  cannotCommentOnThisTicket: {
+    id: 'ticket-view.cannot-comment',
+    defaultMessage: 'You cannot comment on this ticket',
+  },
+  publicCommentButtonText: {
+    id: 'ticket-view.public-comment-button-text',
+    defaultMessage: 'Public',
+  },
+  internalCommentButtonText: {
+    id: 'ticket-view.internal-comment-button-text',
+    defaultMessage: 'Internal',
+
+\end{lstlisting}
+\end{figure}
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={JSON fajlovi sa porukama.}, label={lst:messagsjsonfiles}]
+// en.json - nekompajlirana verzija
+{
+  "admin-link.metrics": "Metrics",
+  "admin-links.home-page": "Home",
+  "admin-links.tags": "Tags",
+  ...
+
+// en.json - kompajlirana verzija
+{
+  "admin-link.metrics": [
+    {
+      "type": 0,
+      "value": "Metrics"
+    }
+  ],
+  "admin-links.home-page": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
+  "admin-links.tags": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+\end{lstlisting}
+\end{figure}
+
+\begin{figure}[h]
+\begin{lstlisting}[language=JavaScript, style=ES6, caption={Korišćenje poruka}, label={lst:messagesusage}]
+const intl = useIntl();
+// ...
+return (<Button type="submit">
+            {intl.formatMessage(formsMessages.submit)}
+        </Button>)
+\end{lstlisting}
+\end{figure}
+
+Napomenućemo da bi sofisticirani sistem internacionalizacije podržao čuvanje vrednosti u bazi podataka i njihovo eksportovanje u JSON fajlove, čime bi se omogućilo dinamičko menjanje vrendosti translacija bez ponovnog pokretanja aplikacije. To je, ipak, u ovom radu ostavljeno kao moguće poboljšanje.
 
 % ------------------------------------------------------------------------------
 
 % ------------------------------------------------------------------------------
 \chapter{Analitika}
+
 \section{Skladišta podataka, ETL procesi}
 \section{Prikaz metrika, biblioteka Streamlit}
 % ------------------------------------------------------------------------------
 
 % ------------------------------------------------------------------------------
-\chapter{Devops}
-\section{Virtuelizacija, sistem Docker}
+\chapter{DevOps}
+
+Pojam DevOps (nastao od engleske sintagme \textit{Development Operations} - u bukvalnom prevodu \textit{razvojne operacije}) predstavlja relativno mladu granu softverskog inženjerstva. U svojoj najužoj definiciji, prema \cite{zdevopsarticle}, kaže se da DevOps opisuje usvajanje iterativnog razvoja softvera, automatizaciju i programabilne infrastrukture za otpremanje\footnote{eng. deployment} i održavanje softverskog sistema.
+
+U nekim krugovima poistovećuje se sa ulogom sistemskih administratora dok drugi tvrde da je to potpuno zasebna profesija. Čiju god stranu zauzeli moramo se složiti da sa masovnim razvojem različitih tehnologija, okruženja i platformi nastaju novi problemi koji ne potpadaju pod tradicionali pojam softverskog inženjerstva gde uglavnom obuhvatamo razvoj domenskih funckionalnosti. Naime, ukoliko kažemo da je zadatak \textit{"implementirati dugme na stranici za prikaz tiketa kojim se zatvara tiket"} potpuno je jasno da se tim zadatkom neće baviti devops inženjer, dok bi na primer zadatak \textit{implementirati sistem za periodično pravljenje i čuvanje rezervnih kopija baze podataka} upravo zapao tom inženjeru.
+
+Interesantno opažanje primećeno u \cite{devopshandbook} je da u mnogim kompanijama postoji neprekidna kontrateža između odeljenja za razvoj i odeljenja za razvojne operacije, uprkos činjenici da je kranji cilj isti. Na primer, inženjeru kome je zadatak da implementira jedan mali server za nekoliko API pristupnih tačaka od nule biće lakše da taj server pokrene direktno na produkcionoj mašini i neretko će zahtevati da se "napravi izuzetak" usled skromne veličine projekta. DevOps inženjer bi skoro sigurno insistirao na tome da se čak i za najmanji takav server napravi odgovarajuća infrastruktura, recimo kroz Docker. Lako je zapitati se zašto se uopšte dovodi u pitanje vrednost poštovanja principa razvojnih operacija i zašto bi programer iz hipotetičkog scenarija ikada zahtevao da se napravi izuzetak. Odgovori na ova pitanja zalaze u poslovne aspekte softverskog inženjerstva gde je uvek pitanje toga ko donosi veću vrednost. Ovaj rad se uzdržava od dalje diskusije na tu temu jer je fokus primarno tehnički, ali napomenućemo da su istorijat DevOps-a i razni poslovni aspekti ove grane odlično obrađeni u \cite{devopshandbook}.
+
+
+\section{Kontejneri, sistem Docker}
+
+Istorija nastajanja Docker-a i kontejnerizacije uopšte interesantna je tema sama za sebe, i u \cite{dockerdeepdive} izložena je ukratko na sledeći način:
+\begin{enumerate}
+    \item \textbf{Korišćenje zasebnih servera za svaku aplikaciju.} U početku je bilo komplikovano, pa čak i nemoguće pokrenuti više zasebnih servera na istoj mašini, pa bi kompanije često išle u pravcu kupovanja ili iznajmljivanja zasebnih fizičkih servera za svaki aplikativni server.
+    \item \textbf{Virtuelne mašine.} Koncept koji je značajno olakšao stvari bile su virtuelne mašine. Ukratko, dozvoljavale su pokretanje proizvojnog broja istinski odvojenih okruženja na jednoj fizičkoj mašini. Mana ovakvog pristupa jeste da virtuelna mašina zahteva kompletan operativni sistem, a samim tim i dosta resursa u vidu RAM-a i procesorskog vremena.
+    \item \textbf{Kontejneri.} Kao rešenje koje ima za cilj da uzme najbolje od oba sveta nastaju kontejneri (eng. containters). Za razliku od virtuelnih mašina, svaki pokrenut kontejner koristi operativni sistem računara na kome se pokreće, a ipak održava nivo potpune izolovanosti.
+\end{enumerate}
+
+Docker je jedno od rešenja za rad sa kontejnerima, i izabrano je za potrebe ovog rada usled svoje popularnosti i rasprostranjenosti. Za mnoge programere čija je primarna delatnost razvoj poslovnih funckionalnosti Docker predstavlja crnu kutiju. Pojmovi kao što su \textit{docker engine}, \textit{slike (eng. images)} i \textit{orkestracija} stvaraju konfuziju ako se od početka ne posveti pažnja njihovom razumevanju, stoga ćemo se prilikom objašnjavanja koristiti analogijama sa nekim konceptima koji su poznati svim pogramerima.
+
+\subsection{Docker slike}
+
+Na početku poglavlja pomenuto je kako je jedan od zadataka DevOps-a između ostalog uspostavljanje programabilnug infrastruktura za otpremanje i održavanje softverskog sistema. Način na koji pravimo docker slike upravo se zasniva na programabilnosti. 
+
+Naime, docker slike treba shvatiti upravo po inspiraciji zbog koje se koriste - potrebno nam je izolovano okruženje jako specifične namene, i želimo takvog da ga napravimo. Pomenuli smo da virtuelne mašine nose sa sobom previše stvari koje nam nisu potrebne, najpre ceo operativni sistem i sve njegove module. Definicijom adekvatne docker slike izbegavamo korišćenje bespotrebnih resursa. 
+
+Dakle prilikom definisanja slike za pokretanje našeg bekend servera u režimu za razvoj\footnote{O produkcionoj postavci biće reči kasnije.} za sistem STS možemo pristupiti sledećim rezonovanjem:
+
+\begin{enumerate}
+    \item Potreban nam je Node.js
+    \item Potreban nam je CLI za okruženje \textit{@nestjs}
+    \item Potrebno je instalirati sve pakete deklarisane u fajlu \textit{package.json}
+    \item Potrebno je prekopirati izvorni k\^{o}d
+    \item Potrebno je pokrenuti razvojni server
+\end{enumerate}
+
+Jezik kojim se prave docker slike upravo je pravljen da što bliže oslika prirodni jezik opisivanja sistema, i prikazan je na \ref{lst:dockerimgbackendexample}.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=docker, caption={Slika za bekend server}, label={lst:dockerimgbackendexample}]
+FROM node:18-alpine3.16
+
+# Basic setup
+WORKDIR /app
+ENV NODE_ENV=development
+
+# Install nestjs cli
+RUN npm i -g @nestjs/cli@9.3.0
+
+# Install dependencies first to utilize build cache
+COPY package*.json ./
+RUN npm install
+
+# Copy the sourcecode
+COPY . .
+
+# Start the development server
+CMD ["npm", "run", "start:dev"]
+\end{lstlisting}
+\end{figure}
+
+\subsection{Docker kontejneri}
+
+Ako bismo postavljali analogiju između razvoja slika i kontejnera sa običnim razvojem aplikacija, onda bismo mogli reći da slika odgovara programu, a kontejner odgovara procesu. Na taj način gore definisana docker slika sama po sebi ne radi ništa ukoliko se ne pokrene u vidu kontejnera. 
+
+Nastavljajući analogiju, sliku moramo prvi izgraditi (eng. build) što bi odgovaralo procesu kompilacije. Ovu kompilaciju je bolje shvatiti ne kao prevod na mašinski jezik već kao prevod u međureprezentaciju koju je u stanju da izvršava docker engine. Docker CLI komandom na primeru \ref{lst:buildinglocal} možemo izgraditi sliku sa odgovarajućom oznakom (eng. tag).
+
+\newpage
+\begin{lstlisting}[caption={Izgradnja slike}, label={lst:buildinglocal}]
+docker build -f
+    services/api-main/docker/Dockerfile.development 
+    -t sts-api-local 
+    ./services/api-main 
+\end{lstlisting}
+
+Nakon izgradnje moguće je pokrenuti datu sliku u vidu kontejnera, sa nekoliko dodatnih konfiguracija koje se sastoje od:
+\begin{itemize}
+    \item \textbf{Vezivanje portova.} Opcijom \textit{-p} možemo navesti koji port kontejnera se vezuje za koji port domaćinskog operativnog sistema (eng. host OS). Ovo omoguaćava da aplikacija unutar kontejnera bude agnostična od zauzetosti portove.
+    \item \textbf{Povezivanje sa fajl sistemom.} U lokalnom razvojnom okruženju potreban nam je izvorni kod aplikacije koji možemo uvesti korišćenjem koncepta \textit{docker volume}-a. Oni predstavljaju apstrakciju medijskih uređaja, ali u ovom slučaju koristimo ih da povežemo određeni direktorijum unutar kontejnera sa hostom\footnote{Ovo se ostvaruje tehnologijom rsync. Izostavljamo detalje kako se to interno postiže, ali napominjemo jer se u praksi često koristi izraz rsync kao glagol. Neretko ćemo čuti da se kaže da su dva foldera "rsync-ovana".}.
+\end{itemize}
+
+Primer komande za pokretanje prikazan je u \ref{lst:dockerrunninglocal}.
+
+\newpage
+\begin{lstlisting}[caption={Pokretanje kontejnera}, label={lst:dockerrunninglocal}]
+docker run 
+    sts-api-local 
+    -v ./services/api-main:/app 
+    -p 3000:3000
+\end{lstlisting}
+
+Na ovaj način analogijom možemo reći da je naš kompajliran program pokrenut i sada predstavlja proces.
+
+\subsection{Orkestracija putem modula docker-compose}
+
+Proces prikazan u prethodne dve sekcije izgleda previše repetitivno, i još bitnije deluje da se može automatizovati. Ako bismo ovako razvijali aplikaciju morali bismo konstantno da ponavljamo korake:
+\begin{enumerate}
+    \item Izgradi sve slike komandama \textit{docker build}
+    \item Pokreni sve slike komandama \textit{docker run}
+\end{enumerate}
+
+Pri tom moramo uvek voditi računa da li odgovarajuće portove dobro vazujemo, da li vezujemo odgovarajuće fajlove i slično. Dijagram ovog procesa prikazan je na slici \ref{fig:dockermanual}. Čitav ovaj proces upravljanja stanjima kontejnera, njihovim pokretanjem i obaranjem, portovima i vezivanjem sa fajl sistemom možemo podvesti pod jedan sveobuhvatni pojam koji se naziva \textit{orkestracija}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{docs/images/ch_6/dockermanual.png} 
+  \caption{Proces pokretanja kontejnera.}
+  \label{fig:dockermanual}
+\end{figure}
+
+Postoje vrlo sofisticirani softverski sistemi za orkestraciju kontejnera, od koji se neki pokreću primarno u oblaku\footnote{Primer takvog sistema je AWS ECS.}. Sistem STS nije dizajniran za cloud okruženja već za varijantu samostalnog hostovanja (eng. self-hosting)\footnote{Jedna zanimljivost je da tokom pisanja ovog rada postoji veliki raskol u onlajn zajednicama programera da li je bolje koristiti cloud rešenja ili samostalno hostovanje. Slična rasprava vodi se oko promovisanja monolitnih okruženja kao superiornih u odnosu na mikroservise, što nekima deluje kao vraćanje u prošlost. Više reči o ovome u zaključku.}. Zbog toga orkestrator docker-compose zadovoljava sve zahteve.
+
+Skoro svi orkestratori zasnivaju se na konfiguraciji umesto na eksplicitnom programiranju ponašanja kontejnera (kao što smo prvobitni uradili koristeći bash skripte iz prethodnih sekcija). U slučaju docker-compose-a to se postiže pisanjem YAML fajlova. Konfiguracija u ovom fajlovima navodi koje sve servise sistem sadrži, koju sliku koriste ili na koji način se izgrađuju, konfiguracije portova i vezivanja fajl sistema, promenljive okruženja i slično. Primer konfigurisanja bekend i frontend servisa za lokalno okruženje date je u \ref{lst:dockercomposelocal}.
+
+Nakon ovakvog konfigurisanja čitavog sistema, upravljanje kompletnim okruženjem poprilično je jednostavno i može se postići sa nekoliko jednostavnih komandi prikazanih u \ref{lst:dockerlocalcommands}.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=docker-compose, caption={docker-compose konfiguracija nekih razvojnih servisa.}, label={lst:dockercomposelocal}]
+services:
+  api_main:
+    container_name: api-main-local
+    build:
+      context: ./services/api-main
+      dockerfile: ./docker/Dockerfile.development
+    environment:
+      MAIN_DB_USERNAME: ${MAIN_DB_USERNAME}
+      MAIN_DB_PWD: ${MAIN_DB_PWD}
+      JWT_SECRET: ${JWT_SECRET}
+      FIREBASE_KEY_PATH: "/app/certificates/sts-firebase-key.json"
+    ports:
+      - "3001:3000"
+    volumes:
+      - "./services/api-main:/app"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  ssr:
+    container_name: ssr-local
+    build:
+      context: ./services/ssr
+      dockerfile: ./docker/Dockerfile.development
+    ports:
+      - "3003:3000"
+    environment:
+      NODE_ENV: "development"
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+    volumes:
+      - "./services/ssr:/app/"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+\end{lstlisting}
+\end{figure}
+
+\newpage
+\begin{lstlisting}[caption={docker-compose komande.}, label={lst:dockerlocalcommands}]
+# Pokretanje svih servisa
+docker-compose up -d 
+
+# Obaranje svih servisa
+docker-compose down
+\end{lstlisting}
+
+Napomenućemo da docker-compose podržava i kompleksnije operacije kao što su skaliranje kontejnera\footnote{Uz propratne module kao što su docker-swarm.} kojima se u ovom radu ne bavimo. Napominjemo tu činjenicu da obeshrabrimo popularno mišljenje da za bilo kakav ozbiljan rad sa kontejnerima moramo odmah pribegavati naprednim sistemima kao što su \textit{AWS ECS} ili \textit{kubernetes}. Naravno da ti sistemi imaju svoju ulogu i veoma su moćni, ali njihovo preuranjeno korišćenje može doneti više štete nego koristi razvoju.
+
+
 \section{Reverzni proksi nginx}
+
+Uspostavljanjem docker-a kao sistema za pokretanje aplikacije rešili smo jedan problem - izolacija okruženja. U ovom trenutku imamo pet servisa pokrenutih kroz različite kontejnere i povezane na različite portove\footnote{Servisi su: baza podataka, Nest.js server, Next.js server, ETL i streamlit.}. Sledeće prirodno pitanje koje se nameće jeste kako korisnik pristupa veb sajtu i kako servisi komuniciraju jedni između drugih. Uzevši u obzir da se svi servisi pokreću na različitim portovima bilo bi neodrživo da svaka komponenta sistema mora da zna na kojim portovima su ostale, a potpuno suludo da korisnik sajta mora da zna na kom portu je hostovan glavni vebsajt (frontend).
+
+Očigledno je da nam je potrebna pristupna tačka celom sistemu za spoljašnji svet - jednom rečju potreban nam je \textbf{veb server}. Pri početku pogavlja \ref{sec:backend} izričito je napomeuta razlika između veb servera i aplikativnog servera. Pod aplikativnim serverom mislimo na HTTP server u odgovarajućem veb okruženju (u našem slučaju Next.js ili Nest.js) koji služi za obradu zahteva ili (u slučaju serverskog renderovanja) generisanje HTML-a. Ovi serveri treba da se bave isključivo svojim ulogama i da se ne brinu o stvarima kao što su provera SSL sertifikata, serviranje statičkih fajlova i slično. Navedeni zadaci, naravno uz još mnogo, potpadaju pod ulogu veb servera.
+
+Tok korisničkog zahteva uprošćeno možemo shvatiti na sledeći način, kao što je prikazano u \cite{webvsappserver}:
+\begin{enumerate}
+    \item Korisnik pokuša da pristupi određenom resursu putem URL-a.
+    \item Zahtev prvo stiže do veb servera\footnote{Ukoliko se dodatno koristi mreža za dostavljanje sadržaja (eng. Content Delivery Network - CDN), recimo Cloudflare, onda bi zahtev tehnički prvo prošao kroz nju, ali svakako veb server treba da bude agnostičan od toga.}. Ukoliko se koristi HTTPS veb server vrši proveru sertifikata i bezbednosti konekcije.
+    \item U zavisnosti od URL-a veb server odlučuje da li može sam da odgovori ili ne. Ukoliko može, na primer ako je zahtev za statičkim sadržajem kao što su slike, veb server odgovara i komunikacija se završava.
+    \item U suprotnom veb server delegira posao odgovarajućem aplikativnom serveru.
+\end{enumerate}
+
+$nginx$ \cite{nginxdocs} nam omogućava sve od navedenog. Kada ga koristimo za delegiranje zadataka aplikativnim serverima onda kažemo da zauzima ulogu obrnutog ili reverznog proksija (eng. reverse proxy). Razlog takvog imenovanja jeste upravo u smeru prosleđivanja zahteva - klasičan proksi prosleđuje zahteve eksternim servisima, dok reverzni proksi prosleđuje zahteve "sam na sebe". 
+
+Dijagram \ref{fig:dockerandnginxfinal} prikazuje nacrt celog sistema.
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{docs/images/ch_6/dockernadnginxfinal.png} 
+  \caption{Proces pokretanja kontejnera.}
+  \label{fig:dockerandnginxfinal}
+\end{figure}
+
+
+\newpage
+\section{Produkciono okruženje, višefazna izgradnja slika, DockerHub}
+
+Za kraj napominjemo male razlike između konfiguracije lokalnog okruženja prikazanog u prethodnim sekcija i produkcionog, od čega je najveća razlike u docker slikama. Naime, u produkciji nema potrebe da otpremamo izvorni k\^{o}d aplikacija kao što to radimo u lokalnom okruženju\footnote{U lokalnom okruženju nam je potreban izvorni k\^{o}d kako bismo mogli da razvijamo uživo, tj da se promene u k\^{o}du odmah reflektuju.}, već u docker sliku možemo kopirati samo neophodne fajlove za pokretanje.
+
+
+\subsection{Višefazna izgradnja}
+Na primer, u slučaju Nest.js API-a dovoljno je imati samo nekoliko fajlova i foldera: 
+\begin{itemize}
+    \item \textbf{node\_modules} folder koji sadrži instalirane Node.js pakete.
+    \item \textbf{dist} folder koji sadrži kompajliran produkcioni k\^{o}d.
+    \item \textbf{package.json} fajl kako bismo pokretali skripte.
+\end{itemize}
+
+Izgradnju docker slika koji sadrže samo potrebne fajlove i odbacuju sve što nije potrebno usput možemo postići korišćenjem višefaznih izgradnji (eng. multiphase build). Dockerfile možemo organizovati u više faza, gde iz svake faze kopiramo isključivo fajlove koji su potrebni na samom kraju. Ovakav način izgradnja slika prikazan je u primeru \ref{lst:mfbuild}.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=docker, caption={Višefazna izgradnja slike za API servis.}, label={lst:mfbuild}]
+# Install deps
+FROM node:18-alpine3.16 as deps
+WORKDIR /app
+COPY ./package.json ./
+COPY ./package-lock.json ./
+RUN npm ci
+
+# Build
+FROM node:18-alpine3.16 as builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+# Run
+FROM node:18-alpine3.16 as runner
+WORKDIR /app
+ENV NODE_ENV production
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/dist ./dist
+EXPOSE 3000
+ENV PORT 3000
+CMD ["node", "dist/main"]
+\end{lstlisting}
+\end{figure}
+
+\subsection{DockerHub}
+
+Kao dodatno olakšanje za pokretanje produkcione varijante sistema STS, sve slike možemo otpremiti na DockerHub koji predstavlja onlajn servis za pronalaženje i deljenje docker slika \cite{dockerhubdocs}. Besplatan plan koji nudi DockerHub, u trenutku pisanja ovog rada, omogućava hostovanje neograničeno mnogo javnih slika, što je više nego dovoljno za potrebe sistema STS. 
+
+S tim u vidu napravljene su produkcione skripte koje se mogu naći u folderu $bin$ u izvornom k\^{o}du koje se bave izgradnjom i otpremanjem produkcionih slika. Primer ovih komandi vidimo u \ref{lst:prodscriptsexample}.
+
+\begin{lstlisting}[caption={docker-compose komande.}, label={lst:prodscriptsexample}]
+# Komanda za izgradnju API slike (fajl sts-build)
+docker build -f 
+    ./services/api-main/docker/Dockerfile.production 
+    -t aleksakojadinovic/sts:api-latest 
+    ./services/api-main
+
+# Komanda za otpremanje slike (fajl sts-push)
+docker push aleksakojadinovic/sts:api-latest
+
+\end{lstlisting}
+
+Produkciona docker-compose konfiguracija sada ne mora uopšte zavisiti od postojanja Dockerfile-ova već može direktno pokretati slike sa DockerHub-a. Na taj način postigli smo da na konačnom fizičkom\footnote{Naglašavamo fizičkom jer mislimo na pravu instancu servera gde ćemo pokretati docker. Ipak pojam fizičkog servera i ovde treba uzeti sa rezervom jer su u oblaku i takvi serveri virtuelni samo na višem nivou. Svakako iz našeg ugla smatramo ih za fizičke servere.} serveru na kom pokrećemo sistem ne moramo niti imati izvorni k\^{o}d niti klonirati git repozitorijum izvornog k\^{o}da - možemo docker-compose konfiguraciu držati u zasebnom repozitorijumu. Ipak je za naše potrebe sve obuhvaćeno u jednom repozitorijumu kako bi služio kao centralni izvor svega pokrivenog u ovom radu.
+
 % ------------------------------------------------------------------------------
 
 % ------------------------------------------------------------------------------
