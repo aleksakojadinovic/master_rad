@@ -311,7 +311,7 @@ Sledeće dve slike prikazuju kontrolnu tablu na kojoj administatori mogu upravlj
 \newpage
 \subsection{Upravljanje korisnicima}
 
-Administratori poseduju mogućnost upravljanja korisnicima sajta putem kontrolne table na adresi \textit{manage/users}. Tabla prikazuje listu svih korisnika i akcije koje mogu biti primenjene nad njima. Od akcija podržana je promena tipa korisnika (pod određenim uslovima) i promena statusa korisnika.
+Administratori poseduju mogućnost upravljanja korisnicima sajta putem kontrolne table na adresi \verb|manage/users|. Tabla prikazuje listu svih korisnika i akcije koje mogu biti primenjene nad njima. Od akcija podržana je promena tipa korisnika (pod određenim uslovima) i promena statusa korisnika.
 
 \begin{figure}[h]
   \centering
@@ -354,10 +354,10 @@ ER modelovanje neretko se dovodi u vezu sa modelovanjem relacionih baza podataka
 \subsection{Odnos tiketa i korisnika, složeni odnosi}
 Primećujemo da dva glavna entiteta - tiket i korisnik - mogu biti u više različitih odnosa:
 \begin{itemize}
-    \item Korisnik može kreirati više tiketa (odnos \textit{creates}), dok tiket može biti kreiran od strane samo jednog korisnika.
-    \item Korisnik može komentarisati na tiket (odnos \textit{comments}). Primećujemo da ovaj odnos sadrži dodatne podatke, kao što su identifikator, telo i vreme komentara.
-    \item Korisnik može biti dodeljen tiketu (odnos \textit{is\_assigned\_to}), i tu dodelu može izvršiti drugi korisnik, označen atributom \textit{initiator}.
-    \item Korisnik može menjati status tiketa (odnos \textit{changes\_status}).
+    \item Korisnik može kreirati više tiketa (odnos \verb|creates|), dok tiket može biti kreiran od strane samo jednog korisnika.
+    \item Korisnik može komentarisati na tiket (odnos \verb|comments|). Primećujemo da ovaj odnos sadrži dodatne podatke, kao što su identifikator, telo i vreme komentara.
+    \item Korisnik može biti dodeljen tiketu (odnos \verb|is_assigned_to|), i tu dodelu može izvršiti drugi korisnik, označen atributom \verb|initiator|.
+    \item Korisnik može menjati status tiketa (odnos \verb|changes_status|).
 \end{itemize}
 
 Kompleksni odnosi, kao što su komentarisanje i dodeljivanje, u relacionoj bazi podataka morali bi biti izvedeni odgovarajućim zasebnim veznim relacijama. Na primer, u slučaju komentarisanja, ako bi korisnik i tiket bili predstavljani sledećim relacijama (koristimo relacionu notaciju):
@@ -376,7 +376,7 @@ tada bi nam za komentar bila potrebna dodatna relacija koja sadrži identifikato
 \textbf{Comment}(\underline{comment\_id}, user\_id, ticket\_id, body, timestamp)    
 \end{center}
 
-Kako koristimo MongoDB i dokumentni model podataka, imamo mogućnost da komentare čuvamo u okviru dokumenta tiketa. Tačnije, u sloju baze podataka, ovi komentari se ne čuvaju eksplicitno, već kroz sistem istorije tiketa. Ukratko, svaka promena nad tiketom se pamti kao jedan događaj u nizu \textit{history}, uz odgovarajući tip promene i neophodne podatke.
+Kako koristimo MongoDB i dokumentni model podataka, imamo mogućnost da komentare čuvamo u okviru dokumenta tiketa. Tačnije, u sloju baze podataka, ovi komentari se ne čuvaju eksplicitno, već kroz sistem istorije tiketa. Ukratko, svaka promena nad tiketom se pamti kao jedan događaj u nizu \verb|history|, uz odgovarajući tip promene i neophodne podatke.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Tip podataka istorije tiketa.}]
@@ -497,7 +497,7 @@ function updateComment(...) {
 \end{figure}
 
 \newpage
-U ovom primeru primećujemo prisustvo domena u svim aspektima. Metode kao što su $isFinalStatus$ i $isOwner$ i semantičke klase grešaka kao \textit{CannotChangeTicketInFinalStatus} doprinose da određeni delovi k\^{o}da dostižu nivoe čitljivosti bliske prirodnom jeziku.
+U ovom primeru primećujemo prisustvo domena u svim aspektima. Metode kao što su \verb|isFinalStatus| i \verb|isOwner| i semantičke klase grešaka kao \verb|TicketNotFoundError| doprinose da određeni delovi k\^{o}da dostižu nivoe čitljivosti bliske prirodnom jeziku.
 
 \subsection{Slojevita arhitektura}
 Prilikom izrade softvera, usled rokova i nedostatka resursa, neretko dolazi do isprepletanosti poslovne logike, logike korisničkog interfejsa, logike pristupa bazi podataka i drugih komponenti sistema \cite{dddfull}. Ovakve odluke u razvoju, iako rezultuju kratkoročnim rešenjem, dugoročno dovode do borbe sa onim što kolokvijalno nazivamo \textit{tehnički dug} (eng. technical debt). Postojanje tehničkog duga javlja se i iz drugih odluka tokom razvoja i u praksi je pokazano da opšte rešenje ovog problema ne postoji; svaki tim se pre ili kasnije sretne sa tehničkim dugom koji otežava i usporava rad. Ipak, ta neminovnost ne treba da obeshrabri rano uvođenje dobrih praksi kao što je raslojavanje arhitekture. 
@@ -513,7 +513,7 @@ DDD razaznaje četiri sloja, s tim što u ovom pogavlju razmatramo prva tri, dok
 
 \section{Okruženje NestJS}
 
-NestJS \cite{nestjsdocs} je Node.js okruženje za razvoj serverskih aplikacija. Izgrađeni je nad bibliotekom \textit{express} \cite{expressjsdocs} koja je i danas popularan izbor za izradu manjih serverskih aplikacija kao i za edukativne svrhe.  U srž ovog okruženja ugrađeni su koncepti modula, servisa i umetanja zavisnosti (eng. Dependency Injection - DI), što ga čini idealnim za konstrukciju aplikacije zasnovane na DDD principima.
+NestJS \cite{nestjsdocs} je Node.js okruženje za razvoj serverskih aplikacija. Izgrađeni je nad bibliotekom \verb|express| \cite{expressjsdocs} koja je i danas popularan izbor za izradu manjih serverskih aplikacija kao i za edukativne svrhe.  U srž ovog okruženja ugrađeni su koncepti modula, servisa i umetanja zavisnosti (eng. Dependency Injection - DI), što ga čini idealnim za konstrukciju aplikacije zasnovane na DDD principima.
 
 Osnovni gradivni elementi NestJS aplikacije su \textit{moduli}. Svaki modul obuhvata jednu smislenu celinu aplikacije koja može sadržati \textit{kontrolere} i \textit{provajdere}. U slučaju DDD-a, modul odgovara jednom izolovanom kontekstu\footnote{eng. Bounded Context \cite{dddfull}}. Module definišemo na deklarativni način, pri čemu u okviru modula možemo uvoziti i druge module kako bismo postigli saradnju različitih delova sistema.
 
@@ -543,7 +543,7 @@ export class TicketsModule {}
 \end{lstlisting}
 \end{figure}
 
-Kao što je jasno sa primera, NestJS se u velikoj meri oslanja na metaprogramiranje i mogućnosti jezika \textit{typescript} u vidu dekoratora. Prilikom pokretanja NestJS aplikacije vrši se korak poznat kao \textbf{bootstrap}, odnosno priprema aplikacije za rad. U tom koraku se razrešavaju sve međuzavisnosti modula i servisa i instanciraju sve klase kojima se upravlja putem umetanja zavisnosti.
+Kao što je jasno sa primera, NestJS se u velikoj meri oslanja na metaprogramiranje i mogućnosti jezika \verb|typescript| u vidu dekoratora. Prilikom pokretanja NestJS aplikacije vrši se korak poznat kao \textbf{bootstrap}, odnosno priprema aplikacije za rad. U tom koraku se razrešavaju sve međuzavisnosti modula i servisa i instanciraju sve klase kojima se upravlja putem umetanja zavisnosti.
 
 Što se tiče strukture direktorijuma i fajlova u okviru projekta, korišćen je hibrid između mnogo sistema viđenih u praktičnom radu. Takva struktura najbolje odgovara zahtevima okruženja i sistema koji modelujemo. Primer strukture prikazan je u \ref{lst:dddfolderstructure}.
 
@@ -569,7 +569,7 @@ Sloj infrastrukture ima više uloga u DDD sistemu, ali zajednička osobina je od
 
 
 \subsection{Repozitorijumi}
-Apstrakcija koju pruža sloj repozitorijuma ogleda se upravo u načinu na koji on obrađuje podatke pre vraćanja u više slojeve, tačnije služi se \textbf{šablonom preslikavanja podataka} (eng. Data mapper pattern). Uloga mapiranja podataka uglavnom je u praksi delegirana konkretnoj biblioteci ili okruženju koja upravlja pristupom bazi putem softverskog segmenta iz klase Objektno-relacionih ili Objektno-dokumentnih preslikavača (eng. Object Relational Mapper - ORM, Object Document Mapper - ODM). Iako ti sistemi često u potpunosti zadovoljavaju potrebe mapiranja podataka, u ovom radu je mapiranje urađeno ručno, tako da se objekti dobijeni ODM slojem, odnosno bibliotekom \textit{mongoose} \cite{mongoosedocs}, preslikavaju u entitete koristeći biblioteku \textit{@automapper/js} \cite{automapperjsdocs}.
+Apstrakcija koju pruža sloj repozitorijuma ogleda se upravo u načinu na koji on obrađuje podatke pre vraćanja u više slojeve, tačnije služi se \textbf{šablonom preslikavanja podataka} (eng. Data mapper pattern). Uloga mapiranja podataka uglavnom je u praksi delegirana konkretnoj biblioteci ili okruženju koja upravlja pristupom bazi putem softverskog segmenta iz klase Objektno-relacionih ili Objektno-dokumentnih preslikavača (eng. Object Relational Mapper - ORM, Object Document Mapper - ODM). Iako ti sistemi često u potpunosti zadovoljavaju potrebe mapiranja podataka, u ovom radu je mapiranje urađeno ručno, tako da se objekti dobijeni ODM slojem, odnosno bibliotekom \verb|mongoose| \cite{mongoosedocs}, preslikavaju u entitete koristeći biblioteku \verb|@automapper/js| \cite{automapperjsdocs}.
 
 \begin{figure}[h]
   \centering
@@ -579,9 +579,9 @@ Apstrakcija koju pruža sloj repozitorijuma ogleda se upravo u načinu na koji o
 \end{figure}
 
 Prirodno se nameće pitanje dohvatanja povezanih entiteta, ili konkretnije rad sa agregatima. U ovom radu implementiran je sistem \textbf{pohlepnog učitavanja} (eng. eager loading), kojim se svi povezani entiteti zahtevanog entiteta dohvataju odmah prilikom zahteva ka glavnom entitetu. U nekim sistemima ovakav izbor ne bi bio idealan, međutim takva odluka doneta je usled činjenice da je dizajn baze podataka relativno jednostavan, a lakoća implementacije i korišćenja nadmašuje cene u performansama koje su minimalne. Kombinacijom metode $populate$ 
- iz biblioteke \textit{mongoose}, kao i rekurzivne prirode biblioteke \textit{automapper/js}, ovo se lako postiže.
+ iz biblioteke \verb|mongoose|, kao i rekurzivne prirode biblioteke \verb|automapper/js|, ovo se lako postiže.
 
-U primeru \ref{lst:repositoryhead} vidimo zaglavlje klase \textit{TicketsRepository}. Kao i sve ostale repozitorijumske klase, oslanjaju se na model klase dobijene od strane biblioteke \textit{mongoose} i deklarišu niz koji predstavlja sve putanje koje treba popuniti zarad implementacije pohlepnog učitavanja.
+U primeru \ref{lst:repositoryhead} vidimo zaglavlje klase \verb|TicketsRepository|. Kao i sve ostale repozitorijumske klase, oslanjaju se na model klase dobijene od strane biblioteke \verb|mongoose| i deklarišu niz koji predstavlja sve putanje koje treba popuniti zarad implementacije pohlepnog učitavanja.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Repozitorijum tiketa, konstrukcija i niz POPULATE.}, label={lst:repositoryhead}]
@@ -633,9 +633,9 @@ async findById(id: string): Promise<Ticket | null> {
 \newpage
 \subsection{Sheme, mutacije podataka, šablon Event Sourcing}
 \label{sec:eventsourcing}
-Osim repozitorijuma, sloj infrastrukture prirodno sadrži i definicije shema biblioteke \textit{mongoose}. Iz ugla programera, ovi objekti su najbliža pristupna tačka bazi podataka i podržavaju operacije upita i mutacija nad realnim podacima u bazi. Takav jedan upit viđen je na isečku \ref{lst:repofetch} u prethodnoj sekciji.
+Osim repozitorijuma, sloj infrastrukture prirodno sadrži i definicije shema biblioteke \verb|mongoose|. Iz ugla programera, ovi objekti su najbliža pristupna tačka bazi podataka i podržavaju operacije upita i mutacija nad realnim podacima u bazi. Takav jedan upit viđen je na isečku \ref{lst:repofetch} u prethodnoj sekciji.
 
-Na ovom mestu bavimo se mutacijama podataka, i to baš tiketa. Osim prikaza rada sa mutiranjem podataka kroz biblioteku \textit{mongoose}, ovaj primer služi da ilustruje dualnu prirodu tiketa kao entiteta i njegovu potpunu različitost u strukturi između sloja infrastruktura i sloja domena. Naime, kao što će biti prikazano u sledećem poglavlju, tiket u sloju domena je jednostavna klasa koja sadrži sve podatke o datom tiketu. Ipak, u sloju infrastrukture, a radi veće fleksibilnosti i mogućnosti praćenja istorije, upotrebljena je varijanta šablona \textit{Event Sourcing}. Osnovno načelo ovog šablona je da umesto čuvanja eksplicitnog stanja objekta čuvamo istoriju njegovih promena.
+Na ovom mestu bavimo se mutacijama podataka, i to baš tiketa. Osim prikaza rada sa mutiranjem podataka kroz biblioteku \verb|mongoose|, ovaj primer služi da ilustruje dualnu prirodu tiketa kao entiteta i njegovu potpunu različitost u strukturi između sloja infrastruktura i sloja domena. Naime, kao što će biti prikazano u sledećem poglavlju, tiket u sloju domena je jednostavna klasa koja sadrži sve podatke o datom tiketu. Ipak, u sloju infrastrukture, a radi veće fleksibilnosti i mogućnosti praćenja istorije, upotrebljena je varijanta šablona \textit{Event Sourcing}. Osnovno načelo ovog šablona je da umesto čuvanja eksplicitnog stanja objekta čuvamo istoriju njegovih promena.
 
 Na isečku \ref{lst:ticketschema} vidimo deo klase koja predstavlja shemu za rad sa tiketima.
 
@@ -667,7 +667,7 @@ export class TicketDb extends Document {
 
 
 \newpage
-Niz \textit{history} predstavlja promene primenjene na datom tiketu na osnovu kojih se može izvesti trenutno stanje tiketa. Ipak, prirodno se postavlja pitanje zašto se, osim istorije promena, čuvaju i eksplicitna polja kao što su \textit{status}, \textit{title}, \textit{body} i drugi, budući da se ti podaci mogu izvući putem istorije. Razlog leži u performansama pretrage. Ukoliko bismo čuvali samo listu promena, a ne sliku trenutnog stanja (eng. snapshot), svaka pretraga bila bi linearne vremenske složenosti u odnosu na dužinu istorije, što bi rezultovalo lošim performansama.
+Niz \verb|history| predstavlja promene primenjene na datom tiketu na osnovu kojih se može izvesti trenutno stanje tiketa. Ipak, prirodno se postavlja pitanje zašto se, osim istorije promena, čuvaju i eksplicitna polja kao što su \verb|status|, \verb|title|, \verb|body| i drugi, budući da se ti podaci mogu izvući putem istorije. Razlog leži u performansama pretrage. Ukoliko bismo čuvali samo listu promena, a ne sliku trenutnog stanja (eng. snapshot), svaka pretraga bila bi linearne vremenske složenosti u odnosu na dužinu istorije, što bi rezultovalo lošim performansama.
 
 Sa ovakvom postavkom, mutacije nad tiketom postižu se diferencijacijom prosleđenog entiteta i entiteta iz baze podataka (primer \ref{lst:repodiff}).
 
@@ -703,7 +703,7 @@ Sa ovakvom postavkom, mutacije nad tiketom postižu se diferencijacijom prosleđ
 
 
 \newpage
-Za kraj, na primeru komentara nad tiketom, prikazujemo uprošćenu verziju mapiranja iz oblika u sloju infrastrukture u domenski entitet, dok se puna verzija nalazi u izvornom k\^{o}du u fajlu \textit{ticket.entity-profile.ts}.
+Za kraj, na primeru komentara nad tiketom, prikazujemo uprošćenu verziju mapiranja iz oblika u sloju infrastrukture u domenski entitet, dok se puna verzija nalazi u izvornom k\^{o}du u fajlu \verb|ticket.entity-profile.ts|.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Mapiranje komentara tiketa.}]
@@ -853,7 +853,7 @@ this.ticketsRepository.update(ticket, user);
 \newpage
 \textbf{Priprema i vraćanje odgovarajućeg odgovora}
 
-Gde pritom koristimo servis \textit{TicketRedactionService} kako bismo otklonili podatke koje dati tip korisnika ne bi trebalo da vidi.
+Gde pritom koristimo servis \verb|TicketRedactionService| kako bismo otklonili podatke koje dati tip korisnika ne bi trebalo da vidi.
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Korak pripreme i vraćanja odgovora.}]
 this.ticketRedactionService.prepareResponse(updatedTicket, user);
@@ -889,15 +889,17 @@ export class BaseError {
 \end{lstlisting}
 \end{figure}
 
-Na ovaj način imamo uniforman interfejs kako svaka greška treba da izgleda, sa dovoljno fleksibilnosti da pokrije sve domenske situacije. U k\^{o}du možemo primetiti sve od jednostavnih grešaka koje predstavljaju nepostojanje - primer \textit{TicketNotFound}, do grešaka koje ukazuju na kompleksnu sitaciju - primer \textit{CannotChangeCommentsOfAClosedTicket}. Na ovakav sistem mogu se uložiti nekoliko kritika, koje ćemo razjasniti.
+Na ovaj način imamo uniforman interfejs kako svaka greška treba da izgleda, sa dovoljno fleksibilnosti da pokrije sve domenske situacije. U k\^{o}du možemo primetiti sve od jednostavnih grešaka koje predstavljaju nepostojanje - primer \verb|TicketNotFound|, do grešaka koje ukazuju na kompleksnu sitaciju - primer \verb|CannotChangeCommentsOfAClosedTicket|. Na ovakav sistem mogu se uložiti nekoliko kritika, koje ćemo razjasniti.
 
 \textbf{Repetitivnost.}  
 Sve greške koje se odnose na nepostajanje entiteta imaju identičan oblik, pa se može uložiti primedba na ponavljanje k\^{o}da, i sugerisati kreiranje dodatnih apstrakcija. U ovom radu izbegli smo takav pristup iz dva razloga:
 \begin{itemize}
-    \item \textbf{Bespotrebne apstrakcije}. Iako je tehnički moguće apstrahovati greške nepostajanja entiteta u neki tip višeg nivoa - recimo \textit{EntityNotFoundError}, ovo uvodi previše jezičke kompleksnosti u domenski sloj, i na duge staze ne doprinosi ni čitljivosti ni razumevanju.
+    \item \textbf{Bespotrebne apstrakcije}. Iako je tehnički moguće apstrahovati greške nepostajanja entiteta u neki tip višeg nivoa - recimo \verb|EntityNotFoundError|, ovo uvodi previše jezičke kompleksnosti u domenski sloj, i na duge staze ne doprinosi ni čitljivosti ni razumevanju.
     \item \textbf{Fleksibilnost}. Ukoliko svaki entitet ima priliku da definiše svoje greške bez ograničenja međuapstrakcija, postiže se maksimalna fleksibilnost u okviru datog entiteta. Može se argumentovati da ovakav pristup olakšava potencijalni prelaz na mikroservisnu arhitekturu, po potrebi.
-    \item \textbf{Preterana ekspresivnost.} Na ovom mestu konkretno govorimo o dužini naziva nekih klasa, koje se mogu smatrati nečitljivim. Ipak, ako se podsetimo dela \ref{sec:dddukodu}, jasno nam je da dobitak na razumljivosti domena kroz k\^{o}d nadmašuje strah od dugačkih imena klasa.
 \end{itemize}
+
+
+\textbf{Preterana ekspresivnost.} Na ovom mestu konkretno govorimo o dužini naziva nekih klasa, koje se mogu smatrati nečitljivim. Ipak, ako se podsetimo dela \ref{sec:dddukodu}, jasno nam je da dobitak na razumljivosti domena kroz k\^{o}d nadmašuje strah od dugačkih imena klasa.
 
 
 Ostaje pitanje transformacije ovakvih grešaka u HTTP oblik. Jedno izrazito elegantno rešenje, koje nam pružaju mogućnosti okruženja NestJS, biće prikazano u sledećem pogavlju.
@@ -914,14 +916,14 @@ Ovo se postiže slojem aplikacije, tankim slojem bez poslovnog znanja čija glav
 \begin{itemize}
     \item \textbf{Odsustvo stanja.} Jedan moderan princip softverskog inženjerstva (u vreme pisanja ovog rada) jeste da komponente ili moduli sistema treba da imaju što manje stanja, a po mogućstvu da ga u potpunosti eleminišu\footnote{Ovaj princip postaje posebno primetan rastom popularnosti funkcionalnih programskih jezika.}. Način na koji ovo shvatamo u REST sistemima je sledeći - za dva API zahteva pod identičnim uslovima dobija se identičan odgovor. Dakle, ne postoji nikakav eksterni faktor samog aplikativnog sloja koji može uticati na odgovor koji korisnik (klijent) dobije, i smatra se da je klijent dužan da pruži kompletan kontekst potreban za obradu zahteva \cite{restapi}.
 
-    \item \textbf{Identifikacija resursa i HTTP metode.} Neretko u praksi srećemo takozvane API slojeve sa previše ekspresivnim delovima URI-a\footnote{eng. Uniform Resource Identifier - URI}. REST definiše nedvosmislen način za identifikaciju resursa i njihovu hijerarhiju, kao i pravilnu upotrebu HTTP metoda (glagola). Na taj način API pristupna tačka\footnote{eng. API endpoint} koja pruža mogućnost dohvatanja korisnika po identifikatoru po pravilu treba da bude dostupna putem GET metode, i to na URI-u nalik na \textit{api/users/123} \cite{restapi}. Primer nepravilnog URI-a bilo bi direktno navođenje akcije dohvatanja - \textit{api/get-user-by-id/213}. Na sličan način jasno je propisano koje metode se koriste za promenu, upis i brisanje entiteta.
+    \item \textbf{Identifikacija resursa i HTTP metode.} Neretko u praksi srećemo takozvane API slojeve sa previše ekspresivnim delovima URI-a\footnote{eng. Uniform Resource Identifier - URI}. REST definiše nedvosmislen način za identifikaciju resursa i njihovu hijerarhiju, kao i pravilnu upotrebu HTTP metoda (glagola). Na taj način API pristupna tačka\footnote{eng. API endpoint} koja pruža mogućnost dohvatanja korisnika po identifikatoru po pravilu treba da bude dostupna putem GET metode, i to na URI-u nalik na \verb|api/users/123| \cite{restapi}. Primer nepravilnog URI-a bilo bi direktno navođenje akcije dohvatanja - \verb|api/get-user-by-id/213|. Na sličan način jasno je propisano koje metode se koriste za promenu, upis i brisanje entiteta.
 
     \item \textbf{Korišćenje HTTP greški.} Kao što je pomenuto u prethodnoj sekciji, obrada grešaka predstavlja vitalan aspekt razvoja softvera, i značaj deo njene implementacije leži u aplikativnom sloju. REST definiše skup pravila za korektno ukazivanje korisniku na greške koje su se dogodile.  
 \end{itemize}
 
 \subsection{Kontroleri, validacija, mapiranje}
 
-Većina okruženja za programiranje veb aplikacija, uključujući i NestJS, pruža ugrađen konstrukt za obradu HTTP zahteva koga nazivamo \textbf{kontroler}. Kontroleri su ništa drugo nego klase nad kojim definišemo metode koje obrađuju HTTP zahteve ka određenom URI-u, dok je proces mapiranja URI-a na metodu maksimalno prepušten okruženju, a programeru eksponiran nekim vidom metaprogramiranja (najšće dekoratorima). Primer \ref{lst:userscontroller} ilustruje kontroler koji se vezuje za URI prefiks \textit{users}, koji sadrži metodu koja označava reagovanje na dinamički zadat identifikator. Ovako postavljen kontroler obrađuje zahteve oblika \textit{GET /api/users/123}.
+Većina okruženja za programiranje veb aplikacija, uključujući i NestJS, pruža ugrađen konstrukt za obradu HTTP zahteva koga nazivamo \textbf{kontroler}. Kontroleri su ništa drugo nego klase nad kojim definišemo metode koje obrađuju HTTP zahteve ka određenom URI-u, dok je proces mapiranja URI-a na metodu maksimalno prepušten okruženju, a programeru eksponiran nekim vidom metaprogramiranja (najšće dekoratorima). Primer \ref{lst:userscontroller} ilustruje kontroler koji se vezuje za URI prefiks \verb|users|, koji sadrži metodu koja označava reagovanje na dinamički zadat identifikator. Ovako postavljen kontroler obrađuje zahteve oblika \verb|GET /api/users/123|.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={primer kontrolera}, label={lst:userscontroller}]
@@ -940,7 +942,7 @@ Uloga kontrolera je višestruka, i sastoji se od sledećih koraka:
     \item \textbf{Provera prava pristupa}. Gde pritom ova provera treba da poznaje što manje poslovne logike. Na primer, neke pristupne tačke dostupne su samo ulogovanim korisnicima, neke samo administratorima, i sl.
     \item \textbf{Validacija ulaznih podataka}. Ponovo mislimo na čisto tehničku validaciju, a ne na poslovnu validaciju. Tu spada provera da li su određeni brojčani podaci zaista brojevi, da li su određeni tekstualni podaci dovoljne dužine i slično.
     \item \textbf{Delegacija posla odgovarajućem sevisu}. Nakon uspešne provere prava pristupa i validacije podataka, kontroler će prepustiti zadatak servisu koji je za to namenjem, i po potrebi primiti povratnu informaciju.
-    \item \textbf{Obrada servisnih grešaka.} Kontroler je dužan da greške domenskog nivoa koje podiže servis preslika u HTTP greške. Neretka, i sasvim validna praksa, jeste korišćenje \textit{try-catch} blokova u ove svrhe. Ipak, vrlo elegantan mehanizam presretača (eng. interceptors) okruženja NestJS omogućio je izolaciju ovog posla. Naime, presretač je klasa koju postavljamo na nivo kontrolera, u kojoj možemo dodati logiku obrade grešaka podignutih iz domenskog sloja.
+    \item \textbf{Obrada servisnih grešaka.} Kontroler je dužan da greške domenskog nivoa koje podiže servis preslika u HTTP greške. Neretka, i sasvim validna praksa, jeste korišćenje \verb|try-catch| blokova u ove svrhe. Ipak, vrlo elegantan mehanizam presretača (eng. interceptors) okruženja NestJS omogućio je izolaciju ovog posla. Naime, presretač je klasa koju postavljamo na nivo kontrolera, u kojoj možemo dodati logiku obrade grešaka podignutih iz domenskog sloja.
     \item \textbf{Preslikavanje podataka.} Ukoliko odgovor od servisa obuhvata entitet, dužnost kontrolera je da izvrši mapiranje datog entiteta u odgovarajući objekat za transfer podataka (eng. Data Transfer Object - DTO).
 \end{enumerate}
 
@@ -953,7 +955,7 @@ Slika \ref{fig:applayerdiagram} prikazuje dijagram rada aplikativnog sloja.
   \label{fig:applayerdiagram}
 \end{figure}
 
-Što se tiče tehničkih aspekata, maksimalno je korišćeno metaprogramiranje za postizanje validacije i preslikavanja grešaka, kako bi se izbeglo repetitivno pisanje k\^{o}da. Presretači su suštinski manuelne provere tipa instance greške. Validacija je izvedena deklarativno kombinacijom biblioteka \textit{class-transformer} i \textit{class-validator}.
+Što se tiče tehničkih aspekata, maksimalno je korišćeno metaprogramiranje za postizanje validacije i preslikavanja grešaka, kako bi se izbeglo repetitivno pisanje k\^{o}da. Presretači su suštinski manuelne provere tipa instance greške. Validacija je izvedena deklarativno kombinacijom biblioteka \verb|class-transformer| i \verb|class-validator|.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Presretač grešaka.}]
@@ -1131,7 +1133,7 @@ export const ticketsSlice = api.injectEndpoints({
 
 Nakon definisanja konfiguracije u prethodnoj sekciji ostaje još pitanje kako koristimo objekte koje generiše RTKQ.
 
-Treba još jednom istaknuti da RTKQ nije ništa drugo nego modul sistema \textit{redux}\footnote{Tehnički spada pod zaseban npm paket \textit{redux-toolkit} ali u govoru se često poistovećuju jer označavaju isti ekosistem.}, tako da je očekivano da RTKQ svo upravljanje podacima vrši upravo posredstvom \textit{redux}-a i njegovog ugrađenog skladišta (eng. store)\footnote{Način na koji radi biblioteka \textit{redux} je kompleksan i može biti tema posebnog istraživanja, tako da se na ovom mestu zadržavamo samo na potrebnim detaljima.}. S tim u vidu, prilikom izazivanja dohvatanja podataka na serveru koristimo upravo \textit{store} objekat i RTKQ-ov poziv \textit{initiate} kako bi se dohvatanje započelo.
+Treba još jednom istaknuti da RTKQ nije ništa drugo nego modul sistema \verb|redux|\footnote{Tehnički spada pod zaseban npm paket \textit{redux-toolkit} ali u govoru se često poistovećuju jer označavaju isti ekosistem.}, tako da je očekivano da RTKQ svo upravljanje podacima vrši upravo posredstvom \verb|redux|-a i njegovog ugrađenog skladišta (eng. store)\footnote{Način na koji radi biblioteka \textit{redux} je kompleksan i može biti tema posebnog istraživanja, tako da se na ovom mestu zadržavamo samo na potrebnim detaljima.}. S tim u vidu, prilikom izazivanja dohvatanja podataka na serveru koristimo upravo \verb|store| objekat i RTKQ-ov poziv \verb|initiate| kako bi se dohvatanje započelo.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Dohvatanje podataka o tiketu na serveru.}]
@@ -1199,9 +1201,9 @@ Definicija internacionalizacije je veoma opšteg karaktera, i na osnovu \cite{i1
 
 
 
-U ovom radu urađena je samo prva stavka - podržani su srpski i engleksi jezik. Za potrebe čuvanja trenutnog jezika koristi se \textit{Accept-Language} HTTP zaglavlje (eng. HTTP header) u kombinaciji sa odgovarajućom vrednošću \textit{language\_code} kolačića (eng. cookie). na klijentskoj strani.
+U ovom radu urađena je samo prva stavka - podržani su srpski i engleksi jezik. Za potrebe čuvanja trenutnog jezika koristi se \verb|Accept-Language| HTTP zaglavlje (eng. HTTP header) u kombinaciji sa odgovarajućom vrednošću \verb|language_code| kolačića (eng. cookie). na klijentskoj strani.
 
-U sekciji \ref{sec:tagsystem} pomenuto je kako sistem oznaka koristi internacionalizaciju za nazive i opise oznaka. Upravo podešavanje \textit{Accept-Language} zaglavlja omogućuje da nam API vrati podatke na odgovarajućem jeziku.
+U sekciji \ref{sec:tagsystem} pomenuto je kako sistem oznaka koristi internacionalizaciju za nazive i opise oznaka. Upravo podešavanje \verb|Accept-Language| zaglavlja omogućuje da nam API vrati podatke na odgovarajućem jeziku.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Postavljanje Accept-Language zaglavlja u RTKQ prilikom API zahteva.}]
@@ -1222,7 +1224,7 @@ const baseQuery = fetchBaseQuery({
 \end{lstlisting}
 \end{figure}
 
-Sa druge strane, za kontrolu prikaza sadržaja na grafičkom korisničkom interfejsu koristi se kombinacija biblioteka \textit{react-intl} i \textit{formatjs} \cite{formatjsdocs}. Naime, tekstualni sadržaji koje želimo da internacionalizujemo na sajtu nazivaju se \textit{poruke} (eng. messages) i definišu se odgovarajućim funkcijama u k\^{o}du, zajedno sa svojim podrazumevanim vrednostima. Primer \ref{lst:definingmessages} prikazuje definisanje nekih poruka za stranicu koja prikazuje tiket.
+Sa druge strane, za kontrolu prikaza sadržaja na grafičkom korisničkom interfejsu koristi se kombinacija biblioteka \verb|react-intl| i \verb|formatjs| \cite{formatjsdocs}. Naime, tekstualni sadržaji koje želimo da internacionalizujemo na sajtu nazivaju se \textit{poruke} (eng. messages) i definišu se odgovarajućim funkcijama u k\^{o}du, zajedno sa svojim podrazumevanim vrednostima. Primer \ref{lst:definingmessages} prikazuje definisanje nekih poruka za stranicu koja prikazuje tiket.
 
 Pokretanjem komande \verb|npm run i18n|, definisane kao skripte u okviru fajla $package.json$ vrše se \textit{ekstrakcija} i \textit{kompilacija} poruka. Ekstrakcija predstavlja proces izvlačenja svih poruka iz fajlova koji definišu poruke na način prikazan u primeru \ref{lst:definingmessages} u odgovarajuće JSON fajlove. Kompajliranje prevodi te fajlove u oblik prikladan korišćenju u produkciji. Delovi tih fajlova prikazani su u primeru \ref{lst:messagsjsonfiles}.
 
@@ -1327,7 +1329,7 @@ Sledeće prirodno pitanje koje se nameće jeste kako i kada se date transformaci
 
 Metrike koje mogu imati vrednost u sistemu STS jesu primerno metrike koje se odnose na tiket kao glavni entitet i promene koje se nad njime dešavaju. Tako možemo razmatrati prosečno vreme rešavanja (eng. average resolution time), prosečno vreme preuzimanja (eng. average pickup time) i prosečno vreme prvog odgovora (eng. average first-response time). S tim u vidu, skladište podataka, i njegov deo koji se bavi tiketima, dizajniran je tako da izvuče navedene metrike za svaki tiket\footnote{Vredi napomenuti kako je izbor šablona Event Sourcing za čuvanje tiketa i niza promena prikazan u sekciji \ref{sec:eventsourcing} doprineo znatno lakšoj implementaciji ovih transformacija.}. Primer \ref{lst:ticketetlloop} prikazuje glavni deo ETL skripte. Primer \ref{lst:ticketetltransformfunction} prikazuje funkciju koja transformiše tiket, dok primer \ref{lst:ticketetlconcretefunction} prikazuje računanje jedne konkretne metrike.
 
-Za potrebe automatizacije ovog procesa koristi se \textbf{cron}, ugrađeni planer poslova (eng. job scheduler) operativnih sistema zasnovanih na Unix-u. Njegovu konfiguraciju izostavljamo jer nema specifičnosti u odnosnu na najosnovnije korišćenje.
+Za potrebe automatizacije ovog procesa koristi se \verb|cron|, ugrađeni planer poslova (eng. job scheduler) operativnih sistema zasnovanih na Unix-u. Njegovu konfiguraciju izostavljamo jer nema specifičnosti u odnosnu na najosnovnije korišćenje.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=python, caption={Transformacija tiketa.}, label={lst:ticketetlloop}]
@@ -1690,7 +1692,7 @@ docker push aleksakojadinovic/sts:api-latest
 
 \end{lstlisting}
 
-Produkciona docker-compose konfiguracija sada ne mora uopšte zavisiti od postojanja Dockerfile-ova već može direktno pokretati slike sa DockerHub-a. Na taj način postigli smo da na konačnom fizičkom\footnote{Naglašavamo fizičkom jer mislimo na pravu instancu servera gde ćemo pokretati docker. Ipak pojam fizičkog servera i ovde treba uzeti sa rezervom jer su u oblaku i takvi serveri virtuelni samo na višem nivou. Svakako iz našeg ugla smatramo ih za fizičke servere.} serveru na kom pokrećemo sistem ne moramo niti imati izvorni k\^{o}d niti klonirati git repozitorijum izvornog k\^{o}da - možemo docker-compose konfiguraciju držati u zasebnom repozitorijumu. Ipak je za naše potrebe sve obuhvaćeno u jednom repozitorijumu kako bi služio kao centralni izvor svega pokrivenog u ovom radu.
+Produkciona docker-compose konfiguracija sada ne mora uopšte zavisiti od postojanja Dockerfile-ova već može direktno pokretati slike sa DockerHub-a. Na taj način postigli smo da na konačnom fizičkom\footnote{Naglašavamo fizičkom jer mislimo na pravu instancu servera gde ćemo pokretati docker. Ipak pojam fizičkog servera i ovde treba uzeti sa rezervom jer su u oblaku i takvi serveri virtuelni samo na višem nivou. Svakako iz našeg ugla smatramo ih za fizičke servere.} serveru na kom pokrećemo sistem ne moramo niti imati izvorni k\^{o}d niti klonirati git repozitorijum izvornog k\^{o}da - možemo docker-compose konfiguraciju držati u zasebnom repozitorijumu. Ipak je sve obuhvaćeno u jednom repozitorijumu kako bi služio kao centralni izvor svega pokrivenog u radu.
 
 % ------------------------------------------------------------------------------
 
