@@ -1297,19 +1297,19 @@ Napomenućemo da bi sofisticirani sistem internacionalizacije podržao čuvanje 
 % ------------------------------------------------------------------------------
 \chapter{Analitika}
 
-Jedan zadatak prilikom razvoja softverskog sistema jeste napraviti sve proizvodne funkcionalnosti - kreiranje tiketa, komentarisanje, promena statusa, zatvaranje, i sl. Iz ugla čistog softverskog inženjerstva moglo bi se reći da je posao završen onda kada su implementirane sve komponente sistema i njihova međusobna saradnja zarad izvršavanja poslovnih procesa.
+Jedan zadatak u okviru razvoja softverskog sistema jeste napraviti sve proizvodne funkcionalnosti - kreiranje tiketa, komentarisanje, promena statusa, zatvaranje, i sl. Iz ugla čistog softverskog inženjerstva moglo bi se reći da je posao završen onda kada su implementirane sve komponente sistema i njihova međusobna saradnja zarad izvršavanja poslovnih procesa.
 
 Ovakav stav, očekivano, bio bi naivan. Problem leži u tome što ne postoji taj nivo istrage i domenskog znanja koji poslovođi može ukazati na sve potencijalne mane i moguća unapređenja sistema kao što mogu uraditi realni podaci generisani prilikom upotrebe softvera. Ovakav pristup ima za cilj da stvori ponavljajući ciklus koji se sastoji, grubo, iz sledećih koraka \cite{dataanalytics}:
 \begin{enumerate}
-    \item Poslovne aktivnosti se pamte u transackionoj bazi podataka.
+    \item Poslovne aktivnosti se pamte u transakcionoj bazi podataka.
     \item Na osnovu tih podatka izvode se zaključci koristeći odgovarajuće tehnike i alate.
     \item Dati zaključci ukazuju na šta se treba fokusirati u razvoju proizvoda.
-    \item Nove implementirane stvari donose još podataka, koje dalje možemo analizirati ispočetka.
+    \item Nove implementirane funkcionalnosti donose još podataka, koje dalje možemo analizirati ispočetka.
 \end{enumerate}
 
 \section{Skladišta podataka, ETL procesi, cron}
 
-Niz koraka iz uvodnog dela ovog poglavlja predstavlja uopšten mentalni model na kome se zasniva proces analitike podataka\footnote{Postoji mnoštvo termina koji se koriste u današnje vreme, kao što su \textit{Data Mining, Business Intelligence} i drugi. Ne zadržavamo se na diskusiji konkretnih pojmova jer ne služe svrsi ovog rada.} iz poslovnog ugla. Nešto konkretniji model koji se više fokusira na tehnologije i metodologije prikazan je na dijagramu \ref{fig:datadiag}.
+Niz koraka iz uvodnog dela ovog poglavlja predstavlja uopšten mentalni model na kome se zasniva proces analitike podataka\footnote{Postoji mnoštvo termina koji se koriste u današnje vreme, kao što su \textit{Data Mining, Business Intelligence} i drugi. Ne zadržavamo se na diskusiji konkretnih pojmova jer ne služe svrsi ovog rada.} iz poslovnog ugla. Nešto konkretniji model, koji se više fokusira na tehnologije i metodologije, prikazan je na dijagramu \ref{fig:datadiag}.
 
 \begin{figure}[h]
   \centering
@@ -1318,7 +1318,7 @@ Niz koraka iz uvodnog dela ovog poglavlja predstavlja uopšten mentalni model na
   \label{fig:datadiag}
 \end{figure}
 
-Za potrebe ovog rada, a iz razloga jer to nije glavni fokus, sistem analitike izveden je u uprošćenom obliku. Skladišta podataka (eng. data warehouse) predstavljaju zasebnu oblast izučavanja i u vreme pisanja rada potpadaju najviše pod oblast poznatom kao inženjerstvo podataka (eng. data engineering). Za naše potrebe smatraćemo skladište podataka kao organizovanu kolekciju podataka dobijenu transformacijom izvornih podataka u oblik prikladan za izvršavanje odgovarajućih upita \cite{dataanalytics}.
+Za potrebe ovog rada, a iz razloga jer to nije glavni fokus, sistem analitike izveden je u uprošćenom obliku. Skladišta podataka (eng. data warehouse) predstavljaju zasebnu oblast izučavanja i u vreme pisanja rada potpadaju najviše pod oblast poznatom kao inženjerstvo podataka (eng. data engineering). Skladište podataka smatraćemo za organizovanu kolekciju podataka dobijenu transformacijom izvornih podataka u oblik prikladan za izvršavanje odgovarajućih upita \cite{dataanalytics}.
 
 Sledeće prirodno pitanje koje se nameće jeste kako i kada se date transformacije vrše. U sistemu STS ovaj zadatak potpada pod ETL (eng. Extract Transform Load) servis. Kao što i samo ime kaže sastoji se od tri koraka:
 \begin{enumerate}
@@ -1327,7 +1327,7 @@ Sledeće prirodno pitanje koje se nameće jeste kako i kada se date transformaci
     \item \textbf{Load} - učitavanje u skladište podataka.
 \end{enumerate}
 
-Metrike koje mogu imati vrednost u sistemu STS jesu primerno metrike koje se odnose na tiket kao glavni entitet i promene koje se nad njime dešavaju. Tako možemo razmatrati prosečno vreme rešavanja (eng. average resolution time), prosečno vreme preuzimanja (eng. average pickup time) i prosečno vreme prvog odgovora (eng. average first-response time). S tim u vidu, skladište podataka, i njegov deo koji se bavi tiketima, dizajniran je tako da izvuče navedene metrike za svaki tiket\footnote{Vredi napomenuti kako je izbor šablona Event Sourcing za čuvanje tiketa i niza promena prikazan u sekciji \ref{sec:eventsourcing} doprineo znatno lakšoj implementaciji ovih transformacija.}. Primer \ref{lst:ticketetlloop} prikazuje glavni deo ETL skripte. Primer \ref{lst:ticketetltransformfunction} prikazuje funkciju koja transformiše tiket, dok primer \ref{lst:ticketetlconcretefunction} prikazuje računanje jedne konkretne metrike.
+Metrike koje mogu imati vrednost u sistemu STS jesu primarno metrike koje se odnose na tiket, kao glavni entitet, i promene koje se nad njime dešavaju. Tako možemo razmatrati prosečno vreme rešavanja (eng. average resolution time), prosečno vreme preuzimanja (eng. average pickup time) i prosečno vreme prvog odgovora (eng. average first-response time). S tim u vidu, skladište podataka, i njegov deo koji se bavi tiketima, dizajniran je tako da izvuče navedene metrike za svaki tiket\footnote{Vredi napomenuti kako je izbor šablona Event Sourcing za čuvanje tiketa i niza promena prikazan u sekciji \ref{sec:eventsourcing} doprineo znatno lakšoj implementaciji ovih transformacija.}. Primer \ref{lst:ticketetlloop} prikazuje glavni deo ETL skripte. Primer \ref{lst:ticketetltransformfunction} prikazuje funkciju koja transformiše tiket, dok primer \ref{lst:ticketetlconcretefunction} prikazuje računanje jedne konkretne metrike.
 
 Za potrebe automatizacije ovog procesa koristi se \verb|cron|, ugrađeni planer poslova (eng. job scheduler) operativnih sistema zasnovanih na Unix-u. Njegovu konfiguraciju izostavljamo jer nema specifičnosti u odnosnu na najosnovnije korišćenje.
 
@@ -1415,7 +1415,7 @@ def calculate_resolution_time(ticket):
 \newpage
 \section{Prikaz metrika, biblioteka streamlit}
 
-Nakon uspešnog punjenja skladišta podataka postoje dva pravca\footnote{Koja nisu međusobno isključiva.} u kojima tok podataka može dalje ići.
+Nakon uspešnog punjenja skladišta podataka postoje dva pravca, kojima tok podataka može dalje ići. Pritom treba imati u vidu da ta dva pravca nisu međusobno isključiva.
 \begin{itemize}
     \item Podaci iz skladišta mogu se koristiti za naprednu analizu statističkim metodama ili metodama mašinskog učenja.
     \item Podaci se mogu vizuelizovati određenim kontrolnim tablama (eng. dashboards) zarad brzog dobijanja slike o podacima.
@@ -1425,7 +1425,7 @@ Kao što je već napomenuto, napredne analize podataka ne spadaju u područje ov
 
 Ova biblioteka omogućava jednostavno kreiranje interaktivnih kontrolnih tabli za prikaz podataka. Glavna prednost je u tome što sadrži veliki broj predefinisanih elemenata korisničkog interfejsa (grafikoni, histograni, prikaz vremena, elementi za odabir opsega datuma, i slično) što omogućava programeru da se fokusira na poslovne vrednosti umesto na tehnikalije izgradnje takvih elemenata. 
 
-Skripta za prikaz kontrolne table je jednostavna i može se videti u fajlu $services/analytics/app.py$. Satoji se od dohvatanja informacija o tiketima za izabran vremenski okvir i prikaz prosečnih vrednosti statistika iz prethodnog poglavlja. Slika \ref{fig:stsmetrics} prikazuje izgleda korisničkog interfejsa ove kontrolne table.
+Skripta za prikaz kontrolne table je jednostavna i može se videti u fajlu \verb|services/analytics/app.py|. Sastoji se od dohvatanja informacija o tiketima za izabran vremenski okvir i prikaz prosečnih vrednosti statistika iz prethodnog poglavlja. Slika \ref{fig:stsmetrics} prikazuje izgleda korisničkog interfejsa ove kontrolne table.
 
 \begin{figure}[h]
   \centering
@@ -1441,29 +1441,29 @@ Skripta za prikaz kontrolne table je jednostavna i može se videti u fajlu $serv
 
 Pojam DevOps (nastao od engleske sintagme \textit{Development Operations} - u bukvalnom prevodu \textit{razvojne operacije}) predstavlja relativno mladu granu softverskog inženjerstva. U svojoj najužoj definiciji, prema \cite{zdevopsarticle}, kaže se da DevOps opisuje usvajanje iterativnog razvoja softvera, automatizaciju i programabilne infrastrukture za otpremanje\footnote{eng. deployment} i održavanje softverskog sistema.
 
-U nekim krugovima poistovećuje se sa ulogom sistemskih administratora dok drugi tvrde da je to potpuno zasebna profesija. Čiju god stranu zauzeli moramo se složiti da sa masovnim razvojem različitih tehnologija, okruženja i platformi nastaju novi problemi koji ne potpadaju pod tradicionali pojam softverskog inženjerstva gde uglavnom obuhvatamo razvoj domenskih funckionalnosti. Naime, ukoliko kažemo da je zadatak \textit{"implementirati dugme na stranici za prikaz tiketa kojim se zatvara tiket"} potpuno je jasno da se tim zadatkom neće baviti devops inženjer, dok bi na primer zadatak \textit{implementirati sistem za periodično pravljenje i čuvanje rezervnih kopija baze podataka} upravo zapao tom inženjeru.
+U nekim krugovima poistovećuje se sa ulogom sistemskih administratora dok drugi tvrde da je to potpuno zasebna profesija. Čiju god stranu zauzeli moramo se složiti da sa masovnim razvojem različitih tehnologija, okruženja i platformi nastaju novi problemi koji ne potpadaju pod tradicionali pojam softverskog inženjerstva gde uglavnom obuhvatamo razvoj domenskih funkcionalnosti. Naime, ukoliko kažemo da je zadatak \textit{"implementirati dugme na stranici za prikaz tiketa kojim se zatvara tiket"} potpuno je jasno da se tim zadatkom neće baviti DevOps inženjer, dok bi na primer zadatak \textit{implementirati sistem za periodično pravljenje i čuvanje rezervnih kopija baze podataka} upravo zapao tom inženjeru.
 
 Interesantno opažanje primećeno u \cite{devopshandbook} je da u mnogim kompanijama postoji neprekidna kontrateža između odeljenja za razvoj i odeljenja za razvojne operacije, uprkos činjenici da je kranji cilj isti. Na primer, inženjeru kome je zadatak da implementira jedan mali server za nekoliko API pristupnih tačaka od nule biće lakše da taj server pokrene direktno na produkcionoj mašini i neretko će zahtevati da se "napravi izuzetak" usled skromne veličine projekta. DevOps inženjer bi skoro sigurno insistirao na tome da se čak i za najmanji takav server napravi odgovarajuća infrastruktura, recimo kroz Docker. Lako je zapitati se zašto se uopšte dovodi u pitanje vrednost poštovanja principa razvojnih operacija i zašto bi programer iz hipotetičkog scenarija ikada zahtevao da se napravi izuzetak. Odgovori na ova pitanja zalaze u poslovne aspekte softverskog inženjerstva gde je uvek pitanje toga ko donosi veću vrednost. Ovaj rad se uzdržava od dalje diskusije na tu temu jer je fokus primarno tehnički, ali napomenućemo da su istorijat DevOps-a i razni poslovni aspekti ove grane odlično obrađeni u \cite{devopshandbook}.
 
 
 \section{Kontejneri, sistem Docker}
 
-Istorija nastajanja Docker-a i kontejnerizacije uopšte interesantna je tema sama za sebe, i u \cite{dockerdeepdive} izložena je ukratko na sledeći način:
+Istorija nastajanja Docker-a, i kontejnerizacije uopšte, interesantna je tema sama za sebe i u \cite{dockerdeepdive} izložena ukratko na sledeći način:
 \begin{enumerate}
-    \item \textbf{Korišćenje zasebnih servera za svaku aplikaciju.} U početku je bilo komplikovano, pa čak i nemoguće pokrenuti više zasebnih servera na istoj mašini, pa bi kompanije često išle u pravcu kupovanja ili iznajmljivanja zasebnih fizičkih servera za svaki aplikativni server.
+    \item \textbf{Korišćenje zasebnih servera za svaku aplikaciju.} U početku je bilo komplikovano, pa čak i nemoguće pokrenuti više zasebnih servera na istoj mašini, tako da bi kompanije često išle u pravcu kupovanja ili iznajmljivanja zasebnih fizičkih servera za svaki aplikativni server.
     \item \textbf{Virtuelne mašine.} Koncept koji je značajno olakšao stvari bile su virtuelne mašine. Dozvoljavale su pokretanje proizvoljnog broja istinski odvojenih okruženja na jednoj fizičkoj mašini. Mana ovakvog pristupa jeste da virtuelna mašina zahteva kompletan operativni sistem, a samim tim i dosta resursa u vidu RAM-a i procesorskog vremena.
     \item \textbf{Kontejneri.} Kao rešenje koje ima za cilj da uzme najbolje od oba sveta nastaju kontejneri (eng. containters). Za razliku od virtuelnih mašina, svaki pokrenut kontejner koristi operativni sistem računara na kome se pokreće, a ipak održava nivo potpune izolovanosti.
 \end{enumerate}
 
-Docker je jedno od rešenja za rad sa kontejnerima, i izabrano je za potrebe ovog rada usled svoje popularnosti i rasprostranjenosti. Za mnoge programere čija je primarna delatnost razvoj poslovnih funckionalnosti Docker predstavlja crnu kutiju. Pojmovi kao što su \textit{docker engine}, \textit{slike (eng. images)} i \textit{orkestracija} stvaraju konfuziju ako se od početka ne posveti pažnja njihovom razumevanju, stoga ćemo se prilikom objašnjavanja koristiti analogijama sa nekim konceptima koji su poznati svim pogramerima.
+Docker je jedno od rešenja za rad sa kontejnerima, i izabrano je za potrebe ovog rada usled svoje popularnosti i rasprostranjenosti. Za mnoge programere, čija je primarna delatnost razvoj poslovnih funckionalnosti, Docker predstavlja crnu kutiju. Pojmovi kao što su \textit{docker engine}, \textit{slike (eng. images)} i \textit{orkestracija} stvaraju konfuziju ako se od početka ne posveti pažnja njihovom razumevanju, stoga ćemo se prilikom objašnjavanja koristiti analogijama sa nekim konceptima koji su poznati svim pogramerima.
 
 \subsection{Docker slike}
 
-Na početku poglavlja pomenuto je kako je jedan od zadataka DevOps-a između ostalog uspostavljanje programabilnug infrastruktura za otpremanje i održavanje softverskog sistema. Način na koji pravimo docker slike upravo se zasniva na programabilnosti. 
+Na početku poglavlja pomenuto je kako je jedan od zadataka DevOps-a, između ostalog, uspostavljanje programabilnog infrastruktura za otpremanje i održavanje softverskog sistema. Način na koji pravimo docker slike upravo se zasniva na programabilnosti. 
 
 Naime, docker slike treba shvatiti upravo po inspiraciji zbog koje se koriste - potrebno nam je izolovano okruženje jako specifične namene. Pomenuli smo da virtuelne mašine nose sa sobom previše stvari koje nam nisu potrebne, najpre ceo operativni sistem i sve njegove module. Definicijom adekvatne docker slike izbegavamo korišćenje bespotrebnih resursa. 
 
-Dakle prilikom definisanja slike za pokretanje našeg bekend servera u režimu za razvoj\footnote{O produkcionoj postavci biće reči kasnije.} za sistem STS možemo pristupiti sledećim rezonovanjem:
+Dakle, prilikom definisanja slike za pokretanje našeg bekend servera u režimu za razvoj\footnote{O produkcionoj postavci biće reči kasnije.} za sistem STS, možemo pristupiti sledećim rezonovanjem:
 
 \begin{enumerate}
     \item Potreban nam je Node.js
@@ -1502,7 +1502,7 @@ CMD ["npm", "run", "start:dev"]
 
 Ako bismo postavljali analogiju između razvoja slika i kontejnera sa običnim razvojem aplikacija, onda bismo mogli reći da slika odgovara programu, a kontejner odgovara procesu. Na taj način gore definisana docker slika sama po sebi ne radi ništa ukoliko se ne pokrene u vidu kontejnera. 
 
-Nastavljajući analogiju, sliku moramo prvi izgraditi (eng. build) što bi odgovaralo procesu kompilacije. Ovu kompilaciju je bolje shvatiti ne kao prevod na mašinski jezik već kao prevod u međureprezentaciju koju je u stanju da izvršava docker engine. Docker CLI komandom na primeru \ref{lst:buildinglocal} možemo izgraditi sliku sa odgovarajućom oznakom (eng. tag).
+Nastavljajući analogiju, sliku moramo prvi izgraditi (eng. build) što bi odgovaralo procesu kompilacije. Ovu kompilaciju je bolje shvatiti ne kao prevod na mašinski jezik, već kao prevod u međureprezentaciju, koju je u stanju da izvršava docker engine. Docker CLI komandom, na primeru \ref{lst:buildinglocal}, možemo izgraditi sliku sa odgovarajućom oznakom (eng. tag).
 
 \newpage
 \begin{lstlisting}[caption={Izgradnja slike}, label={lst:buildinglocal}]
@@ -1514,8 +1514,8 @@ docker build -f
 
 Nakon izgradnje moguće je pokrenuti datu sliku u vidu kontejnera, sa nekoliko dodatnih konfiguracija koje se sastoje od sledećeg:
 \begin{itemize}
-    \item \textbf{Vezivanje portova.} Opcijom \verb|-p| možemo navesti koji port kontejnera se vezuje za koji port domaćinskog operativnog sistema (eng. host OS). Ovo omoguaćava da aplikacija unutar kontejnera bude agnostična od zauzetosti portova.
-    \item \textbf{Povezivanje sa fajl sistemom.} U lokalnom razvojnom okruženju potreban nam je izvorni k\^{o}d aplikacije koji možemo uvesti korišćenjem koncepta \textit{docker volume}-a. Oni predstavljaju apstrakciju medijskih uređaja, ali u ovom slučaju koristimo ih da povežemo određeni direktorijum unutar kontejnera sa hostom\footnote{Ovo se ostvaruje tehnologijom rsync. Izostavljamo detalje kako se to interno postiže, ali napominjemo jer se u praksi često koristi izraz rsync kao glagol. Neretko ćemo čuti da se kaže da su dva foldera "rsync-ovana".}.
+    \item \textbf{Vezivanje portova.} Opcijom \verb|-p| možemo navesti koji port kontejnera se vezuje za koji port domaćinskog operativnog sistema (eng. host OS). Ovo omogućava da aplikacija unutar kontejnera bude agnostična od zauzetosti portova.
+    \item \textbf{Povezivanje sa fajl sistemom.} U lokalnom razvojnom okruženju potreban nam je izvorni k\^{o}d aplikacije, koji možemo uvesti korišćenjem koncepta \textit{docker volume}-a. Oni predstavljaju apstrakciju medijskih uređaja, ali u ovom slučaju koristimo ih da povežemo određeni direktorijum unutar kontejnera sa hostom\footnote{Ovo se ostvaruje tehnologijom rsync. Izostavljamo detalje kako se to interno postiže, ali napominjemo, jer se u praksi često koristi izraz rsync kao glagol. Neretko ćemo čuti da se kaže da su dva foldera "rsync-ovana".}.
 \end{itemize}
 
 Primer komande za pokretanje prikazan je u \ref{lst:dockerrunninglocal}.
@@ -1531,13 +1531,13 @@ Na ovaj način analogijom možemo reći da je naš kompajliran program pokrenut 
 
 \subsection{Orkestracija putem modula docker-compose}
 
-Proces prikazan u prethodne dve sekcije izgleda previše repetitivno, i još bitnije deluje da se može automatizovati. Ako bismo ovako razvijali aplikaciju morali bismo konstantno da ponavljamo korake:
+Proces prikazan u prethodne dve sekcije izgleda previše repetitivno i, još bitnije, deluje da se može automatizovati. Ako bismo ovako razvijali aplikaciju morali bismo konstantno da ponavljamo korake:
 \begin{enumerate}
     \item Izgradi sve slike komandama \verb|docker build|.
     \item Pokreni sve kontejnere komandama \verb|docker run|.
 \end{enumerate}
 
-Pri tom moramo uvek voditi računa da li odgovarajuće portove dobro vazujemo, da li vezujemo odgovarajuće fajlove i slično. Dijagram ovog procesa prikazan je na slici \ref{fig:dockermanual}. Čitav ovaj proces upravljanja stanjima kontejnera, njihovim pokretanjem i obaranjem, portovima i vezivanjem sa fajl sistemom možemo podvesti pod jedan sveobuhvatni pojam koji se naziva \textit{orkestracija}.
+Pri tom moramo uvek voditi računa da li odgovarajuće portove dobro vazujemo, da li vezujemo odgovarajuće fajlove i slično. Dijagram ovog procesa prikazan je na slici \ref{fig:dockermanual}. Čitav ovaj proces upravljanja stanjima kontejnera, njihovim pokretanjem i obaranjem, portovima i vezivanjem sa fajl sistemom podvodimo pod jedan sveobuhvatni pojam \textit{orkestracije}.
 
 \begin{figure}[h]
   \centering
@@ -1546,9 +1546,9 @@ Pri tom moramo uvek voditi računa da li odgovarajuće portove dobro vazujemo, d
   \label{fig:dockermanual}
 \end{figure}
 
-Postoje vrlo sofisticirani softverski sistemi za orkestraciju kontejnera, od koji se neki pokreću primarno u oblaku\footnote{Primer takvog sistema je AWS ECS.}. Sistem STS nije dizajniran za cloud okruženja već za varijantu samostalnog hostovanja (eng. self-hosting)\footnote{Jedna zanimljivost je da tokom pisanja ovog rada postoji veliki raskol u onlajn zajednicama programera da li je bolje koristiti cloud rešenja ili samostalno hostovanje. Slična rasprava vodi se oko promovisanja monolitnih okruženja kao superiornih u odnosu na mikroservise, što nekima deluje kao vraćanje u prošlost.}. Zbog toga orkestrator docker-compose zadovoljava sve zahteve.
+Postoje vrlo sofisticirani softverski sistemi za orkestraciju kontejnera, od kojih se neki pokreću primarno u oblaku\footnote{Primer takvog sistema je AWS ECS.}. Sistem STS nije dizajniran za cloud okruženja već za varijantu samostalnog hostovanja (eng. self-hosting)\footnote{Jedna zanimljivost je da tokom pisanja ovog rada postoji veliki raskol u onlajn zajednicama programera: da li je bolje koristiti cloud rešenja ili samostalno hostovanje. Slična rasprava vodi se oko promovisanja monolitnih okruženja kao superiornih u odnosu na mikroservise, što nekima deluje kao vraćanje u prošlost.}. Zbog toga orkestrator docker-compose zadovoljava sve zahteve.
 
-Skoro svi orkestratori zasnivaju se na konfiguraciji umesto na eksplicitnom programiranju ponašanja kontejnera (kao što smo prvobitni uradili koristeći bash skripte iz prethodnih sekcija). U slučaju docker-compose-a to se postiže pisanjem YAML fajlova. Konfiguracija u ovom fajlovima navodi koje sve servise sistem sadrži, koju sliku koriste ili na koji način se izgrađuju, konfiguracije portova i vezivanja fajl sistema, promenljive okruženja i slično. Primer konfigurisanja bekend i frontend servisa za lokalno okruženje date je u \ref{lst:dockercomposelocal}.
+Skoro svi orkestratori zasnivaju se na konfiguraciji umesto na eksplicitnom programiranju ponašanja kontejnera (kao što smo prvobitni uradili koristeći \verb|bash| skripte iz prethodnih sekcija). U slučaju docker-compose-a to se postiže pisanjem YAML fajlova. Konfiguracija u ovom fajlovima navodi koje sve servise sistem sadrži, koju sliku koriste ili na koji način se izgrađuju, konfiguracije portova i vezivanja fajl sistema, promenljive okruženja i slično. Primer konfigurisanja bekend i frontend servisa za lokalno okruženje dat je u \ref{lst:dockercomposelocal}.
 
 Nakon ovakvog konfigurisanja čitavog sistema, upravljanje kompletnim okruženjem poprilično je jednostavno i može se postići sa nekoliko jednostavnih komandi prikazanih u \ref{lst:dockerlocalcommands}.
 
@@ -1598,24 +1598,24 @@ docker-compose up -d
 docker-compose down
 \end{lstlisting}
 
-Napomenućemo da docker-compose podržava i kompleksnije operacije kao što su skaliranje kontejnera\footnote{Uz propratne module kao što su docker-swarm.} kojima se u ovom radu ne bavimo. Napominjemo tu činjenicu da obeshrabrimo popularno mišljenje da za bilo kakav ozbiljan rad sa kontejnerima moramo odmah pribegavati naprednim sistemima kao što su \textit{AWS ECS} ili \textit{kubernetes}. Naravno da ti sistemi imaju svoju ulogu i veoma su moćni, ali njihovo preuranjeno korišćenje može doneti više štete nego koristi razvoju.
+Napomenućemo da docker-compose podržava i kompleksnije operacije kao što su skaliranje kontejnera\footnote{Uz propratne module kao što su docker-swarm.}, kojima se u ovom radu ne bavimo. Napominjemo tu činjenicu kako bismo obeshrabrili popularno mišljenje da za bilo kakav ozbiljan rad sa kontejnerima moramo odmah pribegavati naprednim sistemima kao što su \textit{AWS ECS} ili \textit{kubernetes}. Naravno da ti sistemi imaju svoju ulogu i veoma su moćni, ali njihovo preuranjeno korišćenje može doneti više štete nego koristi razvoju.
 
 
 \section{Reverzni proksi nginx}
 
-Uspostavljanjem docker-a kao sistema za pokretanje aplikacije rešili smo jedan problem - izolacija okruženja. U ovom trenutku imamo pet servisa pokrenutih kroz različite kontejnere i povezane na različite portove\footnote{Servisi su: baza podataka, Nest.js server, Next.js server, ETL i streamlit.}. Sledeće prirodno pitanje koje se nameće jeste kako korisnik pristupa veb sajtu i kako servisi komuniciraju jedni između drugih. Uzevši u obzir da se svi servisi pokreću na različitim portovima bilo bi neodrživo da svaka komponenta sistema mora da zna na kojim portovima su ostale, a potpuno suludo da korisnik sajta mora da zna na kom portu je hostovan glavni vebsajt (frontend).
+Uspostavljanjem docker-a kao sistema za pokretanje aplikacije rešili smo jedan problem - izolacija okruženja. U ovom trenutku imamo pet servisa pokrenutih kroz različite kontejnere i povezane na različite portove\footnote{Servisi su: baza podataka, Nest.js server, Next.js server, ETL i streamlit.}. Sledeće pitanje koje se prirodno nameće jeste kako korisnik pristupa veb sajtu i kako servisi komuniciraju jedni između drugih. Uzevši u obzir da se svi servisi pokreću na različitim portovima, bilo bi neodrživo da svaka komponenta sistema mora da zna na kojim portovima su ostale, a potpuno apsurdno da korisnik sajta mora da zna na kom portu je hostovan glavni vebsajt (frontend).
 
-Očigledno je da nam je potrebna pristupna tačka celom sistemu za spoljašnji svet - jednom rečju potreban nam je \textbf{veb server}. Pri početku pogavlja \ref{sec:backend} izričito je napomenuta razlika između veb servera i aplikativnog servera. Pod aplikativnim serverom mislimo na HTTP server u odgovarajućem veb okruženju (u našem slučaju Next.js ili Nest.js) koji služi za obradu zahteva ili (u slučaju serverskog renderovanja) generisanje HTML-a. Ovi serveri treba da se bave isključivo svojim ulogama i da se ne brinu o stvarima kao što su provera SSL sertifikati, serviranje statičkih fajlova i slično. Navedeni zadaci, naravno uz još mnoge, potpadaju pod ulogu veb servera.
+Očigledno je da nam je potrebna pristupna tačka celom sistemu za spoljašnji svet - jednom rečju potreban nam je \textbf{veb server}. Pri početku pogavlja \ref{sec:backend} izričito je napomenuta razlika između veb servera i aplikativnog servera. Pod aplikativnim serverom mislimo na HTTP server u odgovarajućem veb okruženju (u našem slučaju Next.js ili Nest.js) koji služi za obradu zahteva ili (u slučaju serverskog renderovanja) generisanje HTML-a. Ovi serveri treba da se bave isključivo svojim ulogama i da se ne brinu o stvarima kao što su provera SSL sertifikata, serviranje statičkih fajlova i slično. Navedeni zadaci, naravno uz još mnoge, potpadaju pod ulogu veb servera.
 
 Tok korisničkog zahteva uprošćeno možemo shvatiti na sledeći način, kao što je prikazano u \cite{webvsappserver}:
 \begin{enumerate}
     \item Korisnik pokuša da pristupi određenom resursu putem URL-a.
-    \item Zahtev prvo stiže do veb servera\footnote{Ukoliko se dodatno koristi mreža za dostavljanje sadržaja (eng. Content Delivery Network - CDN), recimo Cloudflare, onda bi zahtev tehnički prvo prošao kroz nju, ali svakako veb server treba da bude agnostičan od toga.}. Ukoliko se koristi HTTPS veb server vrši proveru sertifikata i bezbednosti konekcije.
-    \item U zavisnosti od URL-a veb server odlučuje da li može sam da odgovori ili ne. Ukoliko može, na primer ako je zahtev za statičkim sadržajem kao što su slike, veb server odgovara i komunikacija se završava.
+    \item Zahtev prvo stiže do veb servera\footnote{Ukoliko se dodatno koristi mreža za dostavljanje sadržaja (eng. Content Delivery Network - CDN), recimo Cloudflare, onda bi zahtev tehnički prvo prošao kroz nju, ali svakako veb server treba da bude agnostičan od toga.}. Ukoliko se koristi HTTPS, veb server vrši proveru sertifikata i bezbednosti konekcije.
+    \item U zavisnosti od URL-a, veb server odlučuje da li može sam da odgovori ili ne. Ukoliko može, na primer ako je zahtev za statičkim sadržajem kao što su slike, veb server odgovara i komunikacija se završava.
     \item U suprotnom veb server delegira posao odgovarajućem aplikativnom serveru.
 \end{enumerate}
 
-$nginx$ \cite{nginxdocs} nam omogućava sve od navedenog. Kada ga koristimo za delegiranje zadataka aplikativnim serverima onda kažemo da zauzima ulogu obrnutog ili reverznog proksija (eng. reverse proxy). Razlog takvog imenovanja jeste upravo u smeru prosleđivanja zahteva - klasičan proksi prosleđuje zahteve eksternim servisima, dok reverzni proksi prosleđuje zahteve "sam na sebe". 
+$nginx$ \cite{nginxdocs} nam omogućava sve od navedenog. Kada ga koristimo za delegiranje zadataka aplikativnim serverima, onda kažemo da zauzima ulogu obrnutog ili reverznog proksija (eng. reverse proxy). Razlog takvog imenovanja jeste upravo u smeru prosleđivanja zahteva - klasičan proksi prosleđuje zahteve eksternim servisima, dok reverzni proksi prosleđuje zahteve "sam na sebe". 
 
 Dijagram \ref{fig:dockerandnginxfinal} prikazuje nacrt celog sistema.
 
@@ -1631,7 +1631,7 @@ Dijagram \ref{fig:dockerandnginxfinal} prikazuje nacrt celog sistema.
 \newpage
 \section{Produkciono okruženje, višefazna izgradnja slika, DockerHub}
 
-Za kraj napominjemo male razlike između konfiguracije lokalnog okruženja prikazanog u prethodnim sekcijama i produkcionog, od čega je najveća razlike u docker slikama. Naime, u produkciji nema potrebe da otpremamo izvorni k\^{o}d aplikacija kao što to radimo u lokalnom okruženju\footnote{U lokalnom okruženju nam je potreban izvorni k\^{o}d kako bismo mogli da razvijamo uživo, tj da se promene u k\^{o}du odmah reflektuju.}, već u docker sliku možemo kopirati samo neophodne fajlove za pokretanje.
+Za kraj napominjemo male razlike između konfiguracije lokalnog okruženja, prikazanog u prethodnim sekcijama, i produkcionog, od čega je najveća razlike u docker slikama. Naime, u produkciji nema potrebe da otpremamo izvorni k\^{o}d aplikacija, kao što to radimo u lokalnom okruženju\footnote{U lokalnom okruženju nam je potreban izvorni k\^{o}d kako bismo mogli da razvijamo uživo, tj. da se promene u k\^{o}du odmah reflektuju.}, već u docker sliku možemo kopirati samo neophodne fajlove za pokretanje.
 
 
 \subsection{Višefazna izgradnja}
@@ -1642,7 +1642,7 @@ Na primer, u slučaju Nest.js API-a dovoljno je imati samo nekoliko fajlova i fo
     \item \verb|package.json| fajl kako bismo pokretali skripte.
 \end{itemize}
 
-Izgradnju docker slika koji sadrže samo potrebne fajlove i odbacuju sve što nije potrebno usput možemo postići korišćenjem višefaznih izgradnji (eng. multiphase build). Dockerfile možemo organizovati u više faza, gde iz svake faze kopiramo isključivo fajlove koji su potrebni na samom kraju. Ovakav način izgradnja slika prikazan je u primeru \ref{lst:mfbuild}.
+Izgradnju docker slika koje sadrže samo potrebne fajlove, i odbacuju sve što nije potrebno usput, možemo postići korišćenjem višefaznih izgradnji (eng. multiphase build). Dockerfile možemo organizovati u više faza, gde iz svake faze kopiramo isključivo fajlove koji su potrebni na samom kraju. Ovakav način izgradnje slika prikazan je u primeru \ref{lst:mfbuild}.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=docker, caption={Višefazna izgradnja slike za API servis.}, label={lst:mfbuild}]
@@ -1676,9 +1676,9 @@ CMD ["node", "dist/main"]
 \newpage
 \subsection{DockerHub}
 
-Kao dodatno olakšanje za pokretanje produkcione varijante sistema STS, sve slike možemo otpremiti na DockerHub koji predstavlja onlajn servis za pronalaženje i deljenje docker slika \cite{dockerhubdocs}. Besplatan plan koji nudi DockerHub, u trenutku pisanja ovog rada, omogućava hostovanje neograničeno mnogo javnih slika, što je više nego dovoljno za potrebe sistema STS. 
+Kao dodatno olakšanje za pokretanje produkcione varijante sistema STS, sve slike možemo otpremiti na DockerHub, koji predstavlja onlajn servis za pronalaženje i deljenje docker slika \cite{dockerhubdocs}. Besplatan plan koji nudi DockerHub, u trenutku pisanja ovog rada, omogućava hostovanje neograničeno mnogo javnih slika, što je više nego dovoljno za potrebe sistema STS. 
 
-S tim u vidu napravljene su produkcione skripte koje se mogu naći u folderu \verb|bin| u izvornom k\^{o}du koje se bave izgradnjom i otpremanjem produkcionih slika. Primer ovih komandi vidimo u \ref{lst:prodscriptsexample}.
+S tim u vidu napravljene su produkcione skripte, koje se nalaze u folderu \verb|bin| u izvornom k\^{o}du i bave se izgradnjom i otpremanjem produkcionih slika. Primer ovih komandi vidimo u \ref{lst:prodscriptsexample}.
 
 \begin{lstlisting}[caption={docker-compose komande.}, label={lst:prodscriptsexample}]
 # Komanda za izgradnju API slike (fajl sts-build)
@@ -1692,7 +1692,7 @@ docker push aleksakojadinovic/sts:api-latest
 
 \end{lstlisting}
 
-Produkciona docker-compose konfiguracija sada ne mora uopšte zavisiti od postojanja Dockerfile-ova već može direktno pokretati slike sa DockerHub-a. Na taj način postigli smo da na konačnom fizičkom\footnote{Naglašavamo fizičkom jer mislimo na pravu instancu servera gde ćemo pokretati docker. Ipak pojam fizičkog servera i ovde treba uzeti sa rezervom jer su u oblaku i takvi serveri virtuelni samo na višem nivou. Svakako iz našeg ugla smatramo ih za fizičke servere.} serveru na kom pokrećemo sistem ne moramo niti imati izvorni k\^{o}d niti klonirati git repozitorijum izvornog k\^{o}da - možemo docker-compose konfiguraciju držati u zasebnom repozitorijumu. Ipak je sve obuhvaćeno u jednom repozitorijumu kako bi služio kao centralni izvor svega pokrivenog u radu.
+Produkciona docker-compose konfiguracija sada ne mora uopšte zavisiti od postojanja Dockerfile-ova, već može direktno pokretati slike sa DockerHub-a. Na taj način postigli smo da na konačnom fizičkom\footnote{Naglašavamo fizičkom jer mislimo na pravu instancu servera gde ćemo pokretati docker. Ipak pojam fizičkog servera i ovde treba uzeti sa rezervom jer su u oblaku i takvi serveri virtuelni samo na višem nivou. Svakako iz našeg ugla smatramo ih za fizičke servere.} serveru, na kom pokrećemo sistem, ne moramo niti imati izvorni k\^{o}d niti klonirati git repozitorijum izvornog k\^{o}da - možemo docker-compose konfiguraciju držati u zasebnom repozitorijumu. Ipak je sve obuhvaćeno u jednom repozitorijumu kako bi služio kao centralni izvor svega pokrivenog u radu.
 
 % ------------------------------------------------------------------------------
 
@@ -1700,21 +1700,21 @@ Produkciona docker-compose konfiguracija sada ne mora uopšte zavisiti od postoj
 \chapter{Zaključak}
 % ------------------------------------------------------------------------------
 
-Dostupne tehnologije za razvoj veb aplikacija su mnogobrojne i trendovi ukazuju na to da će ih biti sve više. Tehnološki stekovi (eng. tech stack) mogu se neformalno svrstati u dve grupe. Prva bi se sastojala od tradicionalnih ekosistema poput onih vezanih za jezik PHP\footnote{Uz koji često ide MySQL baza podataka, sa podrškom okruženja kao što je CodeIgniter, Symfony ili Laravel.} ili Javu\footnote{Npr okruženje Spring Boot.}, dok bi se u drugu mogli svrstati moderne Javascript biblioteke od kojih su neke prikazane. Nije retka pojava izjednačavanje tradicionalnih okruženja sa kvalitetom i stabilnošću, i stav da se jedino u njima može pisati ozbiljan softver. Isto tako postoji i pogrešno verovanje u suprotnom smeru - novi Javascript ekosistemi označavaju se kao infantilni uprkos dugogodišnjem postojanju.
+Dostupne tehnologije za razvoj veb aplikacija su mnogobrojne i trendovi ukazuju na to da će ih biti sve više. Tehnološki stekovi (eng. tech stack) mogu se neformalno svrstati u dve grupe. Prva bi se sastojala od tradicionalnih ekosistema poput onih vezanih za jezik PHP\footnote{Uz koji često ide MySQL baza podataka, sa podrškom okruženja kao što je CodeIgniter, Symfony ili Laravel.} ili Javu\footnote{Npr. okruženje Spring Boot.}, dok bi se u drugu mogli svrstati moderne Javascript biblioteke, od kojih su neke prikazane. Nije retka pojava izjednačavanje tradicionalnih okruženja sa kvalitetom i stabilnošću, i stav da se jedino u njima može pisati ozbiljan softver. Isto tako postoji i pogrešno verovanje u suprotnom smeru - novi Javascript ekosistemi označavaju se kao infantilni uprkos dugogodišnjem postojanju.
 
 Cilj ovog rada je višestruk. Sa jedne strane služi da potvrdi činjenicu da je dobra infrastruktura i dizajn softvera agnostičan od konkretnih tehnologija. Druga svrha jeste prikaz kompletnog procesa razvoja složenog softverskog sistema u modernim tehnologijama, a pritom ne pribegavajući brzim rešenjima koja okruženja nude već prateći ustanovljene principe.
 
-Već u prvom poglavlju dat je primer dizajniranja nerelacione baze podataka putem ER modela, koji se često vezuje čvrsto za relacione baze. Pritom je iskorišćen šablon Event Sourcing zarad povećanja fleksibilnosti tiketa. Kasnije, uvođenjem okruženja NestJS i jezika \verb|typescript|, a uz podršku paketa \verb|mongoose|, implementacija principima domenskog dizajna omogućila je maksimalnu izolovanost slojeva. Razlika između osnovnog entiteta kroz tri sloja - infrastrukturni, domenski i API - demonstrira istinsku izolovanost komponenti i omogućava razmišljanje o izdvajanju u zasebne pakete ili čak mikroservise.
+Već u prvom poglavlju dat je primer dizajna nerelacione baze podataka putem ER modela, koji se često vezuje čvrsto za relacione baze. Pritom je iskorišćen šablon Event Sourcing zarad povećanja fleksibilnosti tiketa. Kasnije, uvođenjem okruženja NestJS i jezika \verb|typescript|, a uz podršku paketa \verb|mongoose|, implementacija principima domenskog dizajna omogućila je maksimalnu izolovanost slojeva. Razlika između osnovnog entiteta kroz tri sloja - infrastrukturni, domenski i API - demonstrira istinsku izolovanost komponenti i omogućava razmišljanje o izdvajanju u zasebne pakete, ili čak mikroservise.
 
-Frontend svet je u trenutku pisanja raznovrsan i podeljen. Pojava da velika kompanija kao što je Vercel predvodi okruženje otvorenog k\^{o}da (Next.js) dovodi do toga da marketing i popularnost utiče direktno na šablone razvoja softvera\footnote{Na primer, moguće je direktno se povezati na bazu podataka u Next.js-u i vršiti upite na bazi zahteva. Jasno je da ovde sprega između frontend dela aplikacija i baze podataka ogromna, a ipak se ovakav pristup reklamira kao poželjan u određenim Next.js kursevima.}. Ovaj rad je iz tog ugla stremio da uzme najbolje iz oba sveta - iskorišćen je pun potencijal serverskog renderovanja Next.js-a, a uz podršku stabilnih ekosistemskih paketa poput redux-a.
+Frontend svet je u trenutku pisanja raznovrsan i podeljen. Pojava da velika kompanija kao što je Vercel predvodi okruženje otvorenog k\^{o}da (Next.js) dovodi do toga da marketing i popularnost utiče direktno na šablone razvoja softvera\footnote{Na primer, moguće je direktno se povezati na bazu podataka u Next.js-u i vršiti upite na bazi zahteva. Jasno je da ovde sprega između frontend dela aplikacije i baze podataka ogromna, a ipak se ovakav pristup reklamira kao poželjan u određenim Next.js kursevima.}. Ovaj rad je iz tog ugla stremio da uzme najbolje iz oba sveta - iskorišćen je pun potencijal serverskog renderovanja Next.js-a, a uz podršku stabilnih ekosistemskih paketa poput redux-a.
 
 Poglavlje o DevOps-u prikazuje moć Docker-a kao univerzalnog alata za izolaciju okruženja i otpremanje softvera. Za ogromne sisteme cloud rešenja koja nude veliki provajderi poput Amazona ili Google-a mogu biti dobar izbor, ali treba imati u vidu da kombinacija alata kao što su Docker i nginx mogu zadovoljiti većinu potreba.
 
 Analitika može biti tema za zasebno istraživanje, ali je uspešno uspostavljena platforma za njen dalji razvoj.
 
-Naravno, sistem STS u obliku prikazanom u ovom radu ima očiglednih nedostataka. Najočigledniji nedostatak jesu testovi - jedinični testovi (eng. unit tests) bili bi krucijalan deo za garanciju kvaliteta softvera i deo procesa otpremanja. Zamerka se može ukazati i na infrastruktuni sloj bekenda i njegov strogi izbor pohlepnog učitavanja - neki sistemi omogućavaju odabir da li je učtivanje lenjo ili pohlepno na nivou entiteta. Nedostatak tipiziranja u frontendu, odnosno korišćenje čistog jezika \verb|javascript|, stvar je izbora zarad izbegavanja kompleksnosti. Iz ugla osiguravanja podataka, automatske skripte za generisanje rezervnih kopija baze podataka bile bi neizostavan deo ozbiljnog softverskog sistema u produkciji, što se može postići kako manuelno tako i korišćenjem baza podataka u oblaku. Analitički servis, kao što je pomenuto, jeste minimalan i služi isključivo za demonstraciju takvih mogućnosti.
+Naravno, sistem STS, u obliku prikazanom u ovom radu ima očiglednih nedostataka. Najočigledniji nedostatak jesu testovi - jedinični testovi (eng. unit tests) bili bi krucijalan deo za garanciju kvaliteta softvera i deo procesa otpremanja. Zamerka se može ukazati i na infrastruktuni sloj bekenda i njegov strogi izbor pohlepnog učitavanja - neki sistemi omogućavaju odabir da li je učitavanje lenjo ili pohlepno na nivou entiteta. Nedostatak tipiziranja u frontendu, odnosno korišćenje čistog jezika \verb|javascript|, stvar je izbora zarad izbegavanja kompleksnosti. Iz ugla osiguravanja podataka, automatske skripte za generisanje rezervnih kopija baze podataka bile bi neizostavan deo ozbiljnog softverskog sistema u produkciji, što se može postići kako manuelno tako i korišćenjem baza podataka u oblaku. Analitički servis, kao što je pomenuto, jeste minimalan i služi isključivo za demonstraciju takvih mogućnosti.
 
-Sve u svemu, trenutna implementacija sistema STS čini solidnu osnovnu za dalji razvoj. Izolovanost komponenti omogućava i laku podelu poslova po timovima kako bi svaki tim mogao da se fokusira na unapređenje pojedinačnih modula. Programski ko\^{o}d u repozitorijumu može poslužiti i kao šablon za buduće projekte (eng. boilerplate) sa izborom istih tehnologija.
+Sve u svemu, trenutna implementacija sistema STS čini solidnu osnovnu za dalji razvoj. Izolovanost komponenti omogućava i laku podelu poslova po timovima, kako bi svaki tim mogao da se fokusira na unapređenje pojedinačnih modula. Programski k\^{o}d u repozitorijumu može poslužiti i kao šablon za buduće projekte (eng. boilerplate) sa izborom istih tehnologija.
 % ------------------------------------------------------------------------------
 % Literatura
 % ------------------------------------------------------------------------------
