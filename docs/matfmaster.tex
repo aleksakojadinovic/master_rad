@@ -569,7 +569,7 @@ Sloj infrastrukture ima više uloga u DDD sistemu, ali zajednička osobina je od
 
 
 \subsection{Repozitorijumi}
-Apstrakcija koju pruža sloj repozitorijuma ogleda se upravo u načinu na koji on obrađuje podatke pre vraćanja u više slojeve, tačnije služi se \textbf{šablonom preslikavanja podataka} (eng. Data mapper pattern). Uloga mapiranja podataka uglavnom je u praksi delegirana konkretnoj biblioteci ili okruženju koje upravlja pristupom bazi putem softverskog segmenta iz klase Objektno-relacionih ili Objektno-dokumentnih preslikavača (eng. Object Relational Mapper - ORM, Object Document Mapper - ODM). Iako ti sistemi često u potpunosti zadovoljavaju potrebe mapiranja podataka, u ovom radu je mapiranje urađeno ručno, tako da se objekti dobijeni ODM slojem, odnosno bibliotekom \verb|mongoose| \cite{mongoosedocs}, preslikavaju u entitete koristeći biblioteku \verb|@automapper/js| \cite{automapperjsdocs}.
+Apstrakcija koju pruža sloj repozitorijuma ogleda se upravo u načinu na koji on obrađuje podatke pre vraćanja u više slojeve, tačnije služi se \textbf{šablonom preslikavanja podataka} (eng. Data mapper pattern). Uloga mapiranja podataka uglavnom je u praksi delegirana konkretnoj biblioteci ili okruženju, koje upravlja pristupom bazi putem softverskog segmenta iz klase Objektno-relacionih ili Objektno-dokumentnih preslikavača (eng. Object Relational Mapper - ORM, Object Document Mapper - ODM). Iako ti sistemi često u potpunosti zadovoljavaju potrebe mapiranja podataka, u ovom radu je mapiranje urađeno ručno, tako da se objekti dobijeni ODM slojem, odnosno bibliotekom \verb|mongoose| \cite{mongoosedocs}, preslikavaju u entitete koristeći biblioteku \verb|@automapper/js| \cite{automapperjsdocs}.
 
 \begin{figure}[h]
   \centering
@@ -1191,7 +1191,7 @@ function TicketViewPage() {
 
 Frontend, kao deo aplikacije koji je direktno zadužen za prikaz grafičkog korisničkog interfejsa, prirodno nosi pitanja koja se odnose na način prikazivanja sadržaja neke vrste. 
 
-Definicija internacionalizacije je veoma opšteg karaktera i na osnovu \cite{i18n} svodi se na dizajn i razvoj sadržaja proizvoda, aplikacije ili dokumenta koji omogućava lako prilagođavanje kulturi, regionu ili jeziku. U užem smislu, iz ugla frontend razvoja, razmatraju se uglavnom sadržaji sledećeg tipa:
+Definicija internacionalizacije je veoma opšteg karaktera i na osnovu \cite{i18n} svodi se na dizajn i razvoj sadržaja proizvoda, aplikacije ili dokumenta koji omogućava lako prilagođavanje kulturi, regionu ili jeziku. U užem smislu, odnosno iz ugla frontend razvoja, razmatraju se uglavnom sadržaji sledećeg tipa:
 
 \begin{itemize}
     \item \textbf{Tekstualni sadržaj.} Skoro svaki deo korisničkog interjsa sadrži neki tekstualni sadržaj. Iako je moguće takav sadržaj zapisati direktno u k\^{o}du (eng. hardcode), ipak je bolje imati sistem koji tekstualne sadržaje drži izdvojeno i po potrebi omogućava višejezičnost - kada korisnik promeni željeni jezik menjaju se i svi tekstualni sadržaji bez ikakve specijalne izmene u k\^{o}du.
@@ -1297,7 +1297,7 @@ Napomenućemo da bi sofisticirani sistem internacionalizacije podržao čuvanje 
 % ------------------------------------------------------------------------------
 \chapter{Analitika}
 
-Jedan zadatak u okviru razvoja softverskog sistema jeste napraviti sve proizvodne funkcionalnosti - kreiranje tiketa, komentarisanje, promena statusa, zatvaranje, i sl. Iz ugla čistog softverskog inženjerstva moglo bi se reći da je posao završen onda kada su implementirane sve komponente sistema i njihova međusobna saradnja zarad izvršavanja poslovnih procesa.
+Jedan zadatak u okviru razvoja softvera jeste napraviti sve proizvodne funkcionalnosti - kreiranje tiketa, komentarisanje, promena statusa, zatvaranje, i sl. Iz ugla čistog softverskog inženjerstva moglo bi se reći da je posao završen onda kada su implementirane sve komponente sistema i njihova međusobna saradnja zarad izvršavanja poslovnih procesa.
 
 Ovakav stav, očekivano, bio bi naivan. Problem leži u tome što ne postoji taj nivo istrage i domenskog znanja koji poslovođi može ukazati na sve potencijalne mane i moguća unapređenja sistema kao što mogu uraditi realni podaci generisani prilikom upotrebe softvera. Ovakav pristup ima za cilj da stvori ponavljajući ciklus koji se sastoji, grubo, iz sledećih koraka \cite{dataanalytics}:
 \begin{enumerate}
@@ -1318,7 +1318,7 @@ Niz koraka iz uvodnog dela ovog poglavlja predstavlja uopšten mentalni model na
   \label{fig:datadiag}
 \end{figure}
 
-Za potrebe ovog rada, a iz razloga jer to nije glavni fokus, sistem analitike izveden je u uprošćenom obliku. Skladišta podataka (eng. data warehouse) predstavljaju zasebnu oblast izučavanja i u vreme pisanja rada potpadaju najviše pod oblast poznatom kao inženjerstvo podataka (eng. data engineering). Skladište podataka smatraćemo za organizovanu kolekciju podataka dobijenu transformacijom izvornih podataka u oblik prikladan za izvršavanje odgovarajućih upita \cite{dataanalytics}.
+Za potrebe ovog rada, a iz razloga jer to nije glavni fokus, sistem analitike izveden je u uprošćenom obliku. Skladišta podataka (eng. data warehouse) predstavljaju zasebnu oblast izučavanja i u vreme pisanja rada potpadaju najviše pod oblast poznatoj kao inženjerstvo podataka (eng. data engineering). Skladište podataka smatraćemo za organizovanu kolekciju podataka dobijenu transformacijom izvornih podataka u oblik prikladan za izvršavanje odgovarajućih upita \cite{dataanalytics}.
 
 Sledeće prirodno pitanje koje se nameće jeste kako i kada se date transformacije vrše. U sistemu STS ovaj zadatak potpada pod ETL (eng. Extract Transform Load) servis. Kao što i samo ime kaže sastoji se od tri koraka:
 \begin{enumerate}
