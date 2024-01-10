@@ -10,8 +10,9 @@ export const isProduction = () => process.env.NODE_ENV === 'production';
 export const getBaseUrl = () =>
   isServer() ? 'https://host.docker.internal' : '/';
 
+// Depends on deployment model
 export const getExternalBaseUrl = () =>
-  isProduction() ? 'TODO' : 'https://dev.sts.com';
+  isProduction() ? 'https://dev.sts.com' : 'https://dev.sts.com';
 
 export const formatDate = (date, intl = null) => {
   const at = intl ? intl.formatMessage(globalMessages.timeAt) : 'at';

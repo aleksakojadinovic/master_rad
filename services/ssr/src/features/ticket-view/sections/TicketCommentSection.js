@@ -21,7 +21,6 @@ function TicketCommentSection({ ticket }) {
 
   const toggleInternal = () => setIsInternal((internal) => !internal);
 
-  // TODO: this needs BE support
   const canAddComment = useMemo(() => {
     return (
       ticket.status !== TicketStatus.CLOSED &&

@@ -140,7 +140,6 @@ export class TicketService extends BaseService {
     const currentStatus = ticket.status;
     const targetStatus = dto.status;
 
-    // TODO: encapsulate this logic somewhere
     const canChange = TICKET_STATUS_GRAPH[currentStatus].find(
       (entry) =>
         entry.status === targetStatus && entry.roles.includes(user.role),

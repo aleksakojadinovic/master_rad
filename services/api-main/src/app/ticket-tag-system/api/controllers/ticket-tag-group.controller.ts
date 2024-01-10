@@ -11,6 +11,7 @@ import {
   Req,
   ValidationPipe,
   UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { TicketTagGroupService } from '../../domain/services/ticket-tag-group.service';
 import { CreateTicketTagGroupDTO } from '../dto/create-ticket-tag-group.dto';
@@ -42,8 +43,11 @@ export class TicketTagGroupController {
   async create(
     @Body() createTicketTagGroupDTO: CreateTicketTagGroupDTO,
     @Req() req: Request,
+    @GetUserInfo() user: User,
   ) {
-    // TODO: Validate, protect
+    if (!user.isAdministrator()) {
+      throw new UnauthorizedException();
+    }
     const languageCode = resolveLanguageCode(req);
     const group = await this.ticketTagGroupService.create(
       createTicketTagGroupDTO,
@@ -75,7 +79,9 @@ export class TicketTagGroupController {
     @Req() req: Request,
     @GetUserInfo() user: User,
   ) {
-    // TODO: protect
+    if (!user.isAdministrator()) {
+      throw new UnauthorizedException();
+    }
     const languageCode = resolveLanguageCode(req);
     const ticketTagGroups = await this.ticketTagGroupService.findAll(
       queryDTO,
@@ -100,7 +106,11 @@ export class TicketTagGroupController {
     @Body(new ValidationPipe())
     updateTicketTagGroupDto: CreateOrUpdateTicketTagGroupDTO,
     @Req() req: Request,
+    @GetUserInfo() user: User,
   ) {
+    if (!user.isAdministrator()) {
+      throw new UnauthorizedException();
+    }
     if (!isValidObjectId(id)) {
       throw new BadRequestException(`Invalid group id: ${id}`);
     }

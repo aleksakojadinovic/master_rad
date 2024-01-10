@@ -14,7 +14,6 @@ const roles = [
 ];
 const predefinedAdmin = { username: 'administrator' };
 
-// TODO: Eventually make a CLI for this seeder so not to overwrite everything every time
 const predefinedAgents = [
   { firstName: 'Emma', lastName: 'Smith' },
   { firstName: 'Oliver', lastName: 'Johnson' },

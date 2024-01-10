@@ -144,7 +144,6 @@ function TicketTagGroupAdmin({ group, isCreate }) {
   const [whoCanRemoveKey, setWhoCanRemoveKey] = useState(0);
   const [whoCanSeeKey, setWhoCanSeeKey] = useState(0);
 
-  // TODO: adapt to create/update blabla
   const statusMessage = useMemo(() => {
     if (isUpdateSuccess) {
       return intl.formatMessage(
@@ -273,7 +272,6 @@ function TicketTagGroupAdmin({ group, isCreate }) {
               />
             </Box>
           ))}
-          {/* TODO: This is so very stupid, find a better way */}
           <Box marginTop="8px">
             <Button
               onClick={() =>
@@ -283,7 +281,6 @@ function TicketTagGroupAdmin({ group, isCreate }) {
                     id: `new-tag-${currentTags.length}`,
                     name: '',
                     description: '',
-                    // TODO: Don't use hardcoded locales
                     nameIntl: { en: '', sr: '' },
                     descriptionIntl: { en: '', sr: '' },
                     isNew: true,

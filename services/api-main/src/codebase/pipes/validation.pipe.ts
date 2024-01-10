@@ -5,7 +5,6 @@ export class CustomValidationPipe extends ValidationPipe {
     try {
       return await super.transform(value, metadata);
     } catch (e) {
-      // TODO
       throw e;
     }
   }
