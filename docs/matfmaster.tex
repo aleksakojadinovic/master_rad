@@ -197,7 +197,7 @@
 
 % Apstrakt na srpskom jeziku (u odabranom pismu)
 \apstr{%
-Razvoj veb aplikacija u današnje vreme jedna je od najrasprostranjenijih grana softverskog inženjerstva. Moguće je implementirati veoma kompleksne softverske sisteme kao veb servise. Izbor veba nosi kako pogodnosti tako i izazove. Ovaj rad ima za cilj implementaciju kompleksne veb platforme za rešavanje konkretnog poslovnog problema - asinhrone korisničke podrške u vidu tiketa. Pritom se razmatra korišćenje modernih veb tehnologija zasnovanih na Node.js ekosistemu. Rad prikazuje proces dizajna domenskog modela putem ER dijagrama i DDD principa, a zatim i kompletnu implementaciju serverskog i klijentskog dela aplikacije u okruženjima NestJS i Next.js. Osim domenskog razvoja razmatra se i izolacija okruženja koristeći sistem za virtuelizaciju Docker. Rad obuhvata i prikaz implementacije minimalnog analitčkog servisa u jeziku \textit{python} uključujući ETL procese i vizuelizaciju.
+Razvoj veb aplikacija u današnje vreme jedna je od najrasprostranjenijih grana softverskog inženjerstva. Moguće je implementirati veoma kompleksne softverske sisteme kao veb servise. U ovom radu se razmatra i analizira arhitektura kompleksne veb platforme za rešavanje konkretnog poslovnog problema - asinhrone korisničke podrške u vidu tiketa. Predloženo rešenje razvijeno je korišćenjem modernih veb tehnologija zasnovanih na Node.js ekosistemu. Rad prikazuje proces dizajna domenskog modela putem ER dijagrama i DDD principa, a zatim i kompletnu implementaciju serverskog i klijentskog dela aplikacije u okruženjima NestJS i Next.js. Osim domenskog dizajna i razvoja, razmatra se i izolacija okruženja koristeći sistem za virtuelizaciju Docker. Rad obuhvata i prikaz implementacije minimalnog analitčkog servisa u jeziku \textit{python} uključujući ETL procese i vizuelizaciju.
 }
 
 % Ključne reči na srpskom jeziku (u odabranom pismu)
@@ -236,19 +236,19 @@ Prilikom razvoja bilo kakvog poslovnog softvera namenjenog za korišćenje od st
 
 Veb je od svog originalnog oblika, koji se zasnivao na prikazivanju i povezivanju statičkih HTML stranica, evoluirao do kompleksne platforme za razvoj softvera. Iz tog razloga vremenom se javljala potreba za formalizovanjem principa razvoja softvera za veb, baš kao i za tradicionalne aplikacije \cite{web_evolution}. Za ove potrebe nastali su mnogi standardi i okviri za uspešan razvoj veb aplikacija, koji se vremenom pokazuju kao dobre prakse uprkos konstantnom menjaju konkretnih tehnologija i trendova.
 
-Ovaj rad predstaviće razvoj kompleksne veb platforme za upravljanje korisničkim žalbama i zahtevima. Pod kompleksnošću platforme primarno podrazumevamo tehničku kompleksnost - mogućnosti sistema iz ugla korisnika su ograničene, ali način na koji je sistem dizajniran omogućava njegovo lako proširenje. Dobri standardi i prakse razvoja veb aplikacija često se vezuju za tradicionalne platforme, međutim cilj ovog rada jeste da predstavi njihovu upotrebljivost i u modernim bibliotekama i okruženjima.
+Ovaj rad predstaviće razvoj kompleksne veb platforme za upravljanje korisničkim žalbama i zahtevima. Pod kompleksnošću platforme primarno podrazumevamo tehničku kompleksnost - mogućnosti sistema iz ugla korisnika su ograničene, ali način na koji je sistem dizajniran omogućava njegovo lako proširenje. Iako se dobri standardi i prakse razvoja veb aplikacija obično vezuju za tradicionalne platforme, cilj ovog rada jeste da predstavi njihovu upotrebljivost i u modernim bibliotekama i okruženjima.
 
-Poglavlje 2 najpre će prikazati sistem STS iz ugla korisnika, kako bi problematika realnog sveta koju rešavamo bila jasna, dok se naredni deo bavi projektovanjem sistema putem modela entiteta i odnosa. 
+Poglavlje 2 najpre će prikazati sistem STS iz ugla korisnika, kako bi bila jasna problematika realnog sveta koja se rešava, dok se naredni deo bavi projektovanjem sistema putem modela entiteta i odnosa. 
 
 Treće poglavlje bavi se serverskim delom aplikacije, odnosno bekendom, primenom domenskog dizajna i pregledom svakog od slojeva serverske aplikacije.
 
-U poglavlju 4 fokus se prebacuje na klijentski deo aplikacije, gde se osim prikaza rada aplikacije osvrćemo na kratak istorijat primene jezika Javascript, kao i neke druge aspekte razvoja klijentskih aplikacija.
+U poglavlju 4 fokus se prebacuje na klijentski deo aplikacije, gde se osim prikaza rada aplikacije daje i kratak istorijat primene jezika Javascript, kao i neki drugi aspekti razvoja klijentskih aplikacija.
 
 Naredno poglavlje prikazuje implementaciju minimalnog sistema za analitiku, uz propratne ETL procese i vizuelizaciju.
 
 Pretposlednje poglavlje uvodi nas u postavku infrastrukture za razvoj, koncept veb servera i proksija, kao i kratak prikaz sistema Docker, kao neizostavnog alata za moderan veb razvoj.
 
-Poglavlje 7 posvećeno je zaključku rada.
+Poglavlje 7 daje zaključna razmatranja.
 
 \chapter{Sistem STS}
 Svaki biznis koji pruža neku vrstu usluge korisnicima neizostavno mora imati korisničku podršku u nekom obliku. Pre razvoja veb tehnologija telefonski sistemi bili su jedini način direktne podrške koju korisnik može da dobije. Razvoj i pristupčanost veba doveli su do evolucije sofisticiranih onlajn proizvoda koji rešavaju problem korisničke podrške, kako putem pisanih rasprava u vidu tiketa, tako i putem tradicionalnih telefonskih linija uz određenu integraciju\footnote{\href{http://zendesk.com}{Zendesk}, \href{https://www.8x8.com/}{8x8}, \href{https://www.atlassian.com/software/jira/service-management}{Jira Service Management}.}.
@@ -376,7 +376,7 @@ tada bi nam za komentar bila potrebna dodatna relacija koja sadrži identifikato
 \textbf{Comment}(\underline{comment\_id}, user\_id, ticket\_id, body, timestamp)    
 \end{center}
 
-Kako koristimo MongoDB i dokumentni model podataka, imamo mogućnost da komentare čuvamo u okviru dokumenta tiketa. Tačnije, u sloju baze podataka, ovi komentari se ne čuvaju eksplicitno, već kroz sistem istorije tiketa. Ukratko, svaka promena nad tiketom se pamti kao jedan događaj u nizu \verb|history|, uz odgovarajući tip promene i neophodne podatke.
+Budući da se koristi MongoDB i dokumentni model podataka, imamo mogućnost da komentare čuvamo u okviru dokumenta tiketa. Tačnije, u sloju baze podataka, ovi komentari se ne čuvaju eksplicitno, već kroz sistem istorije tiketa. Ukratko, svaka promena nad tiketom se pamti kao jedan događaj u nizu \verb|history|, uz odgovarajući tip promene i neophodne podatke.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Tip podataka istorije tiketa.}]
@@ -411,7 +411,7 @@ Dodatni nivo fleksibilnosti postiže se ograničavanjem ko može koju akciju da 
     \item lista uloga korisnika koji mogu da uklanjaju oznake iz date grupe
 \end{itemize}
 
-U domenskom sloju softverskog sistema, o kome će biti reči u sekciji \ref{sec:dddsection}, slabi entiteti se najčešće preslikavaju u pojam \textit{vrednosnih objekata}\footnote{eng. value objects}, dok se u k\^{o}du realizuju putem običnih klasa\footnote{U praksi postoji konvencija nazivanja takvih objekata kao \textit{Plain Old} (stari dobri) objekti. Tako u slučaju jezika Javascript nazivaju se POJO (Plain old Javascript Object), dok bi za PHP bili POJO, i sl.}.
+U domenskom sloju softverskog sistema, o kome će biti reči u sekciji \ref{sec:dddsection}, slabi entiteti se najčešće preslikavaju u pojam \textit{vrednosnih objekata}\footnote{eng. value objects}, dok se u k\^{o}du realizuju putem običnih klasa\footnote{U praksi postoji konvencija nazivanja takvih objekata kao \textit{Plain Old} (stari dobri) objekti. Tako u slučaju jezika Javascript nazivaju se POJO (Plain old Javascript Object), dok bi za PHP bili POPO, i sl.}.
 
 
 % ------------------------------------------------------------------------------
@@ -1712,7 +1712,7 @@ Poglavlje o DevOps-u prikazuje moć Docker-a kao univerzalnog alata za izolaciju
 
 Analitika može biti tema za zasebno istraživanje, ali je uspešno uspostavljena platforma za njen dalji razvoj.
 
-Naravno, sistem STS, u obliku prikazanom u ovom radu ima očiglednih nedostataka. Najočigledniji nedostatak jesu testovi - jedinični testovi (eng. unit tests) bili bi krucijalan deo za garanciju kvaliteta softvera i deo procesa otpremanja. Zamerka se može ukazati i na infrastruktuni sloj bekenda i njegov strogi izbor pohlepnog učitavanja - neki sistemi omogućavaju odabir da li je učitavanje lenjo ili pohlepno na nivou entiteta. Nedostatak tipiziranja u frontendu, odnosno korišćenje čistog jezika \verb|javascript|, stvar je izbora zarad izbegavanja kompleksnosti. Iz ugla osiguravanja podataka, automatske skripte za generisanje rezervnih kopija baze podataka bile bi neizostavan deo ozbiljnog softverskog sistema u produkciji, što se može postići kako manuelno tako i korišćenjem baza podataka u oblaku. Analitički servis, kao što je pomenuto, jeste minimalan i služi isključivo za demonstraciju takvih mogućnosti.
+Naravno, sistem STS, čija je implementacija dostupna javno na adresi \\\href{https://github.com/aleksakojadinovic/master_rad}{https://github.com/aleksakojadinovic/master\_rad}, u obliku prikazanom u ovom radu ima očiglednih nedostataka. Najočigledniji nedostatak jesu testovi - jedinični testovi (eng. unit tests) bili bi krucijalan deo za garanciju kvaliteta softvera i deo procesa otpremanja. Zamerka se može ukazati i na infrastruktuni sloj bekenda i njegov strogi izbor pohlepnog učitavanja - neki sistemi omogućavaju odabir da li je učitavanje lenjo ili pohlepno na nivou entiteta. Nedostatak tipiziranja u frontendu, odnosno korišćenje čistog jezika \verb|javascript|, stvar je izbora zarad izbegavanja kompleksnosti. Iz ugla osiguravanja podataka, automatske skripte za generisanje rezervnih kopija baze podataka bile bi neizostavan deo ozbiljnog softverskog sistema u produkciji, što se može postići kako manuelno tako i korišćenjem baza podataka u oblaku. Analitički servis, kao što je pomenuto, jeste minimalan i služi isključivo za demonstraciju takvih mogućnosti.
 
 Sve u svemu, trenutna implementacija sistema STS čini solidnu osnovnu za dalji razvoj. Izolovanost komponenti omogućava i laku podelu poslova po timovima, kako bi svaki tim mogao da se fokusira na unapređenje pojedinačnih modula. Programski k\^{o}d u repozitorijumu može poslužiti i kao šablon za buduće projekte (eng. boilerplate) sa izborom istih tehnologija.
 % ------------------------------------------------------------------------------
