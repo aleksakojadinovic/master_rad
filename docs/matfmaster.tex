@@ -236,7 +236,7 @@ Prilikom razvoja bilo kakvog poslovnog softvera namenjenog za korišćenje od st
 
 Veb je od svog originalnog oblika, koji se zasnivao na prikazivanju i povezivanju statičkih HTML stranica, evoluirao do kompleksne platforme za razvoj softvera. Iz tog razloga vremenom se javljala potreba za formalizovanjem principa razvoja softvera za veb, baš kao i za tradicionalne aplikacije \cite{web_evolution}. Za ove potrebe nastali su mnogi standardi i okviri za uspešan razvoj veb aplikacija, koji se vremenom pokazuju kao dobre prakse uprkos konstantnom menjaju konkretnih tehnologija i trendova.
 
-Ovaj rad predstaviće razvoj kompleksne veb platforme za upravljanje korisničkim žalbama i zahtevima. Pod kompleksnošću platforme primarno podrazumevamo tehničku kompleksnost - mogućnosti sistema iz ugla korisnika su ograničene, ali način na koji je sistem dizajniran omogućava njegovo lako proširenje. Iako se dobri standardi i prakse razvoja veb aplikacija obično vezuju za tradicionalne platforme, cilj ovog rada jeste da predstavi njihovu upotrebljivost i u modernim bibliotekama i okruženjima.
+Ovaj rad predstaviće razvoj kompleksne veb platforme za upravljanje korisničkim žalbama i zahtevima. Pod kompleksnošću platforme primarno se podrazumeva tehnička kompleksnost - mogućnosti sistema iz ugla korisnika su ograničene, ali način na koji je sistem dizajniran omogućava njegovo lako proširenje. Iako se dobri standardi i prakse razvoja veb aplikacija obično vezuju za tradicionalne platforme, cilj ovog rada jeste da predstavi njihovu upotrebljivost i u modernim bibliotekama i okruženjima.
 
 Poglavlje 2 najpre će prikazati sistem STS iz ugla korisnika, kako bi bila jasna problematika realnog sveta koja se rešava, dok se naredni deo bavi projektovanjem sistema putem modela entiteta i odnosa. 
 
@@ -255,7 +255,7 @@ Svaki biznis koji pruža neku vrstu usluge korisnicima neizostavno mora imati ko
 
 \section{Sistem STS iz ugla korisnika}
 
-Sistem STS\footnote{Skraćeno od eng. Simple Ticket Service, jednostavan servis za tikete.}, razvijan za potrebe ovog rada, obuhvata osnovnu funkcionalnost za pružanje podrške u vidu tiketa. Tiket predstavlja jednu tekstualnu korisničku žalbu ili zahtev, na kojoj se može pokrenuti diskusija, a sve sa ciljem asinhronog\footnote{Pod asinhronošću podrazumevamo suprotnost u odnosu na telefonski sistem u kom korisnik i agent podrške vode komunikaciju u realnom vremenu.} razrešenja korisničkog problema. Glavni akteri sistema su:
+Sistem STS\footnote{Skraćeno od eng. Simple Ticket Service, jednostavan servis za tikete.}, razvijan za potrebe ovog rada, obuhvata osnovnu funkcionalnost za pružanje podrške u vidu tiketa. Tiket predstavlja jednu tekstualnu korisničku žalbu ili zahtev, na kojoj se može pokrenuti diskusija, a sve sa ciljem asinhronog\footnote{Pod asinhronošću podrazumeva se suprotnost u odnosu na telefonski sistem u kom korisnik i agent podrške vode komunikaciju u realnom vremenu.} razrešenja korisničkog problema. Glavni akteri sistema su:
 
 \begin{itemize}
     \item \textbf{Klijenti} - koji mogu postavljati tikete u cilju dobijanja podrške.
@@ -265,7 +265,7 @@ Sistem STS\footnote{Skraćeno od eng. Simple Ticket Service, jednostavan servis 
 
 \subsection{Osnovne funkcionalnosti, prikaz tiketa, statusi}
 
-Osnovni pojam sistema, kao što je rečeno, jeste tiket. Na slici možemo videti primer zaglavlja jednog tiketa. Sastoji se primarno iz naslova i opisa, dok se mogu videti imena klijenta i trenutno zaduženog agenta.
+Osnovni pojam sistema, kao što je rečeno, jeste tiket. Na slici se vidi primer zaglavlja jednog tiketa. Sastoji se primarno iz naslova i opisa, dok se mogu videti imena klijenta i trenutno zaduženog agenta.
 
 \begin{figure}[h]
   \centering
@@ -286,7 +286,7 @@ Tiket može prolaziti kroz više statusa. Promene tih statusa vidljive su kako a
 
 Često postoji potreba klasifikacije tiketa po raznim kriterijumima - departman unutar firme koji se bavi tiketom, hitnost, prioritetnost i slično. Kako bi se postigla maksimalna fleksibilnost uveden je sistem oznaka (eng. tags). Oznaka se može nakačiti na dati tiket i može dati brzu informaciju o nekim njegovim aspektima. Ovaj sistem u potpunosti je konfigurabilan od strane korisnika (u ovom slučaju administratora), tako da nije potrebna intervencija programera prilikom dodavanja novih ili promene postojećih oznaka.
 
-Na sledećoj slici vidimo kako izgleda tiket označen oznakama histnosti i odeljenja.
+Na sledećoj slici vidi se kako izgleda tiket označen oznakama histnosti i odeljenja.
 
 \begin{figure}[h]
   \centering
@@ -294,7 +294,7 @@ Na sledećoj slici vidimo kako izgleda tiket označen oznakama histnosti i odelj
   \caption{Tiket sa oznakama hitnosti i odeljenje.}
 \end{figure}
 
-Sledeće dve slike prikazuju kontrolnu tablu na kojoj administatori mogu upravljati oznakama. Primećujemo dodatnu fleksibilnost u sistemu kojom se može konfigurisati koji tip korisnika ima pravo da vidi, dodaje i uklanja koju oznaku. Takođe može se primetiti da sistem podržava višejezičnost, tako što se imena i opisi mogu podešavati i na srpskom i na engleskom jeziku. O jezicima i sistemu internacionalizacije biće više reči u sekciji \ref{sec:intl}.
+Sledeće dve slike prikazuju kontrolnu tablu na kojoj administatori mogu upravljati oznakama. Primetna je dodatna fleksibilnost u sistemu kojom se može konfigurisati koji tip korisnika ima pravo da vidi, dodaje i uklanja koju oznaku. Takođe može se primetiti da sistem podržava višejezičnost, tako što se imena i opisi mogu podešavati i na srpskom i na engleskom jeziku. O jezicima i sistemu internacionalizacije biće više reči u sekciji \ref{sec:intl}.
 
 \begin{figure}[h]
   \centering
@@ -337,12 +337,12 @@ ER model\footnote{eng. Entity-relationship model - model entiteta i odnosa.} pre
 
 Sastoji se od nekoliko vrsta elemenata:
 \begin{itemize}
-    \item \textbf{Entiteti} predstavljaju stvari iz realnog sveta koje modelujemo. Jedna pojedinačna pojava entieta naziva se \textit{instanca entiteta} \cite{dbmodelinganddesign}. ER dijagram koristi pravougaonike za oznaku entiteta.
+    \item \textbf{Entiteti} predstavljaju stvari iz realnog sveta koje se modeluju. Jedna pojedinačna pojava entiteta naziva se \textit{instanca entiteta} \cite{dbmodelinganddesign}. ER dijagram koristi pravougaonike za oznaku entiteta.
     \item \textbf{Odnosi} predstavljaju asocijacije između entiteta u najopštijem smislu. Karakteriše ih i brojnost koja pruža informaciju o broju instanci svakog entiteta u datom odnosu. Ovakav sistem poznat je i u modelovanju relacionih baza pod nazivima "1 na 1", "1 ka više" i "više ka više". ER dijagram koristi kvadrat za označavanje odnosa.
     \item \textbf{Atributi} jesu karakteristike entiteta ili odnosa koje pružaju dodatne detalje o njima. Atributi mogu biti ključni, u kom slučaju učestuvju u identifikaciji entiteta ili odnosa, ili deskriptivni, kada se odnose na nejedinstvene osobine \cite{dbmodelinganddesign}. Prikazuju se elipsama koje su strelicama povezane za entitet ili odnos kom pripadaju, dok se imena ključnih atributa podvlače.
 \end{itemize}
 
-ER modelovanje neretko se dovodi u vezu sa modelovanjem relacionih baza podataka. Model ipak nije ograničen na vrstu baze podataka, tako da ga koristimo i ovde  uprkos tome što je baza sistema nerelaciona - konkretno MongoDB. Štaviše, proces transformacije ER modela u dokumentni model dodatno je olakšan, jer za određene asocijacije nije potrebno praviti dodatne tabele/dokumente usled mogućnosti čuvanja kompleksnih polja u dokumentima. Na narednom dijagramu prikazan je uprošćen\footnote{Neki atributi nisu prikazani zbog kompaktnosti, neki odnosi korisnika i tiketa nisu prikazani jer su jednostavni (promena naslova, promena tela).} ER dijagram sistema STS.
+ER modelovanje neretko se dovodi u vezu sa modelovanjem relacionih baza podataka. Model ipak nije ograničen na vrstu baze podataka, tako da se koristi i ovde  uprkos tome što je baza sistema nerelaciona - konkretno MongoDB. Štaviše, proces transformacije ER modela u dokumentni model dodatno je olakšan, jer za određene asocijacije nije potrebno praviti dodatne tabele/dokumente usled mogućnosti čuvanja kompleksnih polja u dokumentima. Na narednom dijagramu prikazan je uprošćen\footnote{Neki atributi nisu prikazani zbog kompaktnosti, neki odnosi korisnika i tiketa nisu prikazani jer su jednostavni (promena naslova, promena tela).} ER dijagram sistema STS.
 
 \begin{figure}[h]
   \centering
@@ -352,15 +352,15 @@ ER modelovanje neretko se dovodi u vezu sa modelovanjem relacionih baza podataka
 
 \newpage
 \subsection{Odnos tiketa i korisnika, složeni odnosi}
-Primećujemo da dva glavna entiteta - tiket i korisnik - mogu biti u više različitih odnosa:
+Može se primetiti da dva glavna entiteta - tiket i korisnik - mogu biti u više različitih odnosa:
 \begin{itemize}
     \item Korisnik može kreirati više tiketa (odnos \verb|creates|), dok tiket može biti kreiran od strane samo jednog korisnika.
-    \item Korisnik može komentarisati na tiket (odnos \verb|comments|). Primećujemo da ovaj odnos sadrži dodatne podatke, kao što su identifikator, telo i vreme komentara.
+    \item Korisnik može komentarisati na tiket (odnos \verb|comments|). Vredno pomena je da ovaj odnos sadrži dodatne podatke, kao što su identifikator, telo i vreme komentara.
     \item Korisnik može biti dodeljen tiketu (odnos \verb|is_assigned_to|), i tu dodelu može izvršiti drugi korisnik, označen atributom \verb|initiator|.
     \item Korisnik može menjati status tiketa (odnos \verb|changes_status|).
 \end{itemize}
 
-Kompleksni odnosi, kao što su komentarisanje i dodeljivanje, u relacionoj bazi podataka morali bi biti izvedeni odgovarajućim zasebnim veznim relacijama. Na primer, u slučaju komentarisanja, ako bi korisnik i tiket bili predstavljani sledećim relacijama (koristimo relacionu notaciju):
+Kompleksni odnosi, kao što su komentarisanje i dodeljivanje, u relacionoj bazi podataka morali bi biti izvedeni odgovarajućim zasebnim veznim relacijama. Na primer, u slučaju komentarisanja, ako bi korisnik i tiket bili predstavljani sledećim relacijama (koristeći relacionu notaciju):
 
 \begin{center}
 \textbf{Ticket}(\underline{id}, title, body, status, creator\_id)    
@@ -370,13 +370,13 @@ Kompleksni odnosi, kao što su komentarisanje i dodeljivanje, u relacionoj bazi 
 \textbf{User}(\underline{id}, username, role)    
 \end{center}
 
-tada bi nam za komentar bila potrebna dodatna relacija koja sadrži identifikator tiketa i korisnika:
+tada bi komentar zahtevao dodatnu relacija koja sadrži identifikator tiketa i korisnika:
 
 \begin{center}
 \textbf{Comment}(\underline{comment\_id}, user\_id, ticket\_id, body, timestamp)    
 \end{center}
 
-Budući da se koristi MongoDB i dokumentni model podataka, imamo mogućnost da komentare čuvamo u okviru dokumenta tiketa. Tačnije, u sloju baze podataka, ovi komentari se ne čuvaju eksplicitno, već kroz sistem istorije tiketa. Ukratko, svaka promena nad tiketom se pamti kao jedan događaj u nizu \verb|history|, uz odgovarajući tip promene i neophodne podatke.
+Budući da se koristi MongoDB i dokumentni model podataka, moguće je komentare čuvati u okviru dokumenta tiketa. Tačnije, u sloju baze podataka, ovi komentari se ne čuvaju eksplicitno, već kroz sistem istorije tiketa. Ukratko, svaka promena nad tiketom se pamti kao jedan događaj u nizu \verb|history|, uz odgovarajući tip promene i neophodne podatke.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Tip podataka istorije tiketa.}]
@@ -404,7 +404,7 @@ O ovom sistemu iz domenskog ugla biće više reči u sekciji \ref{sec:eventsourc
 
 Kao što je pomenuto u prethodnoj sekciji, uveden je fleksibilan sistem oznaka takav da je moguće upravljati samim sistemom bez intervencije programera. Oznake se mogu dodeljivati tiketu, a same mogu pripadati grupi oznaka. Jedan očigledan primer upotrebe ovog sistema je označavanje koliko je dati tiket hitan - grupa oznaka bila bi \textbf{hitnost}, dok bi konkretne oznake bile, primera radi, \textbf{veoma hitno}, \textbf{umereno hitno} i \textbf{nije hitno}.
 
-Dodatni nivo fleksibilnosti postiže se ograničavanjem ko može koju akciju da vrši nad kojom grupom oznaka. Na primer, klijent koji postavlja tiket može videti kojom hitnošću je označeno njegovo pitanje, ali ne može sam označiti hitnost usled činjenice da se ne može smatrati objektivnim po tom pitanju. Ovim uvodimo još jedan element ER modela, prikazan na dijagramu pravougaonikom sa duplim ivicama, koji nazivamo \textbf{slab entitet}\footnote{eng. weak entity}. Uglavnom nastaju od kompleksnih atributa, odnosno atributa koji se ne mogu izraziti jednom vrednošću\footnote{Knjiški primer slabog entiteta je adresa - sastoji se od ulice i broja. Ipak, postoje situacije gde adresa može biti i (jak) entitet.} i odlikuje ih nedostatak sopstvenog identiteta - identitet slabog entiteta je "pozajmljen" od strane jakog entiteta kome pripada \cite{dbmodelinganddesign}. U ovom slučaju, slab entitet \textbf{dozvola} (eng. permissions) sastoji se od sledećih podataka:
+Dodatni nivo fleksibilnosti postiže se ograničavanjem ko može koju akciju da vrši nad kojom grupom oznaka. Na primer, klijent koji postavlja tiket može videti kojom hitnošću je označeno njegovo pitanje, ali ne može sam označiti hitnost usled činjenice da se ne može smatrati objektivnim po tom pitanju. Ovim se uvodi još jedan element ER modela, prikazan na dijagramu pravougaonikom sa duplim ivicama, poznat kao \textbf{slab entitet}\footnote{eng. weak entity}. Uglavnom nastaju od kompleksnih atributa, odnosno atributa koji se ne mogu izraziti jednom vrednošću\footnote{Knjiški primer slabog entiteta je adresa - sastoji se od ulice i broja. Ipak, postoje situacije gde adresa može biti i (jak) entitet.} i odlikuje ih nedostatak sopstvenog identiteta - identitet slabog entiteta je "pozajmljen" od strane jakog entiteta kome pripada \cite{dbmodelinganddesign}. U ovom slučaju, slab entitet \textbf{dozvola} (eng. permissions) sastoji se od sledećih podataka:
 \begin{itemize}
     \item lista uloga korisnika koji mogu da vide oznake iz date grupe
     \item lista uloga korisnika koji mogu da dodaju oznake iz date grupe
@@ -418,9 +418,9 @@ U domenskom sloju softverskog sistema, o kome će biti reči u sekciji \ref{sec:
 \chapter{Bekend}
 \label{sec:backend}
 % ------------------------------------------------------------------------------
-Kod velikog broja softverskih sistema serverski deo aplikacije (bekend) može se uopšteno shvatiti kao aplikacija koja apstrahuje pristup podacima na udaljenom serveru. Podaci se skoro uvek čuvaju u nekoj vrsti baze podataka, dok se pristup i manipulacija podacima dodatno apstrahuje aplikativnim\footnote{Opštosti radi, izbegnuti su pojmovi \textbf{veb server} i \textbf{http server}. Veb server predstavlja server za dostavljanje statičkog sadržaja na vebu, i često kada govorimo o bekend aplikacijama ne mislimo na ovaj tip servera (nginx, apache2). HTTP server takođe ne bi bio ispravan pojam usled postojanja drugih protokola komunikacije na vebu.} serverom.
+Kod velikog broja softverskih sistema serverski deo aplikacije (bekend) može se uopšteno shvatiti kao aplikacija koja apstrahuje pristup podacima na udaljenom serveru. Podaci se skoro uvek čuvaju u nekoj vrsti baze podataka, dok se pristup i manipulacija podacima dodatno apstrahuje aplikativnim\footnote{Opštosti radi, izbegnuti su pojmovi \textbf{veb server} i \textbf{http server}. Veb server predstavlja server za dostavljanje statičkog sadržaja na vebu, i često kada se govori o bekend aplikacijama ne misli se na ovaj tip servera (nginx, apache2). HTTP server takođe ne bi bio ispravan pojam usled postojanja drugih protokola komunikacije na vebu.} serverom.
 
-Navedeni gradivni delovi - baza podataka i aplikativni server - tehnički su dovoljni za implementaciju bekend dela aplikacije. Mnogi kursevi razvoja veb aplikacija, pogotovu oni zasnovani na MEAN i MERN\footnote{Mongo, Angular ili React, Express, Node.js, dve popularne kombinacije veb tehnologija.} okruženjima, upravo ovakve primere i prikazuju. Tu neretko srećemo arhitekturu od samo dva sloja - sloj aplikativnog programskog interfejsa (eng. Application Programming Interface - API) i sloja pristupa bazi podatka. Međutim, za izgradnju složene aplikacije koja uzima u obzir čistoću k\^{o}da, razdvajanje odgovornosti, održivost i iskustvo programera (eng. Developer Experience - DX) potrebno je dodatno raslojiti aplikaciju i pratiti neke ustanovljene principe.
+Navedeni gradivni delovi - baza podataka i aplikativni server - tehnički su dovoljni za implementaciju bekend dela aplikacije. Mnogi kursevi razvoja veb aplikacija, pogotovu oni zasnovani na MEAN i MERN\footnote{Mongo, Angular ili React, Express, Node.js, dve popularne kombinacije veb tehnologija.} okruženjima, upravo ovakve primere i prikazuju. Tu se neretko sreće arhitektura od samo dva sloja - sloj aplikativnog programskog interfejsa (eng. Application Programming Interface - API) i sloja pristupa bazi podatka. Međutim, za izgradnju složene aplikacije koja uzima u obzir čistoću k\^{o}da, razdvajanje odgovornosti, održivost i iskustvo programera (eng. Developer Experience - DX) potrebno je dodatno raslojiti aplikaciju i pratiti neke ustanovljene principe.
 
 
 \section{DDD}
@@ -497,12 +497,12 @@ function updateComment(...) {
 \end{figure}
 
 \newpage
-U ovom primeru primećujemo prisustvo domena u svim aspektima. Metode kao što su \verb|isFinalStatus| i \verb|isOwner| i semantičke klase grešaka kao \verb|TicketNotFoundError| doprinose da određeni delovi k\^{o}da dostižu nivoe čitljivosti bliske prirodnom jeziku.
+U ovom primeru evidentno je prisustvo domena u svim aspektima. Metode kao što su \verb|isFinalStatus| i \verb|isOwner| i semantičke klase grešaka kao \verb|TicketNotFoundError| doprinose da određeni delovi k\^{o}da dostižu nivoe čitljivosti bliske prirodnom jeziku.
 
 \subsection{Slojevita arhitektura}
 Prilikom izrade softvera, usled rokova i nedostatka resursa, neretko dolazi do isprepletanosti poslovne logike, logike korisničkog interfejsa, logike pristupa bazi podataka i drugih komponenti sistema \cite{dddfull}. Ovakve odluke u razvoju, iako rezultuju kratkoročnim rešenjem, dugoročno dovode do borbe sa \textit{tehničkim dugom} (eng. technical debt). Postojanje tehničkog duga javlja se i iz drugih odluka tokom razvoja i u praksi je pokazano da opšte rešenje ovog problema ne postoji; svaki tim se pre ili kasnije sretne sa tehničkim dugom koji otežava i usporava rad. Ipak, ta neminovnost ne treba da obeshrabri rano uvođenje dobrih praksi kao što je raslojavanje arhitekture. 
 
-DDD razaznaje četiri sloja, s tim što u ovom poglavlju razmatramo prva tri, dok je sloj korisničkog interfejsa predmet narednog poglavlja. Detaljna diskusija o slojevima, uz relevantnu implementaciju, prikazana je u sekcijama 2.2, 2.3 i 2.4.
+DDD razaznaje četiri sloja, s tim što se ovo poglavlje odnosi na prva tri, dok je sloj korisničkog interfejsa predmet narednog poglavlja. Detaljna diskusija o slojevima, uz relevantnu implementaciju, prikazana je u sekcijama 2.2, 2.3 i 2.4.
 
 \begin{figure}[h]
   \centering
@@ -515,7 +515,7 @@ DDD razaznaje četiri sloja, s tim što u ovom poglavlju razmatramo prva tri, do
 
 NestJS \cite{nestjsdocs} je Node.js okruženje za razvoj serverskih aplikacija. Izgrađen je nad bibliotekom \verb|express| \cite{expressjsdocs} koja je i danas popularan izbor za izradu manjih serverskih aplikacija kao i za edukativne svrhe.  U srž ovog okruženja ugrađeni su koncepti modula, servisa i umetanja zavisnosti (eng. Dependency Injection - DI), što ga čini idealnim za konstrukciju aplikacije zasnovane na DDD principima.
 
-Osnovni gradivni elementi NestJS aplikacije su \textit{moduli}. Svaki modul obuhvata jednu smislenu celinu aplikacije koja može sadržati \textit{kontrolere} i \textit{provajdere}. U slučaju DDD-a, modul odgovara jednom izolovanom kontekstu\footnote{eng. Bounded Context \cite{dddfull}}. Module definišemo na deklarativni način, pri čemu u okviru modula možemo uvoziti i druge module kako bismo postigli saradnju različitih delova sistema.
+Osnovni gradivni elementi NestJS aplikacije su \textit{moduli}. Svaki modul obuhvata jednu smislenu celinu aplikacije koja može sadržati \textit{kontrolere} i \textit{provajdere}. U slučaju DDD-a, modul odgovara jednom izolovanom kontekstu\footnote{eng. Bounded Context \cite{dddfull}}. Moduli se definišu na deklarativni način, pri čemu se u okviru modula mogu uvoziti i drugi moduli kako bi se postigla saradnja različitih delova sistema.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Deklaracija modula za tikete.}]
@@ -545,7 +545,7 @@ export class TicketsModule {}
 
 Kao što se vidi u primeru, NestJS se u velikoj meri oslanja na metaprogramiranje i mogućnosti jezika \verb|typescript| u vidu dekoratora. Prilikom pokretanja NestJS aplikacije vrši se korak poznat kao \textbf{bootstrap}, odnosno priprema aplikacije za rad. U tom koraku se razrešavaju sve međuzavisnosti modula i servisa, i instanciraju sve klase kojima se upravlja putem umetanja zavisnosti.
 
-Što se tiče strukture direktorijuma i fajlova u okviru projekta, korišćen je hibrid između mnogo sistema viđenih u praktičnom radu. Takva struktura najbolje odgovara zahtevima okruženja i sistema koji modelujemo. Primer strukture prikazan je u \ref{lst:dddfolderstructure}.
+Što se tiče strukture direktorijuma i fajlova u okviru projekta, iskorišćen je hibrid između mnogo sistema viđenih u praktičnom radu. Takva struktura najbolje odgovara zahtevima okruženja i sistema koji se modeluje. Primer strukture prikazan je u \ref{lst:dddfolderstructure}.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={fajl tickets.module.ts},label={lst:dddfolderstructure}]
@@ -581,7 +581,7 @@ Apstrakcija koju pruža sloj repozitorijuma ogleda se upravo u načinu na koji o
 Prirodno se nameće pitanje dohvatanja povezanih entiteta, ili konkretnije rad sa agregatima. U ovom radu implementiran je sistem \textbf{pohlepnog učitavanja} (eng. eager loading), kojim se svi povezani entiteti zahtevanog entiteta dohvataju odmah prilikom zahteva ka glavnom entitetu. U nekim sistemima ovakav izbor ne bi bio idealan, međutim takva odluka doneta je usled činjenice da je dizajn baze podataka relativno jednostavan, a lakoća implementacije i korišćenja nadmašuje cene u performansama koje su minimalne. Kombinacijom metode $populate$ 
  iz biblioteke \verb|mongoose|, kao i rekurzivne prirode biblioteke \verb|automapper/js|, ovo se lako postiže.
 
-U primeru \ref{lst:repositoryhead} vidimo zaglavlje klase \verb|TicketsRepository|. Kao i sve ostale repozitorijumske klase, oslanjaju se na model klase dobijene od strane biblioteke \verb|mongoose| i deklarišu niz koji predstavlja sve putanje koje treba popuniti zarad implementacije pohlepnog učitavanja.
+Primer \ref{lst:repositoryhead} prikazuje zaglavlje klase \verb|TicketsRepository|. Kao i sve ostale repozitorijumske klase, oslanjaju se na model klase dobijene od strane biblioteke \verb|mongoose| i deklarišu niz koji predstavlja sve putanje koje treba popuniti zarad implementacije pohlepnog učitavanja.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Repozitorijum tiketa, konstrukcija i niz POPULATE.}, label={lst:repositoryhead}]
@@ -635,9 +635,9 @@ async findById(id: string): Promise<Ticket | null> {
 \label{sec:eventsourcing}
 Osim repozitorijuma, sloj infrastrukture prirodno sadrži i definicije shema biblioteke \verb|mongoose|. Iz ugla programera, ovi objekti su najbliža pristupna tačka bazi podataka i podržavaju operacije upita i mutacija nad realnim podacima u bazi. Takav jedan upit viđen je na isečku \ref{lst:repofetch} u prethodnoj sekciji.
 
-Na ovom mestu bavimo se mutacijama podataka, i to baš tiketa. Osim prikaza rada sa mutiranjem podataka kroz biblioteku \verb|mongoose|, ovaj primer služi da ilustruje dualnu prirodu tiketa kao entiteta i njegovu potpunu različitost u strukturi između sloja infrastruktura i sloja domena. Naime, kao što će biti prikazano u sledećem poglavlju, tiket u sloju domena je jednostavna klasa koja sadrži sve podatke o datom tiketu. Ipak, u sloju infrastrukture, a radi veće fleksibilnosti i mogućnosti praćenja istorije, upotrebljena je varijanta šablona \textit{Event Sourcing}. Osnovno načelo ovog šablona je da umesto čuvanja eksplicitnog stanja objekta čuvamo istoriju njegovih promena.
+Na ovom mestu reč je o mutacijama podataka, i to baš tiketa. Osim prikaza rada sa mutiranjem podataka kroz biblioteku \verb|mongoose|, ovaj primer služi da ilustruje dualnu prirodu tiketa kao entiteta i njegovu potpunu različitost u strukturi između sloja infrastruktura i sloja domena. Naime, kao što će biti prikazano u sledećem poglavlju, tiket u sloju domena je jednostavna klasa koja sadrži sve podatke o datom tiketu. Ipak, u sloju infrastrukture, a radi veće fleksibilnosti i mogućnosti praćenja istorije, upotrebljena je varijanta šablona \textit{Event Sourcing}. Osnovno načelo ovog šablona je da se umesto čuvanja eksplicitnog stanja objekta čuva istorija njegovih promena.
 
-Na isečku \ref{lst:ticketschema} vidimo deo klase koja predstavlja shemu za rad sa tiketima.
+Na isečku \ref{lst:ticketschema} prikazan je deo klase koja predstavlja shemu za rad sa tiketima.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Definicija sheme tiketa.}, label={lst:ticketschema}]
@@ -667,7 +667,7 @@ export class TicketDb extends Document {
 
 
 \newpage
-Niz \verb|history| predstavlja promene primenjene na datom tiketu na osnovu kojih se može izvesti trenutno stanje tiketa. Ipak, prirodno se postavlja pitanje zašto se, osim istorije promena, čuvaju i eksplicitna polja kao što su \verb|status|, \verb|title|, \verb|body| i drugi, budući da se ti podaci mogu izvući putem istorije. Razlog leži u performansama pretrage. Ukoliko bismo čuvali samo listu promena, a ne sliku trenutnog stanja (eng. snapshot), svaka pretraga bila bi linearne vremenske složenosti u odnosu na dužinu istorije, što bi rezultovalo lošim performansama.
+Niz \verb|history| predstavlja promene primenjene na datom tiketu na osnovu kojih se može izvesti trenutno stanje tiketa. Ipak, prirodno se postavlja pitanje zašto se, osim istorije promena, čuvaju i eksplicitna polja kao što su \verb|status|, \verb|title|, \verb|body| i drugi, budući da se ti podaci mogu izvući putem istorije. Razlog leži u performansama pretrage. Čuvanje samo liste promena, a ne slike trenutnog stanja (eng. snapshot), izazvalo bi da svaka pretraga bude linearne vremenske složenosti u odnosu na dužinu istorije, što bi rezultovalo lošim performansama.
 
 Sa ovakvom postavkom, mutacije nad tiketom postižu se diferencijacijom prosleđenog entiteta i entiteta iz baze podataka (primer \ref{lst:repodiff}).
 
@@ -690,12 +690,12 @@ Sa ovakvom postavkom, mutacije nad tiketom postižu se diferencijacijom prosleđ
       item.timestamp = timestamp;
       item.type = TicketHistoryEntryType.TITLE_CHANGED;
 
-      // Dodajemo novu stavku u istoriju
+      // Dodaje se nova stavka u istoriju
       item.payload = 
          new TicketHistoryEntryTitleChanged(newTicket.title);
          
       document.history.push(item);
-      // Menjamo snapshot stanje
+      // Menja se snapshot stanje
       document.title = newTicket.title;
     }
 \end{lstlisting}
@@ -703,7 +703,7 @@ Sa ovakvom postavkom, mutacije nad tiketom postižu se diferencijacijom prosleđ
 
 
 \newpage
-Za kraj, primerom \ref{lst:mappingdata}, prikazujemo uprošćenu verziju mapiranja iz oblika u sloju infrastrukture u domenski entitet, dok se puna verzija nalazi u izvornom k\^{o}du u fajlu \verb|ticket.entity-profile.ts|.
+Za kraj, primer \ref{lst:mappingdata} prikazuje uprošćenu verziju mapiranja iz oblika u sloju infrastrukture u domenski entitet, dok se puna verzija nalazi u izvornom k\^{o}du u fajlu \verb|ticket.entity-profile.ts|.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Mapiranje komentara tiketa.}, label={lst:mappingdata}]
@@ -715,9 +715,9 @@ Za kraj, primerom \ref{lst:mappingdata}, prikazujemo uprošćenu verziju mapiran
 
       return commentItems
         .map((item) => {
-          // pretrazujemo sve komentare u istoriji
+          // pretrazuju se svi komentari u istoriji
           const payload = item.payload as CommentAdded;
-          // proveravamo da li su kasnije bili obrisani
+          // proverava se da li su kasnije bili obrisani
           const deletes = source.history.filter(
             (deleteItem) => deleteItem.type === COMMENT_DELETED 
             && (deleteItem.payload as CommentDeleted)
@@ -742,7 +742,7 @@ Za kraj, primerom \ref{lst:mappingdata}, prikazujemo uprošćenu verziju mapiran
 \newpage
 \section{Sloj domena}
 
-Takođe poznat kao srce poslovnog softvera, sloj domena sadrži glavnu poslovnu logiku i operacije koje direktno oslikavaju dešavanja u svetu koji softver modeluje. Iz ugla implementacije, svoje mogućnosti pružaju putem apstrakcije koju često nazivamo servisima, što koristimo i kao sufiks u nazivima njihovih klasa, iako se mogu koristiti i druge konvencije\footnote{Nekada se umesto sufiksa \textit{Service} koriste reči koje direktno oslikavaju namenu datog servisa. Na primer umesto \textit{GetUserService} koristi se naziv \textit{UserProvider} i sl.}.
+Takođe poznat kao srce poslovnog softvera, sloj domena sadrži glavnu poslovnu logiku i operacije koje direktno oslikavaju dešavanja u svetu koji softver modeluje. Iz ugla implementacije, svoje mogućnosti pružaju putem apstrakcije često nazivanom servisima, što se koristi i kao sufiks u nazivima njihovih klasa, iako se mogu koristiti i druge konvencije\footnote{Nekada se umesto sufiksa \textit{Service} koriste reči koje direktno oslikavaju namenu datog servisa. Na primer umesto \textit{GetUserService} koristi se naziv \textit{UserProvider} i sl.}.
 
 \subsection{Tok podataka kroz domenski sloj}
 
@@ -755,7 +755,7 @@ Usled činjenice da obuhvata sve poslovne operacije nije lako definisati opštu 
   \label{fig:domainlayerdiagram}
 \end{figure}
 
-Ipak, operacije unutar servisa (koraci 2-4) konkretizovaćemo za potrebe sistema kojim se bavimo, jer se mogu svesti na sledeći šablon, gde redosled ne mora nužno biti ispraćen u k\^{o}du usled prirode jezika\footnote{Zbog asinhrone prirode okruženja Node.js, a radi postizanja maksimalnih performansi, neke operacije pokrećemo paralelno a zatim čekamo koristeći funkciju $Promise.all$, što može naizgled delovati kao mešanje koraka.}:
+Ipak, operacije unutar servisa (koraci 2-4) konkretizovane su za potrebe sistema koji se razmatra, jer se mogu svesti na sledeći šablon, gde redosled ne mora nužno biti ispraćen u k\^{o}du usled prirode jezika\footnote{Zbog asinhrone prirode okruženja Node.js, a radi postizanja maksimalnih performansi, neke operacije pokreću se paralelno a zatim čekaju koristeći funkciju $Promise.all$, što može naizgled delovati kao mešanje koraka.}:
 
 \begin{enumerate}
   \item Dohvatanje odgovarajućeg entiteta
@@ -766,7 +766,7 @@ Ipak, operacije unutar servisa (koraci 2-4) konkretizovaćemo za potrebe sistema
   \item Priprema i vraćanje odgovarajućeg odgovora
 \end{enumerate}
 
-Na sledećem primeru operacije dodeljivanja tiketa agentima prikazujemo prethodne korake, redom.
+Na sledećem primeru operacije dodeljivanja tiketa agentima prikazani su prethodni koraci, redom.
 
 \textbf{Dohvatanje entiteta}
 
@@ -819,7 +819,7 @@ ticket.assign(assignees);
 
 \textbf{Komunikacija sa drugim servisima}
 
-Konstruišemo niz obaveštenja koja je potrebno poslati, slanje delegiramo odgovarajućem servisu.
+Konstruiše se niz obaveštenja koja je potrebno poslati, a slanje se delegira odgovarajućem servisu.
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Korak komunikacije sa drugim servisima.}]
 const usersToNotify = assignees.filter(
@@ -842,7 +842,7 @@ const promise = this.notificationsService.emitNotifications(
 
 \textbf{Osiguravanje trajnosti podataka}
 
-Čuvamo načinjene promene u bazi podataka.
+Čuvaju se načinjene promene u bazi podataka.
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Korak očuvanja trajnosti podataka.}]
 // ...
@@ -853,7 +853,7 @@ this.ticketsRepository.update(ticket, user);
 \newpage
 \textbf{Priprema i vraćanje odgovarajućeg odgovora}
 
-Gde pritom koristimo servis \verb|TicketRedactionService| kako bismo otklonili podatke koje dati tip korisnika ne bi trebalo da vidi.
+Gde se pritom koristi servis \verb|TicketRedactionService| zarad otklanjanja podataka koje dati tip korisnika ne bi trebalo da vidi.
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Korak pripreme i vraćanja odgovora.}]
 this.ticketRedactionService.prepareResponse(updatedTicket, user);
@@ -864,11 +864,11 @@ return updatedTicket;
 \newpage
 \subsection{Obrada grešaka}
 
-U prethodnom primeru toka podataka primećujemo intenzivan rad sa greškama. Ovom delu posvećena je posebna pažnja jer je obrada grešaka jedno od centralnih pitanja dizajna kompleksnog softverskog sistema, i bitno je od početka dizajnirati je korektno kako bi kasniji rad bio znatno olakšan.
+U prethodnom primeru toka podataka javlja se intenzivan rad sa greškama. Ovom delu posvećena je posebna pažnja jer je obrada grešaka jedno od centralnih pitanja dizajna kompleksnog softverskog sistema, i bitno je od početka dizajnirati je korektno kako bi kasniji rad bio znatno olakšan.
 
 Naime, programer koji se bavi implementacijom odgovarajuće domenske funkcionalnosti pre ili kasnije susrešće se sa potrebom da obrađuje greške. Čak i najjednostavniji zahtev, kao što je, recimo, dohvatanje jednog tiketa, zahteva rad sa greškama na svakom od nivoa slojevite arhitekture. Manuelno orkestriranje grešaka pri svakoj implementaciji neke funkcionalnosti dovelo bi do usporenog rada i nekonzistentnog sistema bez jasnih standarda. 
 
-Stoga pravimo jasnu podelu između grešaka domenskog nivoa i grešaka aplikativnog nivoa (HTTP grešaka), i u domenskom sloju držimo se isključivo grešaka domenskog nivoa. Sve domenske greške nasleđuju baznu klasu $BaseError$ prikazano u primeru \ref{lst:baseerror}.
+Stoga se pravi jasna podela između grešaka domenskog nivoa i grešaka aplikativnog nivoa (HTTP grešaka), i u domenskom sloju radi se isključivo sa grešakama domenskog nivoa. Sve domenske greške nasleđuju baznu klasu $BaseError$ prikazano u primeru \ref{lst:baseerror}.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={BaseError.ts}, label={lst:baseerror}]
@@ -889,41 +889,41 @@ export class BaseError {
 \end{lstlisting}
 \end{figure}
 
-Na ovaj način imamo uniforman interfejs kako svaka greška treba da izgleda, sa dovoljno fleksibilnosti da pokrije sve domenske situacije. U k\^{o}du možemo primetiti sve od jednostavnih grešaka koje predstavljaju nepostojanje - primer \verb|TicketNotFound|, do grešaka koje ukazuju na kompleksnu sitaciju - primer \verb|CannotChangeCommentsOfAClosedTicket|. Na ovakav sistem mogu se uložiti nekoliko kritika, koje ćemo razjasniti.
+Na ovaj način realizovan je uniforman interfejs koji propisuje kako svaka greška treba da izgleda, sa dovoljno fleksibilnosti da pokrije sve domenske situacije. U k\^{o}du se može primetiti sve od jednostavnih grešaka koje predstavljaju nepostojanje - primer \verb|TicketNotFound|, do grešaka koje ukazuju na kompleksnu sitaciju - primer \verb|CannotChangeCommentsOfAClosedTicket|. Na ovakav sistem mogu se uložiti nekoliko kritika, koje su razmotrene u nastavku.
 
 \textbf{Repetitivnost.}  
-Sve greške koje se odnose na nepostajanje entiteta imaju identičan oblik, pa se može uložiti primedba na ponavljanje k\^{o}da i sugerisati kreiranje dodatnih apstrakcija. U ovom radu izbegli smo takav pristup iz dva razloga:
+Sve greške koje se odnose na nepostajanje entiteta imaju identičan oblik, pa se može uložiti primedba na ponavljanje k\^{o}da i sugerisati kreiranje dodatnih apstrakcija. U ovom radu izbegnut je takav pristup iz dva razloga:
 \begin{itemize}
     \item \textbf{Bespotrebne apstrakcije}. Iako je tehnički moguće apstrahovati greške nepostajanja entiteta u neki tip višeg nivoa - recimo \verb|EntityNotFoundError|, ovo uvodi previše jezičke kompleksnosti u domenski sloj i na duge staze ne doprinosi ni čitljivosti ni razumevanju.
     \item \textbf{Fleksibilnost}. Ukoliko svaki entitet ima priliku da definiše svoje greške bez ograničenja međuapstrakcija, postiže se maksimalna fleksibilnost u okviru datog entiteta. Može se argumentovati da ovakav pristup olakšava potencijalni prelaz na mikroservisnu arhitekturu, po potrebi.
 \end{itemize}
 
 
-\textbf{Preterana ekspresivnost.} Na ovom mestu konkretno govorimo o dužini naziva nekih klasa, koje se mogu smatrati nečitljivim. Ipak, ako se podsetimo dela \ref{sec:dddukodu}, jasno nam je da dobitak na razumljivosti domena kroz k\^{o}d nadmašuje strah od dugačkih imena klasa.
+\textbf{Preterana ekspresivnost.} Na ovom mestu konkretna primedba bila bi na račun dužine naziva nekih klasa, koje se mogu smatrati nečitljivim. Ipak, uzevši u obzir deo \ref{sec:dddukodu}, dobitak na razumljivosti domena kroz k\^{o}d nadmašuje strah od dugačkih imena klasa.
 
 
-Ostaje pitanje transformacije ovakvih grešaka u HTTP oblik. Jedno izrazito elegantno rešenje, koje nam pružaju mogućnosti okruženja NestJS, biće prikazano u sledećem pogavlju.
+Ostaje pitanje transformacije ovakvih grešaka u HTTP oblik. Jedno izrazito elegantno rešenje, pruženo od strane okruženja NestJS, biće prikazano u sledećem pogavlju.
 
 \section{Sloj aplikacije}
 
-Sve do sad razmatrane slojeve i delove sistema možemo smatrati internim u smislu mogućnosti spoljnjeg pristupa - sloj domena bavi se poslovnom logikom, uz podršku sloja infrastrukture. Kako bi domenski sistem mogao da se koristi od strane grafičkih veb aplikacija, mobilnih aplikacija ili, uopšteno, bilo kojih drugih softverskih sistema, potebno je da svoju funkcionalnost eksponira spoljašnjem svetu. 
+Svi do sad razmatrani sloji i delovi sistema mogu se smatrati internim u smislu mogućnosti spoljnjeg pristupa - sloj domena bavi se poslovnom logikom, uz podršku sloja infrastrukture. Kako bi domenski sistem mogao da se koristi od strane grafičkih veb aplikacija, mobilnih aplikacija ili, uopšteno, bilo kojih drugih softverskih sistema, potebno je da svoju funkcionalnost eksponira spoljašnjem svetu. 
 
 \subsection{REST API, svojstva}
 \label{sec:restapi}
 
-Ispoljavanje spoljašnjem svetu postiže se slojem aplikacije, tankim slojem bez poslovnog znanja, čija glavna uloga jeste primanje zahteva i njihova delegacija na domenski sloj \cite{dddfull}. U ovom radu, za potrebe implementacije aplikativnog sloja, bavimo se najpoznatijim arhitekturalnim stilom poznatim kao REST (\textit{\textbf{RE}presentational \textbf{S}tate \textbf{T}ransfer}). Kompletna specifikacija ovog protokola je ogromna i pokriva sve aspekte korišćenja HTTP-a kao transportnog sloja veb aplikacija, tako da pominjemo samo neke od najvažnijih:
+Ispoljavanje spoljašnjem svetu postiže se slojem aplikacije, tankim slojem bez poslovnog znanja, čija glavna uloga jeste primanje zahteva i njihova delegacija na domenski sloj \cite{dddfull}. U ovom radu, za potrebe implementacije aplikativnog sloja, izabran je najpoznatiji arhitekturalni stil poznat kao REST (\textit{\textbf{RE}presentational \textbf{S}tate \textbf{T}ransfer}). Kompletna specifikacija ovog protokola je ogromna i pokriva sve aspekte korišćenja HTTP-a kao transportnog sloja veb aplikacija, tako da su u nastavku prikazane samo neke od najvažnijih osobina:
 
 \begin{itemize}
-    \item \textbf{Odsustvo stanja.} Jedan moderan princip softverskog inženjerstva (u vreme pisanja ovog rada) jeste da komponente ili moduli sistema treba da imaju što manje stanja, a po mogućstvu da ga u potpunosti eleminišu\footnote{Ovaj princip postaje posebno primetan rastom popularnosti funkcionalnih programskih jezika.}. Način na koji ovo shvatamo u REST sistemima je sledeći - za dva API zahteva pod identičnim uslovima dobija se identičan odgovor. Dakle, ne postoji nikakav eksterni faktor samog aplikativnog sloja koji može uticati na odgovor koji korisnik (klijent) dobije, i smatra se da je klijent dužan da pruži kompletan kontekst potreban za obradu zahteva \cite{restapi}.
+    \item \textbf{Odsustvo stanja.} Jedan moderan princip softverskog inženjerstva (u vreme pisanja ovog rada) jeste da komponente ili moduli sistema treba da imaju što manje stanja, a po mogućstvu da ga u potpunosti eleminišu\footnote{Ovaj princip postaje posebno primetan rastom popularnosti funkcionalnih programskih jezika.}. Interpretacija u REST sistemima je sledeća - za dva API zahteva pod identičnim uslovima dobija se identičan odgovor. Dakle, ne postoji nikakav eksterni faktor samog aplikativnog sloja koji može uticati na odgovor koji korisnik (klijent) dobije, i smatra se da je klijent dužan da pruži kompletan kontekst potreban za obradu zahteva \cite{restapi}.
 
-    \item \textbf{Identifikacija resursa i HTTP metode.} Neretko u praksi srećemo takozvane API slojeve sa previše ekspresivnim delovima URI-a\footnote{eng. Uniform Resource Identifier - URI}. REST definiše nedvosmislen način za identifikaciju resursa i njihovu hijerarhiju, kao i pravilnu upotrebu HTTP metoda (glagola). Na taj način API pristupna tačka\footnote{eng. API endpoint}, koja pruža mogućnost dohvatanja korisnika po identifikatoru, po pravilu treba da bude dostupna putem GET metode, i to na URI-u nalik na \verb|api/users/123| \cite{restapi}. Primer nepravilnog URI-a bilo bi direktno navođenje akcije dohvatanja - \verb|api/get-user-by-id/213|. Na sličan način jasno je propisano koje metode se koriste za promenu, upis i brisanje entiteta.
+    \item \textbf{Identifikacija resursa i HTTP metode.} Neretko se u praksi sreću API slojevi sa previše ekspresivnim delovima URI-a\footnote{eng. Uniform Resource Identifier - URI}. REST definiše nedvosmislen način za identifikaciju resursa i njihovu hijerarhiju, kao i pravilnu upotrebu HTTP metoda (glagola). Na taj način API pristupna tačka\footnote{eng. API endpoint}, koja pruža mogućnost dohvatanja korisnika po identifikatoru, po pravilu treba da bude dostupna putem GET metode, i to na URI-u nalik na \verb|api/users/123| \cite{restapi}. Primer nepravilnog URI-a bilo bi direktno navođenje akcije dohvatanja - \verb|api/get-user-by-id/213|. Na sličan način jasno je propisano koje metode se koriste za promenu, upis i brisanje entiteta.
 
     \item \textbf{Korišćenje HTTP greški.} Kao što je pomenuto u prethodnoj sekciji, obrada grešaka predstavlja vitalan aspekt razvoja softvera, i značajan deo njene implementacije leži u aplikativnom sloju. REST definiše skup pravila za korektno ukazivanje korisniku na greške koje su se dogodile.  
 \end{itemize}
 
 \subsection{Kontroleri, validacija, mapiranje}
 
-Većina okruženja za programiranje veb aplikacija, uključujući i NestJS, pruža ugrađen konstrukt za obradu HTTP zahteva koga nazivamo \textbf{kontroler}. Kontroleri su ništa drugo nego klase nad kojim definišemo metode koje obrađuju HTTP zahteve ka određenom URI-u, dok je proces mapiranja URI-a na metodu maksimalno prepušten okruženju, a programeru eksponiran nekim vidom metaprogramiranja (najšće dekoratorima). Primer \ref{lst:userscontroller} ilustruje kontroler vezan za URI prefiks \verb|users|, sa metodom koja reagovanje na dinamički zadat identifikator. Ovako postavljen kontroler obrađuje zahteve oblika \verb|GET /api/users/123|.
+Većina okruženja za programiranje veb aplikacija, uključujući i NestJS, pruža ugrađen konstrukt za obradu HTTP zahteva poznat pod nazivom \textbf{kontroler}. Kontroleri su ništa drugo nego klase nad kojim se definišu metode koje obrađuju HTTP zahteve ka određenom URI-u, dok je proces mapiranja URI-a na metodu maksimalno prepušten okruženju, a programeru eksponiran nekim vidom metaprogramiranja (najšće dekoratorima). Primer \ref{lst:userscontroller} ilustruje kontroler vezan za URI prefiks \verb|users|, sa metodom koja reagovanje na dinamički zadat identifikator. Ovako postavljen kontroler obrađuje zahteve oblika \verb|GET /api/users/123|.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Primer kontrolera.}, label={lst:userscontroller}]
@@ -942,7 +942,7 @@ Uloga kontrolera je višestruka i sastoji se od sledećih koraka:
     \item \textbf{Provera prava pristupa}. Ova provera treba da poznaje što manje poslovne logike. Na primer, neke pristupne tačke dostupne su samo ulogovanim korisnicima, neke samo administratorima, i sl.
     \item \textbf{Validacija ulaznih podataka}. Ponovo se misli na čisto tehničku validaciju, a ne na poslovnu validaciju. Tu spada provera da li su određeni brojčani podaci zaista brojevi, da li su određeni tekstualni podaci dovoljne dužine i slično.
     \item \textbf{Delegacija posla odgovarajućem sevisu}. Nakon uspešne provere prava pristupa i validacije podataka, kontroler će prepustiti zadatak servisu koji je za to namenjem i po potrebi primiti povratnu informaciju.
-    \item \textbf{Obrada servisnih grešaka.} Kontroler je dužan da greške domenskog nivoa, koje podiže servis, preslika u HTTP greške. Neretka, i sasvim validna praksa, jeste korišćenje \verb|try-catch| blokova u ove svrhe. Ipak, vrlo elegantan mehanizam presretača (eng. interceptors) okruženja NestJS omogućio je izolaciju ovog posla. Naime, presretač je klasa koju postavljamo na nivo kontrolera, u kojoj možemo dodati logiku obrade grešaka podignutih iz domenskog sloja.
+    \item \textbf{Obrada servisnih grešaka.} Kontroler je dužan da greške domenskog nivoa, koje podiže servis, preslika u HTTP greške. Neretka, i sasvim validna praksa, jeste korišćenje \verb|try-catch| blokova u ove svrhe. Ipak, vrlo elegantan mehanizam presretača (eng. interceptors) okruženja NestJS omogućio je izolaciju ovog posla. Naime, presretač je klasa koja se postavlja na nivo kontrolera, u kojoj se može dodati logika obrade grešaka podignutih iz domenskog sloja.
     \item \textbf{Preslikavanje podataka.} Ukoliko odgovor od servisa obuhvata entitet, dužnost kontrolera je da izvrši mapiranje datog entiteta u odgovarajući objekat za transfer podataka (eng. Data Transfer Object - DTO).
 \end{enumerate}
 
@@ -1045,7 +1045,7 @@ Prethodni način generisanja korisničkog interfejsa često se naziva klijentsko
 
 \newpage
 \section{React i Next.js}
-Da sumiramo, problemi koje želimo da izbegnemo kod tradicionalnih jednostraničnih aplikacija jesu sledeći:
+Sumirano, probleme koje treba izbeći kod tradicionalnih jednostraničnih aplikacija jesu sledeći:
 \begin{enumerate}
     \item \textbf{Prvobitni HTML je minimalan.} Usled činjenice da se klijentske skripte bave prikazom korisničkog interfejsa, konkretno u React-u koristeći sistem komponenti i JSX-a \cite{reactdocscomponents}, inicijalni HTML koji se prikazuje korisniku je prazan i postoji vreme koje je potrebno dok veb pregledač izvrši skriptu.
     \item \textbf{Potrebno je dohvatiti podatke s klijenta.} Čak i nakon prikazivanja početnog korisničkog interejsa, najčešći je slučaj da je potrebno dohvatiti neke podatke preko API-a koje treba prikazati. Pošto je sva odgovornost na klijentu, ti podaci se tek mogu dohvatati u ovoj fazi, tako da postoji dodatno vreme gde neke sekcije sajta sadrže simbolične prikaze sadržaja koji se učitava\footnote{Ustanovljen naziv u frontend svetu za ove elemente jeste \textit{content loader}, postoji veliki broj biblioteka koje olakšavaju njihovo generisanje.}, dok se u pozadini vrši dohvatanje podataka.
@@ -1057,18 +1057,18 @@ U ekosistemu React-a postoje nesuglasice da li React predstavlja biblioteku ili 
 
 \subsection{Next.js i šabloni renderovanja korisničkih interfejsa}
 
-Imajući prethodnu diskusiju u vidu i koristeći se što opštijim terminima, možemo reći da je Next.js moderno okruženje za razvoj veb aplikacija, izgrađeno nad React-om, koje podržava više šablona renderovanja korisničkih interfejsa. U trenutku pisanja ovog rada, šabloni renderovanja korisničkih interfejsa (eng. rendering patterns) čest su predmet diskusija onlajn zajednica inženjera. Najveća okruženja i biblioteke utrkuju se sa implementacijom svih šablona kako bi bili konkurentan izbor modernih frontend proizvoda. Next.js, predvođen kompanijom Vercel, definitivno je među prvima kada je u pitanju razvoj veb aplikacija. Od pomenutih šablona Next.js podržava sledeće \cite{nextjsdocs}:
+Imajući prethodnu diskusiju u vidu i koristeći se što opštijim terminima, može se reći da je Next.js moderno okruženje za razvoj veb aplikacija, izgrađeno nad React-om, koje podržava više šablona renderovanja korisničkih interfejsa. U trenutku pisanja ovog rada, šabloni renderovanja korisničkih interfejsa (eng. rendering patterns) čest su predmet diskusija onlajn zajednica inženjera. Najveća okruženja i biblioteke utrkuju se sa implementacijom svih šablona kako bi bili konkurentan izbor modernih frontend proizvoda. Next.js, predvođen kompanijom Vercel, definitivno je među prvima kada je u pitanju razvoj veb aplikacija. Od pomenutih šablona Next.js podržava sledeće \cite{nextjsdocs}:
 \begin{itemize}
     \item \textbf{Klijentsko renderovanje - CSR.} Klasično SPA ponašanje podržano je samom činjenicom da se u osnovi nalazi React.
     \item \textbf{Serversko renderovanje - SSR.} Omogućeno je dohvatanje eksternih podataka na serveru pre renderovanja stabla React komponenti.
     \item \textbf{Generisanje statičkih sajtova - SSG\footnote{eng. Static Site Generation}.} Moguće je određene stranice u potpunosti renderovati u vremenu kompajliranja aplikacije (eng. build time), tako da gotov HTML bude spreman i pre nego što se aplikacija pokrene. Ovakve stranice po pravilu su najbrže.
     \item \textbf{Inkrementalno regenerisanje statičkih stranica - ISG\footnote{eng. Incremental Static Regeneration}.} SSG stranice jesu brze, ali mana im je što podaci mogu zastareti. Next.js omogućava periodično osvežavanje tih stranica kako bi sadržaj bio ažuran.
-    \item \textbf{Strimovanje korisničkog interfejsa\footnote{eng. Streaming SSR}.} Tokom pisanja rada pojavila se React verzija 18 koja uvodi koncept serverskih komponenti (eng. server components), koje Next.js usvaja u verziji 13 i proglašava kao novi pravac. U ovom radu ne bavimo se ovim sistemom, jer je u trenutku pisanja i dalje u eksperimentalnoj fazi.
+    \item \textbf{Strimovanje korisničkog interfejsa\footnote{eng. Streaming SSR}.} Tokom pisanja rada pojavila se React verzija 18 koja uvodi koncept serverskih komponenti (eng. server components), koje Next.js usvaja u verziji 13 i proglašava kao novi pravac. U ovom radu ovaj sistem nije razmatran, jer je u trenutku pisanja i dalje u eksperimentalnoj fazi.
 \end{itemize}
 
 \subsection{SSR i tok jednog zahteva}
 
-SSG i ISR jesu dobar izbor prilikom generisanja sajtova koji ne menjaju svoj sadržaj često i ne bave se intenzivnom manipulacijom podataka\footnote{Dobar primer sajtova pogodnih za SSG i ISR jesu personalni blogovi.}. Ipak, sistem za tikete, koji pravimo u ovom radu, je kompleksniji i temeljno se zasniva na dohvatanju i manipulaciji podataka sa eksternog API-a. Iz tog razloga glavni iskorišćen šablon upravo je serversko renderovanje. Na dijagramu \ref{fig:ssrdiagram} prikazan je primer toka jednog zahteva ka stranici za prikaz tiketa.
+SSG i ISR jesu dobar izbor prilikom generisanja sajtova koji ne menjaju svoj sadržaj često i ne bave se intenzivnom manipulacijom podataka\footnote{Dobar primer sajtova pogodnih za SSG i ISR jesu personalni blogovi.}. Ipak, sistem za tikete, koji je prikazan u ovom radu, kompleksniji je i temeljno se zasniva na dohvatanju i manipulaciji podataka sa eksternog API-a. Iz tog razloga glavni iskorišćen šablon upravo je serversko renderovanje. Na dijagramu \ref{fig:ssrdiagram} prikazan je primer toka jednog zahteva ka stranici za prikaz tiketa.
 
 \begin{figure}[h]
   \centering
@@ -1077,7 +1077,7 @@ SSG i ISR jesu dobar izbor prilikom generisanja sajtova koji ne menjaju svoj sad
   \label{fig:ssrdiagram}
 \end{figure}
 
-Proces u kom stranica postaje interaktivna, odnosno korak 7 sa dijagrama, naziva se \textbf{hidracija} \cite{reactdocscomponents}. Ovaj naziv ima smisla i može se nerformalno shvatili ako stablo React komponenti zamislimo kao sistem međusobno povezanih praznih cevi, koje onda na vrhu prikačimo na izvor vode - u ovoj analogiji Javascript.
+Proces u kom stranica postaje interaktivna, odnosno korak 7 sa dijagrama, naziva se \textbf{hidracija} \cite{reactdocscomponents}. Ovaj naziv ima smisla i može se nerformalno shvatili ako se stablo React komponenti zamisli kao sistem međusobno povezanih praznih cevi, koje se onda na vrhu prikače na izvor vode - u ovoj analogiji Javascript.
 
 \newpage
 \label{sec:datafetchingandconfiguration}
@@ -1086,17 +1086,17 @@ Proces u kom stranica postaje interaktivna, odnosno korak 7 sa dijagrama, naziva
 Kao što je pomenuto u prethodnoj sekciji, React (a tako i Next.js) prepuštaju programeru izbor načina na koji će da vrši dohvatanje podataka sa eksternih servisa. Iako to može zvučati trivijalno, dohvatanje podataka jedan je od najsloženijih zadataka modernih frontend sistema i očekivano je da React ekosistem nudi veliki broj biblioteka koji rešavaju ovaj izazov. Problemi koji se očekuju da budu rešeni od strane modernih biblioteka za dohvatanje podataka uključuju sledeće:
 
 \begin{itemize}
-    \item \textbf{Keširanje i deduplikacija.} Želimo mogućnost da dohvatamo iste podatake u različitim delovima stabla aplikacije, a da pritom ne pozivamo API svaki put, već da se podaci keširaju i iskoriste ponovo.
-    \item \textbf{Deklarativnost.} Želimo da se oslobodimo pisanja proceduralne logike za dohvatanje podataka, tako što to izvršimo na deklarativan način pisanjem odgovarajuće konfiguracije.
+    \item \textbf{Keširanje i deduplikacija.} Poželjna je mogućnost dohvatanja istih podataka u različitim delovima stabla aplikacije, a da se pritom API ne poziva svaki put, već da se podaci keširaju i iskoriste ponovo.
+    \item \textbf{Deklarativnost.} Korišćenje je znatno olakšano oslobađanjem programera od pisanja proceduralne logike za dohvatanje podataka, tako što se to izvrši na deklarativan način pisanjem odgovarajuće konfiguracije.
     \item \textbf{Stanja učitavanja i grešaka.} Potrebno je imati ugrađenu podršku za stanja učitavanja (eng. loading state) i stanja grešaka (eng. error state), kako bi programer mogao da se fokusira na pisanja logike stranice u zavisnosti od tih stanja, a ne da ih manuelno prati i ažurira.
 \end{itemize}
 
-Za ovaj rad izabrana je biblioteka Redux Toolkit sa svojim podmodulom Query, koji se češće nazivaju skraćeno RTKQ \cite{rtkqdocs}. Ova biblioteka zapravo je nadogradnja na veoma poznatu biblioteku za upravljanjem stanjem\footnote{eng. state management library} Redux, koja je dugo vremena bila neizostavan deo React ekosistema. Ipak, u ovom radu ne koristimo upravljanje stanjem u pravom smislu te reči, tako da upotreba biblioteke RTKQ ostaje ograničena isključivo na dohvatanje podataka.
+Za ovaj rad izabrana je biblioteka Redux Toolkit sa svojim podmodulom Query, koji se češće nazivaju skraćeno RTKQ \cite{rtkqdocs}. Ova biblioteka zapravo je nadogradnja na veoma poznatu biblioteku za upravljanjem stanjem\footnote{eng. state management library} Redux, koja je dugo vremena bila neizostavan deo React ekosistema. Ipak, u ovom radu ne koristi se upravljanje stanjem u pravom smislu te reči, tako da upotreba biblioteke RTKQ ostaje ograničena isključivo na dohvatanje podataka.
 
 \subsection{Deklaracija API sloja, upravljanje keš oznakama}
-U uvodnom delu ove sekcije pomenuta je deklarativnost kao jedna od tri funkcionalnosti koje očekujemo od moderne biblioteke za dohvatanje podataka. Deklarativnost je opšti pojam softverskog inženjerstva, i najlakši način da se opiše, neformalnim jezikom jeste "piši \textbf{šta} softver treba da uradi a ne \textbf{kako} to da uradi".
+U uvodnom delu ove sekcije pomenuta je deklarativnost kao jedna od tri funkcionalnosti očekivanih od moderne biblioteke za dohvatanje podataka. Deklarativnost je opšti pojam softverskog inženjerstva, i najlakši način da se opiše, neformalnim jezikom jeste "piši \textbf{šta} softver treba da uradi a ne \textbf{kako} to da uradi".
 
-U duhu takvog načina razmišljanja, bibliteka RTKQ oslobađa programera od repetitivnog zadatka pisanja API poziva za svaki mogući entitet. RTKQ takođe pruža i elegantan mehanizam upravljanja keširanjem podataka korišćenjem koncepta keš oznaka (eng. cache tags). Naime, ako najpre dohvatimo neki entitet preko određene API pristupne tačke metodom GET, a zatim ga ažuriramo metodom PATCH, prirodno je da želimo da se već dohvaćen entitet ažurira kako bi podaci prikazani korisniku  bili najsvežiji. U frontend delu aplikacije sistema STS ovakve potrebe su intenzivne prilikom operacije ažuriranja tiketa.  Primer \ref{lst:rtkqconfigtickets} prikazuje kako se svi navedeni problemi rešavaju uz nekoliko jednostavnih konfiguracionih pravila koje zahteva RTKQ.
+U duhu takvog načina razmišljanja, bibliteka RTKQ oslobađa programera od repetitivnog zadatka pisanja API poziva za svaki mogući entitet. RTKQ takođe pruža i elegantan mehanizam upravljanja keširanjem podataka korišćenjem koncepta keš oznaka (eng. cache tags). Naime, ako se najpre dohvati neki entitet preko određene API pristupne tačke metodom GET, a zatim ažurira metodom PATCH, prirodno je očekivati da se već dohvaćen entitet ažurira kako bi podaci prikazani korisniku  bili najsvežiji. U frontend delu aplikacije sistema STS ovakve potrebe su intenzivne prilikom operacije ažuriranja tiketa.  Primer \ref{lst:rtkqconfigtickets} prikazuje kako se svi navedeni problemi rešavaju uz nekoliko jednostavnih konfiguracionih pravila koje zahteva RTKQ.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Konfiguracija API poziva za dohvatanje tiketa i dodavanje komentara}, label={lst:rtkqconfigtickets}]
@@ -1131,9 +1131,9 @@ export const ticketsSlice = api.injectEndpoints({
 
 \subsection{Izazivanje dohvatanja podataka i korišćenje u komponentama}
 
-Nakon definisanja konfiguracije u prethodnoj sekciji ostaje još pitanje kako koristimo objekte koje generiše RTKQ.
+Nakon definisanja konfiguracije u prethodnoj sekciji ostaje još pitanje načina korišćenja objekata generisanih od strane RTKQ.
 
-Treba još jednom istaći da RTKQ nije ništa drugo nego modul sistema \verb|redux|\footnote{Tehnički, spada pod zaseban npm paket \textit{redux-toolkit}, ali u govoru se često poistovećuju jer označavaju isti ekosistem.}, tako da je očekivano da RTKQ kompletno upravljanje podacima vrši upravo posredstvom \verb|redux|-a i njegovog ugrađenog skladišta (eng. store)\footnote{Način na koji radi biblioteka \textit{redux} je kompleksan i može biti tema posebnog istraživanja, tako da se na ovom mestu zadržavamo samo na potrebnim detaljima.}. S tim u vidu, prilikom izazivanja dohvatanja podataka na serveru koristimo upravo \verb|store| objekat i RTKQ-ov poziv \verb|initiate| kako bi se dohvatanje započelo.
+Treba još jednom istaći da RTKQ nije ništa drugo nego modul sistema \verb|redux|\footnote{Tehnički, spada pod zaseban npm paket \textit{redux-toolkit}, ali u govoru se često poistovećuju jer označavaju isti ekosistem.}, tako da je očekivano da RTKQ kompletno upravljanje podacima vrši upravo posredstvom \verb|redux|-a i njegovog ugrađenog skladišta (eng. store)\footnote{Način na koji radi biblioteka \textit{redux} je kompleksan i može biti tema posebnog istraživanja, stoga je izuzeta.}. S tim u vidu, prilikom izazivanja dohvatanja podataka na serveru koristi se upravo \verb|store| objekat i RTKQ-ov poziv \verb|initiate| kako bi se dohvatanje započelo.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Dohvatanje podataka o tiketu na serveru.}]
@@ -1203,7 +1203,7 @@ Definicija internacionalizacije je veoma opšteg karaktera i na osnovu \cite{i18
 
 U ovom radu urađena je samo prva stavka - podržani su srpski i engleksi jezik. Za potrebe čuvanja trenutnog jezika koristi se \verb|Accept-Language| HTTP zaglavlje (eng. HTTP header) u kombinaciji sa odgovarajućom vrednošću \verb|language_code| kolačića (eng. cookie) na klijentskoj strani.
 
-U sekciji \ref{sec:tagsystem} pomenuto je kako sistem oznaka koristi internacionalizaciju za nazive i opise oznaka. Upravo podešavanje \verb|Accept-Language| zaglavlja omogućuje da nam API vrati podatke na odgovarajućem jeziku.
+U sekciji \ref{sec:tagsystem} pomenuto je kako sistem oznaka koristi internacionalizaciju za nazive i opise oznaka. Upravo podešavanje \verb|Accept-Language| zaglavlja omogućuje da API vrati podatke na odgovarajućem jeziku.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Postavljanje Accept-Language zaglavlja u RTKQ prilikom API zahteva.}]
@@ -1224,7 +1224,7 @@ const baseQuery = fetchBaseQuery({
 \end{lstlisting}
 \end{figure}
 
-Sa druge strane, za kontrolu prikaza sadržaja na grafičkom korisničkom interfejsu koristi se kombinacija biblioteka \verb|react-intl| i \verb|formatjs| \cite{formatjsdocs}. Naime, tekstualni sadržaji, koje želimo da internacionalizujemo na sajtu, nazivaju se \textit{poruke} (eng. messages) i definišu se odgovarajućim funkcijama u k\^{o}du, zajedno sa svojim podrazumevanim vrednostima. Primer \ref{lst:definingmessages} prikazuje definisanje nekih poruka za stranicu koja prikazuje tiket.
+Sa druge strane, za kontrolu prikaza sadržaja na grafičkom korisničkom interfejsu koristi se kombinacija biblioteka \verb|react-intl| i \verb|formatjs| \cite{formatjsdocs}. Naime, tekstualni sadržaji, koje treba internacionalizovati na sajtu, nazivaju se \textit{poruke} (eng. messages) i definišu se odgovarajućim funkcijama u k\^{o}du, zajedno sa svojim podrazumevanim vrednostima. Primer \ref{lst:definingmessages} prikazuje definisanje nekih poruka za stranicu koja prikazuje tiket.
 
 Pokretanjem komande \verb|npm run i18n|, definisane kao skripte u okviru fajla \verb|package.json|, vrše se \textit{ekstrakcija} i \textit{kompilacija} poruka. Ekstrakcija predstavlja proces izvlačenja svih poruka iz fajlova, koji definišu poruke na način prikazan u primeru \ref{lst:definingmessages}, u odgovarajuće JSON fajlove. Kompajliranje prevodi te fajlove u oblik prikladan korišćenju u produkciji. Delovi tih fajlova prikazani su u primeru \ref{lst:messagsjsonfiles}.
 
@@ -1290,7 +1290,7 @@ return (<Button type="submit">
 \end{lstlisting}
 \end{figure}
 
-Napomenućemo da bi sofisticirani sistem internacionalizacije podržao čuvanje vrednosti u bazi podataka i njihovo eksportovanje u JSON fajlove, čime bi se omogućilo dinamičko menjanje vrednosti translacija bez ponovnog pokretanja aplikacije. To je, ipak, u ovom radu ostavljeno kao mogućnost za poboljšanje.
+Treba imati u vidu da bi sofisticirani sistem internacionalizacije podržao čuvanje vrednosti u bazi podataka i njihovo eksportovanje u JSON fajlove, čime bi se omogućilo dinamičko menjanje vrednosti translacija bez ponovnog pokretanja aplikacije. To je, ipak, u ovom radu ostavljeno kao mogućnost za poboljšanje.
 
 % ------------------------------------------------------------------------------
 
@@ -1304,12 +1304,12 @@ Ovakav stav, očekivano, bio bi naivan. Problem leži u tome što ne postoji taj
     \item Poslovne aktivnosti se pamte u transakcionoj bazi podataka.
     \item Na osnovu tih podatka izvode se zaključci koristeći odgovarajuće tehnike i alate.
     \item Dati zaključci ukazuju na šta se treba fokusirati u razvoju proizvoda.
-    \item Nove implementirane funkcionalnosti donose još podataka, koje dalje možemo analizirati ispočetka.
+    \item Nove implementirane funkcionalnosti donose još podataka, koje se dalje mogu analizirati istim nizom koraka.
 \end{enumerate}
 
 \section{Skladišta podataka, ETL procesi, cron}
 
-Niz koraka iz uvodnog dela ovog poglavlja predstavlja uopšten mentalni model na kome se zasniva proces analitike podataka\footnote{Postoji mnoštvo termina koji se koriste u današnje vreme, kao što su \textit{Data Mining, Business Intelligence} i drugi. Ne zadržavamo se na diskusiji konkretnih pojmova jer ne služe svrsi ovog rada.} iz poslovnog ugla. Nešto konkretniji model, koji se više fokusira na tehnologije i metodologije, prikazan je na dijagramu \ref{fig:datadiag}.
+Niz koraka iz uvodnog dela ovog poglavlja predstavlja uopšten mentalni model na kome se zasniva proces analitike podataka\footnote{Postoji mnoštvo termina koji se koriste u današnje vreme, kao što su \textit{Data Mining, Business Intelligence} i drugi. Diskusija konkretnih pojmova je izuzeta jer ne služi svrsi ovog rada.} iz poslovnog ugla. Nešto konkretniji model, koji se više fokusira na tehnologije i metodologije, prikazan je na dijagramu \ref{fig:datadiag}.
 
 \begin{figure}[h]
   \centering
@@ -1318,7 +1318,7 @@ Niz koraka iz uvodnog dela ovog poglavlja predstavlja uopšten mentalni model na
   \label{fig:datadiag}
 \end{figure}
 
-Za potrebe ovog rada, a iz razloga jer to nije glavni fokus, sistem analitike izveden je u uprošćenom obliku. Skladišta podataka (eng. data warehouse) predstavljaju zasebnu oblast izučavanja i u vreme pisanja rada potpadaju najviše pod oblast poznatoj kao inženjerstvo podataka (eng. data engineering). Skladište podataka smatraćemo za organizovanu kolekciju podataka dobijenu transformacijom izvornih podataka u oblik prikladan za izvršavanje odgovarajućih upita \cite{dataanalytics}.
+Za potrebe ovog rada, a iz razloga jer to nije glavni fokus, sistem analitike izveden je u uprošćenom obliku. Skladišta podataka (eng. data warehouse) predstavljaju zasebnu oblast izučavanja i u vreme pisanja rada potpadaju najviše pod oblast poznatoj kao inženjerstvo podataka (eng. data engineering). Skladište podataka posmatra se kao organizovana kolekcija podataka dobijena transformacijom izvornih podataka u oblik prikladan za izvršavanje odgovarajućih upita \cite{dataanalytics}.
 
 Sledeće prirodno pitanje koje se nameće jeste kako i kada se date transformacije vrše. U sistemu STS ovaj zadatak potpada pod ETL (eng. Extract Transform Load) servis. Kao što i samo ime kaže sastoji se od tri koraka:
 \begin{enumerate}
@@ -1327,15 +1327,15 @@ Sledeće prirodno pitanje koje se nameće jeste kako i kada se date transformaci
     \item \textbf{Load} - učitavanje u skladište podataka.
 \end{enumerate}
 
-Metrike koje mogu imati vrednost u sistemu STS jesu primarno metrike koje se odnose na tiket, kao glavni entitet, i promene koje se nad njime dešavaju. Tako možemo razmatrati prosečno vreme rešavanja (eng. average resolution time), prosečno vreme preuzimanja (eng. average pickup time) i prosečno vreme prvog odgovora (eng. average first-response time). S tim u vidu, skladište podataka, i njegov deo koji se bavi tiketima, dizajniran je tako da izvuče navedene metrike za svaki tiket\footnote{Vredi napomenuti kako je izbor šablona Event Sourcing za čuvanje tiketa i niza promena prikazan u sekciji \ref{sec:eventsourcing} doprineo znatno lakšoj implementaciji ovih transformacija.}. Primer \ref{lst:ticketetlloop} prikazuje glavni deo ETL skripte. Primer \ref{lst:ticketetltransformfunction} prikazuje funkciju koja transformiše tiket, dok primer \ref{lst:ticketetlconcretefunction} prikazuje računanje jedne konkretne metrike.
+Metrike koje mogu imati vrednost u sistemu STS jesu primarno metrike koje se odnose na tiket, kao glavni entitet, i promene koje se nad njime dešavaju. Tako se mogu razmatrati prosečno vreme rešavanja (eng. average resolution time), prosečno vreme preuzimanja (eng. average pickup time) i prosečno vreme prvog odgovora (eng. average first-response time). S tim u vidu, skladište podataka, i njegov deo koji se bavi tiketima, dizajniran je tako da izvuče navedene metrike za svaki tiket\footnote{Vredi napomenuti kako je izbor šablona Event Sourcing za čuvanje tiketa i niza promena prikazan u sekciji \ref{sec:eventsourcing} doprineo znatno lakšoj implementaciji ovih transformacija.}. Primer \ref{lst:ticketetlloop} prikazuje glavni deo ETL skripte. Primer \ref{lst:ticketetltransformfunction} prikazuje funkciju koja transformiše tiket, dok primer \ref{lst:ticketetlconcretefunction} prikazuje računanje jedne konkretne metrike.
 
-Za potrebe automatizacije ovog procesa koristi se \verb|cron|, ugrađeni planer poslova (eng. job scheduler) operativnih sistema zasnovanih na Unix-u. Njegovu konfiguraciju izostavljamo jer nema specifičnosti u odnosnu na najosnovnije korišćenje.
+Za potrebe automatizacije ovog procesa koristi se \verb|cron|, ugrađeni planer poslova (eng. job scheduler) operativnih sistema zasnovanih na Unix-u. Njegova konfiguracija je izostavljena jer nema specifičnosti u odnosnu na najosnovnije korišćenje.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=python, caption={Transformacija tiketa.}, label={lst:ticketetlloop}]
 def main():
     # ...
-    # Nalazimo poslednji obradjeni tiket i njegovo vreme,
+    # Nalazi se poslednji obradjeni tiket i njegovo vreme,
     # ako postoji
     latest_processed_ticket = dest_tickets_collection.find_one(
         sort=[("timestamp", pymongo.DESCENDING)]
@@ -1344,21 +1344,21 @@ def main():
         latest_processed_ticket["timestamp"] \
         if latest_processed_ticket else None
 
-    # Uzimamo sve neobradjene tikete
+    # Uzimaju se svi neobradjene tikete
     query = {}
     if latest_timestamp:
         query["timestamp"] = {"$gte": latest_timestamp}
 
     unprocessed_tickets_cursor = src_tickets_collection.find(query)
 
-    # Transformisemo sve neobradjene tikete
+    # Transformisu se svi neobradjeni tiketi
     new_tickets = []
     for ticket in unprocessed_tickets_cursor:
         
         transformed_ticket = transform_data(ticket)
         new_tickets.append(transformed_ticket)
 
-    # Ubacujemo u skladiste
+    # Ubacuju se u skladiste
     if new_tickets:
         dest_tickets_collection.insert_many(new_tickets)
 \end{lstlisting}
@@ -1441,9 +1441,9 @@ Skripta za prikaz kontrolne table je jednostavna i može se videti u fajlu \verb
 
 Pojam DevOps (nastao od engleske sintagme \textit{Development Operations} - u bukvalnom prevodu \textit{razvojne operacije}) predstavlja relativno mladu granu softverskog inženjerstva. U svojoj najužoj definiciji, prema \cite{zdevopsarticle}, kaže se da DevOps opisuje usvajanje iterativnog razvoja softvera, automatizaciju i programabilne infrastrukture za otpremanje\footnote{eng. deployment} i održavanje softverskog sistema.
 
-U nekim krugovima poistovećuje se sa ulogom sistemskih administratora dok drugi tvrde da je to potpuno zasebna profesija. Čiju god stranu zauzeli moramo se složiti da sa masovnim razvojem različitih tehnologija, okruženja i platformi nastaju novi problemi koji ne potpadaju pod tradicionali pojam softverskog inženjerstva gde uglavnom obuhvatamo razvoj domenskih funkcionalnosti. Naime, ukoliko kažemo da je zadatak \textit{"implementirati dugme na stranici za prikaz tiketa kojim se zatvara tiket"} potpuno je jasno da se tim zadatkom neće baviti DevOps inženjer, dok bi na primer zadatak \textit{implementirati sistem za periodično pravljenje i čuvanje rezervnih kopija baze podataka} upravo zapao tom inženjeru.
+U nekim krugovima poistovećuje se sa ulogom sistemskih administratora dok drugi tvrde da je to potpuno zasebna profesija. Obe strane moraju se složiti da sa masovnim razvojem različitih tehnologija, okruženja i platformi nastaju novi problemi koji ne potpadaju pod tradicionalni pojam softverskog inženjerstva koji uglavnom obuhvata razvoj domenskih funkcionalnosti. Naime, ukoliko je zadatak \textit{"implementirati dugme na stranici za prikaz tiketa kojim se zatvara tiket"} potpuno je jasno da se tim zadatkom neće baviti DevOps inženjer, dok bi na primer zadatak \textit{implementirati sistem za periodično pravljenje i čuvanje rezervnih kopija baze podataka} upravo zapao tom inženjeru.
 
-Interesantno opažanje primećeno u \cite{devopshandbook} je da u mnogim kompanijama postoji neprekidna kontrateža između odeljenja za razvoj i odeljenja za razvojne operacije, uprkos činjenici da je kranji cilj isti. Na primer, inženjeru kome je zadatak da implementira jedan mali server za nekoliko API pristupnih tačaka od nule biće lakše da taj server pokrene direktno na produkcionoj mašini i neretko će zahtevati da se "napravi izuzetak" usled skromne veličine projekta. DevOps inženjer bi skoro sigurno insistirao na tome da se čak i za najmanji takav server napravi odgovarajuća infrastruktura, recimo kroz Docker. Lako je zapitati se zašto se uopšte dovodi u pitanje vrednost poštovanja principa razvojnih operacija i zašto bi programer iz hipotetičkog scenarija ikada zahtevao da se napravi izuzetak. Odgovori na ova pitanja zalaze u poslovne aspekte softverskog inženjerstva gde je uvek pitanje toga ko donosi veću vrednost. Ovaj rad se uzdržava od dalje diskusije na tu temu jer je fokus primarno tehnički, ali napomenućemo da su istorijat DevOps-a i razni poslovni aspekti ove grane odlično obrađeni u \cite{devopshandbook}.
+Interesantno opažanje primećeno u \cite{devopshandbook} je da u mnogim kompanijama postoji neprekidna kontrateža između odeljenja za razvoj i odeljenja za razvojne operacije, uprkos činjenici da je kranji cilj isti. Na primer, inženjeru kome je zadatak da implementira jedan mali server za nekoliko API pristupnih tačaka od nule biće lakše da taj server pokrene direktno na produkcionoj mašini i neretko će zahtevati da se "napravi izuzetak" usled skromne veličine projekta. DevOps inženjer bi skoro sigurno insistirao na tome da se čak i za najmanji takav server napravi odgovarajuća infrastruktura, recimo kroz Docker. Lako je zapitati se zašto se uopšte dovodi u pitanje vrednost poštovanja principa razvojnih operacija i zašto bi programer iz hipotetičkog scenarija ikada zahtevao da se napravi izuzetak. Odgovori na ova pitanja zalaze u poslovne aspekte softverskog inženjerstva gde je uvek pitanje toga ko donosi veću vrednost. Ovaj rad se uzdržava od dalje diskusije na tu temu jer je fokus primarno tehnički, ali vredi napomenuti da su istorijat DevOps-a i razni poslovni aspekti ove grane odlično obrađeni u \cite{devopshandbook}.
 
 
 \section{Kontejneri, sistem Docker}
@@ -1455,19 +1455,19 @@ Istorija nastajanja Docker-a, i kontejnerizacije uopšte, interesantna je tema s
     \item \textbf{Kontejneri.} Kao rešenje koje ima za cilj da uzme najbolje od oba sveta nastaju kontejneri (eng. containters). Za razliku od virtuelnih mašina, svaki pokrenut kontejner koristi operativni sistem računara na kome se pokreće, a ipak održava nivo potpune izolovanosti.
 \end{enumerate}
 
-Docker je jedno od rešenja za rad sa kontejnerima, i izabrano je za potrebe ovog rada usled svoje popularnosti i rasprostranjenosti. Za mnoge programere, čija je primarna delatnost razvoj poslovnih funckionalnosti, Docker predstavlja crnu kutiju. Pojmovi kao što su \textit{docker engine}, \textit{slike (eng. images)} i \textit{orkestracija} stvaraju konfuziju ako se od početka ne posveti pažnja njihovom razumevanju, stoga ćemo se prilikom objašnjavanja koristiti analogijama sa nekim konceptima koji su poznati svim pogramerima.
+Docker je jedno od rešenja za rad sa kontejnerima, i izabrano je za potrebe ovog rada usled svoje popularnosti i rasprostranjenosti. Za mnoge programere, čija je primarna delatnost razvoj poslovnih funckionalnosti, Docker predstavlja crnu kutiju. Pojmovi kao što su \textit{docker engine}, \textit{slike (eng. images)} i \textit{orkestracija} stvaraju konfuziju ako se od početka ne posveti pažnja njihovom razumevanju, stoga se naredne sekcije koristite analogijama sa nekim konceptima koji su poznati svim pogramerima.
 
 \subsection{Docker slike}
 
-Na početku poglavlja pomenuto je kako je jedan od zadataka DevOps-a, između ostalog, uspostavljanje programabilnog infrastruktura za otpremanje i održavanje softverskog sistema. Način na koji pravimo docker slike upravo se zasniva na programabilnosti. 
+Na početku poglavlja pomenuto je kako je jedan od zadataka DevOps-a, između ostalog, uspostavljanje programabilnog infrastruktura za otpremanje i održavanje softverskog sistema. Način pravljenja docker slika upravo se zasniva na programabilnosti. 
 
-Naime, docker slike treba shvatiti upravo po inspiraciji zbog koje se koriste - potrebno nam je izolovano okruženje jako specifične namene. Pomenuli smo da virtuelne mašine nose sa sobom previše stvari koje nam nisu potrebne, najpre ceo operativni sistem i sve njegove module. Definicijom adekvatne docker slike izbegavamo korišćenje bespotrebnih resursa. 
+Naime, docker slike treba shvatiti upravo po inspiraciji zbog koje se koriste - postoji potreba za izolovanim okruženjem jako specifične namene. Pomenuto je da virtuelne mašine nose sa sobom previše stvari za kojim ne postoji potreba, najpre ceo operativni sistem i svi njegove module. Definicijom adekvatne docker slike izbegava se korišćenje bespotrebnih resursa. 
 
-Dakle, prilikom definisanja slike za pokretanje našeg bekend servera u režimu za razvoj\footnote{O produkcionoj postavci biće reči kasnije.} za sistem STS, možemo pristupiti sledećim rezonovanjem:
+Dakle, prilikom definisanja slike za pokretanje bekend servera sistema STS u režimu za razvoj\footnote{O produkcionoj postavci biće reči kasnije.}, pristupa se sledećim prirodnim rezonovanjem:
 
 \begin{enumerate}
-    \item Potreban nam je Node.js
-    \item Potreban nam je CLI za okruženje \verb|@nestjs|
+    \item Potreban je Node.js
+    \item Potreban je CLI za okruženje \verb|@nestjs|
     \item Potrebno je instalirati sve pakete deklarisane u fajlu \verb|package.json|
     \item Potrebno je prekopirati izvorni k\^{o}d
     \item Potrebno je pokrenuti razvojni server
@@ -1500,9 +1500,9 @@ CMD ["npm", "run", "start:dev"]
 
 \subsection{Docker kontejneri}
 
-Ako bismo postavljali analogiju između razvoja slika i kontejnera sa običnim razvojem aplikacija, onda bismo mogli reći da slika odgovara programu, a kontejner odgovara procesu. Na taj način gore definisana docker slika sama po sebi ne radi ništa ukoliko se ne pokrene u vidu kontejnera. 
+U analogiji između razvoja slika i kontejnera sa običnim razvojem aplikacija moglo bi se reći da slika odgovara programu, a kontejner odgovara procesu. Na taj način gore definisana docker slika sama po sebi ne radi ništa ukoliko se ne pokrene u vidu kontejnera. 
 
-Nastavljajući analogiju, sliku moramo prvi izgraditi (eng. build) što bi odgovaralo procesu kompilacije. Ovu kompilaciju je bolje shvatiti ne kao prevod na mašinski jezik, već kao prevod u međureprezentaciju, koju je u stanju da izvršava docker engine. Docker CLI komandom, na primeru \ref{lst:buildinglocal}, možemo izgraditi sliku sa odgovarajućom oznakom (eng. tag).
+Nastavljajući analogiju, sliku se prvo mora izgraditi (eng. build) što bi odgovaralo procesu kompilacije. Ovu kompilaciju je bolje shvatiti ne kao prevod na mašinski jezik, već kao prevod u međureprezentaciju, koju je u stanju da izvršava docker engine. Docker CLI komandom, na primeru \ref{lst:buildinglocal}, gradi se slika sa odgovarajućom oznakom (eng. tag).
 
 \newpage
 \begin{lstlisting}[caption={Izgradnja slike}, label={lst:buildinglocal}]
@@ -1514,8 +1514,8 @@ docker build -f
 
 Nakon izgradnje moguće je pokrenuti datu sliku u vidu kontejnera, sa nekoliko dodatnih konfiguracija koje se sastoje od sledećeg:
 \begin{itemize}
-    \item \textbf{Vezivanje portova.} Opcijom \verb|-p| možemo navesti koji port kontejnera se vezuje za koji port domaćinskog operativnog sistema (eng. host OS). Ovo omogućava da aplikacija unutar kontejnera bude agnostična od zauzetosti portova.
-    \item \textbf{Povezivanje sa fajl sistemom.} U lokalnom razvojnom okruženju potreban nam je izvorni k\^{o}d aplikacije, koji možemo uvesti korišćenjem koncepta \textit{docker volume}-a. Oni predstavljaju apstrakciju medijskih uređaja, ali u ovom slučaju koristimo ih da povežemo određeni direktorijum unutar kontejnera sa hostom\footnote{Ovo se ostvaruje tehnologijom rsync. Izostavljamo detalje kako se to interno postiže, ali napominjemo, jer se u praksi često koristi izraz rsync kao glagol. Neretko ćemo čuti da se kaže da su dva foldera "rsync-ovana".}.
+    \item \textbf{Vezivanje portova.} Opcijom \verb|-p| navodi se koji port kontejnera se vezuje za koji port domaćinskog operativnog sistema (eng. host OS). Ovo omogućava da aplikacija unutar kontejnera bude agnostična od zauzetosti portova.
+    \item \textbf{Povezivanje sa fajl sistemom.} U lokalnom razvojnom okruženju potreban je izvorni k\^{o}d aplikacije, koji se može uvesti korišćenjem koncepta \textit{docker volume}-a. Oni predstavljaju apstrakciju medijskih uređaja, ali u ovom slučaju koriste se za povezivanje određenih direktorijuma unutar kontejnera sa hostom\footnote{Ovo se ostvaruje tehnologijom rsync. Detalji su izostavljeni, ali vredi napomenuti jer se u praksi često koristi izraz rsync kao glagol. Neretko se može čuti izraz da su dva foldera "rsync-ovana".}.
 \end{itemize}
 
 Primer komande za pokretanje prikazan je u \ref{lst:dockerrunninglocal}.
@@ -1527,17 +1527,17 @@ docker run
     -p 3000:3000
 \end{lstlisting}
 
-Na ovaj način analogijom možemo reći da je naš kompajliran program pokrenut i sada predstavlja proces.
+U skladu sa analogijom, kompajlirani program je sada pokrenut i sada predstavlja proces.
 
 \subsection{Orkestracija putem modula docker-compose}
 
-Proces prikazan u prethodne dve sekcije izgleda previše repetitivno i, još bitnije, deluje da se može automatizovati. Ako bismo ovako razvijali aplikaciju morali bismo konstantno da ponavljamo korake:
+Proces prikazan u prethodne dve sekcije izgleda previše repetitivno i, još bitnije, deluje da se može automatizovati. Prikazani način razvoja doveo bi do konstantnog ponavljanja sledećih koraka:
 \begin{enumerate}
     \item Izgradi sve slike komandama \verb|docker build|.
     \item Pokreni sve kontejnere komandama \verb|docker run|.
 \end{enumerate}
 
-Pri tom moramo uvek voditi računa da li odgovarajuće portove dobro vazujemo, da li vezujemo odgovarajuće fajlove i slično. Dijagram ovog procesa prikazan je na slici \ref{fig:dockermanual}. Čitav ovaj proces upravljanja stanjima kontejnera, njihovim pokretanjem i obaranjem, portovima i vezivanjem sa fajl sistemom podvodimo pod jedan sveobuhvatni pojam \textit{orkestracije}.
+Pritom se uvek mora voditi računa da li se odgovarajući portovi dobro vezuju, da li se vezani odgovarajući fajlovi i slično. Dijagram ovog procesa prikazan je na slici \ref{fig:dockermanual}. Čitav ovaj proces upravljanja stanjima kontejnera, njihovim pokretanjem i obaranjem, portovima i vezivanjem sa fajl sistemom podvodi se pod jedan sveobuhvatni pojam \textit{orkestracije}.
 
 \begin{figure}[h]
   \centering
@@ -1548,7 +1548,7 @@ Pri tom moramo uvek voditi računa da li odgovarajuće portove dobro vazujemo, d
 
 Postoje vrlo sofisticirani softverski sistemi za orkestraciju kontejnera, od kojih se neki pokreću primarno u oblaku\footnote{Primer takvog sistema je AWS ECS.}. Sistem STS nije dizajniran za cloud okruženja već za varijantu samostalnog hostovanja (eng. self-hosting)\footnote{Jedna zanimljivost je da tokom pisanja ovog rada postoji veliki raskol u onlajn zajednicama programera: da li je bolje koristiti cloud rešenja ili samostalno hostovanje. Slična rasprava vodi se oko promovisanja monolitnih okruženja kao superiornih u odnosu na mikroservise, što nekima deluje kao vraćanje u prošlost.}. Zbog toga orkestrator docker-compose zadovoljava sve zahteve.
 
-Skoro svi orkestratori zasnivaju se na konfiguraciji umesto na eksplicitnom programiranju ponašanja kontejnera (kao što smo prvobitni uradili koristeći \verb|bash| skripte iz prethodnih sekcija). U slučaju docker-compose-a to se postiže pisanjem YAML fajlova. Konfiguracija u ovom fajlovima navodi koje sve servise sistem sadrži, koju sliku koriste ili na koji način se izgrađuju, konfiguracije portova i vezivanja fajl sistema, promenljive okruženja i slično. Primer konfigurisanja bekend i frontend servisa za lokalno okruženje dat je u \ref{lst:dockercomposelocal}.
+Skoro svi orkestratori zasnivaju se na konfiguraciji umesto na eksplicitnom programiranju ponašanja kontejnera (kao što je prvobitno urađeno koristeći \verb|bash| skripte iz prethodnih sekcija). U slučaju docker-compose-a to se postiže pisanjem YAML fajlova. Konfiguracija u ovom fajlovima navodi koje sve servise sistem sadrži, koju sliku koriste ili na koji način se izgrađuju, konfiguracije portova i vezivanja fajl sistema, promenljive okruženja i slično. Primer konfigurisanja bekend i frontend servisa za lokalno okruženje dat je u \ref{lst:dockercomposelocal}.
 
 Nakon ovakvog konfigurisanja čitavog sistema, upravljanje kompletnim okruženjem poprilično je jednostavno i može se postići sa nekoliko jednostavnih komandi prikazanih u \ref{lst:dockerlocalcommands}.
 
@@ -1598,16 +1598,16 @@ docker-compose up -d
 docker-compose down
 \end{lstlisting}
 
-Napomenućemo da docker-compose podržava i kompleksnije operacije kao što su skaliranje kontejnera\footnote{Uz propratne module kao što su docker-swarm.}, kojima se u ovom radu ne bavimo. Napominjemo tu činjenicu kako bismo obeshrabrili popularno mišljenje da za bilo kakav ozbiljan rad sa kontejnerima moramo odmah pribegavati naprednim sistemima kao što su \textit{AWS ECS} ili \textit{kubernetes}. Naravno da ti sistemi imaju svoju ulogu i veoma su moćni, ali njihovo preuranjeno korišćenje može doneti više štete nego koristi razvoju.
+Vredi napomenuti da docker-compose podržava i kompleksnije operacije kao što su skaliranje kontejnera\footnote{Uz propratne module kao što su docker-swarm.}, koje su van okvira ovog rada. Ta činjenica ima za cilj da obeshrabri popularno mišljenje da se za bilo kakav ozbiljan rad sa kontejnerima mora odmah pribegavati naprednim sistemima kao što su \textit{AWS ECS} ili \textit{kubernetes}. Naravno da ti sistemi imaju svoju ulogu i veoma su moćni, ali njihovo preuranjeno korišćenje može doneti više štete nego koristi razvoju.
 
 
 \section{Reverzni proksi nginx}
 
-Uspostavljanjem docker-a kao sistema za pokretanje aplikacije rešili smo jedan problem - izolacija okruženja. U ovom trenutku imamo pet servisa pokrenutih kroz različite kontejnere i povezane na različite portove\footnote{Servisi su: baza podataka, Nest.js server, Next.js server, ETL i streamlit.}. Sledeće pitanje koje se prirodno nameće jeste kako korisnik pristupa veb sajtu i kako servisi komuniciraju jedni između drugih. Uzevši u obzir da se svi servisi pokreću na različitim portovima, bilo bi neodrživo da svaka komponenta sistema mora da zna na kojim portovima su ostale, a potpuno apsurdno da korisnik sajta mora da zna na kom portu je hostovan glavni vebsajt (frontend).
+Uspostavljanjem docker-a kao sistema za pokretanje aplikacije rešen je jedan problem - izolacija okruženja. U ovom trenutku postoji pet servisa pokrenutih kroz različite kontejnere i povezane na različite portove\footnote{Servisi su: baza podataka, Nest.js server, Next.js server, ETL i streamlit.}. Sledeće pitanje koje se prirodno nameće jeste kako korisnik pristupa veb sajtu i kako servisi komuniciraju jedni između drugih. Uzevši u obzir da se svi servisi pokreću na različitim portovima, bilo bi neodrživo da svaka komponenta sistema mora da zna na kojim portovima su ostale, a potpuno apsurdno da korisnik sajta mora da zna na kom portu je hostovan glavni vebsajt (frontend).
 
-Očigledno je da nam je potrebna pristupna tačka celom sistemu za spoljašnji svet - jednom rečju potreban nam je \textbf{veb server}. Pri početku pogavlja \ref{sec:backend} izričito je napomenuta razlika između veb servera i aplikativnog servera. Pod aplikativnim serverom mislimo na HTTP server u odgovarajućem veb okruženju (u našem slučaju Next.js ili Nest.js) koji služi za obradu zahteva ili (u slučaju serverskog renderovanja) generisanje HTML-a. Ovi serveri treba da se bave isključivo svojim ulogama i da se ne brinu o stvarima kao što su provera SSL sertifikata, serviranje statičkih fajlova i slično. Navedeni zadaci, naravno uz još mnoge, potpadaju pod ulogu veb servera.
+Očigledna je potreba za pristupnom tačkom celog sistema za spoljašnji svet - jednom rečju potreban je \textbf{veb server}. Pri početku pogavlja \ref{sec:backend} izričito je napomenuta razlika između veb servera i aplikativnog servera. Pod aplikativnim serverom podrazumeva se HTTP server u odgovarajućem veb okruženju (u ovom slučaju Next.js ili Nest.js) koji služi za obradu zahteva ili (u slučaju serverskog renderovanja) generisanje HTML-a. Ovi serveri treba da se bave isključivo svojim ulogama i da se ne brinu o stvarima kao što su provera SSL sertifikata, serviranje statičkih fajlova i slično. Navedeni zadaci, naravno uz još mnoge, potpadaju pod ulogu veb servera.
 
-Tok korisničkog zahteva uprošćeno možemo shvatiti na sledeći način, kao što je prikazano u \cite{webvsappserver}:
+Tok korisničkog zahteva može se uprošćeno shvatiti na sledeći način, kao što je prikazano u \cite{webvsappserver}:
 \begin{enumerate}
     \item Korisnik pokuša da pristupi određenom resursu putem URL-a.
     \item Zahtev prvo stiže do veb servera\footnote{Ukoliko se dodatno koristi mreža za dostavljanje sadržaja (eng. Content Delivery Network - CDN), recimo Cloudflare, onda bi zahtev tehnički prvo prošao kroz nju, ali svakako veb server treba da bude agnostičan od toga.}. Ukoliko se koristi HTTPS, veb server vrši proveru sertifikata i bezbednosti konekcije.
@@ -1615,7 +1615,7 @@ Tok korisničkog zahteva uprošćeno možemo shvatiti na sledeći način, kao š
     \item U suprotnom veb server delegira posao odgovarajućem aplikativnom serveru.
 \end{enumerate}
 
-$nginx$ \cite{nginxdocs} nam omogućava sve od navedenog. Kada ga koristimo za delegiranje zadataka aplikativnim serverima, onda kažemo da zauzima ulogu obrnutog ili reverznog proksija (eng. reverse proxy). Razlog takvog imenovanja jeste upravo u smeru prosleđivanja zahteva - klasičan proksi prosleđuje zahteve eksternim servisima, dok reverzni proksi prosleđuje zahteve "sam na sebe". 
+$nginx$ \cite{nginxdocs} omogućava sve od navedenog. Kada se koristi za delegiranje zadataka aplikativnim serverima, onda se kaže da zauzima ulogu obrnutog ili reverznog proksija (eng. reverse proxy). Razlog takvog imenovanja jeste upravo u smeru prosleđivanja zahteva - klasičan proksi prosleđuje zahteve eksternim servisima, dok reverzni proksi prosleđuje zahteve "sam na sebe". 
 
 Dijagram \ref{fig:dockerandnginxfinal} prikazuje nacrt celog sistema.
 
@@ -1631,7 +1631,7 @@ Dijagram \ref{fig:dockerandnginxfinal} prikazuje nacrt celog sistema.
 \newpage
 \section{Produkciono okruženje, višefazna izgradnja slika, DockerHub}
 
-Za kraj napominjemo male razlike između konfiguracije lokalnog okruženja, prikazanog u prethodnim sekcijama, i produkcionog, od čega je najveća razlike u docker slikama. Naime, u produkciji nema potrebe da otpremamo izvorni k\^{o}d aplikacija, kao što to radimo u lokalnom okruženju\footnote{U lokalnom okruženju nam je potreban izvorni k\^{o}d kako bismo mogli da razvijamo uživo, tj. da se promene u k\^{o}du odmah reflektuju.}, već u docker sliku možemo kopirati samo neophodne fajlove za pokretanje.
+Za kraj istaknute se male razlike između konfiguracije lokalnog okruženja, prikazanog u prethodnim sekcijama, i produkcionog, od čega je najveća razlika u docker slikama. Naime, u produkciji nema potrebe za otpremanjem izvornog k\^{o}da aplikacija, kao što se to radi u lokalnom okruženju\footnote{U lokalnom okruženju potreban je izvorni k\^{o}d kako bi promene u k\^{o}du bile odmah vidljive, bez ikakve kompilacije ili izgradnje.}, već se u docker sliku mogu kopirati samo fajlovi neophodni za pokretanje.
 
 
 \subsection{Višefazna izgradnja}
@@ -1639,10 +1639,10 @@ Na primer, u slučaju Nest.js API-a dovoljno je imati samo nekoliko fajlova i fo
 \begin{itemize}
     \item \verb|node_modules| folder koji sadrži instalirane Node.js pakete.
     \item \verb|dist| folder koji sadrži kompajliran produkcioni k\^{o}d.
-    \item \verb|package.json| fajl kako bismo pokretali skripte.
+    \item \verb|package.json| fajl za pokretanje skripti.
 \end{itemize}
 
-Izgradnju docker slika koje sadrže samo potrebne fajlove, i odbacuju sve što nije potrebno usput, možemo postići korišćenjem višefaznih izgradnji (eng. multiphase build). Dockerfile možemo organizovati u više faza, gde iz svake faze kopiramo isključivo fajlove koji su potrebni na samom kraju. Ovakav način izgradnje slika prikazan je u primeru \ref{lst:mfbuild}.
+Izgradnja docker slika koje sadrže samo potrebne fajlove, i odbacuju sve što nije potrebno usput, postiže se korišćenjem višefaznih izgradnji (eng. multiphase build). Dockerfile se može organizovati u više faza, gde se iz svake faze kopiraju isključivo fajlovi koji su potrebni na samom kraju. Ovakav način izgradnje slika prikazan je u primeru \ref{lst:mfbuild}.
 
 \begin{figure}[h]
 \begin{lstlisting}[language=docker, caption={Višefazna izgradnja slike za API servis.}, label={lst:mfbuild}]
@@ -1676,9 +1676,9 @@ CMD ["node", "dist/main"]
 \newpage
 \subsection{DockerHub}
 
-Kao dodatno olakšanje za pokretanje produkcione varijante sistema STS, sve slike možemo otpremiti na DockerHub, koji predstavlja onlajn servis za pronalaženje i deljenje docker slika \cite{dockerhubdocs}. Besplatan plan koji nudi DockerHub, u trenutku pisanja ovog rada, omogućava hostovanje neograničeno mnogo javnih slika, što je više nego dovoljno za potrebe sistema STS. 
+Kao dodatno olakšanje za pokretanje produkcione varijante sistema STS, slike se mogu otpremiti na DockerHub, koji predstavlja onlajn servis za pronalaženje i deljenje docker slika \cite{dockerhubdocs}. Besplatan plan koji nudi DockerHub, u trenutku pisanja ovog rada, omogućava hostovanje neograničeno mnogo javnih slika, što je više nego dovoljno za potrebe sistema STS. 
 
-S tim u vidu napravljene su produkcione skripte, koje se nalaze u folderu \verb|bin| u izvornom k\^{o}du i bave se izgradnjom i otpremanjem produkcionih slika. Primer ovih komandi vidimo u \ref{lst:prodscriptsexample}.
+S tim u vidu napravljene su produkcione skripte, koje se nalaze u folderu \verb|bin| u izvornom k\^{o}du i bave se izgradnjom i otpremanjem produkcionih slika. Primer ovih komandi prikazan je u \ref{lst:prodscriptsexample}.
 
 \begin{lstlisting}[caption={docker-compose komande.}, label={lst:prodscriptsexample}]
 # Komanda za izgradnju API slike (fajl sts-build)
@@ -1692,7 +1692,7 @@ docker push aleksakojadinovic/sts:api-latest
 
 \end{lstlisting}
 
-Produkciona docker-compose konfiguracija sada ne mora uopšte zavisiti od postojanja Dockerfile-ova, već može direktno pokretati slike sa DockerHub-a. Na taj način postigli smo da na konačnom fizičkom\footnote{Naglašavamo fizičkom jer mislimo na pravu instancu servera gde ćemo pokretati docker. Ipak pojam fizičkog servera i ovde treba uzeti sa rezervom jer su u oblaku i takvi serveri virtuelni samo na višem nivou. Svakako iz našeg ugla smatramo ih za fizičke servere.} serveru, na kom pokrećemo sistem, ne moramo niti imati izvorni k\^{o}d niti klonirati git repozitorijum izvornog k\^{o}da - možemo docker-compose konfiguraciju držati u zasebnom repozitorijumu. Ipak je sve obuhvaćeno u jednom repozitorijumu kako bi služio kao centralni izvor svega pokrivenog u radu.
+Produkciona docker-compose konfiguracija sada ne mora uopšte zavisiti od postojanja Dockerfile-ova, već može direktno pokretati slike sa DockerHub-a. Na taj način postignuto je da na konačnom fizičkom\footnote{Fizička karakteristika servera je naglašena jer se podrazumeva prava instanca servera gde će se pokretati docker. Ipak pojam fizičkog servera i ovde treba uzeti sa rezervom jer su u oblaku i takvi serveri virtuelni samo na višem nivou. Svakako iz ugla korisnika smatraju se za fizičke servere.} serveru, na kom se pokreće sistem, nije potrebno niti imati izvorni k\^{o}d niti klonirati git repozitorijum izvornog k\^{o}da - docker-compose konfiguracija može se držati u zasebnom repozitorijumu. Ipak je sve obuhvaćeno u jednom repozitorijumu kako bi služio kao centralni izvor svega pokrivenog u radu.
 
 % ------------------------------------------------------------------------------
 
