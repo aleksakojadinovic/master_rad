@@ -10,6 +10,8 @@ export class User {
 
   lastName: string;
 
+  canUseAI = false;
+
   get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
