@@ -7,4 +7,5 @@ export class UserDTO {
   initials: string;
   role: string;
   status: string;
+  canUseAI: boolean;
 }
