@@ -12,7 +12,7 @@ const roles = [
   { name: 'agent' },
   { name: 'customer' },
 ];
-const predefinedAdmin = { username: 'administrator' };
+const predefinedAdmin = { username: 'administrator', canUseAI: true };
 
 const predefinedAgents = [
   { firstName: 'Emma', lastName: 'Smith' },
@@ -70,11 +70,12 @@ async function main() {
   const db = client.db('sts_db');
 
   async function seedPredefinedUsers() {
-    const predefinedUsers = [predefinedAdmin].map(({ username }) => ({
+    const predefinedUsers = [predefinedAdmin].map(({ username, canUseAI }) => ({
       username,
       firstName: capitalizeFirstLetter(username),
       lastName: capitalizeFirstLetter(username),
       passwordHash: bcrypt.hashSync(username, 10),
+      canUseAI: canUseAI || false,
       role: 'administrator',
       status: 'ACTIVE',
     }));
@@ -105,6 +106,7 @@ async function main() {
         username: firstName.toLowerCase(),
         firstName,
         lastName,
+        canUseAI: false,
         passwordHash: bcrypt.hashSync(firstName.toLowerCase(), 10),
         role: 'agent',
         status: 'ACTIVE',
