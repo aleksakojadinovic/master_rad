@@ -41,8 +41,8 @@ export class GenerativeAIController {
       throw new BadRequestException('Invalid ticket id');
     }
 
-    await this.generativeAIService.summarize(ticketId, user);
+    const response = await this.generativeAIService.summarize(ticketId, user);
 
-    return { ticketId };
+    return response;
   }
 }

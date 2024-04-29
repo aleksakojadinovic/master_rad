@@ -10,6 +10,7 @@ import { TicketTooShortError } from './errors/TicketTooShort';
 import { TicketTooLongError } from './errors/TicketTooLong';
 import OpenAI from 'openai';
 import { AIServiceDownError } from './errors/AIServiceDown';
+import { AISummary } from './value-objects/AISummary';
 
 @Injectable()
 export class GenerativeAIService extends BaseService {
@@ -27,7 +28,7 @@ export class GenerativeAIService extends BaseService {
 
   openAIAgent: OpenAI;
 
-  async summarize(ticketId: string, user: User) {
+  async summarize(ticketId: string, user: User): Promise<AISummary> {
     try {
       const ticket = await this.ticketService.findOne(ticketId, user);
 
@@ -46,7 +47,18 @@ export class GenerativeAIService extends BaseService {
       const prompt = this.promptFactory.createPrompt(ticket);
 
       try {
+        // const response = await this.openAIAgent.chat.completions.create({
+        //   messages: [{ role: 'system', content: prompt }],
+        //   model: 'gpt-3.5-turbo',
+        // });
+
+        // const message = response.choices[0].message.content;
+        // const summary = new AISummary(message);
+
+        const message = 'This is my AI response for prompt' + prompt;
+        return new AISummary(message);
       } catch (e) {
+        console.error('AI service error:', e);
         throw new AIServiceDownError();
       }
     } catch (e) {
