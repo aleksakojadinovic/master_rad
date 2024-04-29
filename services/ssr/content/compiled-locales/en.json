@@ -29,6 +29,12 @@
       "value": "Users"
     }
   ],
+  "adminDashboard.title": [
+    {
+      "type": 0,
+      "value": "Admin Dashboard"
+    }
+  ],
   "agent-dashboard.empty-state": [
     {
       "type": 0,
@@ -107,10 +113,22 @@
       "value": "Something went wrong. Please contact support."
     }
   ],
+  "api-errors.generic-validation-error": [
+    {
+      "type": 0,
+      "value": "Some provided fields are not valid."
+    }
+  ],
   "api-errors.ticket-tag-group-name-duplicate-error": [
     {
       "type": 0,
       "value": "A tag group with this name already exists."
+    }
+  ],
+  "api.errors.cannot-change-comments-when-this-status": [
+    {
+      "type": 0,
+      "value": "You cannot modify comments on a ticket in this status. Consider re-opening."
     }
   ],
   "api.errors.old-password-invalid": [
@@ -119,10 +137,46 @@
       "value": "Old password is incorrect."
     }
   ],
+  "api.errors.username-or-password-not-valid": [
+    {
+      "type": 0,
+      "value": "Username or password is not valid. Please review and try again."
+    }
+  ],
+  "api.errors.username-taken": [
+    {
+      "type": 0,
+      "value": "This username is already taken."
+    }
+  ],
   "assign.form-title": [
     {
       "type": 0,
       "value": "Assign someone"
+    }
+  ],
+  "auth-modal.login-button-loading-cta": [
+    {
+      "type": 0,
+      "value": "Logging in..."
+    }
+  ],
+  "auth-modal.login-details": [
+    {
+      "type": 0,
+      "value": "Please login. If you are a new customer, please contact us at support@example.com about setting up your account"
+    }
+  ],
+  "auth-modal.modal-title": [
+    {
+      "type": 0,
+      "value": "Log in"
+    }
+  ],
+  "auth=modal.login-button-cta": [
+    {
+      "type": 0,
+      "value": "Login"
     }
   ],
   "change-password.cta": [
@@ -191,6 +245,60 @@
     {
       "type": 0,
       "value": "Title of your issue"
+    }
+  ],
+  "create-user.auto-generated": [
+    {
+      "type": 0,
+      "value": "auto-generated"
+    }
+  ],
+  "create-user.create-user-alert-text": [
+    {
+      "type": 0,
+      "value": "This action will create a new inactive user in the system. You will be able to change their role and status later."
+    }
+  ],
+  "create-user.create-user-cta": [
+    {
+      "type": 0,
+      "value": "Create the user"
+    }
+  ],
+  "create-user.create-user-heading": [
+    {
+      "type": 0,
+      "value": "Create a new user"
+    }
+  ],
+  "create-user.create-user-success-text": [
+    {
+      "type": 0,
+      "value": "You have successfully created the following user:"
+    }
+  ],
+  "create-user.create-user-title": [
+    {
+      "type": 0,
+      "value": "Create a new user"
+    }
+  ],
+  "create-user.notify-them": [
+    {
+      "type": 0,
+      "value": "Please notify them about this account creation, and let them know that password change is suggested"
+    }
+  ],
+  "create-user.page-title": [
+    {
+      "type": 0,
+      "value": "Create User | STS"
+    }
+  ],
+  "create-user.their-password-hint": [
+    {
+      "type": 0,
+      "value": "Their password is the following:"
     }
   ],
   "customer-dashboard.create-new": [
@@ -301,6 +409,12 @@
       "value": "Submit"
     }
   ],
+  "global.by": [
+    {
+      "type": 0,
+      "value": "by"
+    }
+  ],
   "global.cancel": [
     {
       "type": 0,
@@ -323,6 +437,18 @@
     {
       "type": 0,
       "value": "Description"
+    }
+  ],
+  "global.discard": [
+    {
+      "type": 0,
+      "value": "Discard"
+    }
+  ],
+  "global.generic-page-title": [
+    {
+      "type": 0,
+      "value": "STS"
     }
   ],
   "global.language": [
@@ -441,6 +567,12 @@
     {
       "type": 0,
       "value": "Add new tag"
+    }
+  ],
+  "manage-tags.create": [
+    {
+      "type": 0,
+      "value": "Create a tag group | STS"
     }
   ],
   "manage-tags.create-breadcrumb": [
@@ -649,6 +781,12 @@
       "value": "what"
     }
   ],
+  "manage-users.create-new-user-button-text": [
+    {
+      "type": 0,
+      "value": "Create new user"
+    }
+  ],
   "manage-users.full-name-table-header": [
     {
       "type": 0,
@@ -695,6 +833,18 @@
     {
       "type": 0,
       "value": "Profile"
+    }
+  ],
+  "not-found.description": [
+    {
+      "type": 0,
+      "value": "This page either does not exist, or you do not have access to it. Please verify that the URL you are trying to use is correct. If you believe this to be a mistake on our end, please contact us at support@example.com"
+    }
+  ],
+  "not-found.header": [
+    {
+      "type": 0,
+      "value": "404 Not found"
     }
   ],
   "notification-payloads.assigned-notification": [
@@ -757,6 +907,12 @@
       "value": "Change your password"
     }
   ],
+  "profile.first-name-title": [
+    {
+      "type": 0,
+      "value": "First name"
+    }
+  ],
   "profile.inactive-alert-title": [
     {
       "type": 0,
@@ -771,6 +927,12 @@
       "value": "."
     }
   ],
+  "profile.last-name-title": [
+    {
+      "type": 0,
+      "value": "Last name"
+    }
+  ],
   "profile.name-title": [
     {
       "type": 0,
@@ -781,6 +943,12 @@
     {
       "type": 0,
       "value": "Profile | STS"
+    }
+  ],
+  "profile.password-title": [
+    {
+      "type": 0,
+      "value": "Password"
     }
   ],
   "profile.role-title": [
@@ -861,12 +1029,6 @@
     {
       "type": 0,
       "value": "Customer"
-    }
-  ],
-  "roles.superadministrator": [
-    {
-      "type": 0,
-      "value": "Superadministrator"
     }
   ],
   "tags.add-new-group-text": [
@@ -967,6 +1129,24 @@
       "value": "user"
     }
   ],
+  "ticket-search.date-ascending": [
+    {
+      "type": 0,
+      "value": "Date created ascending"
+    }
+  ],
+  "ticket-search.date-descending": [
+    {
+      "type": 0,
+      "value": "Date created descending"
+    }
+  ],
+  "ticket-search.has-tag": [
+    {
+      "type": 0,
+      "value": "Has (any of) tags"
+    }
+  ],
   "ticket-search.page-head-title": [
     {
       "type": 0,
@@ -977,6 +1157,12 @@
     {
       "type": 0,
       "value": "Search tickets"
+    }
+  ],
+  "ticket-search.sort-by": [
+    {
+      "type": 0,
+      "value": "Sort by"
     }
   ],
   "ticket-search.ticket-status-filter-title": [
@@ -1001,6 +1187,12 @@
     {
       "type": 0,
       "value": "Created by"
+    }
+  ],
+  "ticket-search.title-date": [
+    {
+      "type": 0,
+      "value": "Created"
     }
   ],
   "ticket-search.title-status": [
@@ -1089,10 +1281,16 @@
       "value": "Add an internal comment."
     }
   ],
-  "ticket-view.are-you-sure-delete-comment": [
+  "ticket-view.are-you-sure-delete-comment-body": [
     {
       "type": 0,
       "value": "This cannot be undone. Admins may still see this comment."
+    }
+  ],
+  "ticket-view.are-you-sure-delete-comment-title": [
+    {
+      "type": 0,
+      "value": "Are you sure you want to delete this comment?"
     }
   ],
   "ticket-view.cannot-comment": [
@@ -1229,6 +1427,12 @@
     {
       "type": 0,
       "value": "Registered"
+    }
+  ],
+  "validation.email-invalid": [
+    {
+      "type": 0,
+      "value": "Email is invalid"
     }
   ],
   "validation.field-required": [
