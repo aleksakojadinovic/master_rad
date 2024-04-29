@@ -5,7 +5,7 @@ import { Ticket } from 'src/app/tickets/domain/entities/ticket.entity';
 export class TicketSummarizePromptFactory {
   createPrompt(ticket: Ticket) {
     const context =
-      'Summarize the following support ticket. Adjust your language based on the input language. If lorem ipsum reply with lorem ispum. Write only summary and nothing else, 100 chars max.';
+      'Summarize the following support ticket. Adjust your language based on the input language. If lorem ipsum reply with lorem ispum. Write only summary and nothing else, 200 chars max.';
     const customerName = ticket.createdBy.fullName;
     const body = ticket.body;
     const comments = ticket.comments

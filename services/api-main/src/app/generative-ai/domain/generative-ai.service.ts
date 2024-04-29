@@ -52,16 +52,17 @@ export class GenerativeAIService extends BaseService {
       const prompt = this.promptFactory.createPrompt(ticket);
 
       try {
-        // const response = await this.openAIAgent.chat.completions.create({
-        //   messages: [{ role: 'system', content: prompt }],
-        //   model: 'gpt-3.5-turbo',
-        // });
+        const response = await this.openAIAgent.chat.completions.create({
+          messages: [{ role: 'system', content: prompt }],
+          model: 'gpt-3.5-turbo',
+        });
 
-        // const message = response.choices[0].message.content;
-        // const summary = new AISummary(message);
+        const message = response.choices[0].message.content;
+        const summary = new AISummary(message);
+        return summary;
 
-        const message = 'This is my AI response for prompt' + prompt;
-        return new AISummary(message);
+        // const message = 'This is my AI response for prompt' + prompt;
+        // return new AISummary(message);
       } catch (e) {
         console.error('AI service error:', e);
         throw new AIServiceDownError();
