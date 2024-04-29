@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Controller,
-  ForbiddenException,
   Get,
   Query,
   UseGuards,
@@ -33,10 +32,6 @@ export class GenerativeAIController {
     @GetUserInfo() user: User,
     @Query('ticketId') ticketId: string,
   ) {
-    if (!user.canUseAI) {
-      throw new ForbiddenException();
-    }
-
     if (!ticketId || !isValidObjectId(ticketId)) {
       throw new BadRequestException('Invalid ticket id');
     }

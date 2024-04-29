@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Box, Divider } from '@mui/material';
@@ -17,8 +17,10 @@ import StickyPanel from './components/StickyPanel/StickyPanel';
 
 import TicketBodySection from './sections/TicketBodySection';
 import TicketAISection from './sections/TicketAISection';
+import useUser from '@/hooks/useUser';
 
 export default function TicketView({ ticket }) {
+  const { isCustomer } = useUser();
   const intl = useIntl();
 
   const [, { error, isLoading, isSuccess, isError }] = useUpdateTicketMutation({
@@ -48,8 +50,12 @@ export default function TicketView({ ticket }) {
         <TicketTagSection ticket={ticket} />
         <Divider />
         <TicketStatusSection ticket={ticket} />
-        <Divider />
-        <TicketAISection ticket={ticket} />
+        {!isCustomer && (
+          <Fragment>
+            <Divider />
+            <TicketAISection ticket={ticket} />
+          </Fragment>
+        )}
         <Divider />
         <TicketBodySection ticket={ticket} />
         <CardContent>

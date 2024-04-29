@@ -43,6 +43,11 @@ export const apiErrorMessages = defineMessages({
     defaultMessage:
       'Username or password is not valid. Please review and try again.',
   },
+  NotAllowedToUseAIError: {
+    id: 'api.errors.not-allowed-to-use-ai',
+    defaultMessage:
+      'Your account is currently not allowed to use AI. If you wish to use AI, please contact your administrator.',
+  },
   genericValidationError: {
     id: 'api-errors.generic-validation-error',
     defaultMessage: 'Some provided fields are not valid.',

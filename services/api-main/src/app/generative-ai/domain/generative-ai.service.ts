@@ -11,6 +11,7 @@ import { TicketTooLongError } from './errors/TicketTooLong';
 import OpenAI from 'openai';
 import { AIServiceDownError } from './errors/AIServiceDown';
 import { AISummary } from './value-objects/AISummary';
+import { NotAllowedToUseAIError } from './errors/NotAllowedToUseAI';
 
 @Injectable()
 export class GenerativeAIService extends BaseService {
@@ -29,6 +30,10 @@ export class GenerativeAIService extends BaseService {
   openAIAgent: OpenAI;
 
   async summarize(ticketId: string, user: User): Promise<AISummary> {
+    if (!user.canUseAI) {
+      throw new NotAllowedToUseAIError();
+    }
+
     try {
       const ticket = await this.ticketService.findOne(ticketId, user);
 
@@ -36,7 +41,7 @@ export class GenerativeAIService extends BaseService {
         throw new BadTicketStatusError();
       }
 
-      if (ticket.comments.length <= 2) {
+      if (ticket.comments.length < 2) {
         throw new TicketTooShortError();
       }
 

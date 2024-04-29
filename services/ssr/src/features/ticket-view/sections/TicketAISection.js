@@ -26,10 +26,11 @@ const TicketAISection = ({ ticket }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const error = useMemo(() => {
+    console.log(apiError);
     if (!isError) {
       return null;
     }
-    return resolveErrorMessage(intl, apiError);
+    return resolveErrorMessage(intl, apiError?.data);
   }, [intl, apiError, isError]);
 
   useEffect(() => {
