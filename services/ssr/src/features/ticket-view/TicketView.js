@@ -16,6 +16,7 @@ import { globalMessages } from '@/translations/global';
 import StickyPanel from './components/StickyPanel/StickyPanel';
 
 import TicketBodySection from './sections/TicketBodySection';
+import TicketAISection from './sections/TicketAISection';
 
 export default function TicketView({ ticket }) {
   const intl = useIntl();
@@ -47,6 +48,8 @@ export default function TicketView({ ticket }) {
         <TicketTagSection ticket={ticket} />
         <Divider />
         <TicketStatusSection ticket={ticket} />
+        <Divider />
+        <TicketAISection ticket={ticket} />
         <Divider />
         <TicketBodySection ticket={ticket} />
         <CardContent>
