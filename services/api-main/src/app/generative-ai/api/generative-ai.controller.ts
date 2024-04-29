@@ -1,7 +1,9 @@
 import {
+  BadRequestException,
   Controller,
   ForbiddenException,
   Get,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -13,21 +15,34 @@ import { AuthGuard } from '@nestjs/passport';
 import { ExtractUserInfo } from 'src/codebase/guards/user.guard';
 import { GetUserInfo } from 'src/codebase/decorators/user.decorator';
 import { User } from 'src/app/users/domain/entities/user.entity';
+import { GenerativeAIService } from '../domain/generative-ai.service';
+import { isValidObjectId } from 'mongoose';
 
 @UseInterceptors(GenerativeAIInterceptor)
 @Controller('generative-ai')
 export class GenerativeAIController {
   constructor(
     private readonly usersService: UsersService,
+    private readonly generativeAIService: GenerativeAIService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
   @Get('/summarize')
   @UseGuards(AuthGuard('jwt'), ExtractUserInfo)
-  async findOne(@GetUserInfo() user: User) {
+  async findOne(
+    @GetUserInfo() user: User,
+    @Query('ticketId') ticketId: string,
+  ) {
     if (!user.canUseAI) {
       throw new ForbiddenException();
     }
-    return { aaaaa: 'bbbbb' };
+
+    if (!ticketId || !isValidObjectId(ticketId)) {
+      throw new BadRequestException('Invalid ticket id');
+    }
+
+    await this.generativeAIService.summarize(ticketId, user);
+
+    return { ticketId };
   }
 }
