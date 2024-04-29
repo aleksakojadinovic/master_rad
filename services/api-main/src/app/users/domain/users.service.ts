@@ -85,6 +85,14 @@ export class UsersService {
     return this.usersRepository.updateStatus(userId, status);
   }
 
+  async toggleAIAccess(userId: string, requester: User) {
+    if (!requester.isAdministrator()) {
+      throw new OnlyAdminsCanChangeStatusError();
+    }
+
+    return this.usersRepository.toggleAIAccess(userId);
+  }
+
   async changePassword(
     id: string,
     requester: User,

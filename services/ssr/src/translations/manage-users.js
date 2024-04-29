@@ -18,6 +18,10 @@ export const manageUsersMessages = defineMessages({
     id: 'manage-users.status-table-header',
     defaultMessage: 'Status',
   },
+  aiAccessTableHeader: {
+    id: 'manage-users.ai-access-table-header',
+    defaultMessage: 'AI Access',
+  },
   actionsTableHeader: {
     id: 'manage-users.actions-table-header',
     defaultMessage: 'Actions',
@@ -29,6 +33,14 @@ export const manageUsersMessages = defineMessages({
   changeStatusTitle: {
     id: 'manage-users.change-status-title',
     defaultMessage: 'Change status',
+  },
+  grantAIAccess: {
+    id: 'manage-users.grant-ai-access',
+    defaultMessage: 'Grant AI access',
+  },
+  revokeAIAccess: {
+    id: 'manage-users.revoke-ai-access',
+    defaultMessage: 'Revoke AI access',
   },
   changeRoleAreYouSure: {
     id: 'manage-users.change-role-are-you-sure',

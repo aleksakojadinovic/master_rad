@@ -9,6 +9,7 @@ import {
   TablePagination,
   Box,
   Paper,
+  Chip,
 } from '@mui/material';
 import RoleChip from './atoms/RoleChip';
 import UserStatusChip from './atoms/UserStatusChip';
@@ -45,6 +46,9 @@ function UsersTable({ data, onPageChange, onPerPageChange }) {
                 {intl.formatMessage(manageUsersMessages.statusTableHeader)}
               </TableCell>
               <TableCell>
+                {intl.formatMessage(manageUsersMessages.aiAccessTableHeader)}
+              </TableCell>
+              <TableCell>
                 {intl.formatMessage(manageUsersMessages.actionsTableHeader)}
               </TableCell>
             </TableRow>
@@ -58,6 +62,19 @@ function UsersTable({ data, onPageChange, onPerPageChange }) {
                 </TableCell>
                 <TableCell>
                   <UserStatusChip status={user.status} />
+                </TableCell>
+                <TableCell>
+                  {user.canUseAI ? (
+                    <Chip
+                      label={intl.formatMessage(globalMessages.yes)}
+                      color="primary"
+                    />
+                  ) : (
+                    <Chip
+                      label={intl.formatMessage(globalMessages.no)}
+                      color="error"
+                    />
+                  )}
                 </TableCell>
                 <TableCell>
                   <UserActions user={user} />

@@ -114,6 +114,9 @@ export class UsersController {
           newPassword,
         );
         return;
+      case 'toggle_ai_access':
+        await this.usersService.toggleAIAccess(id, user);
+        return;
       default:
         throw new BadRequestException('Unknown action');
     }
