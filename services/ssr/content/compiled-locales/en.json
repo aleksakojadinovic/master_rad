@@ -83,6 +83,18 @@
       "value": "Search"
     }
   ],
+  "ai.buttonText": [
+    {
+      "type": 0,
+      "value": "Request AI summary"
+    }
+  ],
+  "ai.showSummary": [
+    {
+      "type": 0,
+      "value": "Show AI summary"
+    }
+  ],
   "api-errors.cannot-assign-customer": [
     {
       "type": 0,
@@ -129,6 +141,12 @@
     {
       "type": 0,
       "value": "You cannot modify comments on a ticket in this status. Consider re-opening."
+    }
+  ],
+  "api.errors.not-allowed-to-use-ai": [
+    {
+      "type": 0,
+      "value": "Your account is currently not allowed to use AI. If you wish to use AI, please contact your administrator."
     }
   ],
   "api.errors.old-password-invalid": [
@@ -421,6 +439,12 @@
       "value": "Cancel"
     }
   ],
+  "global.close": [
+    {
+      "type": 0,
+      "value": "Close"
+    }
+  ],
   "global.comment": [
     {
       "type": 0,
@@ -461,6 +485,12 @@
     {
       "type": 0,
       "value": "Load More"
+    }
+  ],
+  "global.loading": [
+    {
+      "type": 0,
+      "value": "Loading..."
     }
   ],
   "global.name": [
@@ -675,6 +705,12 @@
       "value": "Actions"
     }
   ],
+  "manage-users.ai-access-table-header": [
+    {
+      "type": 0,
+      "value": "AI Access"
+    }
+  ],
   "manage-users.change-role-are-you-sure": [
     {
       "type": 0,
@@ -793,10 +829,22 @@
       "value": "Full Name"
     }
   ],
+  "manage-users.grant-ai-access": [
+    {
+      "type": 0,
+      "value": "Grant AI access"
+    }
+  ],
   "manage-users.page-title": [
     {
       "type": 0,
       "value": "Manage Users | STS"
+    }
+  ],
+  "manage-users.revoke-ai-access": [
+    {
+      "type": 0,
+      "value": "Revoke AI access"
     }
   ],
   "manage-users.role-table-header": [
