@@ -105,4 +105,9 @@ export const globalMessages = defineMessages({
     id: 'global.discard',
     defaultMessage: 'Discard',
   },
+  loading: {
+    id: 'global.loading',
+    defaultMessage: 'Loading...',
+  },
+  close: { id: 'global.close', defaultMessage: 'Close' },
 });

@@ -23,7 +23,7 @@ import { TicketInfoService } from './domain/services/ticket-info.service';
     TicketTagSystemModule,
     NotificationsModule,
   ],
-
+  exports: [TicketService],
   controllers: [TicketsController],
   providers: [
     TicketService,

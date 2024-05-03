@@ -151,6 +151,12 @@ export class UsersRepository {
     return Promise.resolve();
   }
 
+  async toggleAIAccess(id: string) {
+    const user = await this.userModel.findById(id);
+    await this.userModel.updateOne({ _id: id }, { canUseAI: !user.canUseAI });
+    return Promise.resolve();
+  }
+
   async changePassword(id: string, newPassword: string) {
     const hash = await bcrypt.hash(newPassword, 10);
     await this.userModel.updateOne({ _id: id }, { passwordHash: hash });

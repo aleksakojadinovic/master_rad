@@ -30,6 +30,9 @@ export class UserDb {
 
   @Prop({ type: String })
   status: UserStatus;
+
+  @Prop({ type: Boolean })
+  canUseAI: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass<UserDb>(UserDb);

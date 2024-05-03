@@ -20,6 +20,7 @@ import { TicketEntityProfile } from './app/tickets/api/profiles/ticket.entity.pr
 import { TicketTagGroupEntityProfile } from './app/ticket-tag-system/infrastructure/profiles/ticket-tag-group.entity.profile';
 import { NotificationEntityProfile } from './app/notifications/infrastructure/profiles/notification.entity.profile';
 import { TicketTagDTOProfile } from './app/ticket-tag-system/infrastructure/profiles/ticket-tag.dto.profile';
+import { GenerativeAIModule } from './app/generative-ai/generative-ai.module';
 
 const MAIN_DB_USERNAME = process.env.MAIN_DB_USERNAME;
 const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
@@ -37,6 +38,7 @@ const MAIN_DB_PWD = process.env.MAIN_DB_PWD;
     TicketTagSystemModule,
     NotificationsModule,
     FirebaseModule,
+    GenerativeAIModule,
   ],
   providers: [
     AppService,

@@ -60,6 +60,10 @@ export class UserEntityProfile extends AutomapperProfile {
             (source) => USER_STATUS_VALUES[source.status?.toString()] ?? '',
           ),
         ),
+        forMember(
+          (destination) => destination.canUseAI,
+          mapFrom((source) => source.canUseAI),
+        ),
       );
     };
   }

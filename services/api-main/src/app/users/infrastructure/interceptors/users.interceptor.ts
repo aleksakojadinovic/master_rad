@@ -16,6 +16,7 @@ import { OnlyAdminsCanChangeRolesError } from '../../domain/errors/OnlyAdminsCan
 import { CannotChangeCustomersRoleError } from '../../domain/errors/CannotChangeCustomersRole';
 import { OnlyAdminsCanChangeStatusError } from '../../domain/errors/OnlyAdminsCanChangeStatus';
 import { OldPasswordInvalidError } from '../../domain/errors/OldPasswordInvalid';
+import { OnlyAdminsCanChangeAIAccessError } from '../../domain/errors/OnlyAdminsCanChangeAIAccess';
 
 @Injectable()
 export class UsersInterceptor implements NestInterceptor {
@@ -43,6 +44,10 @@ export class UsersInterceptor implements NestInterceptor {
         }
 
         if (error instanceof OnlyAdminsCanChangeStatusError) {
+          throw new ForbiddenException(error.getPayload());
+        }
+
+        if (error instanceof OnlyAdminsCanChangeAIAccessError) {
           throw new ForbiddenException(error.getPayload());
         }
 
