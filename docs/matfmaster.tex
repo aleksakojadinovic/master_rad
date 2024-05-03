@@ -256,7 +256,17 @@ Svaki biznis koji pruža neku vrstu usluge korisnicima neizostavno mora imati ko
 
 \section{Sistem STS iz ugla korisnika}
 
-Sistem STS\footnote{Skraćeno od eng. Simple Ticket Service, jednostavan servis za kartice.}, razvijan za potrebe ovog rada, obuhvata osnovnu funkcionalnost za pružanje podrške u vidu kartica. Kartica predstavlja jednu tekstualnu korisničku žalbu ili zahtev, na kojoj se može pokrenuti diskusija, a sve sa ciljem asinhronog\footnote{Pod asinhronošću podrazumeva se suprotnost u odnosu na telefonski sistem u kom korisnik i agent podrške vode komunikaciju u realnom vremenu.} razrešenja korisničkog problema. Glavni akteri sistema su:
+Sistem STS\footnote{Skraćeno od eng. Simple Ticket Service, jednostavan servis za kartice.}, razvijan za potrebe ovog rada, obuhvata osnovnu funkcionalnost za pružanje podrške u vidu kartica. Kartica (eng. ticket) predstavlja jednu tekstualnu korisničku žalbu ili zahtev, na kojoj se može pokrenuti diskusija, a sve sa ciljem asinhronog\footnote{Pod asinhronošću podrazumeva se suprotnost u odnosu na telefonski sistem u kom korisnik i agent podrške vode komunikaciju u realnom vremenu.} razrešenja korisničkog problema. Pojam kartice poznat je iz mnogih postojećih platformi za pružanje podrške. Jedna od najpoznatijih takvih platformi je Zendesk \cite{zendesk_website}, čiji se primer kartice može videti na slici \ref{fig:zendesk_ticket}. Pojam kartice u Zendesk-u je u velikoj meri inspirisao iste u STS-u, što će se u nastavku pokazati poklapanjem nekih osnovnih funkcionalnosti - mogućnosti dodeljivanja kartica (eng. assignment), ostavljanja javnih i privatnih komentara (eng. public reply, internal note), dodavanja ozanaka (eng. tags) i slično.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{docs/images/ch_1/zendesk_ticket.png} 
+  \caption{Primer kartice platforme Zendesk.}
+  \label{fig:zendesk_ticket}
+\end{figure}
+
+\newpage
+Glavni akteri sistema su:
 
 \begin{itemize}
     \item \textbf{Klijenti} - koji mogu postavljati kartice u cilju dobijanja podrške.
@@ -266,20 +276,22 @@ Sistem STS\footnote{Skraćeno od eng. Simple Ticket Service, jednostavan servis 
 
 \subsection{Osnovne funkcionalnosti, prikaz kartice, statusi}
 
-Osnovni pojam sistema, kao što je rečeno, jeste kartica. Na slici se vidi primer zaglavlja jedne kartice. Sastoji se primarno iz naslova i opisa, dok se mogu videti imena klijenta i trenutno zaduženog agenta.
+Osnovni pojam sistema, kao što je rečeno, jeste kartica. Na slici \ref{fig:sts_ticket} vidi se primer zaglavlja jedne kartice. Sastoji se primarno iz naslova i opisa, dok se mogu videti imena klijenta i trenutno zaduženog agenta.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]{docs/images/ch_1/ticket-title.png} 
   \caption{Primer kartice.}
+  \label{fig:sts_ticket}
 \end{figure}
 
-Kartica može prolaziti kroz više statusa. Promene tih statusa vidljive su kako agentima tako i korisnicima.
+Kartica može prolaziti kroz više statusa, kao što ilustruje slika \ref{fig:sts_ticket_statuses}. Promene tih statusa vidljive su kako agentima tako i korisnicima.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]{docs/images/ch_1/ticket-statuses.png} 
   \caption{Promene statusa.}
+  \label{fig:sts_ticket_statuses}
 \end{figure}
 
 \subsection{Sistem oznaka, konfigurabilnost}
@@ -287,26 +299,31 @@ Kartica može prolaziti kroz više statusa. Promene tih statusa vidljive su kako
 
 Često postoji potreba klasifikacije kartica po raznim kriterijumima - departman unutar firme koji se bavi karticom, hitnost, prioritetnost i slično. Kako bi se postigla maksimalna fleksibilnost uveden je sistem oznaka (eng. tags). Oznaka se može nakačiti na datu karticu i može dati brzu informaciju o nekim njegovim aspektima. Ovaj sistem u potpunosti je konfigurabilan od strane korisnika (u ovom slučaju administratora), tako da nije potrebna intervencija programera prilikom dodavanja novih ili promene postojećih oznaka.
 
-Na sledećoj slici vidi se kako izgleda kartica označena oznakama histnosti i odeljenja.
+Na slici \ref{fig:tagged_ticket} vidi se kako izgleda kartica označena oznakama histnosti i odeljenja.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]{docs/images/ch_1/tagged-ticket.png} 
   \caption{Kartica sa oznakama hitnosti i odeljenje.}
+  \label{fig:tagged_ticket}
 \end{figure}
 
-Sledeće dve slike prikazuju kontrolnu tablu na kojoj administatori mogu upravljati oznakama. Primetna je dodatna fleksibilnost u sistemu kojom se može konfigurisati koji tip korisnika ima pravo da vidi, dodaje i uklanja koju oznaku. Takođe može se primetiti da sistem podržava višejezičnost, tako što se imena i opisi mogu podešavati i na srpskom i na engleskom jeziku. O jezicima i sistemu internacionalizacije biće više reči u sekciji \ref{sec:intl}.
+Slike \ref{fig:tags_admin_1} i \ref{fig:tags_admin_2} prikazuju kontrolnu tablu na kojoj administatori mogu upravljati oznakama. Primetna je dodatna fleksibilnost u sistemu kojom se može konfigurisati koji tip korisnika ima pravo da vidi, dodaje i uklanja koju oznaku. Takođe može se primetiti da sistem podržava višejezičnost, tako što se imena i opisi mogu podešavati i na srpskom i na engleskom jeziku. O jezicima i sistemu internacionalizacije biće više reči u sekciji \ref{sec:intl}.
+
+\newpage
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]{docs/images/ch_1/tag-mgmt-head.png} 
   \caption{Kreiranje oznake, višejezička imena.}
+  \label{fig:tags_admin_1}
 \end{figure}
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=1\textwidth]{docs/images/ch_1/tag-mgmt-permissions.png} 
   \caption{Kreiranje oznake, permisije.}
+  \label{fig:tags_admin_2}
 \end{figure}
 
 \newpage
@@ -323,7 +340,7 @@ Administratori poseduju mogućnost upravljanja korisnicima sajta putem kontrolne
 \newpage
 \subsection{Postavljanje kartice}
 
-Na kraju, stranica na kojoj klijenti mogu postavljati nove kartice jednostavan je obrazac koji se sastoji iz naslova i tela kartice.
+Stranica na kojoj klijenti mogu postavljati nove kartice jednostavan je obrazac koji se sastoji iz naslova i tela kartice.
 
 \begin{figure}[h]
   \centering
@@ -332,6 +349,17 @@ Na kraju, stranica na kojoj klijenti mogu postavljati nove kartice jednostavan j
 \end{figure}
 
 \newpage
+\subsection{Podrška veštačke inteligencije}
+
+Neke kartice mogu se pretvoriti u dugačku raspravu. Čest je slučaj da jedan agent započne razgovor, pa drugi agent prezume. U toj situaciji drugi agent morao bi da pročita sve dosadašnje komentare da bi shvatio šta treba uraditi. Nekada je dovoljno samo dobiti kratak rezime radi brze reakcije. Ovo je omogućeno integracijom sa modelom veštačke inteligenije GPT 3.5-turbo kompanije OpenAI, koji za datu karticu pruža kratak rezime dosadašnje rasprave.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{docs/images/ch_1/ai-summary.png} 
+  \caption{Rezime kartice generisan veštačkom inteligencijom.}
+\end{figure}
+
+
 
 
 
@@ -433,13 +461,17 @@ Navedeni gradivni delovi - baza podataka i aplikativni server - tehnički su dov
 
 \section{DDD}
 \label{sec:dddsection}
-// NAPOMENA - OVO VISE NECE BITI OVDE
 
-Jedan od najpopularnijih pristupa za dizajn i modelovanje softvera jeste dizajn zasnovan na domenu (eng. Domain Driven Design - DDD). DDD zagovara detaljno upoznavanje svih učesnika razvoja softvera sa domenom koji dati softverski sistem predstavlja. Programeri u saradnji sa domenskim stručnjacima razvijaju zajednički, sveprisutan jezik (eng. ubiquitous language) kako bi se prevazišla barijera različitog rečnika svih strana. \cite{dddq}
+Često korišćena sintagma u praktičnom radu softverskog inženjera jeste \textit{domensko znanje} koje obuhvata znanje o realnom problemu koji se rešava softverom. Prirodan pravac pri implementaciji softverskog sistema jeste izbegavanje kompleksnosti - praćenje onog puta koji vodi najjednostavnijem rešenju. Kada domen koji se modeluje postane dovoljno kompleksan, taj luksuz se više ne može priuštiti, i kompleksnost ne treba izbegavati već na pravi način kontrolisati (\cite{dddfull}, predgovor). Posmatrajući dalje stvari iz ugla domena, glavna uloga softvera postaje ništa drugo do rešavanje domenskog problema za korisnika - ostale komponente mogu biti neizostavne i imati svoje specifičnosti, ali uvek služe postizanju tog višeg cilja (\cite{dddfull}, poglavlje 1).
 
-\subsection{Korišćenje domenskog jezika u programskom k\^{o}du}
+Prethodno razmatranje predstavlja samo jednu od mnogobrojnih inspiracija za formalizovanje domenskog razvoja softvera što je upravo postignuto kroz dizajn zasnovan na domenu (eng. Domain Driven Design - DDD). Domenski dizajn već se smatra za fundamentalnu temu softverskog inženjerstva i kao takav može biti predmet zasebnog istraživanja. Za svrhe ovog rada dva aspekta od najveće su koristi - prvi je zajednički/sveprisutni jezik (eng. ubiquitous language, u daljem tekstu takođe i \textit{domenski jezik}), dok je drugi izolacija domena, odnosno slojevita arhitektura. 
+
+\subsection{Domenski jezik i njegova upotreba u programskom k\^{o}du}
 \label{sec:dddukodu}
-Nakon uspostavljanja, sveprisutan jezik postaje sastavni deo komunikacije programera i domenskih stručnjaka (i svih ostalih učesnika razvoja), ali isto tako i programskog k\^{o}da. Naime, programski k\^{o}d koji nastaje kao produkt modelovanja principa DDD-a postaje jasniji i dostiže viši stepen samodokumentovanosti. U takvom k\^{o}du sama imena klasa, metoda i promenljivih mogu biti dovoljna da programeru daju jasnu sliku šta koja celina k\^{o}da radi. Upravo zbog ovoga, primena DDD-a nije ograničena samo na velike kompanije ili velike timove, i ne služi samo kao sredstvo prevazilaženja "jezičkih" barijera, već doprinosi čistoći k\^{o}da i arhitekture i u manjim timovima, čak i jednočlanim. U sledeća dva primera prikazan je deo metode koja vrši ažuriranje komentara na kartici. Primer \ref{lst:nonddd} prikazuje ovu metodu, ne uzimajuću domenski jezik u obzir.
+
+Potreba za uspostavljanjem domenskog jezika pri izgradnji kompleksnog softvera je jasna - softverski inženjeri prirodno koriste tehnički žargon i primarno sagledaju stvari u tehničkim terminima. Domenski stručnjaci, slično, koriste se žargonom iz svog domena. Ukoliko se ova neusklađenost u jeziku ne adresira cena prevođenja postaje velika, kao i rizik od nerazumevanja (\cite{dddfull}, poglavlje 2). 
+
+Nakon uspostavljanja, domenski jezik postaje sastavni deo komunikacije programera i domenskih stručnjaka (i svih ostalih učesnika razvoja), ali isto tako i programskog k\^{o}da. Naime, programski k\^{o}d koji nastaje kao produkt modelovanja principa DDD-a postaje jasniji i dostiže viši stepen samodokumentovanosti. U takvom k\^{o}du sama imena klasa, metoda i promenljivih mogu biti dovoljna da programeru daju jasnu sliku šta koja celina k\^{o}da radi. Upravo zbog ovoga, primena DDD-a nije ograničena samo na velike kompanije ili velike timove, i ne služi samo kao sredstvo prevazilaženja "jezičkih" barijera, već doprinosi čistoći k\^{o}da i arhitekture i u manjim timovima, čak i jednočlanim. U sledeća dva primera prikazan je deo metode koja vrši ažuriranje komentara na kartici. Primer \ref{lst:nonddd} prikazuje ovu metodu, ne uzimajuću domenski jezik u obzir.
 
 
 \begin{figure}[h]
@@ -510,7 +542,7 @@ function updateComment(...) {
 U ovom primeru evidentno je prisustvo domena u svim aspektima. Metode kao što su \verb|isFinalStatus| i \verb|isOwner| i semantičke klase grešaka kao \verb|TicketNotFoundError| doprinose da određeni delovi k\^{o}da dostižu nivoe čitljivosti bliske prirodnom jeziku.
 
 \subsection{Slojevita arhitektura}
-Prilikom izrade softvera, usled rokova i nedostatka resursa, neretko dolazi do isprepletanosti poslovne logike, logike korisničkog interfejsa, logike pristupa bazi podataka i drugih komponenti sistema \cite{dddfull}. Ovakve odluke u razvoju, iako rezultuju kratkoročnim rešenjem, dugoročno dovode do borbe sa \textit{tehničkim dugom} (eng. technical debt). Postojanje tehničkog duga javlja se i iz drugih odluka tokom razvoja i u praksi je pokazano da opšte rešenje ovog problema ne postoji; svaki tim se pre ili kasnije sretne sa tehničkim dugom koji otežava i usporava rad. Ipak, ta neminovnost ne treba da obeshrabri rano uvođenje dobrih praksi kao što je raslojavanje arhitekture. 
+Prilikom izrade softvera, usled rokova i nedostatka resursa, neretko dolazi do isprepletanosti poslovne logike, logike korisničkog interfejsa, logike pristupa bazi podataka i drugih komponenti sistema (\cite{dddfull}, poglavlje 4). Ovakve odluke u razvoju, iako rezultuju kratkoročnim rešenjem, dugoročno dovode do borbe sa \textit{tehničkim dugom} (eng. technical debt). Postojanje tehničkog duga javlja se i iz drugih odluka tokom razvoja i u praksi je pokazano da opšte rešenje ovog problema ne postoji; svaki tim se pre ili kasnije sretne sa tehničkim dugom koji otežava i usporava rad. Ipak, ta neminovnost ne treba da obeshrabri rano uvođenje dobrih praksi kao što je raslojavanje arhitekture. 
 
 DDD razaznaje četiri sloja, s tim što se ovo poglavlje odnosi na prva tri, dok je sloj korisničkog interfejsa predmet narednog poglavlja. Detaljna diskusija o slojevima, uz relevantnu implementaciju, prikazana je u sekcijama 2.2, 2.3 i 2.4.
 
