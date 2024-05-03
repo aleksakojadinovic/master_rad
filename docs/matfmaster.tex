@@ -1497,15 +1497,15 @@ Istorija nastajanja Docker-a, i kontejnerizacije uopšte, interesantna je tema s
     \item \textbf{Kontejneri.} Kao rešenje koje ima za cilj da uzme najbolje od oba sveta nastaju kontejneri (eng. containters). Za razliku od virtuelnih mašina, svaki pokrenut kontejner koristi operativni sistem računara na kome se pokreće, a ipak održava nivo potpune izolovanosti.
 \end{enumerate}
 
-Docker je jedno od rešenja za rad sa kontejnerima, i izabrano je za potrebe ovog rada usled svoje popularnosti i rasprostranjenosti. Za mnoge programere, čija je primarna delatnost razvoj poslovnih funckionalnosti, Docker predstavlja crnu kutiju. Pojmovi kao što su \textit{docker engine}, \textit{slike (eng. images)} i \textit{orkestracija} stvaraju konfuziju ako se od početka ne posveti pažnja njihovom razumevanju, stoga se naredne sekcije koristite analogijama sa nekim konceptima koji su poznati svim pogramerima.
+Docker je jedno od rešenja za rad sa kontejnerima, i izabrano je za potrebe ovog rada usled svoje popularnosti i rasprostranjenosti. U nastavku su razjašnjeni osnovni pojmovi.
 
 \subsection{Docker slike}
 
-Na početku poglavlja pomenuto je kako je jedan od zadataka DevOps-a, između ostalog, uspostavljanje programabilnog infrastruktura za otpremanje i održavanje softverskog sistema. Način pravljenja docker slika upravo se zasniva na programabilnosti. 
+Docker slike treba u startu shvatiti kao statički koncept koji se odnosi na vreme kompilacije (eng build-time), za razliku od kontejnera koji je, kao što će u narednoj sekciji biti prikazano, koncept faze izvršavanja (eng. runtime). Docker slika predstavlja šablon za izgradnju virtuelnog okruženja specifične namene. Slika kao krajnji proizvod sadrži sve potrebne module i zavisnosti jednog malog operativnog sistema namenjenog da rešava tačno onaj problem koji je zadat (najčešće neka linux distribucija). Iz tog razloga praksa je trudit se da Docker slike budu što manje veličine, kako bi i njihovo pokretanje koristilo što manje resursa (\cite{dockerdeepdive}, poglavlje 6).
 
-Naime, docker slike treba shvatiti upravo po inspiraciji zbog koje se koriste - postoji potreba za izolovanim okruženjem jako specifične namene. Pomenuto je da virtuelne mašine nose sa sobom previše stvari za kojim ne postoji potreba, najpre ceo operativni sistem i svi njegove module. Definicijom adekvatne docker slike izbegava se korišćenje bespotrebnih resursa. 
+Na početku poglavlja pomenuto je kako je jedan od zadataka DevOps-a, između ostalog, uspostavljanje programabilnog infrastruktura za otpremanje i održavanje softverskog sistema. Način deklarisanja docker slika upravo se zasniva na programabilnosti. Definicije se drže u fajlovima koji se kolokvijalno imenuju \textit{Dockerfile}, a isto tako se i u razgovoru nazivaju. Svaka linija u ovom fajlu čini jedan sloj (eng. layer) onog okruženja koja pravimo \cite{dockerdeepdive}.
 
-Dakle, prilikom definisanja slike za pokretanje bekend servera sistema STS u režimu za razvoj\footnote{O produkcionoj postavci biće reči kasnije.}, pristupa se sledećim prirodnim rezonovanjem:
+S tim u vidu, prilikom definisanja slike za pokretanje bekend servera sistema STS u režimu za razvoj\footnote{O produkcionoj postavci biće reči kasnije.}, pristupa se sledećim prirodnim rezonovanjem:
 
 \begin{enumerate}
     \item Potreban je Node.js
@@ -1540,19 +1540,20 @@ CMD ["npm", "run", "start:dev"]
 \end{lstlisting}
 \end{figure}
 
-\subsection{Docker kontejneri}
+Kako bi slika bila spremna za pokretanje, potrebno ju je izgraditi (eng. build). Ovu izgradnju je bolje shvatiti ne kao prevod na mašinski jezik, već kao prevod u međureprezentaciju koju je u stanju da izvršava docker engine. Docker CLI komandom, na primeru \ref{lst:buildinglocal}, gradi se slika sa odgovarajućom oznakom (eng. tag).
 
-U analogiji između razvoja slika i kontejnera sa običnim razvojem aplikacija moglo bi se reći da slika odgovara programu, a kontejner odgovara procesu. Na taj način gore definisana docker slika sama po sebi ne radi ništa ukoliko se ne pokrene u vidu kontejnera. 
-
-Nastavljajući analogiju, sliku se prvo mora izgraditi (eng. build) što bi odgovaralo procesu kompilacije. Ovu kompilaciju je bolje shvatiti ne kao prevod na mašinski jezik, već kao prevod u međureprezentaciju, koju je u stanju da izvršava docker engine. Docker CLI komandom, na primeru \ref{lst:buildinglocal}, gradi se slika sa odgovarajućom oznakom (eng. tag).
-
-\newpage
-\begin{lstlisting}[caption={Izgradnja slike}, label={lst:buildinglocal}]
+\begin{lstlisting}[caption={Izgradnja slike za bekend deo STS aplikacije.}, label={lst:buildinglocal}]
 docker build -f
     services/api-main/docker/Dockerfile.development 
     -t sts-api-local 
     ./services/api-main 
 \end{lstlisting}
+
+
+\newpage
+\subsection{Docker kontejneri}
+
+U svojoj osnovni kontejner je ništa drugo do jedna pokrenuta instanca docker slike, samim tim za razliku od statičke slike odnosi se na vreme izvršavanja (\cite{dockerdeepdive}, poglavlje 7). 
 
 Nakon izgradnje moguće je pokrenuti datu sliku u vidu kontejnera, sa nekoliko dodatnih konfiguracija koje se sastoje od sledećeg:
 \begin{itemize}
@@ -1568,8 +1569,6 @@ docker run
     -v ./services/api-main:/app 
     -p 3000:3000
 \end{lstlisting}
-
-U skladu sa analogijom, kompajlirani program je sada pokrenut i sada predstavlja proces.
 
 \subsection{Orkestracija putem modula docker-compose}
 
