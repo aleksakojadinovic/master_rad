@@ -475,7 +475,7 @@ Nakon uspostavljanja, domenski jezik postaje sastavni deo komunikacije programer
 
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={K\^{o}d koji nije na domenskom jeziku}, label={lst:nonddd}]
-function updateComment(...){
+function addComment(...){
   const ticket = //...
   
   if (!ticket) {
@@ -491,16 +491,6 @@ function updateComment(...){
       ticket.createdBy.id !== user.id) {
     throw new ForbiddenException('Not your ticket');
   }
-  
-  const comment = //...
-  
-  if (!comment) {
-    throw new NotFoundException('Comment not found.')
-  }
-  
-  if (comment.user.id !== user.id) {
-    throw new ForbiddenException('Not your comment.');
-  }
 }
 \end{lstlisting}
 \end{figure}
@@ -510,29 +500,23 @@ Odlikuje se ručnim proverama identifikacionih polja i direktnim podizanjem HTTP
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={K\^{o}d koji je na domenskom jeziku}]
 function updateComment(...) {
-  const ticket = // ...
+    const ticket = await this.ticketsRepository.findById(id);
 
-  if (!ticket) {
-    throw new TicketNotFoundError(ticketId);
-  }
+    if (!ticket) {
+      throw new TicketNotFoundError(id);
+    }
 
-  if (ticket.isFinalStatus()) {
-    throw new CannotChangeTicketInFinalStatusError(ticket.status);
-  }
+    if (ticket.isFinalStatus()) {
+      throw new CannotChangeCommentsForStatusError(ticket.status);
+    }
 
-  if (user.isCustomer() && !ticket.isOwner(user)) {
-    throw new CannotCommentOnOthersTicketsError();
-  }
+    if (user.isCustomer() && !ticket.isOwner(user)) {
+      throw new TicketNotFoundError(ticket.id);
+    }
 
-  const comment = // ...
-
-  if (!comment) {
-    throw new CommentNotFoundError();
-  }
-
-  if (!comment.isOwner(user)) {
-    throw new CannotUpdateOthersCommentsError();
-  }
+    if (user.isCustomer() && dto.isInternal) {
+      throw new CustomerCannotAddInternalCommmentError();
+    }
 }
 \end{lstlisting}
 \end{figure}
@@ -561,7 +545,7 @@ Osnovni gradivni elementi NestJS aplikacije su \textit{moduli}. Svaki modul obuh
 \begin{figure}[h]
 \begin{lstlisting}[language=JavaScript, style=ES6, caption={Deklaracija modula za kartice.}, label={lst:nestjs_module}]
 @Module({
-  // Sekcija koja uvozi ostale module
+  // Sekcija koja uvozi ostale moduile
   imports: [
     MongooseModule.forFeature(...),
     UsersModule,
@@ -569,6 +553,7 @@ Osnovni gradivni elementi NestJS aplikacije su \textit{moduli}. Svaki modul obuh
     NotificationsModule,
   ],
   // Sekcija koja deklarise kontrolere
+  exports: [TicketService],
   controllers: [TicketsController],
   // Sekcija koja deklarise servise i repozitorijume
   providers: [
@@ -577,6 +562,7 @@ Osnovni gradivni elementi NestJS aplikacije su \textit{moduli}. Svaki modul obuh
     TicketRedactionService,
     TicketTagUpdateService,
     TicketAssigneesService,
+    TicketInfoService,
     TicketsRepository,
   ],
 })
